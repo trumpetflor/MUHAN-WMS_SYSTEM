@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<html >
+<html>
 <head>
 	<title>인사 조회</title>
 
@@ -49,41 +49,67 @@
 		
 		
 	table{
-	 text-align: center;
-	 vertical-align: middle;
+
+
 	}
-	td {
-	height: 100px
-	
+	th {
+	width: 200px;
+/* 	text-align: right; */
+	vertical-align: middle;
+	border-right: 1px;
+	height: 30px;
 	}
-		
-	.id_pht{
-	 width: 80px;
-	 transition: 0.5s;
+	#imgWapper{
+	width:180px;
+	border: 1px;
+	margin: 1px;
+	border: 10px;
+	border-color: black;
+/* 	background: black; */
 	}
-/* 	.id_pht:hover{ */
-/* 	 width: 300px; */
-/* 	 position: absolute; */
-/* 	} */
+	#id_photo {
+	 width:180px;
+	margin-top:20px;
+	align-self: center;
+	border-radius: 1px;
+	border: 1px;
+	background-color: black;
+	}
+
+	.caption-top{
+	 caption-side: top; 
+	}
+
 </style>
 <script src="resources/js/jquery-3.6.3.js"></script>
 <script type="text/javascript">
 
+
 	$(function() {
 		
-		//상세조회 버튼 클릭
-		$("#detailBtn").on("click", function () {
+// 		if(${sessionScope.sId}==${emp.emp_email}){//조회 대상이 자신의 아이디와 일치할 경우
+// 			//패스워드 수정 항목 표시
+// 			$("#emp_name_tr").append()
+// 		}
+		 
+		
+
+		////조회 대상이 자신의 아이디와 일치할 경우 패스워드 수정 
+		$("input[type=password]").on("change", function () {
+// 			alert("");
+			if($("#emp_NewPasswd").val() == $("#emp_NewPasswdCheck").val()){
+				
+			}else{
+				alert("비밀번호가 일치하지 않습니다 !")
+			}
 			
-			window.open("");
-			
-			
-			
+		})
+		
+		//submit이벤트
+		$( "form" ).submit(function () {
 			
 			
 		});
-		
-		
-		
 		
 	});
 
@@ -93,23 +119,23 @@
 
 <jsp:include page="inc/left.jsp"></jsp:include>
 
-
-        <div class="breadcrumbs">
-            <div class="breadcrumbs-inner">
-                <div class="row m-0">
-                    <div class="col-sm-4">
-                        <div class="page-header float-left">
-                            <div class="page-title">
-                               <h1>사원조회</h1>   
+ <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
+        <div class=" breadcrumbs m-0">
+            <div class="breadcrumbs-inner rounded-start p-2 " >
+                <div class="row m-0 ">
+                    <div class="col-sm-4 ">
+                        <div class="page-header float-left rounded-start ">
+                            <div class="page-title ">
+                               <h1 class="m-1"><b>붕어빵 님 상세정보</b></h1>   
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="page-header float-right">
-                            <div class="page-title">
-                                <ol class="breadcrumb text-right">
-                                    <li><a href="#">인사</a></li>
-                                    <li><a href="#">사원조회</a></li>
+                    <div class="col-sm-8 rounded-pill ">
+                        <div class="page-header float-right rounded-start ">
+                            <div class="page-title ">
+                                <ol class="breadcrumb text-right ">
+                                    <li><a href="employees">인사</a></li>
+                                    <li><a href="#">사원 상세조회</a></li>
                                    
                                 </ol>
                             </div>
@@ -122,69 +148,106 @@
 
 <div class="content">
    <div class="animated fadeIn">
-   <small> 접속 IP: </small>
-	<table class="table">
+ 
 
-		<thead>
-			<tr>
-				<th>이미지</th>
-				<th>사원번호</th>
-				<th>사원명</th>
-				<th>부서명</th>
-				<th>직급</th>
-				<th>연락처</th>
-				<th>E-Mail</th>
-				<th>관리</th><!-- 관리 권한 부여 시 조회 가능 -->
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><img class="id_pht" alt="증명사진" src="resources/images/id_photo01.jpg"></td>
-				<td>200043</td>
-				<td>김대리</td>
-				<td>개발팀</td>
-				<td>대리</td>
-				<td>010-0000-0000</td>
-				<td><a href="#">asdaf@muhan.com</a></td>
-				<th><!-- 관리 권한 부여 시 조회 가능 -->
-					<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"> 
-	 				<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn">
-	 			</th>
-			</tr>
-			
-			<tr>
+<!-- 상세 조회 시 E-Mail, 우편번호, 주소, 상세주소, 입사일, 재직여부, 권한, 사진이미지 포함하여 표시 -->
+<!-- 조회 대상이 자신의 아이디와 일치할 경우 패스워드 수정 항목 표시
+(기존 패스워드, 새 패스워드, 새 패스워드 확인 입력창 및 수정 버튼 표시) -->
+<form action="employeesUpdate">
+	<div class="container m-0">
+			<div class="m-2 row">
+				<div class=" col-8">
+					<table class=" table">
+					<caption class="caption-top">기본 정보</caption>
+								<tr id="emp_name_tr">
+									<th>사원명</th>
+									<td> <!-- ${emp.emp_name} --> </td>
+								</tr>
+								<tr>
+									<th>사원번호</th>
+									<td><%-- ${emp.emp_num} --%> </td>
+								</tr>
+								<!-- 조회 대상이 자신의 아이디와 일치할 경우 패스워드 수정  -->
+								<c:if test="">
+									<tr>
+										<th>비밀번호</th>
+										<td><input type="password" name="emp_NewPasswd" placeholder=""></td>
+									</tr>
+									<tr>
+										<th>새비밀번호</th>
+										<td><input type="password" id="emp_NewPasswdCheck"></td>
+									</tr>
+									<tr>
+										<th>새비밀번호 확인</th>
+										<td><%-- ${emp.emp_email} --%></td>
+									</tr>
+								</c:if>
+								<tr>
+									<th>E-Mail</th>
+									<td><%-- ${emp.emp_email} --%></td>
+								</tr>
+								<tr>
+									<th>연락처</th>
+									<td><%-- ${emp.emp_tel} --%> </td>
+								</tr>
+								<tr>
+									<th>주소</th>
+									<td><%-- ${emp.emp_addr} --%></td>
+								</tr>
+								<tr>
+									<th>상세주소</th>
+									<td><%-- ${emp.hire_date } --%></td>
+								</tr>
+					 </table>
+				</div>
+				<div class=" col-2" id="imgWapper">
+					<img id="id_photo" alt="증명사진" src="resources/images/id_photo01.jpg" width="150px" >
+				</div>
+			</div>
+	</div>	
+		
+		<div class="m-4">
 
-				<th><!-- 관리 권한 부여 시 조회 가능 -->
-					<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn"> 
-	 				<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn">
-	 			</th>
-			</tr>
-		</tbody>
-	
-	</table>
-	<div>
-		<input type="button" value="신규등록" class = "btn btn-success m-2" name="">
+			 <table class="table">
+			 <caption class="caption-top">재직 정보</caption>
+						<tr>
+							<th>부서명</th>
+							<td><%-- ${dept.dept_name } --%></td>
+						</tr>
+		
+						<tr>
+							<th>직급</th>
+							<td><%-- ${grade.grade_name } --%></td>
+						</tr>
+						<tr>
+							<th>연락처(사무실)</th>
+							<td><%-- ${emp.emp_dtel} --%> </td>
+						</tr>
+						<tr>
+							<th>입사일</th>
+							<td></td>
+						</tr>
+						<tr>
+							<th>재직여부</th>
+							<td></td>
+						</tr>
+						<tr>
+							<th>권한</th>
+							<td></td>
+						</tr>
+			</table>
 	</div>
+	<!-- 조회 대상이 자신의 아이디와 일치할 경우 패스워드 수정  -->
+		<c:if test="">
+				<input type="button" value="수정" class = "btn btn-primary mx-4" name="updatePasswd">
+		</c:if>
+</form>
+
 
 </div>
 </div>
 
-    <div class="clearfix"></div>
-
-    <footer class="site-footer">
-        <div class="footer-inner bg-white">
-            <div class="row">
-                <div class="col-sm-6">
-                    Copyright &copy; 2018 Ela Admin
-                </div>
-                <div class="col-sm-6 text-right">
-                    Designed by <a href="https://colorlib.com">Colorlib</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-</div><!-- /#right-panel -->
+<jsp:include page="inc/footer.jsp"></jsp:include>
     
 <!-- Scripts -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->

@@ -6,6 +6,9 @@
 <!-- XXXmapper.xml파일에서 com.thisteam.muhansangsa.vo.EmployeesVO 쓰는 대신 EmployeesVO만 쓰면 됨 ! -->
 	<typeAliases>
 		<typeAlias type="com.thisteam.muhansangsa.vo.EmployeesVO" alias="EmployeesVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.DepartmentVO" alias="DepartmentVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.GradeVO" alias="GradeVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.PrivilegeVO" alias="PrivilegeVO"/>
 	</typeAliases>
 	
 	

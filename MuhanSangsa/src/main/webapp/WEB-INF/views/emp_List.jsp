@@ -44,17 +44,18 @@
 	}
 	
 	body {
-		        font-family: 'NEXON Lv1 Gothic OTF';
+	 font-family: 'NEXON Lv1 Gothic OTF';
 	}
 		
-		
+	#vertical-align{
+		 vertical-align: middle;
+	}
 	table{
 	 text-align: center;
-	 vertical-align: middle;
 	}
-	td {
-	height: 100px
 	
+	td {
+	height: 100px;
 	}
 		
 	.id_pht{
@@ -73,7 +74,7 @@
 		
 		//상세조회 버튼 클릭
 		$("#detailBtn").on("click", function () {
-			alert(${sId});
+			alert("");
 			window.open("employeesDetail");
 			
 			
@@ -93,23 +94,23 @@
 
 <jsp:include page="inc/left.jsp"></jsp:include>
 
-
-        <div class="breadcrumbs">
-            <div class="breadcrumbs-inner">
-                <div class="row m-0">
-                    <div class="col-sm-4">
-                        <div class="page-header float-left">
-                            <div class="page-title">
-                               <h1>사원조회</h1>   
+ <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
+        <div class=" breadcrumbs m-0">
+            <div class="breadcrumbs-inner rounded-start p-2 " >
+                <div class="row m-0 ">
+                    <div class="col-sm-4 ">
+                        <div class="page-header float-left rounded-start ">
+                            <div class="page-title ">
+                               <h1 class="m-1"><b>사원 관리</b></h1>   
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="page-header float-right">
-                            <div class="page-title">
-                                <ol class="breadcrumb text-right">
-                                    <li><a href="#">인사</a></li>
-                                    <li><a href="#">사원조회</a></li>
+                    <div class="col-sm-8 rounded-pill ">
+                        <div class="page-header float-right rounded-start ">
+                            <div class="page-title ">
+                                <ol class="breadcrumb text-right ">
+                                    <li><a href="employees">인사</a></li>
+                                    <li><a href="#">사원 관리</a></li>
                                    
                                 </ol>
                             </div>
@@ -122,12 +123,11 @@
 
 <div class="content">
    <div class="animated fadeIn">
-   <small> 접속 IP: </small>
-	<table class="table">
+	<table class="table "  id="vertical-align">
 
 		<thead>
 			<tr>
-				<th>이미지</th>
+				<th>사진</th>
 				<th>사원번호</th>
 				<th>사원명</th>
 				<th>부서명</th>
@@ -168,29 +168,14 @@
 		</tbody>
 	
 	</table>
-	<div>
+	<div class="float-right">
 		<input type="button" value="신규등록" class = "btn btn-success m-2" name="">
 	</div>
 
 </div>
 </div>
 
-    <div class="clearfix"></div>
-
-    <footer class="site-footer">
-        <div class="footer-inner bg-white">
-            <div class="row">
-                <div class="col-sm-6">
-                    Copyright &copy; 2018 Ela Admin
-                </div>
-                <div class="col-sm-6 text-right">
-                    Designed by <a href="https://colorlib.com">Colorlib</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-</div><!-- /#right-panel -->
+<jsp:include page="inc/footer.jsp"></jsp:include>
     
 <!-- Scripts -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->

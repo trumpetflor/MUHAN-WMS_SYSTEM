@@ -1,5 +1,8 @@
 package com.thisteam.muhansangsa.controller;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.thisteam.muhansangsa.service.MemberService;
+import com.thisteam.muhansangsa.vo.DepartmentVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
+import com.thisteam.muhansangsa.vo.GradeVO;
 import com.thisteam.muhansangsa.vo.Privilege;
 
 @Controller
@@ -20,7 +25,16 @@ public class MemberController {
 	
 	@GetMapping(value = "/employees")
 	public String emp_view(Model model, HttpSession session){
-		
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		session.getAttribute("sId");
 		String sId = (String)session.getAttribute("sId");
 		//TODO: 로그인 기능 완성되면 지울 것
@@ -85,6 +99,17 @@ public class MemberController {
 	@GetMapping(value = "/employeesDetail")
 	public String emp_detail(Model model, HttpSession session){
 		
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	
 		//조회할 사원을 식별한 이메일
 		String emp_email = (String)model.getAttribute("emp_email");
@@ -101,10 +126,19 @@ public class MemberController {
 				boolean isRightUser = service.getPrivilege(sId,Privilege.사원조회);
 			
 				if(isRightUser) {//권한이 있을 경우
-					
 					//2.사원 조회
 					EmployeesVO emp = service.getEmployee(emp_email);
+					
+					//부서명와 직급명 조회
+//					DepartmentVO dept_name = service.getDepartmentCode(emp.getDept_cd());
+//					GradeVO grade_name = service.getGradeCode(emp.getGrade_cd());
+//					emp.getDept_cd();
+//					emp.getGrade_cd();
+					
 					model.addAttribute("emp", emp);
+//					model.addAttribute("dept", dept_name);
+//					model.addAttribute("grade", grade_name);
+					
 					return "emp_detail";
 					
 					

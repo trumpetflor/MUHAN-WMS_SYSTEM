@@ -58,6 +58,18 @@
 		FROM employees
 			WHERE EMP_EMAIL = #{emp_email}
 		
+	</select>
 	
+	
+	<!-- 부서조회 -->
+	<select id="selectDepartmentName" resultType="DepartmentVO">
+		SELECT DEPT_NAME
+		FROM department
+	</select>
+	
+	<!-- 직급조회 -->
+	<select id="selectGradeName" resultType="GradeVO">
+		SELECT GRADE_NAME
+		FROM grade
 	</select>
 </mapper>
