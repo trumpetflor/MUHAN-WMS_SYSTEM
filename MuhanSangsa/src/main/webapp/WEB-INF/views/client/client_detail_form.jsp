@@ -276,74 +276,22 @@
 
                 <div class="row">
 
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="card">
                             <div class="card-header">
-                                <strong>거래처 등록</strong> Elements
+                                <strong>Basic Form</strong> Elements
                             </div>
                             <div class="card-body card-block">
                                 <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">거래처 코드<font style="color: red;">*</font></label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="text-input" name="text-input" placeholder="ex) 0123456789" class="form-control"><small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small></div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">상호 (거래처명)<font style="color: red;">*</font></label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="text-input" name="text-input" placeholder="ex) 댕댕잇" class="form-control"><small class="form-text text-muted"></small></div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label class=" form-control-label">거래처 구분<font style="color: red;">*</font></label></div>
-                                        <div class="col col-md-9">
-                                            <div class="form-check-inline form-check">
-                                                <label for="inline-radio1" class="form-check-label ">
-                                                    <input type="radio" id="inline-radio1" name="inline-radios" value="01" class="form-check-input" checked="checked">사업자 (국내)
-                                                </label>
-                                                <label for="inline-radio2" class="form-check-label ">
-                                                    <input type="radio" id="inline-radio2" name="inline-radios" value="02" class="form-check-input">사업자 (해외)
-                                                </label>
-                                                <label for="inline-radio3" class="form-check-label ">
-                                                    <input type="radio" id="inline-radio3" name="inline-radios" value="03" class="form-check-input">비사업자 (국내)
-                                                </label>
-                                                <label for="inline-radio3" class="form-check-label ">
-                                                    <input type="radio" id="inline-radio3" name="inline-radios" value="04" class="form-check-input">비사업자 (해외)
-                                                </label>
-                                                <small class="form-text text-muted">미선택시 사업자(국내)로 구분</small>
-                                            </div>
+                                        <div class="col col-md-3"><label class=" form-control-label">Static</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <p class="form-control-static">Username</p>
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">대표자명<font style="color: red;">*</font></label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="text-input" name="text-input" placeholder="ex) 김무한" class="form-control"><small class="form-text text-muted"></small></div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="multiple-select" class=" form-control-label">업태</label></div>
-                                        <div class="col col-md-9">
-                                            <select name="multiple-select" id="multiple-select" style="height: 200px;" multiple="multiple" class="form-control">
-                                                <option value="" disabled="disabled">복수 선택 가능</option>
-                                                <option value="농업, 임업 및 어업">농업, 임업 및 어업</option>
-                                                <option value="광업">광업</option>
-                                                <option value="제조업">제조업</option>
-                                                <option value="전기, 가스, 증기 및 공기조절 공급업">전기, 가스, 증기 및 공기조절 공급업</option>
-                                                <option value="수도, 하수 및 폐기물 처리, 원료 재생업">수도, 하수 및 폐기물 처리, 원료 재생업</option>
-                                                <option value="건설업">건설업</option>
-                                                <option value="도매 및 소매업">도매 및 소매업</option>
-                                                <option value="운수 및 창고업">운수 및 창고업</option>
-                                                <option value="숙박 및 음식점업">숙박 및 음식점업</option>
-                                                <option value="정보통신업">정보통신업</option>
-                                                <option value="금융 및 보험업">금융 및 보험업</option>
-                                                <option value="부동산업">부동산업</option>
-                                                <option value="전문, 과학 및 기술 서비스업">전문, 과학 및 기술 서비스업</option>
-                                                <option value="사업시설 관리, 사업지원 및 임대 서비스업">사업시설 관리, 사업지원 및 임대 서비스업</option>
-                                                <option value="공공 행정, 국방 및 사회보장 행정">공공 행정, 국방 및 사회보장 행정</option>
-                                                <option value="교육서비스업">교육서비스업</option>
-                                                <option value="보건업 및 사회복지 서비스업">보건업 및 사회복지 서비스업</option>
-                                                <option value="예술, 스포츠 및 여가관련 서비스업">예술, 스포츠 및 여가관련 서비스업</option>
-                                                <option value="협회 및 단체, 수리 및 기타 개인 서비스업">협회 및 단체, 수리 및 기타 개인 서비스업</option>
-                                                <option value="가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동">가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동</option>
-                                                <option value="국제 및 외국기관">국제 및 외국기관</option>
-                                                <option value="기타">기타</option>
-                                            </select>
-                                        </div>
+                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Text Input</label></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="text-input" name="text-input" placeholder="Text" class="form-control"><small class="form-text text-muted">This is a help text</small></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">Email Input</label></div>
