@@ -11,22 +11,22 @@ import com.thisteam.muhansangsa.vo.GradeVO;
 
 public interface EmployeesMapper {
 
+	
+	//---------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------ì‚¬ì›ì¡°íšŒ/ìƒì„¸ì •ë³´ì¡°íšŒ ì‹œì‘------------------------------------------------
 	List<Emp_viewVO> selectMemberList(@Param("searchType") String searchType, 
 										@Param("keyword") String keyword);
 	   
-	//±ÇÇÑ Á¶È¸
+	//ê¶Œí•œ ì¡°íšŒ
 	String getPrivilege(@Param("id")String sId);
 
 	int updateMember(EmployeesVO emp);
 
-	//»ç¿ø»ó¼¼Á¶È¸
+	//ì‚¬ì› ìƒì„¸ì¡°íšŒ
 	Emp_viewVO selectEmployee(String emp_email);
 
-	//ºÎ¼­Á¶È¸
-	DepartmentVO selectDepartmentName(String dept_cd);
-	
-	//Á÷±ŞÁ¶È¸
-	GradeVO selectGradeName(String grade_cd);
+	//-------------------------------------------ì‚¬ì›ì¡°íšŒ/ìƒì„¸ì •ë³´ì¡°íšŒ ë------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------
 
 
 

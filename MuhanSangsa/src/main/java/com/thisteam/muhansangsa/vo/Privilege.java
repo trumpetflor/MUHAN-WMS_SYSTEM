@@ -1,14 +1,14 @@
 package com.thisteam.muhansangsa.vo;
-//±âº»µî·Ï(0), »ç¿øÁ¶È¸(1), »ç¿ø°ü¸®(2), Àç°íÁ¶È¸(3), Àç°í°ü¸®(4);
-public enum Privilege {
-	
-	±âº»µî·Ï(0), »ç¿øÁ¶È¸(1), »ç¿ø°ü¸®(2), Àç°íÁ¶È¸(3), Àç°í°ü¸®(4);
+	//ê¸°ë³¸ë“±ë¡(0), ì‚¬ì›ì¡°íšŒ(1), ì‚¬ì›ê´€ë¦¬(2), ì¬ê³ ì¡°íšŒ(3), ì¬ê³ ê´€ë¦¬(4);
+	public enum Privilege {
 
-	//¿ÜºÎ¿¡¼­ Á¢±Ù ¸øÇÏµµ·Ï privateÀ¸·Î ¼±¾ğ
-	private int code ;
-	private Privilege(int code) {
-		this.code = code;
-	}
+		ê¸°ë³¸ë“±ë¡(0), ì‚¬ì›ì¡°íšŒ(1), ì‚¬ì›ê´€ë¦¬(2), ì¬ê³ ì¡°íšŒ(3), ì¬ê³ ê´€ë¦¬(4);
+
+		//ì™¸ë¶€ì—ì„œ ì ‘ê·¼ ëª»í•˜ë„ë¡ privateìœ¼ë¡œ ì„ ì–¸
+		private int code ;
+		private Privilege(int code) {
+			this.code = code;
+		}
 	
 	public int getCode() {
 		return code;

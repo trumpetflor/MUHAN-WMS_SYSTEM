@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.thisteam.muhansangsa.mapper.EmployeesMapper">
-	
+<!-- ===================================================================================================== -->
+	<!-- ===================================== 사원 조회 시작===================================== -->
 	<select id="selectMemberList" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
 		<!-- 사원조회 -->
 		SELECT	IDX
@@ -71,25 +72,13 @@
 	</update>
 	
 	<!-- 사원 상세조회 -->
-	<select id="selectEmployee" resultType="EmployeesVO">
+	<select id="selectEmployee" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
 		SELECT *
 		FROM emp_view
 			WHERE EMP_EMAIL = #{emp_email}
 		
 	</select>
-	
-	
-	<!-- 부서조회 -->
-	<select id="selectDepartmentName" resultType="DepartmentVO">
-		SELECT DEPT_NAME
-		FROM department
-		WHERE DEPT_CD = #{dept_cd}
-	</select>
-	
-	<!-- 직급조회 -->
-	<select id="selectGradeName" resultType="GradeVO">
-		SELECT GRADE_NAME
-		FROM grade
-		WHERE GRADE_CD = #{grade_cd}
-	</select>
+	<!-- ===================================== 사원 조회 끝===================================== -->
+	<!-- ===================================================================================================== -->
+
 </mapper>
