@@ -39,3 +39,8 @@
 	<mybatis-spring:scan base-package="com.thisteam.muhansangsa"/>
 </beans>
 
+
+
+
+
+

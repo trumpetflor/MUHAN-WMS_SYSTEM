@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.thisteam.muhansangsa.mapper.EmployeesMapper">
-	
-	<!-- --------------------------------------인사관리 (사원 등록) ------------------ -->
+<mapper namespace="com.thisteam.muhansangsa.mapper.MemberMapper">
 	
 	<insert id="insertEmployee" >
 			<selectKey keyProperty="idx" resultType="integer" order="BEFORE">
@@ -45,7 +43,6 @@
 		
 		</insert>
 
-
 		<!-- 사원 번호를 위한 부서코드 추출  --> 
 		<select id="selectDepartmentCode" resultType="string">
 			SELECT DEPT_CD
@@ -59,20 +56,21 @@
 				FROM employees
 		</select>
 		
-		<!-- ---------------------------------------------------인사 관리 (사원 등록)-------------------------- -->
+		<!-- 권한 업데이트 23/01/30 진행중 -->
 		
-    
-    
-    
-
-<!-- =============================== 인사관리 : 로그인(세원) =========================================  -->
-<!-- 로그인, 패스워드 확인  -->
-<select id="selectPass" resultType="string">
-	SELECT emp_passwd
-		FROM employees
-		WHERE emp_email = #{emp_email}
-</select>
-
-
-
+		<!-- 
+		update employees set priv_cd = (select (lpad(priv_cd, 5, '0')) as newCd from employees e as emp where EMP_NUM = '0222' ) where EMP_NUM = '0222';
+		update employees set priv_cd = '10011' where EMP_NUM = '0420';
+		select (lpad(priv_cd, 5, '0')) as newCd from employees as emp where EMP_NUM = '0222';
+		 -->
+		<update id="updatePrivCo">
+		 	<selectKey keyProperty="priv_cd" resultType="String" order="BEFORE">
+		 		SELECT LPAD(priv_cd, 5, '0')
+		 			FROM employees
+		 			WHERE EMP_NUM = ${emp_num} 
+		 	</selectKey>
+			
+		
+		</update>
+		
 </mapper>
