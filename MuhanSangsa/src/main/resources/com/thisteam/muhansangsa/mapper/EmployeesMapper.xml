@@ -45,6 +45,7 @@
 		
 		</insert>
 
+
 		<!-- 사원 번호를 위한 부서코드 추출  --> 
 		<select id="selectDepartmentCode" resultType="string">
 			SELECT DEPT_CD
@@ -60,4 +61,18 @@
 		
 		<!-- ---------------------------------------------------인사 관리 (사원 등록)-------------------------- -->
 		
+    
+    
+    
+
+<!-- =============================== 인사관리 : 로그인(세원) =========================================  -->
+<!-- 로그인, 패스워드 확인  -->
+<select id="selectPass" resultType="string">
+	SELECT emp_passwd
+		FROM employees
+		WHERE emp_email = #{emp_email}
+</select>
+
+
+
 </mapper>
