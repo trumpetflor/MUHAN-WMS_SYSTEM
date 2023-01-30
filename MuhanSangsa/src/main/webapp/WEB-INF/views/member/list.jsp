@@ -212,7 +212,7 @@
 
                             <a class="nav-link" href="#"><i class="fa fa-bell-o"></i>Notifications <span class="count">13</span></a> -->
 
-                            <a class="nav-link" href="./Mypage.do"><i class="fa fa-cog"></i>Mypage</a>
+                            <a class="nav-link" href="./Mypage"><i class="fa fa-cog"></i>Mypage</a>
 
                             <a class="nav-link" href="#"><i class="fa fa-power-off"></i>Logout</a>
                         </div>
@@ -275,9 +275,9 @@
                                             <td>$320,800</td>
                                             <td>
                                             <input type="button" value="상세정보" class="form-control text-center"
-											onclick="window.open('memberListDetail.do','MemberDetailForm','width=700, height=920,location=no,status=no,scrollbars=yes');"> 
+											onclick="window.open('memberListDetail','MemberDetailForm','width=700, height=920,location=no,status=no,scrollbars=yes');"> 
 											<input type="button" value="수정" class="form-control text-center"
-											onclick="window.open('memberListDetailModify.do','MemberDetailModifyForm','width=700, height=920,location=no,status=no,scrollbars=yes');">
+											onclick="window.open('memberListDetailModify','MemberDetailModifyForm','width=700, height=920,location=no,status=no,scrollbars=yes');">
 											</td>
                                         </tr>
                                         <tr>
@@ -287,15 +287,15 @@
                                             <td>$170,750</td>
                                             <td>
                                             <input type="button" value="상세정보" class="form-control text-center"
-											onclick="window.open('memberListDetail.do','MemberDetailForm','width=700, height=920,location=no,status=no,scrollbars=yes');">
+											onclick="window.open('memberListDetail','MemberDetailForm','width=700, height=920,location=no,status=no,scrollbars=yes');">
 											<input type="button" value="수정" class="form-control text-center"
-											onclick="window.open('memberListDetailModify.do','MemberDetailModifyForm','width=700, height=920,location=no,status=no,scrollbars=yes');">
+											onclick="window.open('memberListDetailModify','MemberDetailModifyForm','width=700, height=920,location=no,status=no,scrollbars=yes');">
 											</td>
                                         </tr>
                                     </tbody>
                                 </table>
                                 	<button type="button" class="btn btn-outline-secondary"
-									onclick="window.open('ProductInsertForm.pd', 'ProductInsertForm','width=700,height=920,location=no,status=no,scrollbars=yes');">상품
+									onclick="window.open('ProductInsertForm', 'ProductInsertForm','width=700,height=920,location=no,status=no,scrollbars=yes');">상품
 									등록</button>
                             </div>
                         </div>

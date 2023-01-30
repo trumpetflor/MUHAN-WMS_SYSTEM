@@ -53,7 +53,7 @@
                             </label>
 
                         </div>
-                        <button type="button" class="btn btn-success btn-flat m-b-30 m-t-30" onclick="location.href='./memberList.do'">Sign in</button>
+                        <button type="button" class="btn btn-success btn-flat m-b-30 m-t-30" onclick="location.href='./memberList'">Sign in</button>
                         <div class="register-link m-t-15 text-center">
                             <p>Don't have account ? <a href="#"> Sign Up Here</a></p>
                         </div>
