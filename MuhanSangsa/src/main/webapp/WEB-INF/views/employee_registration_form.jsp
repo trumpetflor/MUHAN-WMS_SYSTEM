@@ -34,6 +34,19 @@
 		max-width: 60%;
 		flex: 100 100;
 	}
+	
+	@font-face {
+    font-family: 'EliceDigitalBaeum-Bd';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_elice@1.0/EliceDigitalBaeum-Bd.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+	}
+	
+	*{
+	font-family: 'EliceDigitalBaeum-Bd';
+	 font-weight: normal;
+    font-style: normal;
+	}
 	</style>
 </head>
 <body>
@@ -312,19 +325,26 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email" class=" form-control-label">Email</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="email" name="emp_Email" placeholder="이메일을 입력하세요" class="form-control"><small class="help-block form-text">사원의 이메일은 무한상사 관리시스템 아이디로 사용됩니다</small></div>
+                                        <div class="col-12 col-md-9"><input type="email" id="email" name="emp_Email" placeholder="이메일을 입력하세요" class="form-control" >
+                                        <small class="help-block form-text">사원의 이메일은 무한상사 관리시스템 아이디로 사용됩니다</small></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="password" class=" form-control-label">Password</label></div>
                                         <div class="col-12 col-md-9"><input type="password" id="password" name="emp_Passwd" placeholder="비밀번호를 입력하세요" class="form-control"><small class="help-block form-text">Please enter a complex password</small></div>
                                     </div>
                                     <!-- 주소 -->
-                                    <div class="form-group">
-                                        <label for="postCode" class="form-control-label">우편번호<br><input type="text" id="postCode" name="emp_Post_No" placeholder="우편번호를 입력하세요" class="form-control" ></label>
-                                        <input type="button" value="주소 검색" onclick="kakaoAddr()" >
+                                    <div class="row form-group">
+                                        <div class="col col-md-3"><label for="postCode" class=" form-control-label">우편번호</label></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="postCode" name="emp_Post_No" placeholder="우편번호를 입력하세요" class="form-control"><input type="button" value="주소 검색" onclick="kakaoAddr()" ></div>
                                     </div>
-	                                <div class="form-group"><label for="address1" class=" form-control-label">주소</label><input type="text" id="address1" name="emp_Addr" placeholder="주소를 입력하세요" class="form-control"></div>
-	                                <div class="form-group"><label for="address2" class=" form-control-label">상세주소</label><input type="text" id="address2" name="emp_Addr" placeholder="상세주소를 입력하세요" class="form-control"></div>
+                               		 <div class="row form-group">
+                                        <div class="col col-md-3"><label for="address1" class=" form-control-label">주소</label></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="address1" name="emp_Addr" placeholder="주소를 입력하세요" class="form-control"></div>
+                                    </div>
+                                     <div class="row form-group">
+                                        <div class="col col-md-3"><label for="address2" class=" form-control-label">상세주소</label></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="address2" name="emp_Addr" placeholder="상세주소를 입력하세요" class="form-control"></div>
+                                    </div>
 	                                 <!-- 주소 -->
 	                                 <!-- 입사일 -->
 	                                  <div class="row form-group">
@@ -391,41 +411,6 @@
                         </div> <!-- card -->
                     </div> <!-- col-lg-6 -->
 
-
-<!--                 <div class="col-lg-6"> -->
-<!--                     <div class="card"> -->
-<!--                         <div class="card-header">Example Form</div> -->
-<!--                         <div class="card-body card-block"> -->
-<!--                             <form action="#" method="post" class=""> -->
-<!--                                 <div class="form-group"> -->
-<!--                                     <div class="input-group"> -->
-<!--                                         <div class="input-group-addon">Username</div> -->
-<!--                                         <input type="text" id="username3" name="username3" class="form-control"> -->
-<!--                                         <div class="input-group-addon"><i class="fa fa-user"></i></div> -->
-<!--                                     </div> -->
-<!--                                 </div> -->
-<!--                                 <div class="form-group"> -->
-<!--                                     <div class="input-group"> -->
-<!--                                         <div class="input-group-addon">Email</div> -->
-<!--                                         <input type="email" id="email3" name="email3" class="form-control"> -->
-<!--                                         <div class="input-group-addon"><i class="fa fa-envelope"></i></div> -->
-<!--                                     </div> -->
-<!--                                 </div> -->
-<!--                                 <div class="form-group"> -->
-<!--                                     <div class="input-group"> -->
-<!--                                         <div class="input-group-addon">Password</div> -->
-<!--                                         <input type="password" id="password3" name="password3" class="form-control"> -->
-<!--                                         <div class="input-group-addon"><i class="fa fa-asterisk"></i></div> -->
-<!--                                     </div> -->
-<!--                                 </div> -->
-<!--                                 <div class="form-actions form-group"> -->
-<!--                                     <button type="submit" class="btn btn-primary btn-sm">Submit</button> -->
-<!--                                 </div> -->
-<!--                             </form> -->
-<!--                         </div> -->
-<!--                     </div> -->
-
-
             </div> <!-- row -->
         </div><!-- .animated -->
     </div><!-- .content -->
@@ -436,7 +421,7 @@
         <div class="footer-inner bg-white">
             <div class="row">
                 <div class="col-sm-6">
-                    Copyright &copy; 2018 Ela Admin
+                    Copyright &copy; 2023 
                 </div>
                 <div class="col-sm-6 text-right">
                     Designed by <a href="https://colorlib.com">Colorlib</a>

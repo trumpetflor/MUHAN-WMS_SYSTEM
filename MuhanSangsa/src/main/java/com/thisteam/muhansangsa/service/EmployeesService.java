@@ -1,19 +1,18 @@
 package com.thisteam.muhansangsa.service;
 
-import java.sql.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.thisteam.muhansangsa.mapper.MemberMapper;
+import com.thisteam.muhansangsa.mapper.EmployeesMapper;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 
 @Service
-public class MemberService {
+public class EmployeesService {
 
 	@Autowired
-	private MemberMapper mapper;
+	private EmployeesMapper mapper;
 	
+	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 	// 사원 등록 비즈니스 로직
 	public int registerEmployee(EmployeesVO employee) {
 		return mapper.insertEmployee(employee);
@@ -28,12 +27,8 @@ public class MemberService {
 	public String getidx(EmployeesVO employee) {
 		return mapper.selectIdx(employee);
 	}
-
-	// 권한 업데이트
-	public int getPrivCd(EmployeesVO employee) {
-		return mapper.updatePrivCo(employee);
-	}
-
+	
+	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 
 }
 
