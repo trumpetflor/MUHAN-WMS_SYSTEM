@@ -2,4 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.thisteam.muhansangsa.mapper.EmployeesMapper">
 
+<!-- =============================== 인사관리 : 로그인(세원) =========================================  -->
+<!-- 로그인, 패스워드 확인  -->
+<select id="selectPass" resultType="string">
+	SELECT emp_passwd
+		FROM employees
+		WHERE emp_email = #{emp_email}
+</select>
+
+
 </mapper>
