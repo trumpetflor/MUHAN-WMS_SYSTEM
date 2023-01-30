@@ -2,24 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.thisteam.muhansangsa.mapper.EmployeesMapper">
 	
-	<select id="selectMemberList" resultType="EmployeesVO">
+	<select id="selectMemberList" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
 		<!-- 사원조회 -->
-		
 		SELECT	IDX
 				,EMP_NUM
 				,EMP_NAME
-				,DEPT_CD
-				,GRADE_CD
+				,DEPT_NAME
+				,GRADE_NAME
 				,EMP_TEL
 				,EMP_DTEL
 				,EMP_EMAIL
 				,EMP_POST_NO
 				,EMP_ADDR
 				,HIRE_DATE
-				,WORK_CD
-				,PRIV_CD
+				,WORK_TYPE
+				,PRIV_TYPE
 				,PHOTO
-	 FROM employees;
+		 FROM emp_view
+	 		<if test="!keyword.equals('')">
+			WHERE
+			<!-- 2. 검색타입(searchType) 에 따른 WHERE 대상 변경 -->
+			<!-- => 조건이 복수개이므로 choose 태그 사용 -->
+			<choose>
+				<when test="searchType.equals('emp_name')">
+					EMP_NAME LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('emp_num')">
+					EMP_NUM LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('emp_email')">
+					EMP_EMAIL LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('dep_name')">
+					DEPT_NAME LIKE '%${keyword}%'
+				</when>
+			</choose>		
+			</if>
 		
 	</select>
 		
@@ -55,7 +73,7 @@
 	<!-- 사원 상세조회 -->
 	<select id="selectEmployee" resultType="EmployeesVO">
 		SELECT *
-		FROM employees
+		FROM emp_view
 			WHERE EMP_EMAIL = #{emp_email}
 		
 	</select>
@@ -65,11 +83,13 @@
 	<select id="selectDepartmentName" resultType="DepartmentVO">
 		SELECT DEPT_NAME
 		FROM department
+		WHERE DEPT_CD = #{dept_cd}
 	</select>
 	
 	<!-- 직급조회 -->
 	<select id="selectGradeName" resultType="GradeVO">
 		SELECT GRADE_NAME
 		FROM grade
+		WHERE GRADE_CD = #{grade_cd}
 	</select>
 </mapper>

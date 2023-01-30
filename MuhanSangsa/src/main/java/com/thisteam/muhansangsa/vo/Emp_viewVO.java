@@ -2,7 +2,7 @@ package com.thisteam.muhansangsa.vo;
 
 import java.sql.Date;
 
-public class EmployeesVO {
+public class Emp_viewVO {
 	
 //	IDX	인덱스
 //	EMP_NUM	사원번호
@@ -23,20 +23,17 @@ public class EmployeesVO {
 	int idx; //인덱스
 	String emp_num;//사원번호
 	String emp_name;//사원명
-	String dept_cd;//부서코드
-	String grade_cd;//직급코드
+	String dept_name;//부서명
+	String grade_name;//직급명
 	String emp_tel;//연락처(개인)
 	String emp_dtel;//연락처(사무실)
 	String emp_email;//이메일
-	String emp_passwd;//비밀번호
 	String emp_post_no;//우편번호
 	String emp_addr;//주소
 	Date hire_date;//입사일
-	String work_cd;//재직코드
-	String priv_cd;//권한
+	String work_type;//재직 (재직/휴직/퇴사)
+	String priv_type;//권한
 	String photo;//사진이미지
-	
-	
 	public int getIdx() {
 		return idx;
 	}
@@ -55,17 +52,17 @@ public class EmployeesVO {
 	public void setEmp_name(String emp_name) {
 		this.emp_name = emp_name;
 	}
-	public String getDept_cd() {
-		return dept_cd;
+	public String getDept_name() {
+		return dept_name;
 	}
-	public void setDept_cd(String dept_cd) {
-		this.dept_cd = dept_cd;
+	public void setDept_name(String dept_name) {
+		this.dept_name = dept_name;
 	}
-	public String getGrade_cd() {
-		return grade_cd;
+	public String getGrade_name() {
+		return grade_name;
 	}
-	public void setGrade_cd(String grade_cd) {
-		this.grade_cd = grade_cd;
+	public void setGrade_name(String grade_name) {
+		this.grade_name = grade_name;
 	}
 	public String getEmp_tel() {
 		return emp_tel;
@@ -85,12 +82,6 @@ public class EmployeesVO {
 	public void setEmp_email(String emp_email) {
 		this.emp_email = emp_email;
 	}
-	public String getEmp_passwd() {
-		return emp_passwd;
-	}
-	public void setEmp_passwd(String emp_passwd) {
-		this.emp_passwd = emp_passwd;
-	}
 	public String getEmp_post_no() {
 		return emp_post_no;
 	}
@@ -109,17 +100,17 @@ public class EmployeesVO {
 	public void setHire_date(Date hire_date) {
 		this.hire_date = hire_date;
 	}
-	public String getWork_cd() {
-		return work_cd;
+	public String getWork_type() {
+		return work_type;
 	}
-	public void setWork_cd(String work_cd) {
-		this.work_cd = work_cd;
+	public void setWork_type(String work_type) {
+		this.work_type = work_type;
 	}
-	public String getPriv_cd() {
-		return priv_cd;
+	public String getPriv_type() {
+		return priv_type;
 	}
-	public void setPriv_cd(String priv_cd) {
-		this.priv_cd = priv_cd;
+	public void setPriv_type(String priv_type) {
+		this.priv_type = priv_type;
 	}
 	public String getPhoto() {
 		return photo;
@@ -129,15 +120,15 @@ public class EmployeesVO {
 	}
 	@Override
 	public String toString() {
-		return "EmployeesVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_cd=" + dept_cd
-				+ ", grade_cd=" + grade_cd + ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email="
-				+ emp_email + ", emp_passwd=" + emp_passwd + ", emp_post_no=" + emp_post_no + ", emp_addr=" + emp_addr
-				+ ", hire_date=" + hire_date + ", work_cd=" + work_cd + ", priv_cd=" + priv_cd + ", photo=" + photo
-				+ "]";
+		return "Emp_viewVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_name=" + dept_name
+				+ ", grade_name=" + grade_name + ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email="
+				+ emp_email + ", emp_post_no=" + emp_post_no + ", emp_addr=" + emp_addr + ", hire_date=" + hire_date
+				+ ", work_type=" + work_type + ", priv_type=" + priv_type + ", photo=" + photo + "]";
 	}
 	
 	
-	
+
+
 	
 	
 }

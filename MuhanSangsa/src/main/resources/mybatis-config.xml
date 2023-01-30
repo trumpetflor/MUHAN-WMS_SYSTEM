@@ -9,6 +9,9 @@
 		<typeAlias type="com.thisteam.muhansangsa.vo.DepartmentVO" alias="DepartmentVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.GradeVO" alias="GradeVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.PrivilegeVO" alias="PrivilegeVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.WarehouseVO" alias="WarehouseVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.ClientVO" alias="ClientVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.WorkVO" alias="WorkVO"/>
 	</typeAliases>
 	
 	

@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    
     <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
     <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
 
@@ -18,8 +18,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-    <link rel="stylesheet" href="resources/assets/css/cs-skin-elastic.css">
-    <link rel="stylesheet" href="resources/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 	<!-- CSS only -->
@@ -175,11 +175,11 @@
 									</tr>
 									<tr>
 										<th>새비밀번호</th>
-										<td><input type="password" id="emp_NewPasswdCheck"></td>
+										<td><input type="password" id="emp_NewPasswd"></td>
 									</tr>
 									<tr>
 										<th>새비밀번호 확인</th>
-										<td><%-- ${emp.emp_email} --%></td>
+										<td><input type="password" id="emp_NewPasswdCheck"></td>
 									</tr>
 								</c:if>
 								<tr>

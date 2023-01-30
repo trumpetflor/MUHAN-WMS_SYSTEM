@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.muhansangsa.mapper.EmployeesMapper;
+import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.Privilege;
 
@@ -43,9 +44,9 @@ public class MemberService {
 	
 	
 	//사원 리스트 조회
-	public List getMemberList() {
+	public List<Emp_viewVO> getMemberList(String searchType, String keyword) {
 		
-		return mapper.selectMemberList() ;
+		return mapper.selectMemberList(searchType,keyword) ;
 		
 	}
 	
@@ -58,9 +59,9 @@ public class MemberService {
 	
 	
 	//사원 상세조회
-	public EmployeesVO getEmployee(String emp_email) {
+	public Emp_viewVO getEmployee(String emp_email) {
 		
-		EmployeesVO emp = mapper.selectEmployee(emp_email);
+		Emp_viewVO emp = mapper.selectEmployee(emp_email);
 		
 		return emp;
 	}

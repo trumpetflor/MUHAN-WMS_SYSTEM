@@ -18,8 +18,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-    <link rel="stylesheet" href="resources/assets/css/cs-skin-elastic.css">
-    <link rel="stylesheet" href="resources/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 	<!-- CSS only -->
@@ -62,6 +62,9 @@
 	 width: 80px;
 	 transition: 0.5s;
 	}
+	
+	
+	
 /* 	.id_pht:hover{ */
 /* 	 width: 300px; */
 /* 	 position: absolute; */
@@ -76,8 +79,6 @@
 		$("#detailBtn").on("click", function () {
 			alert("");
 			window.open("employeesDetail");
-			
-			
 			
 			
 			
@@ -123,8 +124,20 @@
 
 <div class="content">
    <div class="animated fadeIn">
+	   <section id="searchSection" class="m-0 d-flex justify-content-end">
+	   <form action="employees_search">
+				<!-- 검색 타입 추가 -->
+				<select name="searchType" id="searchType" class="rounded-1">
+					<option value="emp_name" <c:if test="${param.searchType eq 'emp_name'}">selected</c:if>>사원이름</option>
+					<option value="emp_num" <c:if test="${param.searchType eq 'emp_num'}">selected</c:if>>사원번호</option>
+					<option value="emp_email" <c:if test="${param.searchType eq 'emp_email'}">selected</c:if>>이메일</option>
+					<option value="dept_name" <c:if test="${param.searchType eq 'dept_name'}">selected</c:if>>부서</option>
+				</select>			
+				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1" name="keyword" id="keyword" value="${param.keyword }"> 
+				<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
+		</form>
+	   </section>
 	<table class="table "  id="vertical-align">
-
 		<thead>
 			<tr>
 				<th>사진</th>
@@ -138,33 +151,23 @@
 			</tr>
 		</thead>
 		<tbody>
+		<c:forEach items="${empList }" var="emp">
 			<tr>
 				<td><img class="id_pht" alt="증명사진" src="resources/images/id_photo01.jpg"></td>
-				<td>200043</td>
-				<td>김대리</td>
-				<td>개발팀</td>
-				<td>대리</td>
-				<td>010-0000-0000</td>
-				<td><a href="#">asdaf@muhan.com</a></td>
-				<th><!-- 관리 권한 부여 시 조회 가능 -->
-					<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"> 
-	 				<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn">
-	 			</th>
+				<td>${emp.emp_num }</td>
+				<td>${emp.emp_name }</td>
+				<td>${emp.dept_name }</td>
+				<td>${emp.grade_name }</td>
+				<td>${emp.emp_tel }</td>
+				<td><a href="#">${emp.emp_email }</a></td>
+				<c:if test="${priv == 'ture' }">
+					<th><!-- 관리 권한 부여 시 조회 가능 -->
+						<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"> 
+		 				<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn">
+		 			</th>
+				</c:if>
 			</tr>
-			
-			<tr>
-				<td><img class="id_pht" alt="증명사진" src="resources/images/id_photo02.jpg"></td>
-				<td>27896043</td>
-				<td>정히히</td>
-				<td>개발팀</td>
-				<td>부장</td>
-				<td>010-0000-0000</td>
-				<td><a href="#">dfsdf@muhan.com</a></td>
-				<th><!-- 관리 권한 부여 시 조회 가능 -->
-					<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn"> 
-	 				<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn">
-	 			</th>
-			</tr>
+		</c:forEach>
 		</tbody>
 	
 	</table>
