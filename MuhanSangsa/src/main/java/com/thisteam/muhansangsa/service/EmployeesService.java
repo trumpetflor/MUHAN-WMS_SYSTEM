@@ -34,6 +34,11 @@ public class EmployeesService {
 		return mapper.selectIdx(employee);
 	}
 	
+	public void sendEmail() {
+		
+	}
+	
+	
 	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 
 	

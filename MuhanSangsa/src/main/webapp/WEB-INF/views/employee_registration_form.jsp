@@ -289,57 +289,57 @@
 <!--                                     </div> -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="name" class=" form-control-label">사원명</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="name" name="emp_Name" placeholder="사원명을 입력하세요" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="name" name="emp_name" placeholder="사원명을 입력하세요" class="form-control"></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="department" class=" form-control-label">부서코드</label></div>
                                         <div class="col-12 col-md-9">
-                                            <select name="dept_Cd" id="department" class="form-control">
+                                            <select name="dept_cd" id="department" class="form-control">
                                                 <option value="0">부서명을 선택하세요</option>
-                                                <option value="인사팀">인사팀</option>
-                                                <option value="개발팀">개발팀</option>
-                                                <option value="물류관리팀">물류관리팀</option>
-                                                <option value="영업팀">영업팀</option>
+                                                <option value="01">인사팀</option>
+                                                <option value="02">개발팀</option>
+                                                <option value="03">물류관리팀</option>
+                                                <option value="04">영업팀</option>
                                             </select>
                                         </div>
                                     </div>
                                      <div class="row form-group">
                                         <div class="col col-md-3"><label for="position" class=" form-control-label">직급코드</label></div>
                                         <div class="col-12 col-md-9">
-                                            <select name="grade_Cd" id="position" class="form-control">
+                                            <select name="grade_cd" id="position" class="form-control">
                                                 <option value="0">직급을 선택하세요</option>
-                                                <option value="사원">사원</option>
-                                                <option value="대리">대리</option>
-                                                <option value="부장">부장</option>
-                                                <option value="대표">대표</option>
+                                                <option value="1">사원</option>
+                                                <option value="2">대리</option>
+                                                <option value="3">부장</option>
+                                                <option value="4">대표</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="mobile" class=" form-control-label">연락처(개인)</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="mobile" name="emp_Tel" placeholder="ex) 010-1234-5678" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="mobile" name="emp_tel" placeholder="ex) 010-1234-5678" class="form-control"></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="dTel" class=" form-control-label">연락처(사무실)</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="" name="emp_Dtel" placeholder="ex) 051-123-4567" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="" name="emp_dtel" placeholder="ex) 051-123-4567" class="form-control"></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email" class=" form-control-label">Email</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="email" name="emp_Email" placeholder="이메일을 입력하세요" class="form-control" >
+                                        <div class="col-12 col-md-9"><input type="email" id="email" name="emp_email" placeholder="이메일을 입력하세요" class="form-control" >
                                         <small class="help-block form-text">사원의 이메일은 무한상사 관리시스템 아이디로 사용됩니다</small></div>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="password" class=" form-control-label">Password</label></div>
-                                        <div class="col-12 col-md-9"><input type="password" id="password" name="emp_Passwd" placeholder="비밀번호를 입력하세요" class="form-control"><small class="help-block form-text">Please enter a complex password</small></div>
-                                    </div>
+<!--                                     <div class="row form-group"> -->
+<!--                                         <div class="col col-md-3"><label for="password" class=" form-control-label">Password</label></div> -->
+<!--                                         <div class="col-12 col-md-9"><input type="password" id="password" name="emp_passwd" placeholder="비밀번호를 입력하세요" class="form-control"><small class="help-block form-text">Please enter a complex password</small></div> -->
+<!--                                     </div> -->
                                     <!-- 주소 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="postCode" class=" form-control-label">우편번호</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="postCode" name="emp_Post_No" placeholder="우편번호를 입력하세요" class="form-control"><input type="button" value="주소 검색" onclick="kakaoAddr()" ></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="postCode" name="emp_post_No" placeholder="우편번호를 입력하세요" class="form-control"><input type="button" value="주소 검색" onclick="kakaoAddr()" ></div>
                                     </div>
                                		 <div class="row form-group">
                                         <div class="col col-md-3"><label for="address1" class=" form-control-label">주소</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="address1" name="emp_Addr" placeholder="주소를 입력하세요" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="address1" name="emp_addr" placeholder="주소를 입력하세요" class="form-control"></div>
                                     </div>
                                      <div class="row form-group">
                                         <div class="col col-md-3"><label for="address2" class=" form-control-label">상세주소</label></div>
@@ -349,18 +349,18 @@
 	                                 <!-- 입사일 -->
 	                                  <div class="row form-group">
                                         <div class="col col-md-3"><label for="hireDate" class=" form-control-label">입사일</label></div>
-                                        <div class="col-12 col-md-9"><input type="date" id="hireDate" name="hire_Date" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="date" id="hireDate" name="hire_date" class="form-control"></div>
                                      </div>
                                      <!-- 입사일 -->
 	                                 <!-- 재직여부 -->
 	                                  <div class="row form-group">
                                         <div class="col col-md-3"><label for="workCd" class=" form-control-label">재직여부</label></div>
                                         <div class="col-12 col-md-9">
-                                            <select name="work_Cd" id="workCd" class="form-control">
+                                            <select name="work_cd" id="workCd" class="form-control">
                                                 <option value="0">재직여부를 선택하세요</option>
-                                                <option value="재직">재직</option>
-                                                <option value="휴직">휴직</option>
-                                                <option value="퇴사">퇴사</option>
+                                                <option value="1">재직</option>
+                                                <option value="2">휴직</option>
+                                                <option value="3">퇴사</option>
                                             </select>
                                         </div>
                                     </div>
@@ -371,19 +371,19 @@
                                         <div class="col col-md-9">
                                             <div class="form-check-inline form-check">
                                                 <label for="level1" class="form-check-label ">
-                                                    <input type="checkbox" id="level1" name="priv_Cd" value="10000" class="form-check-input">기본등록&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level1" name="priv_cd" value="10000" class="form-check-input">기본등록&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level2" class="form-check-label ">
-                                                    <input type="checkbox" id="level2" name="priv_Cd" value="1000" class="form-check-input" >사원조회&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level2" name="priv_cd" value="1000" class="form-check-input" >사원조회&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level2" class="form-check-label ">
-                                                    <input type="checkbox" id="level3" name="priv_Cd" value="100" class="form-check-input" >사원관리&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level3" name="priv_cd" value="100" class="form-check-input" >사원관리&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level3" class="form-check-label ">
-                                                    <input type="checkbox" id="level4" name="priv_Cd" value="10" class="form-check-input">재고조회&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level4" name="priv_cd" value="10" class="form-check-input">재고조회&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level4" class="form-check-label ">
-                                                    <input type="checkbox" id="level5" name="priv_Cd" value="1" class="form-check-input">재고관리&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level5" name="priv_cd" value="1" class="form-check-input">재고관리&nbsp;&nbsp;
                                                 </label>
                                             </div>
                                         </div>

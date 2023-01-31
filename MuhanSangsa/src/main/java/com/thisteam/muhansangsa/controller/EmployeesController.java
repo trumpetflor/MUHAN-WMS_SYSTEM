@@ -3,7 +3,7 @@ package com.thisteam.muhansangsa.controller;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
-
+import java.util.UUID;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -18,13 +18,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
-
+import org.springframework.web.servlet.ModelAndView;
 
 import com.thisteam.muhansangsa.service.EmployeesService;
+import com.thisteam.muhansangsa.service.MailService;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.Privilege;
@@ -34,6 +35,7 @@ public class EmployeesController {
 	
 	@Autowired
 	private EmployeesService service;
+	private MailService mailService;
 	
 	
 
@@ -52,26 +54,26 @@ public class EmployeesController {
 		
 		// ---------------------------------------- 사원 번호 생성 
 		// 2. 부서코드(이름) -> 부서코드(코드)
-	      String deptCd = "";
-	      switch (employee.getDept_cd()) {
-	      case "인사팀": deptCd = "01"; break;
-	      case "개발팀": deptCd = "02"; break;
-	      case "물류관리팀": deptCd = "03"; break;
-	      case "영업팀": deptCd = "04"; break;
-
-	      default: deptCd = "00";
+//	      String deptCd = "";
+//	      switch (employee.getDept_cd()) {
+//	      case "인사팀": deptCd = "01"; break;
+//	      case "개발팀": deptCd = "02"; break;
+//	      case "물류관리팀": deptCd = "03"; break;
+//	      case "영업팀": deptCd = "04"; break;
+//
+//	      default: deptCd = "00";
 //	            employee.setDept_Cd("미정");
-	         break;
-	      }
+//	         break;
+//	      }
 	      
 	      // 3. IDX 값 0 일 시 기본값 1로 세팅
-	      if(employee.getIdx() == 0) {
-	         employee.setIdx(1);
-	      }
+//	      if(employee.getIdx() == 0) {
+//	         employee.setIdx(1);
+//	      }
 	      
 	      // 4. 캘린더로 받은 date 값 SimpleDateFormat을 이용하여 연도 뒤2자리만 추출하기
-	      SimpleDateFormat dateFormat = new SimpleDateFormat("YY");
-	      String date = dateFormat.format(employee.getHire_date());
+//	      SimpleDateFormat dateFormat = new SimpleDateFormat("YY");
+//	      String date = dateFormat.format(employee.getHire_date());
 	      
 	      // ---------------------------------------- 사원 번호 생성 (SimpleDateFormat + switch case적용)
 	      
@@ -92,7 +94,8 @@ public class EmployeesController {
 	   // ---------------------------------------- 권한 코드 생성 (2진수 적용 + reverse)
 		
 		// 1. 사원 번호를 위한 부서코드 추출
-		String departmentCode = service.getDepartmentCode(employee.getDept_cd());
+//		String departmentCode = service.getDepartmentCode(employee.getDept_cd());
+	    String departmentCode = employee.getDept_cd();
 		System.out.println("부서코드 잘 추출됐냐 : " + departmentCode);
 		
 		// 2. 사원 번호를 위한 입사년도 추출
@@ -152,12 +155,37 @@ public class EmployeesController {
 			employee.setPriv_cd(privCd);
 		}
 		
+		//-----------------------------완료 
+		
+		// 23/01/31 이메일 인증을 이용하여 임시비밀번호 전송 및 비밀번호 세팅
+//		String passwd = mailService.sendPasswdToEmail(employee.getEmp_email());
+		
+		String passwd = UUID.randomUUID().toString().substring(2, 9);
+		System.out.println("이메일 인증에 사용된 ePw : " + passwd);
+		
+		employee.setEmp_passwd(passwd);
+		
+		// 이메일을 보내봅니다...
 		
 		// 7. 최종 : 사원 등록 
 		int insertCount = service.registerEmployee(employee);
 		
 		
 		if(insertCount > 0) { // 등록 성공 시
+			String employeeEmail = employee.getEmp_email();
+			String addr = "miju.kim.kr@gmail.com";
+			String subject = "무한상사 임시 비밀번호 전송 이메일";
+			String body = "나옵니까"+passwd;
+			
+			System.out.println("이메일 보내지는게 나옵니까" + employeeEmail + addr + subject + body);
+			
+			try {
+				mailService.sendSimpleMessage(employeeEmail);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//			mailService.sendEmail(employeeEmail, addr, subject, body);
 			return "redirect:/";
 		} else {
 			model.addAttribute("msg", "사원 등록 실패!");
@@ -165,7 +193,25 @@ public class EmployeesController {
 		}
 		
 		
+	} // registerPro
+	
+//	@RequestMapping("/emailConfirm")
+//	public ModelAndView sendEmail( String email) throws Exception {
+//		
+//		
+//		return "";
+//		
+//	} // sendEmail
+	
+	@PostMapping("/email")
+	public String sendEmail() {
+		
+//		mailService.sendSimpleMessage(null);
+		
+		return "redirect:/";
 	}
+	
+	
 	
 	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 
