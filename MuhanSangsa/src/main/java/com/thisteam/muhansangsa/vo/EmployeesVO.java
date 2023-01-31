@@ -2,144 +2,136 @@ package com.thisteam.muhansangsa.vo;
 
 import java.sql.Date;
 
+
+import org.springframework.web.multipart.MultipartFile;
+
+
 public class EmployeesVO {
+
+	   private int idx; //ì¸ë±ìŠ¤
+	   private String emp_num; // ì‚¬ì›ë²ˆí˜¸
+	   private String emp_name; // ì‚¬ì›ëª…
+	   private String dept_cd; // ë¶€ì„œì½”ë“œ
+	   private String grade_cd; //ì§ê¸‰ì½”ë“œ
+	   private String emp_tel; //ì—°ë½ì²˜(ê°œì¸)
+	   private String emp_dtel; //ì—°ë½ì²˜(ì‚¬ë¬´ì‹¤)
+	   private String emp_email; 
+	   private String emp_passwd; //ë¡œê·¸ì¸ ì‹œ ì‚¬ìš© 
+	   private String emp_post_No; 
+	   private String emp_addr;
+	   private Date hire_date; //ìž…ì‚¬ì¼
+	   private String work_cd; //ìž¬ì§ì½”ë“œ
+	   private String priv_cd; //ê¶Œí•œ
+	   private String photo;
 	
-//	IDX	ÀÎµ¦½º
-//	EMP_NUM	»ç¿ø¹øÈ£
-//	EMP_NAME	»ç¿ø¸í
-//	DEPT_CD	ºÎ¼­ÄÚµå
-//	GRADE_CD	Á÷±ÞÄÚµå
-//	EMP_TEL	¿¬¶ôÃ³(°³ÀÎ)
-//	EMP_DTEL	¿¬¶ôÃ³(»ç¹«½Ç)
-//	EMP_EMAIL	ÀÌ¸ÞÀÏ
-//	EMP_PASSWD	ºñ¹Ð¹øÈ£
-//	EMP_POST_NO	¿ìÆí¹øÈ£
-//	EMP_ADDR	ÁÖ¼Ò
-//	HIRE_DATE	ÀÔ»çÀÏ
-//	WORK_CD	ÀçÁ÷ÄÚµå
-//	PRIV_CD	±ÇÇÑ
-//	PHOTO	»çÁøÀÌ¹ÌÁö
-	
-	int idx; //ÀÎµ¦½º
-	String emp_num;//»ç¿ø¹øÈ£
-	String emp_name;//»ç¿ø¸í
-	String dept_cd;//ºÎ¼­ÄÚµå
-	String grade_cd;//Á÷±ÞÄÚµå
-	String emp_tel;//¿¬¶ôÃ³(°³ÀÎ)
-	String emp_dtel;//¿¬¶ôÃ³(»ç¹«½Ç)
-	String emp_email;//ÀÌ¸ÞÀÏ
-	String emp_passwd;//ºñ¹Ð¹øÈ£
-	String emp_post_no;//¿ìÆí¹øÈ£
-	String emp_addr;//ÁÖ¼Ò
-	Date hire_date;//ÀÔ»çÀÏ
-	String work_cd;//ÀçÁ÷ÄÚµå
-	String priv_cd;//±ÇÇÑ
-	String photo;//»çÁøÀÌ¹ÌÁö
-	
-	
-	public int getIdx() {
+
+	   public int getIdx() {
 		return idx;
-	}
-	public void setIdx(int idx) {
-		this.idx = idx;
-	}
-	public String getEmp_num() {
-		return emp_num;
-	}
-	public void setEmp_num(String emp_num) {
-		this.emp_num = emp_num;
-	}
-	public String getEmp_name() {
-		return emp_name;
-	}
-	public void setEmp_name(String emp_name) {
-		this.emp_name = emp_name;
-	}
-	public String getDept_cd() {
-		return dept_cd;
-	}
-	public void setDept_cd(String dept_cd) {
-		this.dept_cd = dept_cd;
-	}
-	public String getGrade_cd() {
-		return grade_cd;
-	}
-	public void setGrade_cd(String grade_cd) {
-		this.grade_cd = grade_cd;
-	}
-	public String getEmp_tel() {
-		return emp_tel;
-	}
-	public void setEmp_tel(String emp_tel) {
-		this.emp_tel = emp_tel;
-	}
-	public String getEmp_dtel() {
-		return emp_dtel;
-	}
-	public void setEmp_dtel(String emp_dtel) {
-		this.emp_dtel = emp_dtel;
-	}
-	public String getEmp_email() {
-		return emp_email;
-	}
-	public void setEmp_email(String emp_email) {
-		this.emp_email = emp_email;
-	}
-	public String getEmp_passwd() {
-		return emp_passwd;
-	}
-	public void setEmp_passwd(String emp_passwd) {
-		this.emp_passwd = emp_passwd;
-	}
-	public String getEmp_post_no() {
-		return emp_post_no;
-	}
-	public void setEmp_post_no(String emp_post_no) {
-		this.emp_post_no = emp_post_no;
-	}
-	public String getEmp_addr() {
-		return emp_addr;
-	}
-	public void setEmp_addr(String emp_addr) {
-		this.emp_addr = emp_addr;
-	}
-	public Date getHire_date() {
-		return hire_date;
-	}
-	public void setHire_date(Date hire_date) {
-		this.hire_date = hire_date;
-	}
-	public String getWork_cd() {
-		return work_cd;
-	}
-	public void setWork_cd(String work_cd) {
-		this.work_cd = work_cd;
-	}
-	public String getPriv_cd() {
-		return priv_cd;
-	}
-	public void setPriv_cd(String priv_cd) {
-		this.priv_cd = priv_cd;
-	}
-	public String getPhoto() {
-		return photo;
-	}
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-	@Override
-	public String toString() {
-		return "EmployeesVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_cd=" + dept_cd
-				+ ", grade_cd=" + grade_cd + ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email="
-				+ emp_email + ", emp_passwd=" + emp_passwd + ", emp_post_no=" + emp_post_no + ", emp_addr=" + emp_addr
-				+ ", hire_date=" + hire_date + ", work_cd=" + work_cd + ", priv_cd=" + priv_cd + ", photo=" + photo
-				+ "]";
-	}
-	
-	
-	
-	
-	
+		}
+		public void setIdx(int idx) {
+			this.idx = idx;
+		}
+		public String getEmp_num() {
+			return emp_num;
+		}
+		public void setEmp_num(String emp_num) {
+			this.emp_num = emp_num;
+		}
+		public String getEmp_name() {
+			return emp_name;
+		}
+		public void setEmp_name(String emp_name) {
+			this.emp_name = emp_name;
+		}
+		public String getDept_cd() {
+			return dept_cd;
+		}
+		public void setDept_cd(String dept_cd) {
+			this.dept_cd = dept_cd;
+		}
+		public String getGrade_cd() {
+			return grade_cd;
+		}
+		public void setGrade_cd(String grade_cd) {
+			this.grade_cd = grade_cd;
+		}
+		public String getEmp_tel() {
+			return emp_tel;
+		}
+		public void setEmp_tel(String emp_tel) {
+			this.emp_tel = emp_tel;
+		}
+		public String getEmp_dtel() {
+			return emp_dtel;
+		}
+		public void setEmp_dtel(String emp_dtel) {
+			this.emp_dtel = emp_dtel;
+		}
+		public String getEmp_email() {
+			return emp_email;
+		}
+		public void setEmp_email(String emp_email) {
+			this.emp_email = emp_email;
+		}
+		public String getEmp_passwd() {
+			return emp_passwd;
+		}
+		public void setEmp_passwd(String emp_passwd) {
+			this.emp_passwd = emp_passwd;
+		}
+		public String getEmp_post_No() {
+			return emp_post_No;
+		}
+		public void setEmp_post_No(String emp_post_No) {
+			this.emp_post_No = emp_post_No;
+		}
+		public String getEmp_addr() {
+			return emp_addr;
+		}
+		public void setEmp_addr(String emp_addr) {
+			this.emp_addr = emp_addr;
+		}
+		public Date getHire_date() {
+			return hire_date;
+		}
+		public void setHire_date(Date hire_date) {
+			this.hire_date = hire_date;
+		}
+		public String getWork_cd() {
+			return work_cd;
+		}
+		public void setWork_cd(String work_cd) {
+			this.work_cd = work_cd;
+		}
+		public String getPriv_cd() {
+			return priv_cd;
+		}
+		public void setPriv_cd(String priv_cd) {
+			this.priv_cd = priv_cd;
+		}
+		public String getPhoto() {
+			return photo;
+		}
+		public void setPhoto(String photo) {
+			this.photo = photo;
+		}
+
+    // toString ë°©ì‹ => ë¯¸ì£¼ì‹œ ë²„ì „ìž…ë‹ˆë‹¹
+		@Override
+		public String toString() {
+			StringBuilder builder = new StringBuilder();
+			builder.append("EmployeesVO [idx=").append(idx).append(", emp_Num=").append(emp_Num).append(", emp_Name=")
+					.append(emp_Name).append(", dept_Cd=").append(dept_Cd).append(", grade_Cd=").append(grade_Cd)
+					.append(", emp_Tel=").append(emp_Tel).append(", emp_Dtel=").append(emp_Dtel).append(", emp_Email=")
+					.append(emp_Email).append(", emp_Passwd=").append(emp_Passwd).append(", emp_Post_No=")
+					.append(emp_Post_No).append(", emp_Addr=").append(emp_Addr).append(", hire_Date=").append(hire_Date)
+					.append(", work_Cd=").append(work_Cd).append(", priv_Cd=").append(priv_Cd).append(", photo=")
+					.append(photo).append("]");
+			return builder.toString();
+		}
+		
+		
+
 }
 
 
