@@ -27,12 +27,13 @@ public class ClientVO {
 	private String business_no;
 	private String cust_name;
 	private String boss_name;
-	private String update;
+	private String uptae;
 	private String jongmok;
 	private String tel;
 	private String email;
 	private String post_no;
 	private String addr;
+	private String detailedAddr; // 상세 주소 (DB X)
 	private String g_gubun;
 	private String fax;
 	private String mobile_no;
@@ -60,11 +61,11 @@ public class ClientVO {
 	public void setBoss_name(String boss_name) {
 		this.boss_name = boss_name;
 	}
-	public String getUpdate() {
-		return update;
+	public String getUptae() {
+		return uptae;
 	}
-	public void setUpdate(String update) {
-		this.update = update;
+	public void setUptae(String uptae) {
+		this.uptae = uptae;
 	}
 	public String getJongmok() {
 		return jongmok;
@@ -95,6 +96,12 @@ public class ClientVO {
 	}
 	public void setAddr(String addr) {
 		this.addr = addr;
+	}
+	public String getDetailedAddr() {
+		return detailedAddr;
+	}
+	public void setDetailedAddr(String detailedAddr) {
+		this.detailedAddr = detailedAddr;
 	}
 	public String getG_gubun() {
 		return g_gubun;
@@ -148,10 +155,10 @@ public class ClientVO {
 	@Override
 	public String toString() {
 		return "ClientVO [business_no=" + business_no + ", cust_name=" + cust_name + ", boss_name=" + boss_name
-				+ ", update=" + update + ", jongmok=" + jongmok + ", tel=" + tel + ", email=" + email + ", post_no="
-				+ post_no + ", addr=" + addr + ", g_gubun=" + g_gubun + ", fax=" + fax + ", mobile_no=" + mobile_no
-				+ ", url_path=" + url_path + ", man_name=" + man_name + ", man_tel=" + man_tel + ", man_email="
-				+ man_email + ", remarks=" + remarks + "]";
+				+ ", uptae=" + uptae + ", jongmok=" + jongmok + ", tel=" + tel + ", email=" + email + ", post_no="
+				+ post_no + ", addr=" + addr + ", detailedAddr=" + detailedAddr + ", g_gubun=" + g_gubun + ", fax="
+				+ fax + ", mobile_no=" + mobile_no + ", url_path=" + url_path + ", man_name=" + man_name + ", man_tel="
+				+ man_tel + ", man_email=" + man_email + ", remarks=" + remarks + "]";
 	}
 	
 }

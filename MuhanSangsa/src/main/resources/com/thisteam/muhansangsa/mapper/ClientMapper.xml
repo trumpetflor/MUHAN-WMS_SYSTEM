@@ -2,4 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.thisteam.muhansangsa.mapper.ClientMapper">
 
+	<!-- 거래처 등록 -->
+	<insert id="insertClient">
+		INSERT client
+			VALUES(
+				#{business_no}
+				, #{cust_name}
+				, #{boss_name}
+				, #{uptae}
+				, #{jongmok}
+				, #{tel}
+				, #{email}
+				, #{post_no}
+				, CONCAT(#{addr}, '/', #{detailedAddr})
+				, #{g_gubun}
+				, #{fax}
+				, #{mobile_no}
+				, #{url_path}
+				, #{man_name}
+				, #{man_tel}
+				, #{man_email}
+				, #{remarks}
+			)
+	</insert>
+
+	<select id="selectClientList" resultType="com.thisteam.muhansangsa.vo.ClientVO">
+<!-- 		SELECT business_no, cust_name, boss_name, tel, addr, mobile_no, remarks -->
+		SELECT *
+			FROM client
+	</select>
+
 </mapper>
