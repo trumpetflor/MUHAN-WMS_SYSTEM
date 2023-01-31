@@ -66,12 +66,31 @@
     
 
 <!-- =============================== 인사관리 : 로그인(세원) =========================================  -->
-<!-- 로그인, 패스워드 확인  -->
-<select id="selectPass" resultType="string">
-	SELECT emp_passwd
+	<!-- 로그인, 패스워드 확인  -->
+	<select id="selectPass" resultType="string">
+		SELECT emp_passwd
+			FROM employees
+			WHERE emp_email = #{emp_email}
+	</select>
+
+	<!-- 마이페이지 정보 조회 -->
+	<select id="selectMypageInfo" resultType="com.thisteam.muhansangsa.vo.EmployeesVO">
+	SELECT emp_num
+			, emp_name
+			, dept_cd
+			, grade_cd
+			, emp_tel
+			, emp_dtel
+			, emp_email
+			, emp_passwd
+			, emp_post_No
+			, emp_addr
+			, hire_date
+			, work_cd, photo
 		FROM employees
-		WHERE emp_email = #{emp_email}
-</select>
+		WHERE 
+			emp_num = #{emp_num}
+	</select>
 
 
 <!-- ===================================== hawon =========================================  -->
