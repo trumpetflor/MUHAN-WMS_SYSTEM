@@ -115,21 +115,17 @@ public class EmployeesVO {
 		public void setPhoto(String photo) {
 			this.photo = photo;
 		}
-
-    // toString 방식 => 미주시 버전입니당
+		
+		
 		@Override
 		public String toString() {
-			StringBuilder builder = new StringBuilder();
-			builder.append("EmployeesVO [idx=").append(idx).append(", emp_Num=").append(emp_Num).append(", emp_Name=")
-					.append(emp_Name).append(", dept_Cd=").append(dept_Cd).append(", grade_Cd=").append(grade_Cd)
-					.append(", emp_Tel=").append(emp_Tel).append(", emp_Dtel=").append(emp_Dtel).append(", emp_Email=")
-					.append(emp_Email).append(", emp_Passwd=").append(emp_Passwd).append(", emp_Post_No=")
-					.append(emp_Post_No).append(", emp_Addr=").append(emp_Addr).append(", hire_Date=").append(hire_Date)
-					.append(", work_Cd=").append(work_Cd).append(", priv_Cd=").append(priv_Cd).append(", photo=")
-					.append(photo).append("]");
-			return builder.toString();
+			return "EmployeesVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_cd="
+					+ dept_cd + ", grade_cd=" + grade_cd + ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel
+					+ ", emp_email=" + emp_email + ", emp_passwd=" + emp_passwd + ", emp_post_No=" + emp_post_No
+					+ ", emp_addr=" + emp_addr + ", hire_date=" + hire_date + ", work_cd=" + work_cd + ", priv_cd="
+					+ priv_cd + ", photo=" + photo + "]";
 		}
-		
+
 		
 
 }

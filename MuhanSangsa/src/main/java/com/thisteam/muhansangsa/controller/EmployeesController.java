@@ -53,7 +53,7 @@ public class EmployeesController {
 		// ---------------------------------------- 사원 번호 생성 
 		// 2. 부서코드(이름) -> 부서코드(코드)
 	      String deptCd = "";
-	      switch (employee.getDept_Cd()) {
+	      switch (employee.getDept_cd()) {
 	      case "인사팀": deptCd = "01"; break;
 	      case "개발팀": deptCd = "02"; break;
 	      case "물류관리팀": deptCd = "03"; break;
@@ -71,7 +71,7 @@ public class EmployeesController {
 	      
 	      // 4. 캘린더로 받은 date 값 SimpleDateFormat을 이용하여 연도 뒤2자리만 추출하기
 	      SimpleDateFormat dateFormat = new SimpleDateFormat("YY");
-	      String date = dateFormat.format(employee.getHire_Date());
+	      String date = dateFormat.format(employee.getHire_date());
 	      
 	      // ---------------------------------------- 사원 번호 생성 (SimpleDateFormat + switch case적용)
 	      
@@ -92,18 +92,18 @@ public class EmployeesController {
 	   // ---------------------------------------- 권한 코드 생성 (2진수 적용 + reverse)
 		
 		// 1. 사원 번호를 위한 부서코드 추출
-		String departmentCode = service.getDepartmentCode(employee.getDept_Cd());
+		String departmentCode = service.getDepartmentCode(employee.getDept_cd());
 		System.out.println("부서코드 잘 추출됐냐 : " + departmentCode);
 		
 		// 2. 사원 번호를 위한 입사년도 추출
-		String hireYear = employee.getHire_Date().toString().substring(2, 4);
+		String hireYear = employee.getHire_date().toString().substring(2, 4);
 		System.out.println("입사년도 나오냐? :" + hireYear);
 		
 		// 3. 사원 번호를 위한 idx 추출 (LPAD 사용 3자리 idx처리)
 	 	String idx = service.getidx(employee);
 		
 		// 4. 최종 사원 번호 = 부서코드(2)+입사년도(2)+인덱스(3)(= 총 7자리), 자동부여
-		employee.setEmp_Num(departmentCode+hireYear+idx);
+		employee.setEmp_num(departmentCode+hireYear+idx);
 		
 		// 파일 업로드를 위한 변수 설정
 		String uploadDir = "/resources/upload";
@@ -136,7 +136,7 @@ public class EmployeesController {
 		int priv_code = 0;
 		String privCd = "";
 		
-		String[] arr = employee.getPriv_Cd().split(",");
+		String[] arr = employee.getPriv_cd().split(",");
 		for(String code : arr) {
 			// 권한 int타입으로 변환하여 계산
 			
@@ -149,7 +149,7 @@ public class EmployeesController {
 			privCd = String.format("%5s", Integer.toBinaryString(priv_code)).replaceAll(" ", "0");
 			
 			// 권한 설정
-			employee.setPriv_Cd(privCd);
+			employee.setPriv_cd(privCd);
 		}
 		
 		
