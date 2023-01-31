@@ -1,30 +1,28 @@
 package com.thisteam.muhansangsa.controller;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
-
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
-
 import com.thisteam.muhansangsa.service.EmployeesService;
+import com.thisteam.muhansangsa.vo.DepartmentVO;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.Privilege;
@@ -267,17 +265,20 @@ public class EmployeesController {
 		session.getAttribute("sId");
 		String sId = (String)session.getAttribute("sId");
 		
-//		sId="admin@muhan.com";
+		sId="admin@muhan.com";
 		if(sId != null) { 
 
 			//권한 조회 메서드
-			boolean isRightUser = service.getPrivilege(sId,Privilege.사원관리);
+			boolean isRightUser = service.getPrivilege(sId,Privilege.사원조회);
 			isRightUser = true;//TODO:
 			if(isRightUser) {
 				
 				//권한 있을 시에 조회 수행
 				List<Emp_viewVO> empList= service.getMemberList(searchType,keyword);
 				model.addAttribute("empList", empList);
+				isRightUser = service.getPrivilege(sId,Privilege.사원관리);
+				System.out.println("사원관리 권한: " + isRightUser);
+				model.addAttribute("priv", "1");
 			}
 		
 			System.out.println("sId   : "+sId);
@@ -365,7 +366,7 @@ public class EmployeesController {
 	}
 	
 	//상세조회
-	@GetMapping(value = "/employeesDetail")
+	@GetMapping(value = "/employees/detail")
 	public String emp_detail(Model model, HttpSession session){
 		
 		String ip;
@@ -386,7 +387,7 @@ public class EmployeesController {
 		//세션아이디
 		String sId = (String)session.getAttribute("sId");
 		
-//		sId="admin@muhan.com";
+		sId="admin@muhan.com";
 		System.out.println("sId   : "+sId);
 		
 		if(sId != null) {
@@ -406,15 +407,40 @@ public class EmployeesController {
 				
 				}
 					
-					
 			}else {
 				model.addAttribute("msg", "잘못된 접근입니다");
 				return "fail_back";
 			}
+	}
+		
+		
+		
+		@PostMapping("/dept_detail")
+		public String dept_detail(Model model, HttpSession session, DepartmentVO dept){
+			System.out.println("도착");
+			dept.getDept_cd();
+			dept.getDept_name();
+		
+			int dept_cd  = Integer.parseInt((dept.getDept_cd()));
+			List<Map<String, String>> deptInfo = service.getDeptInfo_count(dept_cd);
+			System.out.println("deptInfo:"+deptInfo);
+//			[{count(GRADE_NAME)=1, GRADE_NAME=사원}, {count(GRADE_NAME)=1, GRADE_NAME=대리}]
+			model.addAttribute("deptInfo", deptInfo);
+			
+			List<Emp_viewVO> deptInfoList = service.getDeptmemberComposition(dept_cd);
+			System.out.println("deptInfoList:"+deptInfoList);
+			//[Emp_viewVO [idx=0, emp_num=0322009, emp_name=최사원아, dept_name=null, grade_name=사원, emp_tel=1234, emp_dtel=1, emp_email=letmego@letmego, emp_post_no=null, emp_addr=null, hire_date=null, work_type=null, priv_type=null, photo=null]
+			// , Emp_viewVO [idx=0, emp_num=0323007, emp_name=김사원아, dept_name=null, grade_name=대리, emp_tel=12, emp_dtel=11, emp_email=letmego@letmego, emp_post_no=null, emp_addr=null, hire_date=null, work_type=null, priv_type=null, photo=null]]
+			model.addAttribute("deptInfoList", deptInfoList);
+			model.addAttribute("dept_name", dept.getDept_name());
+			
+			
+			return "dept_detail";
+		}
 			
 		
 		
-	}
+	
 	
 	//-------------------------------------------사원조회/상세정보조회 끝------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------

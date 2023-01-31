@@ -1,12 +1,12 @@
 package com.thisteam.muhansangsa.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.muhansangsa.mapper.EmployeesMapper;
-
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.Privilege;
@@ -95,6 +95,17 @@ public class EmployeesService {
 	}
 	//-------------------------------------------사원조회/상세정보조회 시작------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------
+
+	public List<Map<String, String>> getDeptInfo_count(int dept_cd) {
+		// TODO Auto-generated method stub
+	
+		return mapper.selectDeptInfo_count(dept_cd);
+	}
+
+	public List<Emp_viewVO> getDeptmemberComposition(int dept_cd) {
+		// TODO Auto-generated method stub
+		return mapper.selectDeptMember(dept_cd);
+	}
 
 
 

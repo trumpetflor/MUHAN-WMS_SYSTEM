@@ -1,6 +1,7 @@
 package com.thisteam.muhansangsa.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -46,6 +47,11 @@ public interface EmployeesMapper {
 
 	//사원 상세조회
 	Emp_viewVO selectEmployee(String emp_email);
+
+	//부서 구성 정보
+	List<Map<String, String>> selectDeptInfo_count(int dept_cd);
+	//부서 구성원 정보
+	List<Emp_viewVO> selectDeptMember(int dept_cd);
 
 	//-------------------------------------------사원조회/상세정보조회 끝------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------
