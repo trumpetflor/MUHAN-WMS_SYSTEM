@@ -32,4 +32,10 @@
 			FROM client
 	</select>
 
+	<select id="selectBusinessNo" resultType="ClientVO">
+		SELECT business_no
+			FROM client
+			WHERE business_no = #{business_no}
+	</select>
+
 </mapper>

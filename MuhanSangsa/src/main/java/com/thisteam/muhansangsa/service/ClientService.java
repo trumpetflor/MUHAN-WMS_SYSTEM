@@ -24,6 +24,10 @@ public class ClientService {
 		return mapper.selectClientList();
 	}
 
+	public ClientVO duplicateBn(String business_no) {
+		return mapper.selectBusinessNo(business_no);
+	}
+
 }
 
 

@@ -30,18 +30,6 @@
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 <style type="text/css">
-	.grandchildren {
-		display: none;
-		position: absolute;
-	}
-	
-	.children {
-		position: relative;
-	}
-	
-	.children:hover .grandchildren {
-		display: block;
-	}
 	
 	@font-face {
 	    font-family: 'Pretendard-Regular';
@@ -62,7 +50,7 @@
 	 font-family: 'NEXON Lv1 Gothic OTF';
 	}
 		
-	#vertical-align{
+	#client_table{
 		 vertical-align: middle;
 	}
 	table{
@@ -78,12 +66,6 @@
 	 transition: 0.5s;
 	}
 	
-
-	#modal_container{
-		height: 300px;
-		width: 500px;
-	
-	}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
@@ -124,26 +106,26 @@
 
 </head>
 <body>
-	<header>
-		<jsp:include page="../inc/left.jsp"></jsp:include>
-	</header>
 
-        <div class="breadcrumbs">
-            <div class="breadcrumbs-inner">
-                <div class="row m-0">
-                    <div class="col-sm-4">
-                        <div class="page-header float-left">
-                            <div class="page-title">
-                                <h1>거래처 조회</h1>
+	<jsp:include page="../inc/left.jsp"></jsp:include>
+
+		<div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
+        <div class=" breadcrumbs m-0">
+            <div class="breadcrumbs-inner rounded-start p-2 " >
+                <div class="row m-0 ">
+                    <div class="col-sm-4 ">
+                        <div class="page-header float-left rounded-start ">
+                            <div class="page-title ">
+                               <h1 class="m-1"><b>거래처 조회</b></h1>   
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="page-header float-right">
-                            <div class="page-title">
+                    <div class="col-sm-8 rounded-pill ">
+                        <div class="page-header float-right rounded-start ">
+                            <div class="page-title ">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="#">기본 등록</a></li>
-                                    <li><a href="#">거래처 등록</a></li>
+                                    <li><a href="ClientList">거래처 등록</a></li>
                                     <li class="active">거래처 조회</li>
                                 </ol>
                             </div>
@@ -155,15 +137,21 @@
 
         <div class="content">
             <div class="animated fadeIn">
-                <div class="row">
+            	<section id="searchSection" class="m-0 d-flex justify-content-end">
+				   <form action="employees_search">
+						<!-- 검색 타입 추가 -->
+						<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
+							<option value="business_no" <c:if test="${param.searchType eq 'business_no'}">selected</c:if>>거래처 코드</option>
+							<option value="cust_name" <c:if test="${param.searchType eq 'cust_name'}">selected</c:if>>거래처명</option>
+							<option value="boss_name" <c:if test="${param.searchType eq 'boss_name'}">selected</c:if>>대표자명</option>
+							<option value="addr" <c:if test="${param.searchType eq 'addr'}">selected</c:if>>주소</option>
+						</select>			
+						<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
+						<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
+					</form>
+				</section>
 
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <strong class="card-title">거래처 목록</strong>
-                            </div>
-                            <div class="card-body">
-                                <table id="client_table" class="table table-striped table-bordered">
+                                <table id="client_table" class="table ">
                                     <thead>
                                         <tr>
                                             <th>거래처 코드</th>
@@ -179,12 +167,8 @@
                                         <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                    </div>
 
 
-                </div>
             </div><!-- .animated -->
         </div><!-- .content -->
 

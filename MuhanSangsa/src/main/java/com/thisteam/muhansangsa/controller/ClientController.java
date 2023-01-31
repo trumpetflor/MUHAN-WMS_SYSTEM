@@ -1,6 +1,7 @@
 package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.muhansangsa.service.ClientService;
@@ -38,6 +40,8 @@ public class ClientController {
 			HttpSession session,
 			HttpServletResponse response
 			) {
+		
+		// 권한에 따른 구분 필요
 		
 		// 거래처 목록 가져오기
 		List<ClientVO> clientList = service.getClientList();
@@ -97,6 +101,34 @@ public class ClientController {
 		}
 		
 	}
+	
+	// 거래처 코드 중복 확인
+	@ResponseBody
+	@GetMapping(value = "DuplicateBusinessNo")
+	public void duplicateBn(
+			Model model,
+			HttpSession session,
+			HttpServletResponse response,
+			@RequestParam String business_no
+			) {
+		
+		// 권한에 다른 구분 필요
+		
+		// 거래처 코드 확인하기
+		try {
+			if(service.duplicateBn(business_no) != null) { // 거래처 코드 존재 (중복 O)
+				response.getWriter().print("true"); // "true" 보내기
+			} else { // 거래처 코드 존재 X (중복 X)
+				response.getWriter().print("false"); // "false" 보내기
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 	
 }
 
