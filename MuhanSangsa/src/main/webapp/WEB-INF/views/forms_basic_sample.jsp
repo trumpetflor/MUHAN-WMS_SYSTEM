@@ -41,10 +41,10 @@
                     <li>
                         <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
                     </li>
-                    <li class="menu-title">UI elements</li><!-- /.menu-title -->
+                    <li class="menu-title"><b>인사</b></li><!-- /.menu-title -->
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Components</a>
-                        <ul class="sub-menu children dropdown-menu">                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Buttons</a></li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>사원 조회</a>
+                        <ul class="sub-menu children dropdown-menu">                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">사원 조회</a></li>
                             <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Badges</a></li>
                             <li><i class="fa fa-bars"></i><a href="ui-tabs.html">Tabs</a></li>
 
@@ -57,32 +57,29 @@
                             <li><i class="fa fa-file-word-o"></i><a href="ui-typgraphy.html">Typography</a></li>
                         </ul>
                     </li>
+                        
+                    
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Tables</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>사원 등록</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="tables-basic.html">Basic Table</a></li>
                             <li><i class="fa fa-table"></i><a href="tables-data.html">Data Table</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item-has-children active dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Forms</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-th"></i><a href="forms-basic.html">Basic Form</a></li>
-                            <li><i class="menu-icon fa fa-th"></i><a href="forms-advanced.html">Advanced Form</a></li>
-                        </ul>
-                    </li>
 
-                    <li class="menu-title">Icons</li><!-- /.menu-title -->
+
+                    <li class="menu-title">2) 구매 관리</li><!-- /.menu-title -->
 
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Icons</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>기본 등록</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-fort-awesome"></i><a href="font-fontawesome.html">Font Awesome</a></li>
-                            <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">Themefy Icons</a></li>
+                            <li><i class="menu-icon fa fa-fort-awesome"></i><a href="font-fontawesome.html">a. 거래처 등록</a></li>
+                            <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">b. 창고 등록</a></li>
+                            <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">c. 품목 등록</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="widgets.html"> <i class="menu-icon ti-email"></i>Widgets </a>
+                        <a href="widgets.html"> <i class="menu-icon ti-email"></i>구매 관리</a>
                     </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-bar-chart"></i>Charts</a>
