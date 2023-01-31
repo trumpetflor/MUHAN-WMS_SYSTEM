@@ -31,18 +31,18 @@
             <div class="login-content">
                 <div class="login-logo">
                     <a href="index.html">
-                        <img class="align-content" src="${pageContext.request.contextPath}/resources/images/logo.png" alt="">
+                        <img class="align-content" src="${pageContext.request.contextPath}/resources/images/Muhan_logo_re.png" alt="">
                     </a>
                 </div>
                 <div class="login-form">
-                    <form>
+                    <form  action="Login" method="post">
                         <div class="form-group">
                             <label>Email address</label>
-                            <input type="email" class="form-control" placeholder="Email">
+                            <input type="email" class="form-control" name="emp_email" placeholder="Email">
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" name="emp_passwd" placeholder="Password">
                         </div>
                         <div class="checkbox">
                             <label>
@@ -53,7 +53,7 @@
                             </label>
 
                         </div>
-                        <button type="button" class="btn btn-success btn-flat m-b-30 m-t-30" onclick="location.href='./memberList'">Sign in</button>
+                        <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30" >Sign in</button>
                         <div class="register-link m-t-15 text-center">
                             <p>Don't have account ? <a href="#"> Sign Up Here</a></p>
                         </div>

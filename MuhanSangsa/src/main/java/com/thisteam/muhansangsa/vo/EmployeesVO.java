@@ -12,7 +12,9 @@ public class EmployeesVO {
 	   private String emp_num; // 사원번호
 	   private String emp_name; // 사원명
 	   private String dept_cd; // 부서코드
+	   private String dept_name; // 부서명
 	   private String grade_cd; //직급코드
+	   private String grade_name; //직급명
 	   private String emp_tel; //연락처(개인)
 	   private String emp_dtel; //연락처(사무실)
 	   private String emp_email; 
@@ -49,12 +51,27 @@ public class EmployeesVO {
 		public void setDept_cd(String dept_cd) {
 			this.dept_cd = dept_cd;
 		}
+		
+		public String getDept_name() {
+			return dept_name;
+		}
+		public void setDept_name(String dept_name) {
+			this.dept_name = dept_name;
+		}
 		public String getGrade_cd() {
 			return grade_cd;
 		}
 		public void setGrade_cd(String grade_cd) {
 			this.grade_cd = grade_cd;
 		}
+		
+		public String getGrade_name() {
+			return grade_name;
+		}
+		public void setGrade_name(String grade_name) {
+			this.grade_name = grade_name;
+		}
+		
 		public String getEmp_tel() {
 			return emp_tel;
 		}

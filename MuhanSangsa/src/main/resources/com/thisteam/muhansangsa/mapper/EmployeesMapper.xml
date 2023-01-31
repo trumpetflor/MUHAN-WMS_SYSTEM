@@ -74,22 +74,28 @@
 	</select>
 
 	<!-- 마이페이지 정보 조회 -->
+	<!-- 로그인 id 는 sId = emp_email    -->
 	<select id="selectMypageInfo" resultType="com.thisteam.muhansangsa.vo.EmployeesVO">
-	SELECT emp_num
-			, emp_name
-			, dept_cd
-			, grade_cd
-			, emp_tel
-			, emp_dtel
-			, emp_email
-			, emp_passwd
-			, emp_post_No
-			, emp_addr
-			, hire_date
-			, work_cd, photo
-		FROM employees
+	SELECT e.emp_num
+			, e.emp_name
+			, e.dept_cd
+			, d.dept_name
+			, e.grade_cd
+            , g.grade_name
+			, e.emp_tel
+			, e.emp_dtel
+			, e.emp_email
+			, e.emp_passwd
+			, e.emp_post_No
+			, e.emp_addr
+			, e.hire_date
+			, e.work_cd 
+			, e.photo
+		FROM  employees e, department d, grade g
 		WHERE 
-			emp_num = #{emp_num}
+		 	e.DEPT_CD = d.DEPT_CD
+            AND e.grade_cd = g.grade_cd
+			AND e.emp_email = #{id}
 	</select>
 
 

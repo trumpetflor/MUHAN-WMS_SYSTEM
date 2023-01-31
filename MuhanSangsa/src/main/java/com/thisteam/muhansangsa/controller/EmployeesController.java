@@ -185,34 +185,34 @@ public class EmployeesController {
 	// 로그인 비즈니스 로직 작업
 	@PostMapping(value = "/Login")
 	public String loginPro(
-			@ModelAttribute EmployeesVO employee, 
+			@ModelAttribute EmployeesVO employees, 
 			Model model, 
 			HttpSession session) {
 		
 		// 비밀번호 암호화 !!DB에 비밀번호 재설정 필요(해싱, 솔팅 다름)!!
 		// 파라미터 : 이메일(id 역할)
 		BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
-		String pass = service.getPass(employee.getEmp_email()); //email(id) 에 해당하는 암호화 비밀번호 가져오기
-		System.out.println(pass);
+		String pass = service.getPass(employees.getEmp_email()); //email(id) 에 해당하는 암호화 비밀번호 가져오기
+//		System.out.println("1"+pass);
 		
 		//암호화 비밀번호 비교
-		if(pass == null || passwdEncoder.matches(employee.getEmp_passwd(), pass)) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)
+		if(pass == null || !passwdEncoder.matches(employees.getEmp_passwd(), pass)) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
 			return "fail_back";
 			
 		} else { // 성공 시
-			session.setAttribute("sId", employee.getEmp_email());//세션 아이디 저장
+			session.setAttribute("sId", employees.getEmp_email());//세션 아이디 저장
 			System.out.println("sId");
-			return "redirect:/"; // 메인페이지로 리다이렉트
+			return "redirect:/memberList"; // 메인페이지로 리다이렉트
 		}
 		
 	}
-	//=============================== 인사관리 : 로그아웃(세원) =========================================
 	
+	//로그아웃
 	@GetMapping(value = "/Logout")
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 초기화
-		return "redirect:/";
+		return "redirect:/Login"; //리다이렉트 로그인페이지
 	}
 	
 	//=============================== 인사관리 : 마이페이지(세원) =========================================
@@ -230,24 +230,19 @@ public class EmployeesController {
 			Model model,
 			HttpSession session) {
 		
+		//로그인 id 는 sId = emp_email  
 		String id = (String)session.getAttribute("sId");
 		
 		// 세션 아이디 
-//		if(id == null || id.equals("")) { //실패 시
-//			model.addAttribute("msg", "로그인이 필요한 페이지입니다");
-//			return "fail_back";
-//		} else { //성공시
-//			EmployeesVO employee = service.getMypageInfo(id);
-//			model.addAttribute("employee", employee);
-//			
-//			return "member/myPage";
-//		}
-		
-		EmployeesVO employee = service.getMypageInfo(id);
-		model.addAttribute("employee", employee);
-		
-		return "member/myPage";
-		
+		if(id == null || id.equals("")) { //실패 시
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다");
+			return "fail_back";
+		} else { //성공시
+			EmployeesVO employees = service.getMypageInfo(id);
+			model.addAttribute("employees", employees);
+			
+			return "member/myPage";
+		}
 	}
 
 	//=============================== 인사관리 : 사원 상세페이지 (세원) =========================================
