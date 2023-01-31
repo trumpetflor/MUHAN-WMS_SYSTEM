@@ -26,9 +26,9 @@
 			)
 	</insert>
 
-	<select id="selectClientList" resultType="com.thisteam.muhansangsa.vo.ClientVO">
-<!-- 		SELECT business_no, cust_name, boss_name, tel, addr, mobile_no, remarks -->
-		SELECT *
+	<select id="selectClientList" resultType="ClientVO">
+<!-- 		SELECT * -->
+		SELECT business_no, cust_name, boss_name, tel, addr, mobile_no, remarks
 			FROM client
 	</select>
 

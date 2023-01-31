@@ -63,13 +63,13 @@
 // 			alert(clientList);
 			for(let client of clientList) {
 				let result = "<tr>"
-							+ "<a href=''><td>" + client.business_no + "<td>"
-							+ "<td>" + client.cust_name + "<td></a>"
-							+ "<td>" + client.boss_name + "<td>"
-							+ "<td>" + client.tel + "<td>"
-							+ "<td>" + client.mobile_no + "<td>"
-							+ "<td>" + client.addr + "<td>"
-							+ "<td>" + client.remarks + "<td>"
+							+ "<a href=''><td>" + client.business_no + "</td>"
+							+ "<td>" + client.cust_name + "</td></a>"
+							+ "<td>" + client.boss_name + "</td>"
+							+ "<td>" + client.tel + "</td>"
+							+ "<td>" + client.mobile_no + "</td>"
+							+ "<td>" + client.addr + "</td>"
+							+ "<td>" + client.remarks + "</td>"
 							+ "</tr>";
 				$("#client_table").append(result);
 			}
