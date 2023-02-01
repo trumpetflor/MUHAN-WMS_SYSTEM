@@ -55,4 +55,11 @@
 				wh_cd = #{wh_cd}
 	</update>
 	
+	<!-- 물류팀 직원 확인 -->
+	<select id="selectWarehouseMan" resultType="string">
+		SELECT wh_man_name
+			FROM warehouse
+			WHERE wh_man_name = ${wh_man_name}
+	</select>
+	
 </mapper>

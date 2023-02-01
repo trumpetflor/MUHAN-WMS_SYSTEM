@@ -19,7 +19,10 @@ public interface WarehouseMapper {
 	List<WarehouseVO> selectWarehouseDetail(String wh_cd);
 	
 	// 창고 수정
-	List<WarehouseVO> updateWarehouse(WarehouseVO warehouse);
+	int updateWarehouse(WarehouseVO warehouse);
+	
+	// 물류팀 직원 확인
+	String selectWarehouseMan(String wh_man_name);
 
 }
 

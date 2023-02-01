@@ -28,7 +28,10 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script>
 <script type="text/javascript">
+	var checkResult = false;
+	
 	//상품 수정 클릭 시 확인창
 	function confirm_modify() {
 		let result = confirm("창고 정보를 수정하시겠습니까?");
@@ -39,6 +42,29 @@
 		}
 	
 	}
+	
+	// 물류팀 확인
+	$(function() {
+		$("#wh_man_name").on("focusout"), function(){
+			let wh_man_name = $("#wh_man_name").val();
+			$.ajax({
+				type: "GET",
+				url: "WarehouseCheckMan",
+				data: { wh_man_name: $("#wh_man_name").val()},
+				success: function(result){
+					$("#checkMan").html(result);
+					
+					if(result == "true"){
+						$("#checkMan").html("물류팀 직원만 가능합니다.").css("color", "red");
+						checkResult = false;
+					} else {
+						$("#checkMan").html("물류팀 직원입니다.").css("color", "green");
+						CheckResult = true;
+					}
+				},
+			});
+		});
+	});
 </script>
 <style>
 .col-lg-6 {
@@ -73,7 +99,7 @@
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">창고코드</label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_cd" value="${warehouse.wh_cd}" class="form-control">
+	                        			<input type="text" id="text-input" name="wh_cd" value="${warehouse.wh_cd}" readonly="readonly" class="form-control">
                         			</div>
                         		</div>
                         		<div class="row form-group">
@@ -84,7 +110,7 @@
                         			</div>
                         		</div>
                         		<c:choose>
-                        		<c:when test="${warehouse.wh_gubun } eq '1'">
+                        		<c:when test="${warehouse.wh_gubun eq '1'}">
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">구분</label></div>
                         			<div class="col-12 col-md-9">
@@ -128,7 +154,7 @@
 	                             </c:otherwise>
 	                             </c:choose>
 	                             <c:choose>
-	                             <c:when test="${warehouse.wh_location } eq '1'">
+	                             <c:when test="${warehouse.wh_location eq '1'}">
 	                             <div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">위치</label></div>
                         			<div class="col-12 col-md-9">
@@ -176,26 +202,27 @@
                         			<div class="col-12 col-md-9">
 	                        			<input type="text" id="postcode" name="postcode" style="width:150px;" placeholder="우편번호" readonly="readonly" class="form-control">
 	                        			<input type="button" value="주소 검색" onclick="kakaoAddr()">
-	                        			<input type="text" id="wh_addr1" name="wh_addr1" placeholder="주소" readonly="readonly" class="form-control">
-	                        			<input type="text" id="text-input" name="wh_addr2" placeholder="상세주소 입력" class="form-control">
+	                        			<input type="text" id="wh_addr1" name="wh_addr1" value="${warehouse.wh_addr1 }" placeholder="주소" readonly="readonly" class="form-control">
+	                        			<input type="text" id="text-input" name="wh_addr2" value="${warehouse.wh_addr2 }" placeholder="상세주소 입력" class="form-control">
                         			</div>
                         		</div>
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">전화번호</label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_tel" class="form-control">
+	                        			<input type="text" id="text-input" name="wh_tel" value="${warehouse.wh_tel }" class="form-control">
 	                        			<small class="form-text text-muted">(ex : 010-0000-0000)</small>
                         			</div>
                         		</div>
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">관리자명</label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_man_name" class="form-control">
-	                        			<small class="form-text text-muted">나중에 물류팀 직원만 가능하게 바꾸기</small>
+	                        			<span class="placehold-text"><input type="text" id="wh_man_name" name="wh_man_name" value="${warehouse.wh_man_name }" class="form-control"></span>
+<!-- 	                        			<span id="checkMan"></span> -->
+	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
                         			</div>
                         		</div>
                         		<c:choose>
-                        		<c:when test="${warehouse.wh_use } eq '1'">
+                        		<c:when test="${warehouse.wh_use eq '1'}">
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">사용여부</label></div>
                         			<div class="col-12 col-md-9">
@@ -241,7 +268,7 @@
 	                            <div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">적요</label></div>
                         			<div class="col-12 col-md-9">
-	                        			<textarea cols="70" rows="10" required="required" style="resize:none;" name="remarks" required="required"></textarea>
+	                        			<textarea cols="70" rows="10" required="required" style="resize:none;" name="remarks" required="required">${warehouse.remarks }</textarea>
                         			</div>
                         		</div>
                         		<div class="row form-group">

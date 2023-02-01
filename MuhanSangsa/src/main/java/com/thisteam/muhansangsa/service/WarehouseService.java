@@ -35,8 +35,23 @@ public class WarehouseService {
 	}
 	
 	// 창고 수정
-	public List<WarehouseVO> modifyWarehouse(WarehouseVO warehouse) {
+	public int modifyWarehouse(WarehouseVO warehouse) {
 		return mapper.updateWarehouse(warehouse);
+	}
+	
+	// 물류팀 직원 확인
+	public Boolean WarehouseCheckMan(String wh_man_name) {
+		Boolean isChecked = false;
+		
+		String checkMan = mapper.selectWarehouseMan(wh_man_name);
+		if(checkMan == null || checkMan.equals("")) {
+			isChecked = false;
+		} else {
+			isChecked = true;
+		}
+		
+		return isChecked;
+		
 	}
 
 }

@@ -1,7 +1,10 @@
 package com.thisteam.muhansangsa.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +106,7 @@ public class WarehouseController {
 		
 		// 조회
 		List<WarehouseVO> whList = service.getWarehouseDetail(wh_cd);
+		System.out.println(whList);
 		model.addAttribute("whList", whList);
 		
 		return "Warehouse/warehouse_modify_form";
@@ -110,12 +114,60 @@ public class WarehouseController {
 	
 	// 창고 수정 작업
 	@PostMapping(value = "/WarehouseModifyPro")
-	public String modifyPro(@ModelAttribute WarehouseVO warehouse,
-							Model model) {
-		List<WarehouseVO> whList = service.modifyWarehouse(warehouse);
+	public void modifyPro(@ModelAttribute WarehouseVO warehouse,
+							Model model,
+							HttpServletResponse response) {
+		System.out.println(warehouse);
+		
+		int modifyCount = service.modifyWarehouse(warehouse);
+		try {
+			
+			if(modifyCount > 0) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('창고 수정이 완료되었습니다!');");
+				out.println("opener.document.location.reload();");
+				out.println("self.close();");
+				out.println("</script>");
+				
+			} else {
+				
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('수정 실패!!');");
+				out.println("opener.document.location.reload();");
+				out.println("self.close();");
+				out.println("</script>");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		
-		return "warehouse/warehouse_list";
+	}
+	
+	// 물류팀직원확인
+	@GetMapping(value = "/WarehouseCheckMan")
+	public void check(@RequestParam String wh_man_name,
+						HttpServletResponse response
+						) {
+		try {
+			Boolean isChecked = service.WarehouseCheckMan(wh_man_name);
+			
+			if(!isChecked) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("true");
+			} else {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
