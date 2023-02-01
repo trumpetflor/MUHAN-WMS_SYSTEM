@@ -98,6 +98,36 @@
 			AND e.emp_email = #{id}
 	</select>
 
+	<!-- 마이페이지 수정 (업데이트 작업) -->
+	<update id="updateMypageMember">
+		UPDATE	employees 
+			SET EMP_TEL = #{emp_tel}
+				,EMP_DTEL = #{emp_dtel}
+				<if test='emp_passwd != null and emp_passwd != ""'>
+					,EMP_PASSWD = #{emp_passwd}
+				</if>
+				,PHOTO = #{photo}
+			WHERE EMP_EMAIL = #{emp_email}
+	</update>
+
+	<!-- 상세페이지 수정(업데이트 작업) -->
+	<update id="updateDetail">
+		UPDATE	employees 
+			SET EMP_NUM = #{emp_num}
+				,EMP_NAME = #{emp_name}
+				,DEPT_CD = #{dept_cd}
+				,GRADE_CD = #{grade_cd}
+				,EMP_TEL = #{emp_tel}
+				,EMP_DTEL = #{emp_dtel}
+				,EMP_EMAIL = #{emp_email}
+				,HIRE_DATE = #{hire_date}
+				,WORK_CD = #{work_cd}
+				,PHOTO = #{photo}
+			WHERE EMP_EMAIL = #{emp_email}
+	
+	</update>
+
+
 
 <!-- ===================================== hawon =========================================  -->
 <!-- ===================================================================================================== -->
@@ -160,8 +190,6 @@
 				,EMP_DTEL = #{emp_dtel}
 				,EMP_EMAIL = #{emp_email}
 				,EMP_PASSWD = #{emp_passwd}
-				,EMP_POST_NO = #{emp_post_no}
-				,EMP_ADDR = #{emp_addr}
 				,HIRE_DATE = #{hire_date}
 				,WORK_CD = #{work_cd}
 				,PRIV_CD = #{priv_cd}

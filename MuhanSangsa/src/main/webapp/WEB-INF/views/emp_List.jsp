@@ -248,9 +248,10 @@
 				<c:if test="${priv eq 1 }">
 					<th><!-- 관리 권한 부여 시 조회 가능 -->
 						<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"
-						onclick="window.open('memberListDetail','MemberDetailForm','width=800, height=920,location=no,status=no,scrollbars=yes');"> 
+						onclick="window.open('empListDetail?id=${emp.emp_email}','MemberDetailForm','width=800, height=920,location=no,status=no,scrollbars=yes');"> 
 						
-		 				<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn">
+		 				<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn"
+		 				onclick="window.open('empListDetailUpdate?id=${emp.emp_email}','MemberDetailModify','width=800, height=920,location=no,status=no,scrollbars=yes');">
 		 			</th>
 				</c:if>
 			</tr>

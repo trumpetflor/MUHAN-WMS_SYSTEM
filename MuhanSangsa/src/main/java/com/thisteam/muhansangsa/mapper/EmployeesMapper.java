@@ -35,7 +35,11 @@ public interface EmployeesMapper {
 	// 마이페이지
 	EmployeesVO selectMypageInfo(String id);
 
+	// 마이페이지 - 수정(업데이트)
+	int updateMypageMember(EmployeesVO emp);
 	
+	// 상세조회 - 수정(업데이트)
+	int updateDetail(EmployeesVO employees);
 	
 	
 	
@@ -52,6 +56,8 @@ public interface EmployeesMapper {
 
 	//사원 상세조회
 	Emp_viewVO selectEmployee(String emp_email);
+
+	
 
 
 

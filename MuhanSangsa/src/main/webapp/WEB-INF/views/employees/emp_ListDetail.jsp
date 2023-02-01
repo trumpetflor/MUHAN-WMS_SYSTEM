@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>     
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -131,8 +132,8 @@
 											<label for="text-input" class="form-control-label">주소<font></font></label>
 										</div>
 										<div class="col-12 col-md-4 d-flex">
-											<input type="text" id="postcode" name="member_postcode"
-												value="${member.member_postcode }"
+											<input type="text" id="postcode" name="emp_postcode"
+												value="${employees.emp_post_No }"
 												class="form-control bg-gradient-light" required="required">
 											<input type="button" class=" mx-1 btn btn-outline-secondary"
 												value="우편번호" onclick="kakaoAddr()">
@@ -141,8 +142,8 @@
 									<div class="row form-group">
 										<div class="col col-md-3"></div>
 										<div class="col-12 col-md-8">
-											<input type="text" id="addr1" name="member_addr1"
-												value="${member.member_addr1 }"
+											<input type="text" id="addr1" name="emp_addr1"
+												value="${employees.emp_addr }"
 												class="form-control bg-gradient-light" required="required">
 											<small class="form-text text-muted">도로명주소</small>
 										</div>
@@ -153,7 +154,7 @@
 										</div>
 										<div class="col-12 col-md-8">
 											<input type="text" id="addr2" name="member_addr2"
-												value="${member.member_addr2 }"
+												value="${employees.emp_addr }"
 												class="form-control bg-gradient-light"> <small
 												class="form-text text-muted">상세주소</small>
 										</div>
@@ -171,9 +172,8 @@
                                         <div class="col col-md-9">
                                             <div class="form-check-inline form-check">
                                                 <label for="inline-radio1" class="form-check-label ">
-                                                    <input type="radio" id="inline-radio1" name="inline-radios" value="1" class="form-check-input"
-													<c:if test="${employees.work_cd eq '1'}">checked</c:if>> 재직
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="radio" id="inline-radio1" name="inline-radios" value="1" class="form-check-input" <c:if test="${employees.work_cd eq '1'}">checked</c:if>> 
+                                                    재직&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                                 <label for="inline-radio2" class="form-check-label ">
                                                     <input type="radio" id="inline-radio2" name="inline-radios" value="2" class="form-check-input" 

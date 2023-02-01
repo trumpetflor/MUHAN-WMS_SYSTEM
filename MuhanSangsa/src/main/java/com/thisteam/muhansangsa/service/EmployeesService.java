@@ -48,10 +48,27 @@ public class EmployeesService {
 	
 	//----------------------------마이페이지----------------------------------- 
 
+	
+	//마이페이지 뿌리기
 	public EmployeesVO getMypageInfo(String id) {
 		return mapper.selectMypageInfo(id);
 	}
 
+	
+	
+	//수정
+	public int updateMypageMember(EmployeesVO emp) {
+		
+		return mapper.updateMypageMember(emp) ;
+	}
+
+	//------------------사원 상세조회------------------------------------
+
+	//상세조회 수정(update)
+	public int updateDetailEmp(EmployeesVO employees) {
+		return mapper.updateDetail(employees);
+	}
+	
 
 	// ================================ hawon ================================
 	//---------------------------------------------------------------------------------------------------------------------
@@ -93,7 +110,7 @@ public class EmployeesService {
 		
 		return mapper.updateMember(emp) ;
 	}
-	
+
 
 	public Emp_viewVO getEmployee(String emp_email) {
 		
@@ -103,6 +120,7 @@ public class EmployeesService {
 	}
 	//-------------------------------------------사원조회/상세정보조회 시작------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------
+
 
 
 

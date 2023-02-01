@@ -24,7 +24,21 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 <script src="${pageContext.request.contextPath}resources/js/jquery-3.6.3.js"></script>
 <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+<script type="text/javascript">
 
+	//상품 수정 클릭 시 확인창
+	function confirm_modify() {
+		let result = confirm("상품을 수정하시겠습니까?");
+		
+		if(result){
+			const form = document.getElementById('MypageUpdate');
+				form.submit();
+		}
+	
+	}
+
+
+</script>
 </head>
 <style type="text/css">
 
@@ -84,7 +98,7 @@
                                 <strong>나의 정보</strong> 
                             </div>
                             <div class="card-body card-block">
-                                <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                <form action="MypageUpdate" method="post" enctype="multipart/form-data" class="form-horizontal" id="MypageUpdate">
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원번호(코드)</label></div>
@@ -115,17 +129,18 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(개인)</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="phone_number" name="phone_number" value="${employees.emp_tel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="phone_number" name="emp_tel" value="${employees.emp_tel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(사무실)</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="office_number" name="office_number" value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="office_number" name="emp_dtel" value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">이메일</label></div>
                                         <div class="col-12 col-md-9">
                                             <p class="form-control-static">${employees.emp_email}</p>
+                                            <input type="hidden" name="emp_email" value="${employees.emp_email}">
                                         </div>
                                     </div>
 
@@ -134,7 +149,7 @@
 											<label for="newPass" class=" form-control-label">신규 비밀번호</label>
 										</div>
 										<div class="col-12 col-md-4">
-											<input type="password" id="newPass" name="newPass"
+											<input type="password" id="emp_passwd" name="emp_passwd"
 												class="form-control bg-gradient-light"> <small
 												class="help-block form-text text-muted" id="checkPw">변경
 												시 입력 (영문 대소문자/숫자/특수문자(!@#$%) 8자~16자)</small>
@@ -146,7 +161,7 @@
 												class="form-control-label">신규 비밀번호 확인</label>
 										</div>
 										<div class="col-12 col-md-4">
-											<input type="password" id="confirmNewPass" name="confirmNewPass"
+											<input type="password" id="emp_passwd" name="emp_comfirmPasswd"
 												class="form-control bg-gradient-light"
 												onkeyup="confirmPw(this.value)"> <span
 												class="help-block form-text" id="checkPasswdConfirmResult"></span>
@@ -193,6 +208,7 @@
 										<input class="btn btn-outline-dark" type="button" value="수정" onclick="javascript:confirm_modify()">&nbsp;&nbsp;
 										<input class="btn btn-outline-dark" type="button" value="확인" onclick="history.back()">&nbsp;&nbsp;
 									</div>
+									
 								</form>
                             </div>
                         </div>

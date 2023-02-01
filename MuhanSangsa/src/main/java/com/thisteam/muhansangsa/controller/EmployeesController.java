@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
@@ -179,7 +180,7 @@ public class EmployeesController {
 	// 로그인 페이지
 	@GetMapping(value = "/Login")
 	public String login() {
-		return "member/login"; // login.jsp 로 포워딩
+		return "employees/login"; // login.jsp 로 포워딩
 	}
 	
 	// 로그인 비즈니스 로직 작업
@@ -203,7 +204,7 @@ public class EmployeesController {
 		} else { // 성공 시
 			session.setAttribute("sId", employees.getEmp_email());//세션 아이디 저장
 			System.out.println("sId");
-			return "redirect:/memberList"; // 메인페이지로 리다이렉트
+			return "redirect:/employees"; // 메인페이지로 리다이렉트
 		}
 		
 	}
@@ -217,14 +218,7 @@ public class EmployeesController {
 	
 	//=============================== 인사관리 : 마이페이지(세원) =========================================
 	
-	//사원 목록페이지 (테스트용)
-	// - 상세정보 페이지 접속차
-	@GetMapping(value = "/memberList")
-	public String selectMemberList() {
-		return "member/list"; // login.jsp 로 포워딩
-	}
-	
-	//마이페이지
+	//마이페이지 리스트
 	@GetMapping(value = "/Mypage")
 	public String emp_myPage(
 			Model model,
@@ -241,25 +235,92 @@ public class EmployeesController {
 			EmployeesVO employees = service.getMypageInfo(id);
 			model.addAttribute("employees", employees);
 			
-			return "member/myPage";
+			return "employees/myPage";
 		}
 	}
+	
+	//마이페이지 업데이트(수정)
+	@PostMapping(value = "/MypageUpdate")
+	public String mypage_updatePro(
+			@ModelAttribute EmployeesVO employees, 
+			Model model, 
+			HttpSession session){
+		
+		String sId = (String)session.getAttribute("sId");
+		System.out.print("employees.getEmp_email()::"+employees.getEmp_email());
+		
+		if(!employees.getEmp_passwd().equals(employees.getEmp_comfirmPasswd())) {
+			model.addAttribute("msg", "비밀번호가 일치하지않습니다.");
+			return "fail_back";
+		}
+		
+		//패스워드 값이 있을경우 암호화
+		if(employees.getEmp_passwd() != null && ! "".equals(employees.getEmp_passwd())) {
+			BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder();
+			employees.setEmp_passwd(passwdEncoder.encode(employees.getEmp_passwd()));
+		}
 
+		if(sId != null) {
+			//수정
+			int updateCount  = service.updateMypageMember(employees);
+			return "redirect:/Mypage";
+			
+		}else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
+	
+	}
+
+	
+	
+	
 	//=============================== 인사관리 : 사원 상세페이지 (세원) =========================================
 	
 	//사원 상세페이지 리스트
-	@GetMapping(value = "/memberListDetail")
-	public String memberListDetail() {
-		return "member/memberDetail";
+	@GetMapping(value = "/empListDetail")
+	public String memberListDetail(
+			@RequestParam(defaultValue = "") String id,
+			Model model) {
+		EmployeesVO employees = service.getMypageInfo(id);
+		model.addAttribute("employees", employees);
+		
+		return "employees/emp_ListDetail";
 	}	
 
 	//사원 상세정보 수정페이지
-	@GetMapping(value = "/memberListDetailModify")
-	public String memberListDetailModify() {
-		return "member/memberModify";
+	@GetMapping(value = "/empListDetailUpdate")
+	public String memberListDetailUpdate(
+			@RequestParam(defaultValue = "") String id,
+			Model model) {
+		EmployeesVO employees = service.getMypageInfo(id);
+		model.addAttribute("employees", employees);
+		
+		return "employees/emp_ListDetailUpdate";
 	}	
 	
+	//사원 상세정보 수정 진행 (update)
+	@PostMapping(value = "/empListDetailUpdatePro")
+	public String memberListDetailUpdatePro(
+			@ModelAttribute EmployeesVO employees, 
+			Model model, 
+			HttpSession session){
+		
+		String sId = (String)session.getAttribute("sId");
 
+		if(sId != null) {
+			//수정
+			int updateCount  = service.updateDetailEmp(employees);
+			return "redirect:employees/emp_ListDetailUpdate?id="+employees.getEmp_email();
+			
+		}else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
+	
+	}
+	
+	
 	// ================================= hawon =================================
 	//---------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------사원조회/상세정보조회 시작-----------------------------------------------------
