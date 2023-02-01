@@ -13,11 +13,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class MailService {
-	
+
 	@Autowired
 	private MailSender mailsender;
+	@Autowired
 	private JavaMailSender emailSender;
 	
 	// 임시 비밀번호 
@@ -25,7 +27,7 @@ public class MailService {
 	
 	public void sendEmail(String toAdderess, String fromAddress, String subject, String msgBody) {
 		
-		System.out.println("메일 서비스 도착ㄴ");
+		System.out.println("메일 서비스 도착");
 		
 		SimpleMailMessage smm = new SimpleMailMessage();
 		smm.setFrom(fromAddress);
@@ -111,6 +113,12 @@ public class MailService {
 		
 	}
 	
-	
-	
+
 }
+
+
+
+
+
+
+

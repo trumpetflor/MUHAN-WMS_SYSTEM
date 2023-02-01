@@ -35,6 +35,7 @@ public class EmployeesController {
 	
 	@Autowired
 	private EmployeesService service;
+	@Autowired
 	private MailService mailService;
 	
 	
@@ -160,9 +161,8 @@ public class EmployeesController {
 		// 23/01/31 이메일 인증을 이용하여 임시비밀번호 전송 및 비밀번호 세팅
 //		String passwd = mailService.sendPasswdToEmail(employee.getEmp_email());
 		
-		String passwd = UUID.randomUUID().toString().substring(2, 9);
-		System.out.println("이메일 인증에 사용된 ePw : " + passwd);
-		
+		String passwd = UUID.randomUUID().toString().substring(1, 8);
+		System.out.println("이메일 인증에 사용된 비밀번호 : " + passwd);
 		employee.setEmp_passwd(passwd);
 		
 		// 이메일을 보내봅니다...
@@ -178,13 +178,13 @@ public class EmployeesController {
 			String body = "나옵니까"+passwd;
 			
 			System.out.println("이메일 보내지는게 나옵니까" + employeeEmail + addr + subject + body);
-			
 			try {
 				mailService.sendSimpleMessage(employeeEmail);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+//				mailService.sendEmail(employeeEmail, addr, subject, body);
 //			mailService.sendEmail(employeeEmail, addr, subject, body);
 			return "redirect:/";
 		} else {
