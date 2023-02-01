@@ -20,8 +20,8 @@ public class ClientService {
 	}
 	
 	// 거래처 목록 조회
-	public List<ClientVO> getClientList() {
-		return mapper.selectClientList();
+	public List<ClientVO> getClientList(String searchType, String keyword, int startRow, int listLimit) {
+		return mapper.selectClientList(searchType, keyword, startRow, listLimit);
 	}
 	
 	// 거래처 코드 조회 (중복 확인)

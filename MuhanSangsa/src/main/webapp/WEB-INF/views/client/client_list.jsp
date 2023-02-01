@@ -149,7 +149,7 @@
         <div class="content">
             <div class="animated fadeIn">
             	<section id="searchSection" class="m-0 d-flex justify-content-end">
-				   <form action="employees_search">
+				   <form action=ClientListJson>
 						<!-- 검색 타입 추가 -->
 						<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
 							<option value="business_no" <c:if test="${param.searchType eq 'business_no'}">selected</c:if>>거래처 코드</option>

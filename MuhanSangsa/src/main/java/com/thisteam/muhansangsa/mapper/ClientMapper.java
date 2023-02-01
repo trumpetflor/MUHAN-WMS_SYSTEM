@@ -12,7 +12,11 @@ public interface ClientMapper {
 	int insertClient(ClientVO client);
 	
 	// 거래처 목록 조회
-	List<ClientVO> selectClientList();
+	List<ClientVO> selectClientList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit);
 
 	// 거래처 코드 조회 (중복 확인)
 	ClientVO selectBusinessNo(String business_no);

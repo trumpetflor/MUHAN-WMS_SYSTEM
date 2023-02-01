@@ -31,6 +31,27 @@
 <!-- 		SELECT * -->
 		SELECT business_no, cust_name, boss_name, tel, addr, mobile_no, remarks
 			FROM client
+			<if test="!keyword.equals('')">
+			WHERE
+			<choose>
+				<when test="searchType.equals('business_no')">
+					business_no LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('cust_name')">
+					cust_name LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('boss_name')">
+					boss_name LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('addr')">
+					addr LIKE '%${keyword}%'
+				</when>
+			</choose>		
+		</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
 	</select>
 
 	<!-- 거래처 코드 조회 (중복 확인) -->
