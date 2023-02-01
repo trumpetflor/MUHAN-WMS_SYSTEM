@@ -23,9 +23,15 @@ public class ClientService {
 	public List<ClientVO> getClientList() {
 		return mapper.selectClientList();
 	}
-
+	
+	// 거래처 코드 조회 (중복 확인)
 	public ClientVO duplicateBn(String business_no) {
 		return mapper.selectBusinessNo(business_no);
+	}
+
+	// 거래처 상세 정보 조회
+	public ClientVO getClientDetail(String business_no) {
+		return mapper.selectClient(business_no);
 	}
 
 }

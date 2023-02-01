@@ -86,8 +86,8 @@
 // 			alert(clientList);
 			for(let client of clientList) {
 				let result = "<tr>"
-							+ "<a href=''><td>" + client.business_no + "</td>"
-							+ "<td>" + client.cust_name + "</td></a>"
+							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.business_no + "</a></td>"
+							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.cust_name + "</a></td>"
 							+ "<td>" + client.boss_name + "</td>"
 							+ "<td>" + client.tel + "</td>"
 							+ "<td>" + client.mobile_no + "</td>"

@@ -134,17 +134,17 @@
 
         <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
         <div class=" breadcrumbs m-0">
-            <div class="breadcrumbs-inner rounded-start p-2 " >
+            <div class="breadcrumbs-inner" >
                 <div class="row m-0 ">
                     <div class="col-sm-4 ">
-                        <div class="page-header float-left rounded-start ">
+                        <div class="page-header float-left  ">
                             <div class="page-title ">
                                <h1 class="m-1"><b>거래처 조회</b></h1>   
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-8 rounded-pill ">
-                        <div class="page-header float-right rounded-start ">
+                    <div class="col-sm-8 ">
+                        <div class="page-header float-right">
                             <div class="page-title ">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="#">기본 등록</a></li>
@@ -161,10 +161,9 @@
         <div class="content">
             <div class="animated fadeIn">
 
-
                 <div class="row">
 
-                    <div class="col-lg-12">
+                    <div class="col-lg-10">
                         <div class="card">
                             <div class="card-header">
                                 <strong>거래처 등록</strong>
@@ -201,11 +200,11 @@
                                         <div class="col col-md-3"><label for="uptae" class=" form-control-label">업태<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
                                             <select name="uptae" id="uptae" data-placeholder="복수 선택 가능" multiple class="standardSelect" required="required">
-                                                <option value="농업, 임업 및 어업">농업, 임업 및 어업</option>
+                                                <option value="농업 · 임업 및 어업">농업 · 임업 및 어업</option>
                                                 <option value="광업">광업</option>
                                                 <option value="제조업">제조업</option>
-                                                <option value="전기, 가스, 증기 및 공기조절 공급업">전기, 가스, 증기 및 공기조절 공급업</option>
-                                                <option value="수도, 하수 및 폐기물 처리, 원료 재생업">수도, 하수 및 폐기물 처리, 원료 재생업</option>
+                                                <option value="전기 · 가스 · 증기 및 공기조절 공급업">전기 · 가스 · 증기 및 공기조절 공급업</option>
+                                                <option value="수도 · 하수 및 폐기물 처리 · 원료 재생업">수도 · 하수 및 폐기물 처리 · 원료 재생업</option>
                                                 <option value="건설업">건설업</option>
                                                 <option value="도매 및 소매업">도매 및 소매업</option>
                                                 <option value="운수 및 창고업">운수 및 창고업</option>
@@ -213,13 +212,13 @@
                                                 <option value="정보통신업">정보통신업</option>
                                                 <option value="금융 및 보험업">금융 및 보험업</option>
                                                 <option value="부동산업">부동산업</option>
-                                                <option value="전문, 과학 및 기술 서비스업">전문, 과학 및 기술 서비스업</option>
-                                                <option value="사업시설 관리, 사업지원 및 임대 서비스업">사업시설 관리, 사업지원 및 임대 서비스업</option>
-                                                <option value="공공 행정, 국방 및 사회보장 행정">공공 행정, 국방 및 사회보장 행정</option>
+                                                <option value="전문 · 과학 및 기술 서비스업">전문, 과학 및 기술 서비스업</option>
+                                                <option value="사업시설 관리 · 사업지원 및 임대 서비스업">사업시설 관리 · 사업지원 및 임대 서비스업</option>
+                                                <option value="공공 행정 · 국방 및 사회보장 행정">공공 행정 · 국방 및 사회보장 행정</option>
                                                 <option value="교육서비스업">교육서비스업</option>
                                                 <option value="보건업 및 사회복지 서비스업">보건업 및 사회복지 서비스업</option>
-                                                <option value="예술, 스포츠 및 여가관련 서비스업">예술, 스포츠 및 여가관련 서비스업</option>
-                                                <option value="협회 및 단체, 수리 및 기타 개인 서비스업">협회 및 단체, 수리 및 기타 개인 서비스업</option>
+                                                <option value="예술 · 스포츠 및 여가관련 서비스업">예술 · 스포츠 및 여가관련 서비스업</option>
+                                                <option value="협회 및 단체 · 수리 및 기타 개인 서비스업">협회 및 단체 · 수리 및 기타 개인 서비스업</option>
                                                 <option value="가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동">가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동</option>
                                                 <option value="국제 및 외국기관">국제 및 외국기관</option>
                                                 <option value="기타">기타</option>
@@ -264,14 +263,14 @@
 										<div class="col col-md-3">
 											<label for="post_no" class="form-control-label font-weight-bold">주소<font color="red">*</font></label>
 										</div>
-										<div class="col-12 col-md-4 d-flex">
+										<div class="col-12 col-md-6 d-flex">
 											<input type="text" id="post_no" name="post_no" placeholder="ex) 00000" class="form-control bg-gradient-light" required="required">
 											<input type="button" class=" mx-1 btn btn-outline-secondary" value="우편번호" onclick="kakaoAddr()">
 										</div>
 									</div>
 									<div class="row form-group">
 										<div class="col col-md-3"></div>
-										<div class="col-12 col-md-8">
+										<div class="col-12 col-md-9">
 											<input type="text" id="addr" name="addr" placeholder="ex) 부산진구 동천로 1" class="form-control bg-gradient-light" required="required">
 											<small class="form-text text-muted">도로명주소</small>
 										</div>
@@ -279,7 +278,7 @@
 									<div class="row form-group">
 										<div class="col col-md-3">
 										</div>
-										<div class="col-12 col-md-8">
+										<div class="col-12 col-md-9">
 											<input type="text" id="detailedAddr" name="detailedAddr" placeholder="" class="form-control bg-gradient-light">
 											<small class="form-text text-muted">상세주소</small>
 										</div>

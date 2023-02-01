@@ -38,4 +38,10 @@
 			WHERE business_no = #{business_no}
 	</select>
 
+	<select id="selectClient" resultType="ClientVO">
+		SELECT *
+			FROM client
+			WHERE business_no = #{business_no} 
+	</select>
+
 </mapper>

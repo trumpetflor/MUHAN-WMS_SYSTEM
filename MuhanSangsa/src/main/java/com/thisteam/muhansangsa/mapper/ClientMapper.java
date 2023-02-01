@@ -15,6 +15,9 @@ public interface ClientMapper {
 	// 거래처 코드 조회 (중복 확인)
 	ClientVO selectBusinessNo(String business_no);
 
+	// 거래처 상세 정보 조회
+	ClientVO selectClient(String business_no);
+
 }
 
 

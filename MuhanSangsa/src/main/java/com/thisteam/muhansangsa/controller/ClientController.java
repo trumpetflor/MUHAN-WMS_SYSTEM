@@ -127,7 +127,53 @@ public class ClientController {
 		
 	}
 	
+	// 거래처 상세조회
+	@GetMapping(value = "ClientDetail")
+	public String clientDetail(
+			@RequestParam(defaultValue = "") String business_no,
+			Model model,
+			HttpSession session
+			) {
+		
+		// 권한 확인
+		
+		// 거래처 상세 정보 조회
+		if(business_no != null && !business_no.equals("")) { // 거래처 코드가 "" 아닐 경우 (존재 O)
+			ClientVO client = service.getClientDetail(business_no);
+			
+			model.addAttribute("client", client); // Model 객체에 ClientVO 객체 저장
+			
+		} else { // 거래처 코드 존재 X
+			model.addAttribute("msg", "잘못된 접근입니다.");
+		}
+		
+		return "client/client_detail_form";
+	}
 	
+	// 거래처 수정
+	@PostMapping(value = "ClientModify")
+	public String clientModify(
+			@ModelAttribute ClientVO client,
+			Model model,
+			HttpSession session
+			) {
+		
+		// 업태 및 종목을 / 로 구분
+		client.setUptae(client.getUptae().replaceAll(",", "/"));
+		client.setJongmok(client.getJongmok().replaceAll(",", "/"));
+		
+		System.out.println(client);
+		
+		int updateCount = service.modifyClient(client);
+		
+		if(updateCount > 0) { // 등록 성공 시
+			return "redirect:ClientDetail";
+		} else { // 등록 실패 시
+			model.addAttribute("msg", "거래처 등록 실패");
+			return "fail_back";
+		}
+		
+	}
 	
 	
 }
