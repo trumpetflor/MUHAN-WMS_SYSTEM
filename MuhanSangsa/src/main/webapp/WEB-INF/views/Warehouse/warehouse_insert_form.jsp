@@ -275,41 +275,59 @@
 	                        			<input type="text" id="text-input" name="" placeholder="내용적으세요" class="form-control">
 	                        			<small class="form-text text-muted">This is a help text</small>
                         			</div>
+                        		</div>
+                        		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">창고코드</label></div>
                         			<div class="col-12 col-md-9">
 	                        			<input type="text" id="text-input" name="wh_cd" class="form-control">
                         			</div>
+                        		</div>
+                        		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">창고명</label></div>
                         			<div class="col-12 col-md-9">
 	                        			<input type="text" id="text-input" name="wh_name" class="form-control">
 	                        			<small class="form-text text-muted">최대 100자</small>
                         			</div>
+                        		</div>
+                        		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">구분</label></div>
                         			<div class="col-12 col-md-9">
-	                                    <div class="radio">
-	                                        <label for="radio1" class="form-check-label ">
-	                                            <input type="radio" id="radio1" name="wh_gubun" value="1" class="form-check-input">1 : 창고
-	                                        </label>
+                        				<div class="form-check-inline form-check">
+		                                    <div class="radio">
+		                                        <label for="radio1" class="form-check-label ">
+		                                            <input type="radio" id="radio1" name="wh_gubun" value="1" class="form-check-input">1 : 창고
+		                                        </label>
+		                                    </div>
 	                                    </div>
-	                                    <div class="radio">
-	                                        <label for="radio2" class="form-check-label ">
-	                                            <input type="radio" id="radio2" name="wh_gubun" value="2" class="form-check-input">2 : 공장
-	                                        </label>
-	                                    </div>
+	                                    <div class="form-check-inline form-check">
+		                                    <div class="radio">
+		                                        <label for="radio2" class="form-check-label ">
+		                                            <input type="radio" id="radio2" name="wh_gubun" value="2" class="form-check-input">2 : 공장
+		                                        </label>
+		                                    </div>
+	                                	</div>
 	                                </div>
+	                             </div>
+	                             <div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">위치</label></div>
                         			<div class="col-12 col-md-9">
-	                                    <div class="radio">
-	                                        <label for="radio1" class="form-check-label ">
-	                                            <input type="radio" id="radio1" name="wh_location" value="1" class="form-check-input">1 : 내부
-	                                        </label>
+                        				<div class="form-check-inline form-check">
+		                                    <div class="radio">
+		                                        <label for="radio1" class="form-check-label ">
+		                                            <input type="radio" id="radio1" name="wh_location" value="1" class="form-check-input">1 : 내부
+		                                        </label>
+		                                    </div>
 	                                    </div>
-	                                    <div class="radio">
-	                                        <label for="radio2" class="form-check-label ">
-	                                            <input type="radio" id="radio2" name="wh_location" value="2" class="form-check-input">2 : 외부
-	                                        </label>
+	                                    <div class="form-check-inline form-check">
+		                                    <div class="radio">
+		                                        <label for="radio2" class="form-check-label ">
+		                                            <input type="radio" id="radio2" name="wh_location" value="2" class="form-check-input">2 : 외부
+		                                        </label>
+		                                    </div>
 	                                    </div>
 	                                </div>
+	                             </div>
+	                             <div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">주소</label></div>
                         			<div class="col-12 col-md-9">
 	                        			<input type="text" id="postcode" name="postcode" style="width:150px;" placeholder="우편번호" readonly="readonly" class="form-control">
@@ -317,39 +335,53 @@
 	                        			<input type="text" id="wh_addr1" name="wh_addr1" placeholder="주소" readonly="readonly" class="form-control">
 	                        			<input type="text" id="text-input" name="wh_addr2" placeholder="상세주소 입력" class="form-control">
                         			</div>
+                        		</div>
+                        		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">전화번호</label></div>
                         			<div class="col-12 col-md-9">
 	                        			<input type="text" id="text-input" name="wh_tel" class="form-control">
-	                        			<small class="form-text text-muted">숫자만 적어주세요</small>
+	                        			<small class="form-text text-muted">(ex : 010-0000-0000)</small>
                         			</div>
+                        		</div>
+                        		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">관리자명</label></div>
                         			<div class="col-12 col-md-9">
 	                        			<input type="text" id="text-input" name="wh_man_name" class="form-control">
 	                        			<small class="form-text text-muted">나중에 물류팀 직원만 가능하게 바꾸기</small>
                         			</div>
+                        		</div>
+                        		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">사용여부</label></div>
                         			<div class="col-12 col-md-9">
-	                                    <div class="radio">
-	                                        <label for="radio1" class="form-check-label ">
-	                                            <input type="radio" id="radio1" name="wh_use" value="1" class="form-check-input">1 : 사용
-	                                        </label>
+                        				<div class="form-check-inline form-check">
+		                                    <div class="radio">
+		                                        <label for="radio1" class="form-check-label ">
+		                                            <input type="radio" id="radio1" name="wh_use" value="1" class="form-check-input">1 : 사용
+		                                        </label>
+		                                    </div>
 	                                    </div>
-	                                    <div class="radio">
-	                                        <label for="radio2" class="form-check-label ">
-	                                            <input type="radio" id="radio2" name="wh_use" value="2" class="form-check-input">2 : 미사용
-	                                        </label>
+	                                    <div class="form-check-inline form-check">
+		                                    <div class="radio">
+		                                        <label for="radio2" class="form-check-label ">
+		                                            <input type="radio" id="radio2" name="wh_use" value="2" class="form-check-input">2 : 미사용
+		                                        </label>
+		                                    </div>
 	                                    </div>
 	                                </div>
+	                            </div>
+	                            <div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">적요</label></div>
                         			<div class="col-12 col-md-9">
 	                        			<textarea cols="70" rows="10" required="required" style="resize:none;" name="remarks" required="required"></textarea>
                         			</div>
+                        		</div>
+                        		<div class="row form-group">
                         			<div class="col col-md-12">
 <!--                                         <div class="input-group"> -->
                                             <div class="input-group-btn"><button class="btn btn-primary">Submit</button></div>
 <!--                                         </div> -->
                                     </div>
-                        		</div>
+                                </div>
                         	</form>
                         </div>
             		</div>

@@ -297,7 +297,11 @@
 		                                    		<td>${warehouse.wh_man_name }</td>
 		                                    		<td>${warehouse.wh_use }</td>
 		                                    		<td>${warehouse.remarks }</td>
-		                                    		<td></td>
+		                                    		<td>
+		                                    			<input type="button" value="수정"
+													class="btn btn-outline-dark"
+													onclick="window.open('WarehouseModifyForm?wh_cd=${warehouse.wh_cd}','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');">
+		                                    		</td>
 		                                    	</tr>
 	                                    	</c:forEach>
                                     	</c:otherwise>
