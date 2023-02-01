@@ -77,7 +77,6 @@
         <div class="content">
             <div class="animated fadeIn">
 
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
@@ -123,10 +122,38 @@
                                         <div class="col-12 col-md-9"><input type="email" id="office_number" name="office_number" value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="email-input" class=" form-control-label">Email</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="email-input" name="email-input" placeholder="Enter Email" 
-                                        value="${employees.emp_email}" class="form-control"></div>
+                                        <div class="col col-md-3">
+                                        <label class=" form-control-label">이메일</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <p class="form-control-static">${employees.emp_email}</p>
+                                        </div>
                                     </div>
+
+									<div class="row form-group">
+										<div class="col col-md-3">
+											<label for="newPass" class=" form-control-label">신규 비밀번호</label>
+										</div>
+										<div class="col-12 col-md-4">
+											<input type="password" id="newPass" name="newPass"
+												class="form-control bg-gradient-light"> <small
+												class="help-block form-text text-muted" id="checkPw">변경
+												시 입력 (영문 대소문자/숫자/특수문자(!@#$%) 8자~16자)</small>
+										</div>
+									</div>
+									<div class="row form-group">
+										<div class="col col-md-3">
+											<label for="confirmNewPass"
+												class="form-control-label">신규 비밀번호 확인</label>
+										</div>
+										<div class="col-12 col-md-4">
+											<input type="password" id="confirmNewPass" name="confirmNewPass"
+												class="form-control bg-gradient-light"
+												onkeyup="confirmPw(this.value)"> <span
+												class="help-block form-text" id="checkPasswdConfirmResult"></span>
+										</div>
+									</div>
+
+                        
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">입사일</label></div>
@@ -157,8 +184,10 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지</label></div>
-                                        <div class="col-12 col-md-9"><input type="file" id="file-input" 
-                                        name="file-input" class="form-control-file" value="${employees.photo}"></div>
+							                <div class=" col-4" id="imgWapper">
+												<img id="id_photo" alt="증명사진" src="resources/images/id_photo01.jpg" width="150px" >
+											</div>
+                                        <div class="col-12 col-md-9"><input type="file" id="file-input" name="file-input" class="form-control-file"></div>
                                     </div>
 									<div align="center">
 										<input class="btn btn-outline-dark" type="button" value="수정" onclick="javascript:confirm_modify()">&nbsp;&nbsp;
