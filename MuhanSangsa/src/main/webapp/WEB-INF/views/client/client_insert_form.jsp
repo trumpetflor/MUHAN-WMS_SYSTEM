@@ -163,7 +163,7 @@
 
                 <div class="row">
 
-                    <div class="col-lg-10">
+                    <div class="col-lg-10" style="margin-left: 100px">
                         <div class="card">
                             <div class="card-header">
                                 <strong>거래처 등록</strong>

@@ -24,8 +24,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
-
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+    
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/lib/chosen/chosen.min.css">
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
@@ -44,6 +45,88 @@
 }
 
 </style>
+
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+<script type="text/javascript">
+	
+	$(function() {
+
+		$isConfirmBn = false; // 거래처 코드 확인용 변수
+		
+		// 거래처 코드 중복 확인
+		$("#business_no").on("focusout", function(){
+			let business_no = $("#business_no").val();
+			let regex = /[0-9]{10,30}/; // 10 ~ 30 자리의 숫자
+			
+			if(!regex.exec(business_no)) {
+				alert(business_no + " 는 유효하지 않은 코드입니다.");
+// 				$("#business_no").focus();
+				isConfirmBn = false;
+			} else {
+// 				alert("거래처 코드 중복 확인 완료");
+				$.ajax({
+					url: "DuplicateBusinessNo",
+					data: {
+						business_no : $("#business_no").val()
+					},
+					success: function(result) {
+						$("#check_bn").html(result);
+						
+						if(result == "true") { // 거래처 코드 존재 (중복 O)
+							$("#check_bn").html("이미 존재하는 코드입니다.").css("color","#00ff00");
+							idResult = false;
+						} else { // 거래처 코드 존재 X (중복 X)
+							$("#check_bn").html("사용 가능한 코드입니다.").css("color","#00ff00");
+							idResult = true;
+						}
+							
+					}
+					
+				});
+			}
+		});
+		
+		$("form").submit(function() {
+			if(!isConfirmBn) {
+				alert("거래처 코드를 확인해주세요.");
+				return false;
+			}
+		});
+		
+		
+		// 종목 입력창 추가
+		$("#add").on("click", function(){
+			$("#jongmokArea").append(
+					'<input type="text" name="jongmok" placeholder="ex) 동물용 사료 및 조제식품 제조업" class="form-control">'
+					+'<small class="form-text text-muted text-right" name="remove">- 삭제</small>');
+		});
+	
+	});
+
+	// 종목 입력창 삭제
+	$(document).on("click", "small[name=remove]", function(){
+// 		alert("종목 삭제");
+		$(this).prev().remove();
+		$(this).remove();
+	});
+	
+</script>
+
+<!-- 카카오 주소 API -->
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+   function kakaoAddr() { // onclick 시 작동할 함수 선언
+      new daum.Postcode({
+         oncomplete: function(data) {
+            var roadAddr = data.roadAddress;
+            // 주소 클릭 시 폼에 뿌리기
+            $("#post_no").val(data.zonecode); // 우편번호
+            $("#addr").val(data.roadAddress).prop("readonly", true); // 도로명주소
+         }
+      }).open();
+   }
+</script>
 
 </head>
 <body>
@@ -108,7 +191,7 @@
                     <div class="col-lg-10">
                         <div class="card">
                             <div class="card-header">
-                                <strong>거래처 등록</strong>
+                                <strong>거래처 상세 정보</strong>
                             </div>
                             <div class="card-body card-block">
                                 <form action="ClientInsertPro" method="post" class="form-horizontal">
@@ -136,17 +219,17 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="boss_name" class=" form-control-label">대표자명<font style="color: red;">*</font></label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="boss_name" name="boss_name" placeholder="ex) 김댕댕" class="form-control" required="required"><small class="form-text text-muted"></small></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="boss_name" name="boss_name" value="${client.boss_name }" class="form-control" required="required"><small class="form-text text-muted"></small></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="uptae" class=" form-control-label">업태<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
                                             <select name="uptae" id="uptae" data-placeholder="복수 선택 가능" multiple class="standardSelect" required="required">
-                                                <option value="농업 · 임업 및 어업" <c:if test="${client.uptae eq '농업, 임업 및 어업' }">selected</c:if>>농업, 임업 및 어업</option>
+                                                <option value="농업 · 임업 및 어업" <c:if test="${client.uptae eq '농업, 임업 및 어업' }">selected</c:if>>농업 · 임업 및 어업</option>
                                                 <option value="광업" <c:if test="${client.uptae eq '광업' }">selected</c:if>>광업</option>
                                                 <option value="제조업" <c:if test="${client.uptae eq '제조업' }">selected</c:if>>제조업</option>
-                                                <option value="전기 · 가스, 증기 및 공기조절 공급업" <c:if test="${client.uptae eq '전기, 가스, 증기 및 공기조절 공급업' }">selected</c:if>>전기, 가스, 증기 및 공기조절 공급업</option>
-                                                <option value="수도 · 하수 및 폐기물 처리, 원료 재생업" <c:if test="${client.uptae eq '수도, 하수 및 폐기물 처리, 원료 재생업' }">selected</c:if>>수도, 하수 및 폐기물 처리, 원료 재생업</option>
+                                                <option value="전기 · 가스, 증기 및 공기조절 공급업" <c:if test="${client.uptae eq '전기 · 가스 · 증기 및 공기조절 공급업' }">selected</c:if>>전기 · 가스 · 증기 및 공기조절 공급업</option>
+                                                <option value="수도 · 하수 및 폐기물 처리, 원료 재생업" <c:if test="${client.uptae eq '수도 · 하수 및 폐기물 처리 · 원료 재생업' }">selected</c:if>>수도 · 하수 및 폐기물 처리 · 원료 재생업</option>
                                                 <option value="건설업" <c:if test="${client.uptae eq '건설업' }">selected</c:if>>건설업</option>
                                                 <option value="도매 및 소매업" <c:if test="${client.uptae eq '도매 및 소매업' }">selected</c:if>>도매 및 소매업</option>
                                                 <option value="운수 및 창고업" <c:if test="${client.uptae eq '운수 및 창고업' }">selected</c:if>>운수 및 창고업</option>
@@ -154,13 +237,13 @@
                                                 <option value="정보통신업" <c:if test="${client.uptae eq '정보통신업' }">selected</c:if>>정보통신업</option>
                                                 <option value="금융 및 보험업" <c:if test="${client.uptae eq '금융 및 보험업' }">selected</c:if>>금융 및 보험업</option>
                                                 <option value="부동산업" <c:if test="${client.uptae eq '부동산업' }">selected</c:if>>부동산업</option>
-                                                <option value="전문 · 과학 및 기술 서비스업" <c:if test="${client.uptae eq '전문, 과학 및 기술 서비스업' }">selected</c:if>>전문, 과학 및 기술 서비스업</option>
-                                                <option value="사업시설 관리 · 사업지원 및 임대 서비스업" <c:if test="${client.uptae eq '사업시설 관리, 사업지원 및 임대 서비스업' }">selected</c:if>>사업시설 관리, 사업지원 및 임대 서비스업</option>
-                                                <option value="공공 행정 · 국방 및 사회보장 행정" <c:if test="${client.uptae eq '공공 행정, 국방 및 사회보장 행정' }">selected</c:if>>공공 행정, 국방 및 사회보장 행정</option>
+                                                <option value="전문 · 과학 및 기술 서비스업" <c:if test="${client.uptae eq '전문 · 과학 및 기술 서비스업' }">selected</c:if>>전문 · 과학 및 기술 서비스업</option>
+                                                <option value="사업시설 관리 · 사업지원 및 임대 서비스업" <c:if test="${client.uptae eq '사업시설 관리 · 사업지원 및 임대 서비스업' }">selected</c:if>>사업시설 관리 · 사업지원 및 임대 서비스업</option>
+                                                <option value="공공 행정 · 국방 및 사회보장 행정" <c:if test="${client.uptae eq '공공 행정 · 국방 및 사회보장 행정' }">selected</c:if>>공공 행정 · 국방 및 사회보장 행정</option>
                                                 <option value="교육서비스업" <c:if test="${client.uptae eq '교육서비스업' }">selected</c:if>>교육서비스업</option>
                                                 <option value="보건업 및 사회복지 서비스업" <c:if test="${client.uptae eq '보건업 및 사회복지 서비스업' }">selected</c:if>>보건업 및 사회복지 서비스업</option>
-                                                <option value="예술 · 스포츠 및 여가관련 서비스업" <c:if test="${client.uptae eq '예술, 스포츠 및 여가관련 서비스업' }">selected</c:if>>예술, 스포츠 및 여가관련 서비스업</option>
-                                                <option value="협회 및 단체 · 수리 및 기타 개인 서비스업" <c:if test="${client.uptae eq '협회 및 단체, 수리 및 기타 개인 서비스업' }">selected</c:if>>협회 및 단체, 수리 및 기타 개인 서비스업</option>
+                                                <option value="예술 · 스포츠 및 여가관련 서비스업" <c:if test="${client.uptae eq '예술 · 스포츠 및 여가관련 서비스업' }">selected</c:if>>예술 · 스포츠 및 여가관련 서비스업</option>
+                                                <option value="협회 및 단체 · 수리 및 기타 개인 서비스업" <c:if test="${client.uptae eq '협회 및 단체 · 수리 및 기타 개인 서비스업' }">selected</c:if>>협회 및 단체 · 수리 및 기타 개인 서비스업</option>
                                                 <option value="가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동" <c:if test="${client.uptae eq '가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동' }">selected</c:if>>가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동</option>
                                                 <option value="국제 및 외국기관" <c:if test="${client.uptae eq '국제 및 외국기관' }">selected</c:if>>국제 및 외국기관</option>
                                                 <option value="기타" <c:if test="${client.uptae eq '기타' }">selected</c:if>>기타</option>
@@ -503,8 +586,18 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/resources/assets/js/lib/chosen/chosen.jquery.min.js"></script>
 
+<script>
+    jQuery(document).ready(function() {
+        jQuery(".standardSelect").chosen({
+            disable_search_threshold: 10,
+            no_results_text: "Oops, nothing found!",
+            width: "100%"
+        });
+    });
+</script>
 
 </body>
 </html>

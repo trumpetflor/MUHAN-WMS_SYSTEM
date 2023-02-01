@@ -141,6 +141,24 @@ public class ClientController {
 		if(business_no != null && !business_no.equals("")) { // 거래처 코드가 "" 아닐 경우 (존재 O)
 			ClientVO client = service.getClientDetail(business_no);
 			
+			System.out.println(client);
+			
+			// 업태 및 종목의 / 를 , 로 바꾸기
+			String[] uptaeArr = client.getUptae().split("/");
+			String[] jongmokArr = client.getJongmok().split("/");
+			
+			
+			
+			// 주소를 addr 과 detailedAddr 로 나누어 저장
+			String[] addrArr = client.getAddr().split("/");
+//			System.out.println(addrArr[0]);
+//			System.out.println(addrArr[1]);
+			
+			client.setAddr(addrArr[0]);
+			client.setDetailedAddr(addrArr[1]);
+			
+			System.out.println(client);
+			
 			model.addAttribute("client", client); // Model 객체에 ClientVO 객체 저장
 			
 		} else { // 거래처 코드 존재 X
@@ -151,29 +169,29 @@ public class ClientController {
 	}
 	
 	// 거래처 수정
-	@PostMapping(value = "ClientModify")
-	public String clientModify(
-			@ModelAttribute ClientVO client,
-			Model model,
-			HttpSession session
-			) {
-		
-		// 업태 및 종목을 / 로 구분
-		client.setUptae(client.getUptae().replaceAll(",", "/"));
-		client.setJongmok(client.getJongmok().replaceAll(",", "/"));
-		
-		System.out.println(client);
-		
-		int updateCount = service.modifyClient(client);
-		
-		if(updateCount > 0) { // 등록 성공 시
-			return "redirect:ClientDetail";
-		} else { // 등록 실패 시
-			model.addAttribute("msg", "거래처 등록 실패");
-			return "fail_back";
-		}
-		
-	}
+//	@PostMapping(value = "ClientModify")
+//	public String clientModify(
+//			@ModelAttribute ClientVO client,
+//			Model model,
+//			HttpSession session
+//			) {
+//		
+//		// 업태 및 종목을 / 로 구분
+//		client.setUptae(client.getUptae().replaceAll(",", "/"));
+//		client.setJongmok(client.getJongmok().replaceAll(",", "/"));
+//		
+//		System.out.println(client);
+//		
+//		int updateCount = service.modifyClient(client);
+//		
+//		if(updateCount > 0) { // 등록 성공 시
+//			return "redirect:ClientDetail";
+//		} else { // 등록 실패 시
+//			model.addAttribute("msg", "거래처 등록 실패");
+//			return "fail_back";
+//		}
+//		
+//	}
 	
 	
 }
