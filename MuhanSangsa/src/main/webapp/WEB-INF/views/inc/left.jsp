@@ -73,12 +73,12 @@
                  </li>
                  <li class="menu-title"><b>인사</b></li><!-- /.menu-title -->
                  <li class="menu-item-has-children dropdown">
-                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>사원 등록</a>
+                     <a href="employeeRegisterForm" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>사원 등록</a>
                  </li>
                      
                  
                  <li class="menu-item-has-children dropdown">
-                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>사원 조회</a>
+                     <a href="employees" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>사원 조회</a>
                  </li>
 
 
@@ -87,8 +87,11 @@
                  <li class="menu-item-has-children dropdown">
                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>기본 등록</a>
                      <ul class="sub-menu children dropdown-menu">
-                         <li><i class="menu-icon fa fa-fort-awesome"></i><a href="#">a. 거래처 등록</a></li>
-                         <li><i class="menu-icon ti-themify-logo"></i><a href="#">b. 창고 등록</a></li>
+                         <li><i class="menu-icon fa fa-fort-awesome"></i><a href="ClientList">a. 거래처 조회</a></li>
+                         <li><i class="menu-icon fa fa-fort-awesome"></i><a href="ClientInsertForm">a. 거래처 등록</a></li>
+                         <li><i class="menu-icon ti-themify-logo"></i><a href="WarehouseList">b. 창고 조회</a></li>
+                         <li><i class="menu-icon ti-themify-logo"></i><a href="WarehouseInsertForm">b. 창고 등록</a></li>
+                         <li><i class="menu-icon ti-themify-logo"></i><a href="#">c. 품목 조회</a></li>
                          <li><i class="menu-icon ti-themify-logo"></i><a href="#">c. 품목 등록</a></li>
                      </ul>
                  </li>

@@ -23,7 +23,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
-
+    
+     <link href="resources/assets/css/styles_wms.css" rel="stylesheet" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -42,20 +43,48 @@
 	
 	#left {
 	 width: 500px;
-	 background-color: grey;
+/* 	 background-color: grey; */
 	 height: 1200px;
 	 position: relative;
 	}
 	
 	#right{
-	 width: 1200px;
+	 width: 800px;
 	 background-color: yellow;
 	  height: 1200px;
 	  position: relative;
 	}
+	
+	#layoutSidenav {
+    position: fixed;
+    }
+	
+	#layoutSidenav_nav {
+    width: 500px; 
+    }
+    
+    
 	</style>
+	<script type="text/javascript">
+	
+	// 입력창 추가
+	$("#add").on("click", function() {
+		$(".sb-sidenav-collapse-arrow").append(
+		'<input type="text" name="area2" placeholder="구역을 입력하세요">'	
+		 + '<small name="remove">삭제</small>'
+		);
+	});
+	
+	
+	// 입력창 삭제
+	$(document).on("click", "small[name=remove]", function() {
+		$(this).prev().remove();
+		$(this).remove();
+	});
+	
+	</script>
 </head>
-<body>
+ <body class="sb-nav-fixed">
     <jsp:include page="inc/left.jsp"></jsp:include>
 		<!-- employee_registration_form body 내용 시작  -->
 		
@@ -83,9 +112,53 @@
         </div>
 		<div class="content d-flex">
 		
-			<div id="left" >
-				
-			</div>
+<div id="left" >
+ <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div ><i class="fas fa-book-open">창고</i></div>
+                                
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                    <div>
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                        제 1창고 &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <input type="button" value="+" id="add" class="btn btn-outline-link.btn-sm" style="display:inline;"><input type="button" value="-" id="remove" class="btn btn-outline-link btn-sm">
+                                    </div>
+                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="login.html">구역1</a>
+                                            <a class="nav-link" href="register.html">구역2</a>
+                                            <a class="nav-link" href="password.html">구역3</a>
+                                        </nav>
+                                    </div>
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                        Error
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="401.html">401 Page</a>
+                                            <a class="nav-link" href="404.html">404 Page</a>
+                                            <a class="nav-link" href="500.html">500 Page</a>
+                                        </nav>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+                </nav>
+            </div>
+        </div>
+		</div>
 			<div id = "right">
 			
 			</div>	
@@ -101,21 +174,12 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-<script src="assets/js/main.js"></script>
-<%-- 카카오 주소 API 적용하기 --%>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script type="text/javascript">
-	function kakaoAddr() { // onclick 시 작동할 함수 선언
-		new daum.Postcode({
-			oncomplete: function(data) {
-				var roadAddr = data.roadAddress;
-				// 회원이 검색해서 찾은 주소 클릭 시 폼에 뿌리기
-				document.getElementById("postCode").value = data.zonecode;
-				document.getElementById("address1").value = data.roadAddress;
-			}
-		}).open();
-	}
-</script>
+<script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/resources/js/scripts.js"></script>
+<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
 </body>
 </html>

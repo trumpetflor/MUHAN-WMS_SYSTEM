@@ -212,7 +212,7 @@
     </div><!-- .content -->
 
     <div class="clearfix"></div>
-
+<jsp:include page="inc/footer.jsp"></jsp:include>
 
 <!-- Right Panel -->
 
