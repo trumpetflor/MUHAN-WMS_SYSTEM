@@ -86,7 +86,7 @@
 		});
 		
 		$("form").submit(function() {
-			if(!isConfirmBn) {
+			if(!$isConfirmBn) {
 				alert("거래처 코드를 확인해주세요.");
 				return false;
 			}
@@ -96,7 +96,7 @@
 		// 종목 입력창 추가
 		$("#add").on("click", function(){
 			$("#jongmokArea").append(
-					'<input type="text" name="jongmok" placeholder="ex) 동물용 사료 및 조제식품 제조업" class="form-control">'
+					'<input type="text" name="jongmok" placeholder="ex) 동물용 사료 및 조제식품 제조업" class="form-control" required="required">'
 					+'<small class="form-text text-muted text-right" name="remove">- 삭제</small>');
 		});
 	
@@ -317,6 +317,7 @@
                                     <i class="fa fa-ban"></i> Reset
                                 </button>
                             </div>
+                            </form>
                         </div>
 
            			 </div>

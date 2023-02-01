@@ -83,9 +83,12 @@
 			dataType: "json"
 		})
 		.done(function(clientList) { // 요청 성공 시
-// 			alert(clientList);
 			for(let client of clientList) {
+// 				alert(client.business_no);
+// 				let strBn = "N" + client.business_no;
 				let result = "<tr>"
+// 							+ "<td onclick='openClientDetail(" + client.business_no + ")'>" + client.business_no + "</td>"
+// 							+ "<td onclick='openClientDetail(" + client.business_no + ")'>" + client.cust_name + "</td>"
 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.business_no + "</a></td>"
 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.cust_name + "</a></td>"
 							+ "<td>" + client.boss_name + "</td>"
@@ -100,6 +103,14 @@
 		.fail(function() {
 			$("#client_table").append("요청 실패..ㅠㅠ");
 		});
+	}
+	
+	// 거래처 세부 정보 창 - 아아ㅏ아가가각가가각!!!1!!!!!! 파라미터 왜 이따구로 넘어와ㅠㅠㅠ
+	function openClientDetail(business_no) {
+// 		alert(strBn);
+// 		let business_no = strBn.replace("N", "");
+		alert(business_no);
+		window.open("ClientDetail?business_no=" + business_no, "거래처 세부 정보");
 	}
 	
 </script>

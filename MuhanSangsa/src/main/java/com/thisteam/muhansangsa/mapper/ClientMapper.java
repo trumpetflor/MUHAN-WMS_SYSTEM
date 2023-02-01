@@ -2,6 +2,8 @@ package com.thisteam.muhansangsa.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.thisteam.muhansangsa.vo.ClientVO;
 
 public interface ClientMapper {
@@ -17,6 +19,9 @@ public interface ClientMapper {
 
 	// 거래처 상세 정보 조회
 	ClientVO selectClient(String business_no);
+
+	// 거래처 정보 수정
+	int updateClient(@Param("business_no") String originBn, @Param("client") ClientVO client);
 
 }
 

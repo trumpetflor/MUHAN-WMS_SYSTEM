@@ -143,17 +143,14 @@ public class ClientController {
 			
 			System.out.println(client);
 			
-			// 업태 및 종목의 / 를 , 로 바꾸기
-			String[] uptaeArr = client.getUptae().split("/");
-			String[] jongmokArr = client.getJongmok().split("/");
-			
-			
+			// 업태, 종목 ClientVO 객체에 배열로 저장
+//			client.setUptaeArr(client.getUptae().split("/"));
+			client.setJongmokArr(client.getJongmok().split("/"));
 			
 			// 주소를 addr 과 detailedAddr 로 나누어 저장
 			String[] addrArr = client.getAddr().split("/");
 //			System.out.println(addrArr[0]);
 //			System.out.println(addrArr[1]);
-			
 			client.setAddr(addrArr[0]);
 			client.setDetailedAddr(addrArr[1]);
 			
@@ -169,29 +166,30 @@ public class ClientController {
 	}
 	
 	// 거래처 수정
-//	@PostMapping(value = "ClientModify")
-//	public String clientModify(
-//			@ModelAttribute ClientVO client,
-//			Model model,
-//			HttpSession session
-//			) {
-//		
-//		// 업태 및 종목을 / 로 구분
-//		client.setUptae(client.getUptae().replaceAll(",", "/"));
-//		client.setJongmok(client.getJongmok().replaceAll(",", "/"));
-//		
-//		System.out.println(client);
-//		
-//		int updateCount = service.modifyClient(client);
-//		
-//		if(updateCount > 0) { // 등록 성공 시
-//			return "redirect:ClientDetail";
-//		} else { // 등록 실패 시
-//			model.addAttribute("msg", "거래처 등록 실패");
-//			return "fail_back";
-//		}
-//		
-//	}
+	@PostMapping(value = "ClientModify")
+	public String clientModify(
+			@ModelAttribute ClientVO client,
+			@RequestParam String originBn, // 기존 거래처 코드
+			Model model,
+			HttpSession session
+			) {
+		
+		// 업태 및 종목을 / 로 구분
+		client.setUptae(client.getUptae().replaceAll(",", "/"));
+		client.setJongmok(client.getJongmok().replaceAll(",", "/"));
+		
+		System.out.println(client);
+		
+		int updateCount = service.modifyClient(originBn, client);
+		
+		if(updateCount > 0) { // 수정 성공 시
+			return "redirect:ClientDetail?business_no=" + client.getBusiness_no();
+		} else { // 수정 실패 시
+			model.addAttribute("msg", "거래처 수정 실패");
+			return "fail_back";
+		}
+		
+	}
 	
 	
 }

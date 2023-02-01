@@ -26,22 +26,48 @@
 			)
 	</insert>
 
+	<!-- 거래처 목록 조회 -->
 	<select id="selectClientList" resultType="ClientVO">
 <!-- 		SELECT * -->
 		SELECT business_no, cust_name, boss_name, tel, addr, mobile_no, remarks
 			FROM client
 	</select>
 
+	<!-- 거래처 코드 조회 (중복 확인) -->
 	<select id="selectBusinessNo" resultType="ClientVO">
 		SELECT business_no
 			FROM client
 			WHERE business_no = #{business_no}
 	</select>
 
+	<!-- 거래처 상세 정보 조회 -->
 	<select id="selectClient" resultType="ClientVO">
 		SELECT *
 			FROM client
 			WHERE business_no = #{business_no} 
 	</select>
+	
+	<!-- 거래처 정보 수정 -->
+	<update id="updateClient">
+		UPDATE client
+			SET business_no = #{client.business_no}
+				, cust_name = #{client.cust_name}
+				, boss_name = #{client.boss_name}
+				, uptae = #{client.uptae}
+				, jongmok = #{client.jongmok}
+				, tel = #{client.tel}
+				, email = #{client.email}
+				, post_no = #{client.post_no}
+				, addr = CONCAT(#{client.addr}, '/', #{client.detailedAddr})
+				, g_gubun = #{client.g_gubun}
+				, fax = #{client.fax}
+				, mobile_no = #{client.mobile_no}
+				, url_path = #{client.url_path}
+				, man_name = #{client.man_name}
+				, man_tel = #{client.man_tel}
+				, man_email = #{client.man_email}
+				, remarks = #{client.remarks}
+			WHERE business_no = #{client.business_no}
+	</update>
 
 </mapper>

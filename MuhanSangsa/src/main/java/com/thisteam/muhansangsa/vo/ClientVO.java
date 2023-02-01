@@ -1,5 +1,7 @@
 package com.thisteam.muhansangsa.vo;
 
+import java.util.Arrays;
+
 /*
 Field      |Type         |Null|Key|Default|Extra|
 -----------+-------------+----+---+-------+-----+
@@ -28,7 +30,9 @@ public class ClientVO {
 	private String cust_name;
 	private String boss_name;
 	private String uptae;
+	private String[] uptaeArr; // 업태 배열 (DB X)
 	private String jongmok;
+	private String[] jongmokArr; // 종목 배열 (DB X)
 	private String tel;
 	private String email;
 	private String post_no;
@@ -67,11 +71,23 @@ public class ClientVO {
 	public void setUptae(String uptae) {
 		this.uptae = uptae;
 	}
+	public String[] getUptaeArr() {
+		return uptaeArr;
+	}
+	public void setUptaeArr(String[] uptaeArr) {
+		this.uptaeArr = uptaeArr;
+	}
 	public String getJongmok() {
 		return jongmok;
 	}
 	public void setJongmok(String jongmok) {
 		this.jongmok = jongmok;
+	}
+	public String[] getJongmokArr() {
+		return jongmokArr;
+	}
+	public void setJongmokArr(String[] jongmokArr) {
+		this.jongmokArr = jongmokArr;
 	}
 	public String getTel() {
 		return tel;
@@ -155,7 +171,8 @@ public class ClientVO {
 	@Override
 	public String toString() {
 		return "ClientVO [business_no=" + business_no + ", cust_name=" + cust_name + ", boss_name=" + boss_name
-				+ ", uptae=" + uptae + ", jongmok=" + jongmok + ", tel=" + tel + ", email=" + email + ", post_no="
+				+ ", uptae=" + uptae + ", uptaeArr=" + Arrays.toString(uptaeArr) + ", jongmok=" + jongmok
+				+ ", jongmokArr=" + Arrays.toString(jongmokArr) + ", tel=" + tel + ", email=" + email + ", post_no="
 				+ post_no + ", addr=" + addr + ", detailedAddr=" + detailedAddr + ", g_gubun=" + g_gubun + ", fax="
 				+ fax + ", mobile_no=" + mobile_no + ", url_path=" + url_path + ", man_name=" + man_name + ", man_tel="
 				+ man_tel + ", man_email=" + man_email + ", remarks=" + remarks + "]";

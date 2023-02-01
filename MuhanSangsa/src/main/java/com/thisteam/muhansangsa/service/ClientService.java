@@ -34,6 +34,11 @@ public class ClientService {
 		return mapper.selectClient(business_no);
 	}
 
+	// 거래처 정보 수정
+	public int modifyClient(String originBn, ClientVO client) {
+		return mapper.updateClient(originBn, client);
+	}
+
 }
 
 
