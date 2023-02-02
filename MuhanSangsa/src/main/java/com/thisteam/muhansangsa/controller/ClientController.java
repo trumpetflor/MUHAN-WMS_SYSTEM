@@ -167,6 +167,7 @@ public class ClientController {
 			
 		} else { // 거래처 코드 존재 X
 			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
 		}
 		
 		return "client/client_detail_form";

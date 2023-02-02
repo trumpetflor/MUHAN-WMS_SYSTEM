@@ -93,12 +93,12 @@
 		.done(function(clientList) { // 요청 성공 시
 			for(let client of clientList) {
 // 				alert(client.business_no);
-// 				let strBn = "N" + client.business_no;
+				let strBn = '"' + client.business_no + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
 				let result = "<tr>"
-// 							+ "<td onclick='openClientDetail(" + client.business_no + ")'>" + client.business_no + "</td>"
-// 							+ "<td onclick='openClientDetail(" + client.business_no + ")'>" + client.cust_name + "</td>"
-							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.business_no + "</a></td>"
-							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.cust_name + "</a></td>"
+							+ "<td onclick='openClientDetail(" + strBn + ")'>" + client.business_no + "</td>"
+							+ "<td onclick='openClientDetail(" + strBn + ")'>" + client.cust_name + "</td>"
+// 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.business_no + "</a></td>"
+// 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.cust_name + "</a></td>"
 							+ "<td>" + client.boss_name + "</td>"
 							+ "<td>" + client.tel + "</td>"
 							+ "<td>" + client.mobile_no + "</td>"
@@ -113,12 +113,12 @@
 		});
 	}
 	
-	// 거래처 세부 정보 창 - 아아ㅏ아가가각가가각!!!1!!!!!! 파라미터 왜 이따구로 넘어와ㅠㅠㅠ
+	// 거래처 세부 정보 창 - 아아ㅏ아가가각가가각!!!1!!!!!! 파라미터 왜 이따구로 넘어와ㅠㅠㅠ 해겨류ㅠㅠㅠㅠㅠㅠ!!!!! - by. 킹갓제너럴영진
 	function openClientDetail(business_no) {
-// 		alert(strBn);
 // 		let business_no = strBn.replace("N", "");
-		alert(business_no);
-		window.open("ClientDetail?business_no=" + business_no, "거래처 세부 정보");
+// 		alert(business_no);
+		window.open("ClientDetail?business_no=" + business_no, "_blank", "width=650, height=800, top=100, left=1000");
+		
 	}
 	
 </script>
@@ -186,7 +186,6 @@
                                         <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
                                     </tbody>
                                 </table>
-
 
             </div><!-- .animated -->
         </div><!-- .content -->

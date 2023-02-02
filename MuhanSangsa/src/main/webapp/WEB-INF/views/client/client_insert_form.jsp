@@ -30,19 +30,24 @@
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 <style>
-.grandchildren {
-	display: none;
-	position: absolute;
-}
-
-.children {
-	position: relative;
-}
-
-.children:hover .grandchildren {
-	display: block;
-}
-
+	.grandchildren {
+		display: none;
+		position: absolute;
+	}
+	
+	.children {
+		position: relative;
+	}
+	
+	.children:hover .grandchildren {
+		display: block;
+	}
+	
+	.col-lg-10{
+		margin: auto;
+		max-width: 85%;
+		flex: 100 100;
+	}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
@@ -132,6 +137,9 @@
 
 	<jsp:include page="../inc/left.jsp"></jsp:include>
 
+	<div class="content">
+     <div class="animated fadeIn">
+	
         <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
         <div class=" breadcrumbs m-0">
             <div class="breadcrumbs-inner" >
@@ -163,7 +171,7 @@
 
                 <div class="row">
 
-                    <div class="col-lg-10" style="margin-left: 100px">
+                    <div class="col-lg-10">
                         <div class="card">
                             <div class="card-header">
                                 <strong>거래처 등록</strong>
@@ -322,7 +330,9 @@
 
            			 </div>
           		  </div>
-
+          		 
+          		</div>
+          		</div>
 
        		 </div><!-- .animated -->
     	</div><!-- .content -->

@@ -31,19 +31,7 @@
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 <style>
-.grandchildren {
-	display: none;
-	position: absolute;
-}
-
-.children {
-	position: relative;
-}
-
-.children:hover .grandchildren {
-	display: block;
-}
-
+	
 </style>
 
 
@@ -59,9 +47,9 @@
 		
 		for(let uptae of uptaeArr) {
 			for(let i = 0; i < uptaeCount; i++) {
-				if(uptae == $("#uptae > option:eq(" + i + ")").val()) {
-					alert("선택된 업태 : " + $("#uptae > option:eq(" + i + ")").val());
-					$("#uptae > option:eq(" + i + ")").prop("selected", true); // 이거 안됨...
+				if(uptae == $("#uptae option:eq(" + i + ")").val()) {
+					alert("선택된 업태 : " + $("#uptae option:eq('" + i + "')").val());
+					$("#uptae option:eq('" + i + "')").prop("selected", true); // 이거 안됨...
 				}
 			}
 		}
@@ -140,6 +128,11 @@
 		}
 	}
 	
+// 	function close() {
+// 		opener.document.location.reload(); // 부모창 새로고침
+// 		window.close(); // 자식창 닫기
+// 	}
+	
 </script>
 
 <!-- 카카오 주소 API -->
@@ -160,33 +153,6 @@
 
 </head>
 <body>
-	<jsp:include page="../inc/left.jsp"></jsp:include>
-
-        <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
-        <div class=" breadcrumbs m-0">
-            <div class="breadcrumbs-inner" >
-                <div class="row m-0 ">
-                    <div class="col-sm-4 ">
-                        <div class="page-header float-left  ">
-                            <div class="page-title ">
-                               <h1 class="m-1"><b>거래처 조회</b></h1>   
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8 ">
-                        <div class="page-header float-right">
-                            <div class="page-title ">
-                                <ol class="breadcrumb text-right">
-                                    <li><a href="#">기본 등록</a></li>
-                                    <li><a href="ClientList">거래처 등록</a></li>
-                                    <li class="active">거래처 등록</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="content">
             <div class="animated fadeIn">
@@ -351,8 +317,8 @@
                                 <button type="button" class="btn btn-danger btn-sm" onclick="confirmReset()">
                                     <i class="fa fa-ban"></i> Reset
                                 </button>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="location.href='ClientList'">
-                                    <i class="fa fa-dot-circle-o"></i> 창닫기.. 가 되고 싶은 목록으로 가기
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.close()">
+                                    <i class="fa fa-dot-circle-o"></i> 창닫기
                                 </button>
                             </div>
                             </form>
@@ -368,7 +334,7 @@
     <div class="clearfix"></div>
 
     <footer>
-    	<br><br><br><br><br><br><br><br><br><br><br><br>
+    	<br>
 		<jsp:include page="../inc/footer.jsp"></jsp:include>
     </footer>
 
