@@ -70,16 +70,24 @@
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
+
+	//AJAX 를 활용한 게시물 목록 표시에 사용될 페이지 번호값 미리 저장
+	let pageNum = 1;
+	
 	$(function() {
-		load_list();
+		
+		let searchType = $("#searchType").val(); // 검색 타입
+		let keyword = $("#keyword").val(); // 검색어
+		
+		load_list(searchType, keyword); // 게시물 목록 조회 함수 호출
 		
 	});
 	
 	// 게시물 목록 조회 함수
-	function load_list() {
+	function load_list(searchType, keyword) {
 		$.ajax({
 			type: "GET",
-			url: "ClientListJson",
+			url: "ClientListJson?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword,
 			dataType: "json"
 		})
 		.done(function(clientList) { // 요청 성공 시
@@ -149,7 +157,7 @@
         <div class="content">
             <div class="animated fadeIn">
             	<section id="searchSection" class="m-0 d-flex justify-content-end">
-				   <form action=ClientListJson>
+				   <form action=ClientList>
 						<!-- 검색 타입 추가 -->
 						<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
 							<option value="business_no" <c:if test="${param.searchType eq 'business_no'}">selected</c:if>>거래처 코드</option>
