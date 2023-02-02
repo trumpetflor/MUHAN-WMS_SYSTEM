@@ -23,6 +23,9 @@ public interface WarehouseMapper {
 	
 	// 물류팀 직원 확인
 	String selectWarehouseMan(String wh_man_name);
+	
+	// 창고코드 중복 확인
+	String selectWarehouseCode(String wh_cd);
 
 }
 

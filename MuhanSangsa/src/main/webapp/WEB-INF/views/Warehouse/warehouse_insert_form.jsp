@@ -33,6 +33,80 @@
     max-width: 100%;
 }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+<script type="text/javascript">
+// 위치=외부(2) 이거나 구분=공장(2) 일때 주소 입력
+function isOut(){
+	let wh_location = $("input[name='wh_location']:checked").val();
+	let wh_gubun = $("input[name='wh_gubun']:checked").val();
+	if(wh_location == '1'){
+		alert("창고가 외부일 때만 입력해주세요!");
+	} else if(wh_location == '2' || wh_gubun == '2') {
+		kakaoAddr();
+	}
+
+} // isOut()
+
+$(function() {
+	$checkNameResult = false;
+	
+	// 창고코드 중복 확인
+	$("#wh_cd").on("focusout", function(){
+		let wh_cd = $("#wh_cd").val();
+		$.ajax({
+			type: "GET",
+			url: "WarehouseCheckCode",
+			data: { wh_cd: $("#wh_cd").val()},
+			success: function(result) {
+				$("#checkCode").html(result);
+				
+				if(result == "true"){
+					$("#checkCode").html("코드 중복입니다!!").css("color", "red");
+					checkResult = false;
+				} else {
+					$("#checkCode").html("사용 가능한 코드입니다.").css("color", "green");
+					CheckResult = true;
+				}
+			},
+		});
+	});// 물류팀 확인
+	
+	// 물류팀 확인
+	$("#wh_man_name").on("focusout", function(){
+		let wh_man_name = $("#wh_man_name").val();
+		$.ajax({
+			type: "GET",
+			url: "WarehouseCheckMan",
+			data: { wh_man_name: $("#wh_man_name").val()},
+			success: function(result) {
+				$("#checkMan").html(result);
+				
+				if(result == "true"){
+					$("#checkMan").html("물류팀 직원만 가능합니다!!!!").css("color", "red");
+					checkNameResult = false;
+				} else {
+					$("#checkMan").html("물류팀 직원입니다.").css("color", "green");
+					checkNameResult = true;
+				}
+			},
+		});
+	});// 물류팀 확인
+	
+	// 구분 = 창고 일때만 위치 선택
+	$("input[name='wh_gubun']").on("change", function(){
+		let wh_gubun = $("input[name='wh_gubun']:checked").val();
+// 		alert(wh_gubun);
+// 		alert(typeof(wh_gubun));
+		if(wh_gubun == '2'){ // 공장이면 선택 못하게함
+			$("input:radio[name=wh_location]").prop("disabled", true);
+			$("input:radio[name=wh_location]").prop("checked", false);
+		} else if(wh_gubun == '1') { // 창고는 선택 가능
+			$("input:radio[name=wh_location]").prop("disabled", false);
+		}
+	}); // 구분 제어
+	
+});
+</script>
 </head>
 <body>
     <!-- Left Panel -->
@@ -279,7 +353,8 @@
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">창고코드</label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_cd" class="form-control">
+	                        			<input type="text" id="wh_cd" name="wh_cd" class="form-control">
+	                        			<small id="checkCode" class="form-text text-muted">창고 코드는 중복 불가합니다</small>
                         			</div>
                         		</div>
                         		<div class="row form-group">
@@ -295,14 +370,14 @@
                         				<div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio1" class="form-check-label ">
-		                                            <input type="radio" id="radio1" name="wh_gubun" value="1" class="form-check-input">1 : 창고
+		                                            <input type="radio" id="wh_gubun1" name="wh_gubun" value="1" class="form-check-input">1 : 창고
 		                                        </label>
 		                                    </div>
 	                                    </div>
 	                                    <div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio2" class="form-check-label ">
-		                                            <input type="radio" id="radio2" name="wh_gubun" value="2" class="form-check-input">2 : 공장
+		                                            <input type="radio" id="wh_gubun2" name="wh_gubun" value="2" class="form-check-input">2 : 공장
 		                                        </label>
 		                                    </div>
 	                                	</div>
@@ -314,14 +389,14 @@
                         				<div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio1" class="form-check-label ">
-		                                            <input type="radio" id="radio1" name="wh_location" value="1" class="form-check-input">1 : 내부
+		                                            <input type="radio" id="wh_location1" name="wh_location" value="1" class="form-check-input">1 : 내부
 		                                        </label>
 		                                    </div>
 	                                    </div>
 	                                    <div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio2" class="form-check-label ">
-		                                            <input type="radio" id="radio2" name="wh_location" value="2" class="form-check-input">2 : 외부
+		                                            <input type="radio" id="wh_location2" name="wh_location" value="2" class="form-check-input">2 : 외부
 		                                        </label>
 		                                    </div>
 	                                    </div>
@@ -331,7 +406,7 @@
                         			<div class="col col-md-3"><label class=" form-control-label">주소</label></div>
                         			<div class="col-12 col-md-9">
 	                        			<input type="text" id="postcode" name="postcode" style="width:150px;" placeholder="우편번호" readonly="readonly" class="form-control">
-	                        			<input type="button" value="주소 검색" onclick="kakaoAddr()">
+	                        			<input type="button" id="addrSearch" value="주소 검색" onclick="isOut()">
 	                        			<input type="text" id="wh_addr1" name="wh_addr1" placeholder="주소" readonly="readonly" class="form-control">
 	                        			<input type="text" id="text-input" name="wh_addr2" placeholder="상세주소 입력" class="form-control">
                         			</div>
@@ -346,8 +421,8 @@
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">관리자명</label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_man_name" class="form-control">
-	                        			<small class="form-text text-muted">나중에 물류팀 직원만 가능하게 바꾸기</small>
+	                        			<input type="text" id="wh_man_name" name="wh_man_name" class="form-control">
+	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
                         			</div>
                         		</div>
                         		<div class="row form-group">

@@ -54,6 +54,20 @@ public class WarehouseService {
 		
 	}
 
+	// 창고 코드 중복 확인
+	public Boolean WarehouseCheckCode(String wh_cd) {
+		Boolean isChecked = false;
+		
+		String checkCode = mapper.selectWarehouseCode(wh_cd);
+		if(checkCode == null || checkCode.equals("")) { // 중복 아님
+			isChecked = false;
+		} else { // 중복임
+			isChecked = true;
+		}
+		
+		return isChecked;
+	}
+
 }
 
 

@@ -29,7 +29,31 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
-
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+<script type="text/javascript">
+	// 창고코드 클릭 시 수정 페이지 이동
+	function modify_1(item){
+		var code = $(item).text();
+		alert(code);
+		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+	}
+	
+	// 창고명 클릭 시 수정 페이지 이동
+	function modify_2(){
+		var code = $("#wh_cd").text();
+		
+		alert(code);
+		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+	}
+	
+// 	$(function(){
+// 		$("#wh_cd").on("click", function(){
+// 			let code = $("#wh_cd").val();
+// 			alert(code);
+// 			window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+// 		});
+// 	});
+</script>
 </head>
 <body>
     <!-- Left Panel -->
@@ -277,7 +301,7 @@
                                             <th>관리자명</th>
                                             <th>사용여부</th>
                                             <th>적요</th>
-                                            <th>버튼</th>
+<!--                                             <th>버튼</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -288,8 +312,8 @@
                                     	<c:otherwise>
 	                                    	<c:forEach var="warehouse" items="${whList }">
 		                                    	<tr>
-		                                    		<td>${warehouse.wh_cd }</td>
-		                                    		<td>${warehouse.wh_name }</td>
+		                                    		<td><a id="wh_cd" href='javascript:void(0);' onclick="modify_1(this)">${warehouse.wh_cd }</a></td>
+		                                    		<td><a id="wh_name" href='javascript:void(0);' onclick="modify_2()">${warehouse.wh_name }</a></td>
 		                                    		<td>${warehouse.wh_gubun }</td>
 		                                    		<td>${warehouse.wh_location }</td>
 		                                    		<td>${warehouse.wh_addr }</td>
@@ -297,17 +321,20 @@
 		                                    		<td>${warehouse.wh_man_name }</td>
 		                                    		<td>${warehouse.wh_use }</td>
 		                                    		<td>${warehouse.remarks }</td>
-		                                    		<td>
-		                                    			<input type="button" value="수정"
-													class="btn btn-outline-dark"
-													onclick="window.open('WarehouseModifyForm?wh_cd=${warehouse.wh_cd}','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');">
-		                                    		</td>
+<!-- 		                                    		<td> -->
+<!-- 		                                    			<input type="button" value="수정" -->
+<!-- 													class="btn btn-outline-dark" -->
+<%-- 													onclick="window.open('WarehouseModifyForm?wh_cd=${warehouse.wh_cd}','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');"> --%>
+<!-- 		                                    		</td> -->
 		                                    	</tr>
 	                                    	</c:forEach>
                                     	</c:otherwise>
                                     	</c:choose>
                                     </tbody>
                                 </table>
+									<div>
+										<input type="button" value="신규입력" class="btn btn-outline-dark" onclick="location.href='WarehouseInsertForm'">
+									</div>
                             </div>
                         </div>
                     </div>
@@ -316,7 +343,6 @@
                 </div>
             </div><!-- .animated -->
         </div><!-- .content -->
-
 
         <div class="clearfix"></div>
 

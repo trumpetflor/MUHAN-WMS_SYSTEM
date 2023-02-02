@@ -150,7 +150,7 @@ public class WarehouseController {
 	
 	// 물류팀직원확인
 	@GetMapping(value = "/WarehouseCheckMan")
-	public void check(@RequestParam String wh_man_name,
+	public void checkMan(@RequestParam String wh_man_name,
 						HttpServletResponse response
 						) {
 		try {
@@ -168,6 +168,29 @@ public class WarehouseController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	// 창고코드 중복 확인
+	@GetMapping(value = "/WarehouseCheckCode")
+	public void CheckCode(@RequestParam String wh_cd,
+						HttpServletResponse response) {
+		try {
+			Boolean isChecked = service.WarehouseCheckCode(wh_cd);
+			
+			if(isChecked) { // 중복
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("true");
+			} else { // 중복아님
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
