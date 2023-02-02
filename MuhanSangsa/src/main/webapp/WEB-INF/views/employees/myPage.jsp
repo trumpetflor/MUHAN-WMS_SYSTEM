@@ -22,7 +22,7 @@
 
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-<script src="${pageContext.request.contextPath}resources/js/jquery-3.6.3.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 <script type="text/javascript">
 
@@ -37,39 +37,30 @@
 	
 	}
 
-
+	//라디오 버튼 변경 비활성화
+	$(function() {
+		$("input:radio[name=inline-radios]").prop('disabled', 'disabled');
+		
+	});
+	
 </script>
 </head>
-<style type="text/css">
-
-	@font-face {
-	    font-family: 'Pretendard-Regular';
-	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-	    font-weight: 400;
-	    font-style: normal;
-	}
-
-	
+<style>
 	@font-face {
 	    font-family: 'NEXON Lv1 Gothic OTF';
 	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
 	    font-weight: normal;
 	    font-style: normal;
 	}
-	
+
 	body {
 	 font-family: 'NEXON Lv1 Gothic OTF';
 	}
 
 	p {
-	 font-family: 'NEXON Lv1 Gothic OTF';
+	 font-family: 'NEXON Lv1 Gothic OTF' !important;
 	}
-		
-	#vertical-align{
-		 vertical-align: middle;
-	}
-	
-	}
+
 </style>
 <body>
 <jsp:include page="../inc/left.jsp"></jsp:include>
@@ -98,12 +89,21 @@
                                 <strong>나의 정보</strong> 
                             </div>
                             <div class="card-body card-block">
-                                <form action="MypageUpdate" method="post" enctype="multipart/form-data" class="form-horizontal" id="MypageUpdate">
+                                <form action="MypageUpdate" method="post" enctype="multipart/form-data" class="form-horizontal" id="MypageUpdate" style="font-family:NEXON Lv1 Gothic OTF">
+                                 <!-- 사진 이미지 -->
+                                 <div class="row form-group">   
+                                 	<div class="col col-md-3"><label class=" form-control-label" style="margin-top: 80px;">사진 이미지</label></div>
+                                  		<div class=" col-12 col-md-4" id="imgWapper">
+											<img id="id_photo" alt="증명사진" style="width: 150px"
+											src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }"	
+											onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';" width="150px" />
+									</div>
+								  </div>
                                     <!-- 사원번호(코드) -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원번호(코드)</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col-12 col-md-4">
                                             <p class="form-control-static">${employees.emp_num }</p>
                                         </div>
                                     </div>
@@ -112,7 +112,7 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원명</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col-12 col-md-4">
                                             <p class="form-control-static">${employees.emp_name }</p>
                                         </div>
                                     </div>
@@ -120,7 +120,7 @@
                                      <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">부서명</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col-12 col-md-4">
                                             <p class="form-control-static">${employees.dept_name }</p>
                                         </div>
                                     </div>
@@ -128,24 +128,25 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">직급</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col-12 col-md-4">
                                             <p class="form-control-static">${employees.grade_name }</p>
                                         </div>
                                     </div>
-                                    <!-- 연락처 -->
+                                    <!-- 연락처(개인) -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(개인)</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="phone_number" name="emp_tel" value="${employees.emp_tel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
+                                        <div class="col-12 col-md-4"><input type="text" id="phone_number" name="emp_tel" value="${employees.emp_tel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
+                                    <!-- 연락처(사무실) -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(사무실)</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="office_number" name="emp_dtel" value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
+                                        <div class="col-12 col-md-4"><input type="text" id="office_number" name="emp_dtel" value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
                                     <!-- 이메일 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">이메일</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col-12 col-md-4">
                                             <p class="form-control-static">${employees.emp_email}</p>
                                             <input type="hidden" name="emp_email" value="${employees.emp_email}">
                                         </div>
@@ -178,7 +179,7 @@
 	                                 <!-- 입사일 -->
 	                                  <div class="row form-group">
                                         <div class="col col-md-3"><label for="hireDate" class=" form-control-label">입사일</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col-12 col-md-4">
                                         	<input type="date" id="hireDate" name="hire_Date" class="form-control" value="${employees.hire_date }" readonly="readonly">
                                         </div>
                                      </div>
@@ -186,11 +187,11 @@
                                     <!-- 재직여부 -->                                    
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label class=" form-control-label">재직여부</label></div>
-                                        <div class="col col-md-9">
+                                        <div class="col col-md-4">
                                             <div class="form-check-inline form-check">
-                                                <label for="inline-radio1" class="form-check-label ">
-                                                    <input type="radio" id="inline-radio1" name="inline-radios" value="1" class="form-check-input"
-													<c:if test="${employees.work_cd eq '1'}">checked</c:if>> 재직
+                                                <label for="inline-radio1" class="form-check-label">
+                                                    <input type="radio" id="inline-radio1" name="inline-radios" value="1" class="form-check-input" 
+													<c:if test="${employees.work_cd eq '1'}">checked</c:if>>재직
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                                 <label for="inline-radio2" class="form-check-label ">
@@ -208,16 +209,13 @@
                                     <!--사진이미지 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지</label></div>
-							                <div class=" col-4" id="imgWapper">
-												<img id="id_photo" alt="증명사진" src="resources/images/id_photo01.jpg" width="150px" >
-											</div>
-                                        <div class="col-12 col-md-9"><input type="file" id="file-input" name="file-input" class="form-control-file"></div>
+                                        <div class="col-12 col-md-4"><input type="file" id="file-input" name="file-input" class="form-control-file"></div>
                                     </div>
+                                    <!--사진이미지 -->
 									<div align="center">
 										<input class="btn btn-outline-dark" type="button" value="수정" onclick="javascript:confirm_modify()">&nbsp;&nbsp;
 										<input class="btn btn-outline-dark" type="button" value="확인" onclick="history.back()">&nbsp;&nbsp;
 									</div>
-									
 								</form>
                             </div>
                         </div>

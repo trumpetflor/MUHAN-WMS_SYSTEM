@@ -110,7 +110,7 @@
         <div class="container">
             <div class="login-content">
                 <div class="login-logo">
-                    <a href="index.html">
+                    <a href="#">
                         <img class="align-content" src="${pageContext.request.contextPath}/resources/images/Muhan_logo_re.png" alt="">
                     </a>
                 </div>

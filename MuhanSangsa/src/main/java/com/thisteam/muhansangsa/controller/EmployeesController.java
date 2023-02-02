@@ -170,12 +170,6 @@ public class EmployeesController {
 	
 	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 
-
-
-
-
-
-
 	//=============================== 인사관리 : 로그인(세원) =========================================
 	// 로그인 페이지
 	@GetMapping(value = "/Login")
@@ -190,21 +184,21 @@ public class EmployeesController {
 			Model model, 
 			HttpSession session) {
 		
-		// 비밀번호 암호화 !!DB에 비밀번호 재설정 필요(해싱, 솔팅 다름)!!
 		// 파라미터 : 이메일(id 역할)
-		BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
-		String pass = service.getPass(employees.getEmp_email()); //email(id) 에 해당하는 암호화 비밀번호 가져오기
-//		System.out.println("1"+pass);
+		String pass = service.getPass(employees.getEmp_email()); //email(id) 에 해당하는 비밀번호 가져오기
+		System.out.println("1==="+pass);
 		
-		//암호화 비밀번호 비교
-		if(pass == null || !passwdEncoder.matches(employees.getEmp_passwd(), pass)) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
+		// 비밀번호 비교
+		if(pass == null || !pass.equals(employees.getEmp_passwd())) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
+//			System.out.println("1======="+pass);
+//			System.out.println("1======="+employees.getEmp_email());
 			return "fail_back";
 			
 		} else { // 성공 시
 			session.setAttribute("sId", employees.getEmp_email());//세션 아이디 저장
 			System.out.println("sId");
-			return "redirect:/employees"; // 메인페이지로 리다이렉트
+			return "redirect:/employees"; // 사원목록페이지(메인)으로 리다이렉트
 		}
 		
 	}

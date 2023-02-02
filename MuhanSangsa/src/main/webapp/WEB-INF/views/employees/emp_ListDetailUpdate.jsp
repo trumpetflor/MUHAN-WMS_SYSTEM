@@ -2,27 +2,27 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>     
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>사원 상세 정보</title>
-    <meta name="description" content="Ela Admin - HTML5 Admin Template">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>사원 상세 정보 수정</title>
+<meta name="description" content="Ela Admin - HTML5 Admin Template">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
-    <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
+<link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 </head>
 <style>
 	@font-face {
@@ -99,6 +99,16 @@
                             </div>
                             <div class="card-body card-block">
                                 <form action="empListDetailUpdatePro" id="empListDetailUpdatePro" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                 <!-- 사진 이미지 -->
+                                 <div class="row form-group">   
+                                 	<div class="col col-md-3"><label class=" form-control-label" style="margin-top: 80px;">사진 이미지</label></div>
+                                  		<div class=" col-12 col-md-4" id="imgWapper">
+											<img id="id_photo" alt="증명사진" style="width: 150px"
+											src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }"	
+											onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';" width="150px" />
+									</div>
+								  </div>
+                                    <!-- 사원번호(코드) -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원번호(코드)</label></div>
@@ -107,6 +117,8 @@
 												class="form-control bg-gradient-light" required="required">
                                         </div>
                                     </div>
+                                    <!-- 사원번호(코드) -->
+                                    <!-- 사원명 -->                                    
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원명</label></div>
@@ -115,6 +127,7 @@
 												class="form-control bg-gradient-light" required="required">                                            
                                         </div>
                                     </div>
+                                    <!-- 부서명 -->                                    
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="department" class=" form-control-label">부서코드</label></div>
                                         <div class="col-12 col-md-9">
@@ -126,7 +139,8 @@
                                                 <option value="04" <c:if test="${employees.dept_cd eq '04'}">selected</c:if>>영업팀</option>
                                             </select>
                                         </div>
-                                    </div>                                    
+                                    </div>
+                                    <!-- 직급 -->                                                                        
                                      <div class="row form-group">
                                         <div class="col col-md-3"><label for="position" class=" form-control-label">직급코드</label></div>
                                         <div class="col-12 col-md-9">
@@ -139,23 +153,25 @@
                                             </select>
                                         </div>
                                     </div>                                    
-                                    
+                                    <!-- 연락처(개인) -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(개인)</label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="phone_number" name="emp_tel" 
                                         value="${employees.emp_tel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
+                                    <!-- 연락처(사무실) -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(사무실)</label></div>
                                         <div class="col-12 col-md-9"><input type="email" id="office_number" name="emp_dtel" 
                                         value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
+                                    <!-- 이메일 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">Email</label></div>
                                         <div class="col-12 col-md-9"><input type="email" id="email-input" name="emp_email" 
                                         value="${employees.emp_email}" placeholder="Enter Email" class="form-control"></div>
                                     </div>
-
+									<!-- 우편번호  -->
 									<div class="row form-group">
 										<div class="col col-md-3">
 											<label for="text-input" class="form-control-label">주소<font></font></label>
@@ -168,24 +184,26 @@
 												value="우편번호" onclick="kakaoAddr()">
 										</div>
 									</div>
+									<!-- 도로명 주소  -->
 									<div class="row form-group">
 										<div class="col col-md-3"></div>
 										<div class="col-12 col-md-8">
-											<input type="text" id="addr1" name="emp_addr "
+											<input type="text" id="emp_addr" name="emp_addr "
 												value="${employees.emp_addr }"
 												class="form-control bg-gradient-light" required="required">
 											<small class="form-text text-muted">도로명주소</small>
 										</div>
 									</div>
+									<!-- 상세주소 -->
 									<div class="row form-group">
 										<div class="col col-md-3">
 											<label for="text-input" class=" form-control-label"></label>
 										</div>
 										<div class="col-12 col-md-8">
 											<input type="text" id="addr2" name="emp_addr"
-												value="${employees.emp_addr }"
-												class="form-control bg-gradient-light"> <small
-												class="form-text text-muted">상세주소</small>
+												value=""
+												class="form-control bg-gradient-light">
+												<small class="form-text text-muted">상세주소</small>
 										</div>
 									</div>
                                    
@@ -218,36 +236,35 @@
                                         </div>
                                     </div>
                                      <!-- 권한 -->
-<!--                                      <div class="row form-group"> -->
-<!--                                         <div class="col col-md-3"><label class=" form-control-label">권한설정</label></div> -->
-<!--                                         <div class="col col-md-9"> -->
-<!--                                             <div class="form-check-inline form-check"> -->
-<!--                                                 <label for="level1" class="form-check-label "> -->
-<!--                                                     <input type="checkbox" id="level1" name="priv_Cd" value="10000" class="form-check-input">기본등록&nbsp;&nbsp; -->
-<!--                                                 </label> -->
-<!--                                                 <label for="level2" class="form-check-label "> -->
-<!--                                                     <input type="checkbox" id="level2" name="priv_Cd" value="1000" class="form-check-input" >사원조회&nbsp;&nbsp; -->
-<!--                                                 </label> -->
-<!--                                                 <label for="level2" class="form-check-label "> -->
-<!--                                                     <input type="checkbox" id="level3" name="priv_Cd" value="100" class="form-check-input" >사원관리&nbsp;&nbsp; -->
-<!--                                                 </label> -->
-<!--                                                 <label for="level3" class="form-check-label "> -->
-<!--                                                     <input type="checkbox" id="level4" name="priv_Cd" value="10" class="form-check-input">재고조회&nbsp;&nbsp; -->
-<!--                                                 </label> -->
-<!--                                                 <label for="level4" class="form-check-label "> -->
-<!--                                                     <input type="checkbox" id="level5" name="priv_Cd" value="1" class="form-check-input">재고관리&nbsp;&nbsp; -->
-<!--                                                 </label> -->
-<!--                                             </div> -->
-<!--                                         </div> -->
-<!--                                     </div> -->
+                                     <div class="row form-group">
+                                        <div class="col col-md-3"><label class=" form-control-label">권한설정</label></div>
+                                        <div class="col col-md-9">
+                                            <div class="form-check-inline form-check">
+                                                <label for="level1" class="form-check-label ">
+                                                    <input type="checkbox" id="level1" name="priv_Cd" value="10000" class="form-check-input">기본등록&nbsp;&nbsp;
+                                                </label>
+                                                <label for="level2" class="form-check-label ">
+                                                    <input type="checkbox" id="level2" name="priv_Cd" value="1000" class="form-check-input" >사원조회&nbsp;&nbsp;
+                                                </label>
+                                                <label for="level2" class="form-check-label ">
+                                                    <input type="checkbox" id="level3" name="priv_Cd" value="100" class="form-check-input" >사원관리&nbsp;&nbsp;
+                                                </label>
+                                                <label for="level3" class="form-check-label ">
+                                                    <input type="checkbox" id="level4" name="priv_Cd" value="10" class="form-check-input">재고조회&nbsp;&nbsp;
+                                                </label>
+                                                <label for="level4" class="form-check-label ">
+                                                    <input type="checkbox" id="level5" name="priv_Cd" value="1" class="form-check-input">재고관리&nbsp;&nbsp;
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- 권한 -->                                    
+                                    <!--사진이미지 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지</label></div>
-							                <div class=" col-4" id="imgWapper">
-												<img id="id_photo" alt="증명사진" src="resources/images/id_photo01.jpg" width="150px" >
-											</div>
-                                        <div class="col-12 col-md-9"><input type="file" id="file-input" name="file-input" class="form-control-file"></div>
+                                        <div class="col-12 col-md-4"><input type="file" id="file-input" name="file-input" class="form-control-file"></div>
                                     </div>
+                                    <!--  -->
                                 </form>
                             </div>
                         </div>
@@ -272,6 +289,20 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
 
+<%-- 카카오 주소 API 적용하기 --%>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+	function kakaoAddr() { // onclick 시 작동할 함수 선언
+		new daum.Postcode({
+			oncomplete: function(data) {
+				var roadAddr = data.roadAddress;
+				// 회원이 검색해서 찾은 주소 클릭 시 폼에 뿌리기
+				document.getElementById("postcode").value = data.zonecode;
+				document.getElementById("emp_addr").value = data.roadAddress;
+			}
+		}).open();
+	}
+</script>
 
 </body>
 </html>
