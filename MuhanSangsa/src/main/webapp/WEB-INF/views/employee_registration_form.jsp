@@ -25,8 +25,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-
+	<script src="/static/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+    
+    
+    
 	<style type="text/css">
 	
 	.col-lg-6{

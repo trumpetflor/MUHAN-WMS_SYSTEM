@@ -21,6 +21,16 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
+		<script src="/static/js/bootstrap.bundle.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
+	
+	
+
 	<style type="text/css">
 		.grandchildren {
 		display: none;
@@ -72,13 +82,13 @@
                      <a href="#"><i class="menu-icon fa fa-laptop"></i>Main</a>
                  </li>
                  <li class="menu-title"><b>인사</b></li><!-- /.menu-title -->
-                 <li class="menu-item-has-children dropdown">
-                     <a href="employeeRegisterForm" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>사원 등록</a>
+                 <li>
+                     <a href="employeeRegisterForm" > <i class="menu-icon fa fa-cogs"></i>사원 등록</a>
                  </li>
                      
                  
-                 <li class="menu-item-has-children dropdown">
-                     <a href="employees" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>사원 조회</a>
+                 <li>
+                     <a href="employees" > <i class="menu-icon fa fa-table"></i>사원 조회</a>
                  </li>
 
 
@@ -98,7 +108,7 @@
                  
                  <li class="menu-title"><b>구매 관리</b></li><!-- /.menu-title -->
                  <li class="menu-item-has-children dropdown">
-                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti-email"></i>구매</a>
+                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>구매</a>
                      <ul class="sub-menu children dropdown-menu">
                          <li><i class="menu-icon fa fa-fort-awesome"></i><a href="#">구매 조회</a></li>
                          <li><i class="menu-icon ti-themify-logo"></i><a href="#">구매 입력</a></li>
@@ -109,11 +119,11 @@
                   <li class="menu-title"><b>WMS</b></li><!-- /.menu-title -->
 
                  <li class="menu-item-has-children dropdown">
-                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>창고 관리</a>
+                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>창고 관리</a>
                      <ul class="sub-menu children dropdown-menu">
-                         <li><i class="menu-icon fa fa-fort-awesome"></i><a href="font-fontawesome.html">a. 거래처 등록</a></li>
-                         <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">b. 창고 등록</a></li>
-                         <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">c. 품목 등록</a></li>
+                         <li><i class="menu-icon fa fa-fort-awesome"></i><a href="#">a. 거래처 등록</a></li>
+                         <li><i class="menu-icon ti-themify-logo"></i><a href="#">b. 창고 등록</a></li>
+                         <li><i class="menu-icon ti-themify-logo"></i><a href="#">c. 품목 등록</a></li>
                      </ul>
                  </li>
  
@@ -191,8 +201,8 @@
 <!-- Right Panel -->
 
 <!-- <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
+<%-- <script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script> --%>
