@@ -52,13 +52,13 @@ public class WarehouseController {
 //		System.out.println(warehouse);
 		
 		// 권한 = 물류팀
-		String sId = (String)session.getAttribute("sId");
-		String privilege = service.getWhPrivilege(sId);
+//		String sId = (String)session.getAttribute("sId");
+//		String privilege = service.getWhPrivilege(sId);
 		
-		if(privilege != "03") { // 권한 없음
-			model.addAttribute("msg", "물류팀만 가능합니다!");
-			return "fail_back";
-		} else { // 물류팀
+//		if(privilege != "03") { // 권한 없음
+//			model.addAttribute("msg", "물류팀만 가능합니다!");
+//			return "fail_back";
+//		} else { // 물류팀
 			
 			// 창고 등록
 			int insertCount = service.registerWarehouse(warehouse);
@@ -70,7 +70,7 @@ public class WarehouseController {
 				return "fail_back";
 			}
 			
-		}
+//		}
 		
 	}
 	

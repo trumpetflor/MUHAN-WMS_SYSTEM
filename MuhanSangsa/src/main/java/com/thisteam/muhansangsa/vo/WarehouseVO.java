@@ -13,6 +13,7 @@ public class WarehouseVO {
 	private String wh_man_name;
 	private String wh_use;
 	private String remarks;
+	private String wh_pcode;
 	public String getWh_cd() {
 		return wh_cd;
 	}
@@ -43,8 +44,30 @@ public class WarehouseVO {
 	public void setWh_addr(String wh_addr) {
 		this.wh_addr = wh_addr;
 		
-		wh_addr1 = wh_addr.split(", ")[0];
-		wh_addr2 = wh_addr.split(", ")[1];
+		// null 값이면 저장 안하게 하기
+		if(wh_addr == null || wh_addr.equals("")) {
+			wh_addr1 = "";
+			wh_addr2 = "";
+		} else {
+			wh_addr1 = wh_addr.split(", ")[0];
+			wh_addr2 = wh_addr.split(", ")[1];
+		}
+		
+//		if(wh_addr2 == null) {
+//		} else {
+//		}
+		
+		
+//		if(wh_addr1 != null || !wh_addr1.equals("")) {
+//			wh_addr1 = wh_addr.split(", ")[0];
+//		} else if(wh_addr1 == null || wh_addr1.equals("")) {
+//			wh_addr1 = "";
+//		}
+//		if(wh_addr2 != null || !wh_addr2.equals("")) {
+//			wh_addr2 = wh_addr.split(", ")[1];
+//		} else if(wh_addr2 == null) {
+//			wh_addr2 = "";
+//		}
 	}
 	public String getWh_addr1() {
 		return wh_addr1;
@@ -82,12 +105,18 @@ public class WarehouseVO {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
+	public String getWh_pcode() {
+		return wh_pcode;
+	}
+	public void setWh_pcode(String wh_pcode) {
+		this.wh_pcode = wh_pcode;
+	}
 	@Override
 	public String toString() {
 		return "WarehouseVO [wh_cd=" + wh_cd + ", wh_name=" + wh_name + ", wh_gubun=" + wh_gubun + ", wh_location="
 				+ wh_location + ", wh_addr=" + wh_addr + ", wh_addr1=" + wh_addr1 + ", wh_addr2=" + wh_addr2
 				+ ", wh_tel=" + wh_tel + ", wh_man_name=" + wh_man_name + ", wh_use=" + wh_use + ", remarks=" + remarks
-				+ "]";
+				+ ", wh_pcode=" + wh_pcode + "]";
 	}
 	
 	

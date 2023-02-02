@@ -34,25 +34,18 @@
 	// 창고코드 클릭 시 수정 페이지 이동
 	function modify_1(item){
 		var code = $(item).text();
-		alert(code);
+// 		alert(code);
 		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
 	}
 	
 	// 창고명 클릭 시 수정 페이지 이동
 	function modify_2(){
-		var code = $("#wh_cd").text();
-		
+		var code = $("#begin").val();
+
 		alert(code);
 		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
 	}
 	
-// 	$(function(){
-// 		$("#wh_cd").on("click", function(){
-// 			let code = $("#wh_cd").val();
-// 			alert(code);
-// 			window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
-// 		});
-// 	});
 </script>
 </head>
 <body>
@@ -296,6 +289,7 @@
                                             <th>창고명</th>
                                             <th>구분</th>
                                             <th>위치</th>
+                                            <th>우편번호</th>
                                             <th>주소</th>
                                             <th>전화번호</th>
                                             <th>관리자명</th>
@@ -310,16 +304,45 @@
                                     		<tr><td colspan="10">데이터가 없습니다.</td></tr>
                                     	</c:when>
                                     	<c:otherwise>
-	                                    	<c:forEach var="warehouse" items="${whList }">
+	                                    	<c:forEach var="warehouse" items="${whList }" varStatus="status">
 		                                    	<tr>
 		                                    		<td><a id="wh_cd" href='javascript:void(0);' onclick="modify_1(this)">${warehouse.wh_cd }</a></td>
 		                                    		<td><a id="wh_name" href='javascript:void(0);' onclick="modify_2()">${warehouse.wh_name }</a></td>
-		                                    		<td>${warehouse.wh_gubun }</td>
-		                                    		<td>${warehouse.wh_location }</td>
+		                                    		<td>
+		                                    		<input type="hidden" value="${status.begin }" id="begin">
+		                                    			<c:choose>
+		                                    				<c:when test="${warehouse.wh_gubun eq '1'}">
+		                                    				창고
+		                                    				</c:when>
+		                                    				<c:otherwise>
+		                                    				공장
+		                                    				</c:otherwise>
+		                                    			</c:choose>
+		                                    		</td>
+		                                    		<td>
+		                                    			<c:choose>
+		                                    				<c:when test="${warehouse.wh_location eq '1'}">
+		                                    				내부
+		                                    				</c:when>
+		                                    				<c:otherwise>
+		                                    				외부
+		                                    				</c:otherwise>
+		                                    			</c:choose>
+		                                    		</td>
+		                                    		<td>${warehouse.wh_pcode}</td>
 		                                    		<td>${warehouse.wh_addr }</td>
 		                                    		<td>${warehouse.wh_tel }</td>
 		                                    		<td>${warehouse.wh_man_name }</td>
-		                                    		<td>${warehouse.wh_use }</td>
+		                                    		<td>
+		                                    			<c:choose>
+		                                    				<c:when test="${warehouse.wh_use eq '1'}">
+		                                    				사용
+		                                    				</c:when>
+		                                    				<c:otherwise>
+		                                    				미사용
+		                                    				</c:otherwise>
+		                                    			</c:choose>
+		                                    		</td>
 		                                    		<td>${warehouse.remarks }</td>
 <!-- 		                                    		<td> -->
 <!-- 		                                    			<input type="button" value="수정" -->

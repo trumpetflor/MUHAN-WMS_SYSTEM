@@ -11,11 +11,19 @@
 				#{wh_name},
 				#{wh_gubun},
 				#{wh_location},
+				<choose>
+				<when test="#{wh_addr}.equals(', ')">
+				'',
+				</when>
+				<otherwise>
 				CONCAT(#{wh_addr1}, ', ', #{wh_addr2}),
+				</otherwise>
+				</choose>
 				#{wh_tel},
 				#{wh_man_name},
 				#{wh_use},
-				#{remarks}
+				#{remarks},
+				#{wh_pcode}
 			)
 	</insert>
 	
@@ -46,21 +54,31 @@
 				wh_name = #{wh_name},
 				wh_gubun = #{wh_gubun},
 				wh_location = #{wh_location},
+				<choose>
+				<when test="#{wh_addr}.equals(', ')">
+				'',
+				</when>
+				<otherwise>
 				wh_addr = CONCAT(#{wh_addr1}, ', ', #{wh_addr2}),
+				</otherwise>
+				</choose>
 				wh_tel = #{wh_tel},
 				wh_man_name = #{wh_man_name},
 				wh_use = #{wh_use},
-				remarks = #{remarks}
+				remarks = #{remarks},
+				wh_pcode = #{wh_pcode}
 			WHERE
 				wh_cd = #{wh_cd}
 	</update>
 	
 	<!-- 물류팀 직원 확인 -->
 	<select id="selectWarehouseMan" resultType="string">
-		SELECT wh_man_name
-			FROM warehouse
+		SELECT emp_name
+			FROM employees
 			WHERE
-				wh_man_name = '${wh_man_name}'
+				emp_name = '${wh_man_name}'
+				AND
+				dept_cd = '03'
 	</select>
 	
 	<!-- 창고코드 중복 확인 -->
