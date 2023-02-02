@@ -6,123 +6,115 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ela Admin - HTML5 Admin Template</title>
-    <meta name="description" content="Ela Admin - HTML5 Admin Template">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Ela Admin - HTML5 Admin Template</title>
+<meta name="description" content="Ela Admin - HTML5 Admin Template">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
-    <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
+<link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
-    
-     <link href="resources/assets/css/styles_wms.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
+
+<link href="resources/assets/css/styles_wms.css" rel="stylesheet" />
+
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+   
+<style type="text/css">
+
+.col-lg-6{
+		margin: auto;
+		max-width: 60%;
+		flex: 100 100;
+	}
 	
-	<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
-
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
-    
-    <style type="text/css">
+	body{
+	width: 100%;
+	height: 100%;
+	}
 	
-	.col-lg-6{
-			margin: auto;
-			max-width: 60%;
-			flex: 100 100;
-		}
-		
-		body{
-		width: 100%;
-		height: 100%;
-		}
-		
-		#left {
-		 width: 500px;
-	/* 	 background-color: grey; */
-		 height: 1200px;
-		 position: relative;
-		}
-		
-		#right{
-		 width: 800px;
-		 background-color: yellow;
-		  height: 1200px;
-		  position: relative;
-		}
-		
-		#layoutSidenav {
-	    position: fixed;
-	    }
-		
-		#layoutSidenav_nav {
-	    width: 500px; 
-	    }
+	#left {
+	 width: 500px;
+/* 	 background-color: grey; */
+	 height: 1200px;
+	 position: relative;
+	}
+	
+	#right{
+	 width: 800px;
+	 background-color: white;
+	 height: 1200px;
+	 margin-left: 30px; 
+/* 	  position: relative; */
+	}
+	
+	#layoutSidenav {
+    position: fixed;
+    }
+	
+	#layoutSidenav_nav {
+    width: 500px; 
+    }
+	
+    .menu a{cursor:pointer;}
+  	.menu .hide{display:none;}
+   
+    ul { 
+    	list-style:none; 
+    } 
+    
+    .w1 {
+    	list-style:none;
+    	padding-left: 20px; 
+    }
+     .w2 {
+    	list-style:none;
+    	padding-left: 70px; 
+    }
 	    
-	    #divBox {
-		  width: 100px;
-		  height: 100px;
-		  margin-top: 10px;
-		  line-height: 100px;
-		  text-align: center;
-		  border: 2px dashed black;
-		}
-		
-		 .menu a{cursor:pointer;}
-    	 .menu .hide{display:none;}
 	    
- 	    ul { 
- 	    	list-style:none; 
- 	    	
- 	    } 
- 	    
- 	    .w1 {
- 	    	list-style:none;
- 	    	padding-left: 20px; 
- 	    }
- 	     .w2 {
- 	    	list-style:none;
- 	    	padding-left: 70px; 
- 	    }
- 	    
- 	    
-	</style>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			
-			//---------------------------------------토글 처리 부분
-			
-	        // menu 클래스 바로 하위에 있는 a 태그를 클릭했을때 (창고목록 > 창고구역명 )
-	        $(".menu>a").click(function(){
-	            var submenu = $(this).next("ul");
-	            
-	 
-	            // submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
-	            if( submenu.is(":visible") ){
-	                submenu.slideUp();
-	            }else{
-	                submenu.slideDown();
-	            }
-	          
-	        });
-	        
-	 		// 창고구역명 > 창고 구역 내 위치명       
-	        $(".hide>.w1").click(function() {
-	        	var submenu2 = $(this).next("ul");
-	        	
-	        	if( submenu2.is(":visible") ){
-	        		submenu2.slideUp();
-	            }else{
-	            	submenu2.slideDown();
-	            }
-	        	
-			});
+</style>
+<script type="text/javascript">
+
+ $(document).ready(function(){
+	
+	//---------------------------------------토글 처리 부분
+	
+    // menu 클래스 바로 하위에 있는 a 태그를 클릭했을때 (창고목록 > 창고구역명 )
+    $(".menu>a").click(function(){
+        var submenu = $(this).next("ul");
+        
+
+        // submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
+        if( submenu.is(":visible") ){
+            submenu.slideUp();
+        }else{
+            submenu.slideDown();
+        }
+      
+    });
+       
+    // 창고구역명 > 창고 구역 내 위치명       
+     $(".hide>.w1").click(function() {
+    	var submenu2 = $(this).next("ul");
+    	
+    	if( submenu2.is(":visible") ){
+    		submenu2.slideUp();
+        }else{
+        	submenu2.slideDown();
+        }
+       	
+	});
 	 		
 	      //---------------------------------------토글 처리 부분 		
 	 	
@@ -187,7 +179,7 @@
 	</script>
 
 
-	
+
 </head>
  <body class="sb-nav-fixed">
     <jsp:include page="inc/left.jsp"></jsp:include>
@@ -215,6 +207,24 @@
                 </div>
             </div>
         </div>
+        
+         <div class="breadcrumbs">
+         	<div class="breadcrumbs-inner">
+                <div class="row m-0">
+                	<div class="col-sm-4">
+                		<div class="page-header float-left">
+		                	<div class="page-title">
+		                		<h1>수정/삭제 추가 자리</h1>
+		                		<div style="display:inline"><input type="text" id="listW0"><input type="button" id="addListW0" value="+">
+		                		<input type="text" id="listW1"><input type="button" id="addListW1" value="+"><input type="button" id="deleteListW1" value="-">
+		                		<input type="text" id="listW2"><input type="button" id="addListW2" value="+"><input type="button" id="deleteListW1" value="-"></div>
+		                	</div>
+                		</div>
+                	</div>
+                </div>
+            </div>    
+         </div>
+        
 		<div class="content d-flex">
 			<div>
 			    <ul style="border:  1px solid blue; width: 410px;">
@@ -252,6 +262,9 @@
 			    </ul>
 			</div>
 			
+			<div id="right">
+			
+			</div>
 			
 		</div> <!-- content -->
        
