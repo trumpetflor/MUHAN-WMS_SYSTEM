@@ -2,6 +2,8 @@ package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +46,18 @@ public class ClientController {
 			HttpServletResponse response
 			) {
 		
+		// 접속한 ip 주소 가져오기
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
 		// 권한에 따른 구분 필요
 		
 		// 페이징 처리를 위한 변수 선언
@@ -57,7 +71,8 @@ public class ClientController {
 		JSONArray jsonArray = new JSONArray();
 		
 		for(ClientVO client : clientList) {
-			client.setAddr(client.getAddr().split("/")[0]);
+			client.setAddr(client.getAddr().split("/")[0]); // 도로명 주소만 가져오기
+			client.setRemarks(client.getRemarks().replace("\r\n", "<br>")); // 출력 시 줄바꿈 처리
 			System.out.println(client);
 			JSONObject jsonObject = new JSONObject(client);
 			System.out.println(jsonObject.get("business_no"));
@@ -80,6 +95,18 @@ public class ClientController {
 			Model model,
 			HttpSession session
 			) {
+		
+		// 접속한 ip 주소 가져오기
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		
 		return "client/client_insert_form";
 	}

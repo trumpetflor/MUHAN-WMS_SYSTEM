@@ -186,16 +186,16 @@
                                         <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
                                     </tbody>
                                 </table>
-
+						<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1 float-right" onclick="location.href='ClientInsertForm'">거래처 등록</button>
             </div><!-- .animated -->
         </div><!-- .content -->
 
     <div class="clearfix"></div>
 
-    <footer>
-    	<br><br><br><br><br><br><br><br><br><br><br><br>
+    <!-- footer -->
+	   	<br><br><br><br><br><br><br><br><br><br><br><br>
 		<jsp:include page="../inc/footer.jsp"></jsp:include>
-    </footer>
+	<!-- footer -->
 
 
 

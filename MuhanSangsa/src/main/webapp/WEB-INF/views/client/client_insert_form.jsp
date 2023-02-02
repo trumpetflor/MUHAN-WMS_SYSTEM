@@ -136,23 +136,20 @@
 <body>
 
 	<jsp:include page="../inc/left.jsp"></jsp:include>
-
-	<div class="content">
-     <div class="animated fadeIn">
 	
         <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
         <div class=" breadcrumbs m-0">
-            <div class="breadcrumbs-inner" >
+            <div class="breadcrumbs-inner rounded-start p-2 " >
                 <div class="row m-0 ">
                     <div class="col-sm-4 ">
-                        <div class="page-header float-left  ">
+                        <div class="page-header float-left rounded-start ">
                             <div class="page-title ">
                                <h1 class="m-1"><b>거래처 조회</b></h1>   
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-8 ">
-                        <div class="page-header float-right">
+                    <div class="col-sm-8 rounded-pill">
+                        <div class="page-header float-right rounded-start">
                             <div class="page-title ">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="#">기본 등록</a></li>
@@ -191,10 +188,10 @@
                                         <div class="col col-md-9">
                                             <div class="form-check-inline form-check">
                                                 <label for="g_gubun" class="form-check-label ">
-                                                    <input type="radio" id="" name="g_gubun" value="01" class="form-check-input" checked="checked">사업자 (국내)
-                                                    <input type="radio" id="" name="g_gubun" value="02" class="form-check-input">사업자 (해외)
-                                                    <input type="radio" id="" name="g_gubun" value="03" class="form-check-input">비사업자 (국내)
-                                                    <input type="radio" id="" name="g_gubun" value="04" class="form-check-input">비사업자 (해외)
+                                                    <input type="radio" name="g_gubun" value="01" class="form-check-input" checked="checked">사업자 (국내)
+                                                    <input type="radio" name="g_gubun" value="02" class="form-check-input">사업자 (해외)
+                                                    <input type="radio" name="g_gubun" value="03" class="form-check-input">비사업자 (국내)
+                                                    <input type="radio" name="g_gubun" value="04" class="form-check-input">비사업자 (해외)
                                                 </label>
                                             </div>
                                           <small class="help-block form-text text-muted">미선택시 사업자(국내)로 구분</small>
@@ -330,21 +327,17 @@
 
            			 </div>
           		  </div>
-          		 
-          		</div>
-          		</div>
-
+          		 </div>
        		 </div><!-- .animated -->
     	</div><!-- .content -->
 
     <div class="clearfix"></div>
 
-    <footer>
-    	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<!-- footer -->
+	   	<br><br><br><br><br><br><br><br><br><br><br><br>
 		<jsp:include page="../inc/footer.jsp"></jsp:include>
-    </footer>
+	<!-- footer -->
 
-</div><!-- /#right-panel -->
 
 <!-- Right Panel -->
 

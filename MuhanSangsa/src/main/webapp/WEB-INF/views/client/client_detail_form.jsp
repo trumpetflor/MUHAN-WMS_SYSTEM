@@ -42,17 +42,29 @@
 		
 		// 업태 - ................. 휴......
 		let uptaeList = "${client.uptae}";
-		let uptaeArr = uptaeList.split("/");
-		let uptaeCount = $('#uptae > option').length;
+// 		let uptaeArr = uptaeList.split("/");
+// 		let uptaeCount = $('#uptae > option').length;
 		
-		for(let uptae of uptaeArr) {
-			for(let i = 0; i < uptaeCount; i++) {
-				if(uptae == $("#uptae option:eq(" + i + ")").val()) {
-					alert("선택된 업태 : " + $("#uptae option:eq('" + i + "')").val());
-					$("#uptae option:eq('" + i + "')").prop("selected", true); // 이거 안됨...
-				}
-			}
-		}
+		$.each(uptaeList.split("/"), function(uptaeCount, uptaeVal) {
+			alert(uptaeVal);
+			$("#uptae option[value='" + uptaeVal + "']").prop("selected", true);
+		});
+		
+// 		for(let uptae of uptaeArr) {
+// 			for(let i = 0; i < uptaeCount; i++) {
+// 				let selectedUptae = $("#uptae option:eq(" + i + ")").val();
+// 				if(uptae == $('#uptae option:eq(' + i + ')').val()) {
+// 					alert("선택된 업태 : " + $('#uptae option:eq(' + i + ')').val());
+// 					$('#uptae option:eq(' + i + ')').prop("selected", true); // 이거 안됨...
+// 					$('#uptae').val(uptae).prop("selected", true); // 이거 안됨...
+// 				}
+// 			}
+// 		}
+		
+// 		$("#uptae option:eq(1)").prop("selected", true); // 이거 안됨...
+// 		$("#uptae").val("제조업").prop("selected", true); // 이거 안됨...
+// 		$('select[id=uptae]').val('제조업');
+// 		$('#uptae option[value="제조업"]').prop("selected", true);
 		
 		$isConfirmBn = true; // 거래처 코드 확인용 변수
 		
@@ -196,7 +208,7 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="uptae" class=" form-control-label">업태<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
-                                            <select name="uptae" id="uptae" data-placeholder="복수 선택 가능" multiple class="standardSelect" required="required">
+                                            <select name="uptae" id="uptae" multiple class="standardSelect" required="required">
                                                 <option value="농업 · 임업 및 어업">농업 · 임업 및 어업</option>
                                                 <option value="광업">광업</option>
                                                 <option value="제조업">제조업</option>
@@ -333,12 +345,10 @@
 
     <div class="clearfix"></div>
 
-    <footer>
-    	<br>
+	<!-- footer -->
+	   	<br><br><br><br><br><br><br><br><br><br><br><br>
 		<jsp:include page="../inc/footer.jsp"></jsp:include>
-    </footer>
-
-</div><!-- /#right-panel -->
+	<!-- footer -->
 
 <!-- Right Panel -->
 
