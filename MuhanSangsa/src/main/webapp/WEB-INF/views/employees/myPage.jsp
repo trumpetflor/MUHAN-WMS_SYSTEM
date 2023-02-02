@@ -99,6 +99,7 @@
                             </div>
                             <div class="card-body card-block">
                                 <form action="MypageUpdate" method="post" enctype="multipart/form-data" class="form-horizontal" id="MypageUpdate">
+                                    <!-- 사원번호(코드) -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원번호(코드)</label></div>
@@ -106,6 +107,8 @@
                                             <p class="form-control-static">${employees.emp_num }</p>
                                         </div>
                                     </div>
+                                    <!-- 사원번호(코드) -->
+                                    <!-- 사원명 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원명</label></div>
@@ -113,6 +116,7 @@
                                             <p class="form-control-static">${employees.emp_name }</p>
                                         </div>
                                     </div>
+                                    <!-- 부서명 -->
                                      <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">부서명</label></div>
@@ -120,6 +124,7 @@
                                             <p class="form-control-static">${employees.dept_name }</p>
                                         </div>
                                     </div>
+                                    <!-- 직급 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">직급</label></div>
@@ -127,6 +132,7 @@
                                             <p class="form-control-static">${employees.grade_name }</p>
                                         </div>
                                     </div>
+                                    <!-- 연락처 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(개인)</label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="phone_number" name="emp_tel" value="${employees.emp_tel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
@@ -135,6 +141,7 @@
                                         <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(사무실)</label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="office_number" name="emp_dtel" value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
+                                    <!-- 이메일 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">이메일</label></div>
@@ -143,7 +150,7 @@
                                             <input type="hidden" name="emp_email" value="${employees.emp_email}">
                                         </div>
                                     </div>
-
+                                    <!-- 신규 비밀번호 -->
 									<div class="row form-group">
 										<div class="col col-md-3">
 											<label for="newPass" class=" form-control-label">신규 비밀번호</label>
@@ -155,6 +162,7 @@
 												시 입력 (영문 대소문자/숫자/특수문자(!@#$%) 8자~16자)</small>
 										</div>
 									</div>
+                                    <!-- 신규 비밀번호 확인-->
 									<div class="row form-group">
 										<div class="col col-md-3">
 											<label for="confirmNewPass"
@@ -167,15 +175,15 @@
 												class="help-block form-text" id="checkPasswdConfirmResult"></span>
 										</div>
 									</div>
-
-                        
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                        <label class=" form-control-label">입사일</label></div>
+	                                 <!-- 입사일 -->
+	                                  <div class="row form-group">
+                                        <div class="col col-md-3"><label for="hireDate" class=" form-control-label">입사일</label></div>
                                         <div class="col-12 col-md-9">
-                                            <p class="form-control-static">${employees.hire_date }</p>
+                                        	<input type="date" id="hireDate" name="hire_Date" class="form-control" value="${employees.hire_date }" readonly="readonly">
                                         </div>
-                                    </div>                                    
+                                     </div>
+                                     <!-- 입사일 -->                          
+                                    <!-- 재직여부 -->                                    
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label class=" form-control-label">재직여부</label></div>
                                         <div class="col col-md-9">
@@ -197,6 +205,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!--사진이미지 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지</label></div>
 							                <div class=" col-4" id="imgWapper">

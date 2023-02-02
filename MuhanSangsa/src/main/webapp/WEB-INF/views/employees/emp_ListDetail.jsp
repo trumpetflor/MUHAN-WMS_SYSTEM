@@ -112,21 +112,26 @@
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(개인)</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="phone_number" name="phone_number" 
-                                        value="${employees.emp_tel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
+                                        <div class="col col-md-3">
+                                        <label class=" form-control-label">연락처(개인)</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <p class="form-control-static">${employees.emp_tel }</p>
+                                        </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(사무실)</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="office_number" name="office_number" 
-                                        value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
-                                    </div>
+                                        <div class="col col-md-3">
+                                        <label class=" form-control-label">연락처(사무실)</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <p class="form-control-static">${employees.emp_dtel }</p>
+                                        </div>
+                                    </div>    
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="email-input" class=" form-control-label">Email</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="email-input" name="email-input" 
-                                        value="${employees.emp_email}" placeholder="Enter Email" class="form-control"></div>
-                                    </div>
-
+                                        <div class="col col-md-3">
+                                        <label class=" form-control-label">이메일</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <p class="form-control-static">${employees.emp_email }</p>
+                                        </div>
+                                    </div>                                   
 									<div class="row form-group">
 										<div class="col col-md-3">
 											<label for="text-input" class="form-control-label">주소<font></font></label>
@@ -134,31 +139,32 @@
 										<div class="col-12 col-md-4 d-flex">
 											<input type="text" id="postcode" name="emp_postcode"
 												value="${employees.emp_post_No }"
-												class="form-control bg-gradient-light" required="required">
+												class="form-control bg-gradient-light" readonly="readonly">
 											<input type="button" class=" mx-1 btn btn-outline-secondary"
 												value="우편번호" onclick="kakaoAddr()">
 										</div>
 									</div>
+							
 									<div class="row form-group">
 										<div class="col col-md-3"></div>
 										<div class="col-12 col-md-8">
 											<input type="text" id="addr1" name="emp_addr1"
 												value="${employees.emp_addr }"
-												class="form-control bg-gradient-light" required="required">
+												class="form-control bg-gradient-light" readonly="readonly">
 											<small class="form-text text-muted">도로명주소</small>
 										</div>
 									</div>
-									<div class="row form-group">
-										<div class="col col-md-3">
-											<label for="text-input" class=" form-control-label"></label>
-										</div>
-										<div class="col-12 col-md-8">
-											<input type="text" id="addr2" name="member_addr2"
-												value="${employees.emp_addr }"
-												class="form-control bg-gradient-light"> <small
-												class="form-text text-muted">상세주소</small>
-										</div>
-									</div>
+<!-- 									<div class="row form-group"> -->
+<!-- 										<div class="col col-md-3"> -->
+<!-- 											<label for="text-input" class=" form-control-label"></label> -->
+<!-- 										</div> -->
+<!-- 										<div class="col-12 col-md-8"> -->
+<!-- 											<input type="text" id="addr2" name="member_addr2" -->
+<%-- 												value="${employees.emp_addr }" --%>
+<!-- 												class="form-control bg-gradient-light"> <small -->
+<!-- 												class="form-text text-muted">상세주소</small> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
                                    
                                     <div class="row form-group">
                                         <div class="col col-md-3">
