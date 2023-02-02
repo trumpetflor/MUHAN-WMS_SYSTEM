@@ -27,6 +27,7 @@ public interface ClientMapper {
 	// 거래처 정보 수정
 	int updateClient(@Param("business_no") String originBn, @Param("client") ClientVO client);
 
+	
 }
 
 

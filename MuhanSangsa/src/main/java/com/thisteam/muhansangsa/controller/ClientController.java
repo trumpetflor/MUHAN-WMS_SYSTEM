@@ -21,29 +21,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.muhansangsa.service.ClientService;
+import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.vo.ClientVO;
+import com.thisteam.muhansangsa.vo.Emp_viewVO;
+import com.thisteam.muhansangsa.vo.Privilege;
 
 @Controller
 public class ClientController {
 	
 	@Autowired
 	private ClientService service;
+//	@Autowired
+	private EmployeesService empService; // 사원 서비스
 	
 	@GetMapping(value = "ClientList")
-	public String clientList() {
-		return "client/client_list";
-	}
-	
-	// 거래처 목록 조회
-	@ResponseBody
-	@GetMapping(value = "ClientListJson")
-	public void clientListJson(
-			@RequestParam(defaultValue = "") String searchType,
-			@RequestParam(defaultValue = "") String keyword,
-			@RequestParam(defaultValue = "1") int pageNum,
+	public String clientList(
 			Model model,
-			HttpSession session,
-			HttpServletResponse response
+			HttpSession session
 			) {
 		
 		// 접속한 ip 주소 가져오기
@@ -58,7 +52,36 @@ public class ClientController {
 			e.printStackTrace();
 		}
 		
-		// 권한에 따른 구분 필요
+		// 세션 아이디 없을 경우 쫓아내기
+		session.getAttribute("sId");
+		String sId = (String)session.getAttribute("sId");
+		
+		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
+		if(sId != null && !sId.equals("")) { 
+
+			System.out.println("sId : "+ sId);
+
+			return "client/client_list"; // 거래처 목록 조회 페이지
+			
+		} else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			
+			return "fail_back";
+		}
+		
+	}
+	
+	// 거래처 목록 조회
+	@ResponseBody
+	@GetMapping(value = "ClientListJson")
+	public void clientListJson(
+			@RequestParam(defaultValue = "") String searchType,
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "1") int pageNum,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
 		
 		// 페이징 처리를 위한 변수 선언
 		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
@@ -108,7 +131,35 @@ public class ClientController {
 			e.printStackTrace();
 		}
 		
-		return "client/client_insert_form";
+		// 권한에 따른 접근 허용 여부 판단
+		// 세션 아이디 저장
+		session.getAttribute("sId");
+		String sId = (String)session.getAttribute("sId");
+		System.out.println("sId : "+ sId);
+		
+		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
+
+		if(sId != null && !sId.equals("")) {  // 세션 아이디 있을 경우
+
+			//권한 조회 메서드
+			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
+			
+			isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
+			
+			if(isRightUser) { // 권한 존재할 경우
+				return "client/client_insert_form"; // 거래처 등록 폼
+			} else { // 권한 없을 경우
+				model.addAttribute("msg", "거래처 관리 권한이 없습니다.");
+				
+				return "fail_back";
+			}
+		
+		} else { // 세션 아이디 없을 경우
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			
+			return "fail_back";
+		}
+		
 	}
 	
 	// 거래처 등록 프로
@@ -169,36 +220,63 @@ public class ClientController {
 			HttpSession session
 			) {
 		
-		// 권한 확인
+		// 권한에 따른 접근 허용 여부 판단
+		// 세션 아이디 저장
+		session.getAttribute("sId");
+		String sId = (String)session.getAttribute("sId");
+		System.out.println("sId : "+ sId);
 		
-		// 거래처 상세 정보 조회
-		if(business_no != null && !business_no.equals("")) { // 거래처 코드가 "" 아닐 경우 (존재 O)
-			ClientVO client = service.getClientDetail(business_no);
+		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
+
+		if(sId != null && !sId.equals("")) { // 세션 아이디 있을 경우
+
+			//권한 조회 메서드
+			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
 			
-			System.out.println(client);
+			isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
 			
-			// 업태, 종목 ClientVO 객체에 배열로 저장
-//			client.setUptaeArr(client.getUptae().split("/"));
-			client.setJongmokArr(client.getJongmok().split("/"));
-			
-			// 주소를 addr 과 detailedAddr 로 나누어 저장
-			String[] addrArr = client.getAddr().split("/");
-//			System.out.println(addrArr[0]);
-//			System.out.println(addrArr[1]);
-			client.setAddr(addrArr[0]);
-			client.setDetailedAddr(addrArr[1]);
-			
-			System.out.println(client);
-			
-			model.addAttribute("client", client); // Model 객체에 ClientVO 객체 저장
-			
-		} else { // 거래처 코드 존재 X
+			if(isRightUser) { // 권한 존재할 경우
+				
+				// 거래처 상세 정보 조회
+				if(business_no != null && !business_no.equals("")) { // 거래처 코드가 "" 아닐 경우 (존재 O)
+					ClientVO client = service.getClientDetail(business_no);
+					
+					System.out.println(client);
+					
+					// 업태, 종목 ClientVO 객체에 배열로 저장
+//					client.setUptaeArr(client.getUptae().split("/"));
+					client.setJongmokArr(client.getJongmok().split("/"));
+					
+					// 주소를 addr 과 detailedAddr 로 나누어 저장
+					String[] addrArr = client.getAddr().split("/");
+//					System.out.println(addrArr[0]);
+//					System.out.println(addrArr[1]);
+					client.setAddr(addrArr[0]);
+					client.setDetailedAddr(addrArr[1]);
+					
+					System.out.println(client);
+					
+					model.addAttribute("client", client); // Model 객체에 ClientVO 객체 저장
+					
+					return "client/client_detail_form";
+
+				} else { // 거래처 코드 존재 X
+					model.addAttribute("msg", "존재하지 않는 거래처 코드입니다.");
+					return "fail_back";
+				}
+				
+			} else { // 권한 없을 경우
+				model.addAttribute("msg", "거래처 관리 권한이 없습니다.");
+				return "fail_back";
+			}
+		
+		} else { // 세션 아이디 없을 경우
 			model.addAttribute("msg", "잘못된 접근입니다.");
 			return "fail_back";
 		}
 		
-		return "client/client_detail_form";
 	}
+		
 	
 	// 거래처 수정
 	@PostMapping(value = "ClientModify")
@@ -209,25 +287,53 @@ public class ClientController {
 			HttpSession session
 			) {
 		
-		// 업태 및 종목을 / 로 구분
-		client.setUptae(client.getUptae().replaceAll(",", "/"));
-		client.setJongmok(client.getJongmok().replaceAll(",", "/"));
+		// 권한에 따른 접근 허용 여부 판단
+		// 세션 아이디 저장
+		session.getAttribute("sId");
+		String sId = (String)session.getAttribute("sId");
+		System.out.println("sId : "+ sId);
 		
-		System.out.println(client);
-		
-		int updateCount = service.modifyClient(originBn, client);
-		
-		if(updateCount > 0) { // 수정 성공 시
-			return "redirect:ClientDetail?business_no=" + client.getBusiness_no();
-		} else { // 수정 실패 시
-			model.addAttribute("msg", "거래처 수정 실패");
+		sId = "maltesers@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
+
+		if(sId != null && !sId.equals("")) { 
+
+			//권한 조회 메서드
+			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
+			
+			isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
+			
+			if(isRightUser) { // 권한 존재할 경우
+				
+				// 거래처 상세 정보 수정
+				// 업태 및 종목을 / 로 구분
+				client.setUptae(client.getUptae().replaceAll(",", "/"));
+				client.setJongmok(client.getJongmok().replaceAll(",", "/"));
+				
+				System.out.println(client);
+				
+				int updateCount = service.modifyClient(originBn, client);
+				
+				if(updateCount > 0) { // 수정 성공 시
+					return "redirect:ClientDetail?business_no=" + client.getBusiness_no();
+					
+				} else { // 수정 실패 시
+					model.addAttribute("msg", "거래처 정보 수정에 실패했습니다.");
+					return "fail_back";
+				}
+			} else { // 권한 없을 경우
+				model.addAttribute("msg", "거래처 관리 권한이 없습니다.");
+				return "fail_back";
+			}
+		} else { // 세션 아이디 없을 경우
+			model.addAttribute("msg", "잘못된 접근입니다.");
 			return "fail_back";
 		}
-		
+	
 	}
 	
 	
 }
+
 
 
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.thisteam.muhansangsa.mapper.ClientMapper;
 import com.thisteam.muhansangsa.vo.ClientVO;
+import com.thisteam.muhansangsa.vo.Privilege;
 
 @Service
 public class ClientService {
@@ -38,6 +39,8 @@ public class ClientService {
 	public int modifyClient(String originBn, ClientVO client) {
 		return mapper.updateClient(originBn, client);
 	}
+
+	
 
 }
 
