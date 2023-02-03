@@ -47,7 +47,7 @@
 		
 		$.each(uptaeList.split("/"), function(uptaeCount, uptaeVal) {
 			alert(uptaeVal);
-			$("#uptae option[value='" + uptaeVal + "']").prop("selected", true);
+// 			$("#uptae option[value='" + uptaeVal + "']").prop("selected", true);
 		});
 		
 // 		for(let uptae of uptaeArr) {
@@ -208,29 +208,78 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="uptae" class=" form-control-label">업태<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
-                                            <select name="uptae" id="uptae" multiple class="standardSelect" required="required" autocomplete="off">
-                                            	<option value="농업 · 임업 및 어업">농업 · 임업 및 어업</option>
-                                                <option value="광업">광업</option>
-                                                <option value="제조업">제조업</option>
-                                                <option value="전기 · 가스 · 증기 및 공기조절 공급업">전기 · 가스 · 증기 및 공기조절 공급업</option>
-                                                <option value="수도 · 하수 및 폐기물 처리 · 원료 재생업">수도 · 하수 및 폐기물 처리 · 원료 재생업</option>
-                                                <option value="건설업">건설업</option>
-                                                <option value="도매 및 소매업">도매 및 소매업</option>
-                                                <option value="운수 및 창고업">운수 및 창고업</option>
-                                                <option value="숙박 및 음식점업">숙박 및 음식점업</option>
-                                                <option value="정보통신업">정보통신업</option>
-                                                <option value="금융 및 보험업">금융 및 보험업</option>
-                                                <option value="부동산업">부동산업</option>
-                                                <option value="전문 · 과학 및 기술 서비스업">전문, 과학 및 기술 서비스업</option>
-                                                <option value="사업시설 관리 · 사업지원 및 임대 서비스업">사업시설 관리 · 사업지원 및 임대 서비스업</option>
-                                                <option value="공공 행정 · 국방 및 사회보장 행정">공공 행정 · 국방 및 사회보장 행정</option>
-                                                <option value="교육서비스업">교육서비스업</option>
-                                                <option value="보건업 및 사회복지 서비스업">보건업 및 사회복지 서비스업</option>
-                                                <option value="예술 · 스포츠 및 여가관련 서비스업">예술 · 스포츠 및 여가관련 서비스업</option>
-                                                <option value="협회 및 단체 · 수리 및 기타 개인 서비스업">협회 및 단체 · 수리 및 기타 개인 서비스업</option>
-                                                <option value="가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동">가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동</option>
-                                                <option value="국제 및 외국기관">국제 및 외국기관</option>
-                                                <option value="기타">기타</option>
+                                            <select name="uptae" id="uptae" multiple class="standardSelect" required="required">
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+                                            	<c:choose>
+                                            		<c:when test="${uptae eq '농업, 임업 및 어업' }"><option value="농업 · 임업 및 어업" selected="selected">농업 · 임업 및 어업</option></c:when>
+                                            		<c:otherwise><option value="농업 · 임업 및 어업">농업 · 임업 및 어업</option></c:otherwise>
+                                            	</c:choose>
+<%--                                                 	<option value="농업 · 임업 및 어업" <c:if test="${uptae eq '농업, 임업 및 어업' }">selected</c:if>>농업 · 임업 및 어업</option> --%>
+<%--                                                 	<option value="농업 · 임업 및 어업" <c:if test="${uptae eq '농업, 임업 및 어업' }">selected</c:if>>농업 · 임업 및 어업</option> --%>
+												</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="광업" <c:if test="${uptae eq '광업' }">selected="selected"</c:if>>광업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="제조업" <c:if test="${client.uptae eq '제조업' }">selected</c:if>>제조업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="전기 · 가스, 증기 및 공기조절 공급업" <c:if test="${client.uptae eq '전기 · 가스 · 증기 및 공기조절 공급업' }">selected</c:if>>전기 · 가스 · 증기 및 공기조절 공급업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="수도 · 하수 및 폐기물 처리, 원료 재생업" <c:if test="${client.uptae eq '수도 · 하수 및 폐기물 처리 · 원료 재생업' }">selected</c:if>>수도 · 하수 및 폐기물 처리 · 원료 재생업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="건설업" <c:if test="${client.uptae eq '건설업' }">selected</c:if>>건설업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="도매 및 소매업" <c:if test="${client.uptae eq '도매 및 소매업' }">selected</c:if>>도매 및 소매업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="운수 및 창고업" <c:if test="${client.uptae eq '운수 및 창고업' }">selected</c:if>>운수 및 창고업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="숙박 및 음식점업" <c:if test="${client.uptae eq '숙박 및 음식점업' }">selected</c:if>>숙박 및 음식점업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="정보통신업" <c:if test="${client.uptae eq '정보통신업' }">selected</c:if>>정보통신업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="금융 및 보험업" <c:if test="${client.uptae eq '금융 및 보험업' }">selected</c:if>>금융 및 보험업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="부동산업" <c:if test="${client.uptae eq '부동산업' }">selected</c:if>>부동산업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="전문 · 과학 및 기술 서비스업" <c:if test="${client.uptae eq '전문 · 과학 및 기술 서비스업' }">selected</c:if>>전문 · 과학 및 기술 서비스업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="사업시설 관리 · 사업지원 및 임대 서비스업" <c:if test="${client.uptae eq '사업시설 관리 · 사업지원 및 임대 서비스업' }">selected</c:if>>사업시설 관리 · 사업지원 및 임대 서비스업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="공공 행정 · 국방 및 사회보장 행정" <c:if test="${client.uptae eq '공공 행정 · 국방 및 사회보장 행정' }">selected</c:if>>공공 행정 · 국방 및 사회보장 행정</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="교육서비스업" <c:if test="${client.uptae eq '교육서비스업' }">selected</c:if>>교육서비스업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="보건업 및 사회복지 서비스업" <c:if test="${client.uptae eq '보건업 및 사회복지 서비스업' }">selected</c:if>>보건업 및 사회복지 서비스업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="예술 · 스포츠 및 여가관련 서비스업" <c:if test="${client.uptae eq '예술 · 스포츠 및 여가관련 서비스업' }">selected</c:if>>예술 · 스포츠 및 여가관련 서비스업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="협회 및 단체 · 수리 및 기타 개인 서비스업" <c:if test="${client.uptae eq '협회 및 단체 · 수리 및 기타 개인 서비스업' }">selected</c:if>>협회 및 단체 · 수리 및 기타 개인 서비스업</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동" <c:if test="${client.uptae eq '가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동' }">selected</c:if>>가구 내 고용활동 및 달리 분류되지 않은 자가소비 생산활동</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="국제 및 외국기관" <c:if test="${uptae eq '국제 및 외국기관' }">selected</c:if>>국제 및 외국기관</option>
+                                            	</c:forEach>
+                                            	<c:forEach var="uptae" items="${client.uptaeArr }" varStatus="uptae_idx">
+	                                                <option value="기타" <c:if test="${uptae eq '기타' }">selected</c:if>>기타</option>
+                                            	</c:forEach>
                                             </select>
                                         </div>
                                     </div>

@@ -53,7 +53,6 @@ public class ClientController {
 		}
 		
 		// 세션 아이디 없을 경우 쫓아내기
-		session.getAttribute("sId");
 		String sId = (String)session.getAttribute("sId");
 		
 		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
@@ -133,18 +132,20 @@ public class ClientController {
 		
 		// 권한에 따른 접근 허용 여부 판단
 		// 세션 아이디 저장
-		session.getAttribute("sId");
-		String sId = (String)session.getAttribute("sId");
-		System.out.println("sId : "+ sId);
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+			System.out.println("sId : "+ sId);
+		}
 		
 		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
 
-		if(sId != null && !sId.equals("")) {  // 세션 아이디 있을 경우
+		if(!sId.equals("")) {  // 세션 아이디 있을 경우
 
 			//권한 조회 메서드
-			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
+//			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
 			
-			isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
+			boolean isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
 			
 			if(isRightUser) { // 권한 존재할 경우
 				return "client/client_insert_form"; // 거래처 등록 폼
@@ -197,8 +198,6 @@ public class ClientController {
 			@RequestParam String business_no
 			) {
 		
-		// 권한에 다른 구분 필요
-		
 		// 거래처 코드 확인하기
 		try {
 			if(service.duplicateBn(business_no) != null) { // 거래처 코드 존재 (중복 O)
@@ -220,20 +219,21 @@ public class ClientController {
 			HttpSession session
 			) {
 		
-		// 권한에 따른 접근 허용 여부 판단
 		// 세션 아이디 저장
-		session.getAttribute("sId");
-		String sId = (String)session.getAttribute("sId");
-		System.out.println("sId : "+ sId);
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+			System.out.println("sId : "+ sId);
+		}
 		
 		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
 
-		if(sId != null && !sId.equals("")) { // 세션 아이디 있을 경우
+		if(!sId.equals("")) {  // 세션 아이디 있을 경우
 
 			//권한 조회 메서드
-			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
+//			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
 			
-			isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
+			boolean isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
 			
 			if(isRightUser) { // 권한 존재할 경우
 				
@@ -244,7 +244,7 @@ public class ClientController {
 					System.out.println(client);
 					
 					// 업태, 종목 ClientVO 객체에 배열로 저장
-//					client.setUptaeArr(client.getUptae().split("/"));
+					client.setUptaeArr(client.getUptae().split("/"));
 					client.setJongmokArr(client.getJongmok().split("/"));
 					
 					// 주소를 addr 과 detailedAddr 로 나누어 저장
