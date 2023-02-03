@@ -42,7 +42,7 @@
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Main </a>
+                        <a href=""><i class="menu-icon fa fa-laptop"></i>Main </a>
                     </li>
                     <li class="menu-title"><b>인사</b></li><!-- /.menu-title -->
                     <li>
@@ -71,9 +71,9 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>구매</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">구매 조회</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">구매 입력</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">구매 현황</a></li>
+                            <li><i class="fa fa-table"></i><a href="">구매 조회</a></li>
+                            <li><i class="fa fa-table"></i><a href="">구매 입력</a></li>
+                            <li><i class="fa fa-table"></i><a href="">구매 현황</a></li>
                         </ul>
                     </li>
                     
@@ -89,8 +89,8 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>입고 관리</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="#">입고 예정</a></li>
-                            <li><i class="fa fa-table"></i><a href="#">입고 처리</a></li>
+                            <li><i class="fa fa-table"></i><a href="InSchedule">입고 예정</a></li>
+                            <li><i class="fa fa-table"></i><a href="InScheduleInsert">입고 처리</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">

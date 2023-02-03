@@ -1,9 +1,7 @@
 package com.thisteam.muhansangsa.vo;
 
 import java.sql.Date;
-
-
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 
 public class EmployeesVO {
@@ -125,6 +123,8 @@ public class EmployeesVO {
 					+ ", emp_addr=" + emp_addr + ", hire_date=" + hire_date + ", work_cd=" + work_cd + ", priv_cd="
 					+ priv_cd + ", photo=" + photo + "]";
 		}
+		
+		
 
 		
 
