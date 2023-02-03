@@ -173,7 +173,7 @@
 	        	"data":str
 	        }
 	        ,
-	        
+	         
 	        contentType: 'application/json;charset=UTF-8',
 	        success: function(data,status,xhr) {
 	               
@@ -350,7 +350,7 @@
 		console.log(dept_name);
 
 		$.ajax({
-			
+			 
 			        type: "post",
 			        url: "dept_detail.ajax",
 			        data: {
