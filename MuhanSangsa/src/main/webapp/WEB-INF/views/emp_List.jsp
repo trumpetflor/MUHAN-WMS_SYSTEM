@@ -24,7 +24,13 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 	<!-- CSS only -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<!-- 모달창 -->
+<!-- Remember to include jQuery :) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 
+<!-- jQuery Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 </head>
 <style type="text/css">
 
@@ -63,7 +69,12 @@
 	 transition: 0.5s;
 	}
 	
+
+	#modal_container{
+		height: 300px;
+		width: 500px;
 	
+	}
 	
 /* 	.id_pht:hover{ */
 /* 	 width: 300px; */
@@ -73,12 +84,33 @@
 <script src="resources/js/jquery-3.6.3.js"></script>
 <script type="text/javascript">
 
+	$(document).on("change","input[name=empChecked]:checked",function(){
+		
+		$("input[name=empChecked]").on("change",function(){
+			alert("체크됨: "+ this.val());
+		});
+
+		
+		
+		
+	});
+	
+	   $('a[href="#modal_container"]').click(function(event) {
+		      event.preventDefault();
+		 
+		      $(this).modal({
+		        fadeDuration: 250
+		      });
+		    });
+	
+	
+
 	$(function() {
 		
 		//상세조회 버튼 클릭
 		$("#detailBtn").on("click", function () {
 			alert("");
-			window.open("employeesDetail");
+			window.open("employees/detail?");
 			
 			
 			
@@ -121,25 +153,72 @@
             </div>
         </div>
 
+<!-- Modal HTML embedded directly into document -->
+<div id="modal_container" class="modal">
+ 	<div>
+	<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
+		<div class="p-2 bg-light text-black well rounded-2" >&#128505;선택된 사원</div>
+		<div class="mx-3 py-3">
+			
+			
+		</div>
+		<div>
+		<select>
+			<option>재직상태 변경</option>
+			<option>부서 변경</option>
+		</select>
+		
+		<select>
+			<option disabled selected value="">선택하세요</option>
+			<option>재직</option>
+			<option>휴직</option>
+			<option>퇴사</option>
+		</select>
+		<select>
+			<option disabled selected value="">선택하세요</option>
+			<option>인사팀</option>
+			<option>개발팀</option>
+			<option>물류관리팀</option>
+			<option>영업팀</option>
+		</select>
+		
+		
+		</div>
+		
+	</div>
+	<div>
+ 	
+ 	</div>
+ 	</div>
+ 	
+  <a href="#" rel="modal:close">Close</a>
+</div><!-- end of DIV #modal_container -->
+
+<!-- Link to open the modal -->
+<p><a href="#modal_container" rel="modal:open">Open Modal</a></p>
 
 <div class="content">
    <div class="animated fadeIn">
 	   <section id="searchSection" class="m-0 d-flex justify-content-end">
 	   <form action="employees_search">
 				<!-- 검색 타입 추가 -->
-				<select name="searchType" id="searchType" class="rounded-1">
+				<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
 					<option value="emp_name" <c:if test="${param.searchType eq 'emp_name'}">selected</c:if>>사원이름</option>
 					<option value="emp_num" <c:if test="${param.searchType eq 'emp_num'}">selected</c:if>>사원번호</option>
 					<option value="emp_email" <c:if test="${param.searchType eq 'emp_email'}">selected</c:if>>이메일</option>
 					<option value="dept_name" <c:if test="${param.searchType eq 'dept_name'}">selected</c:if>>부서</option>
 				</select>			
-				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1" name="keyword" id="keyword" value="${param.keyword }"> 
+				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
 				<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
 		</form>
 	   </section>
 	<table class="table "  id="vertical-align">
 		<thead>
 			<tr>
+			<c:if test="${priv eq 1 }">
+<!-- 				<th></th> -->
+				<th></th><!-- 관리 권한 부여 시 조회 가능 -->
+			</c:if>
 				<th>사진</th>
 				<th>사원번호</th>
 				<th>사원명</th>
@@ -147,12 +226,18 @@
 				<th>직급</th>
 				<th>연락처</th>
 				<th>E-Mail</th>
+			<c:if test="${priv eq 1 }">
 				<th>관리</th><!-- 관리 권한 부여 시 조회 가능 -->
+			</c:if>
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${empList }" var="emp">
+		<c:forEach items="${empList }" var="emp" varStatus="status" >
 			<tr>
+			<c:if test="${priv eq 1 }"><!-- 관리 권한 부여 시 보여짐 가능 -->
+<%-- 				<td>${status.index}</td> --%>
+				<td><input type="checkbox" name="empChecked" id="empChecked" value="${status.index}"></td>
+			</c:if>
 				<td><img class="id_pht" alt="증명사진" src="resources/images/id_photo01.jpg"></td>
 				<td>${emp.emp_num }</td>
 				<td>${emp.emp_name }</td>
@@ -160,7 +245,7 @@
 				<td>${emp.grade_name }</td>
 				<td>${emp.emp_tel }</td>
 				<td><a href="#">${emp.emp_email }</a></td>
-				<c:if test="${priv == 'ture' }">
+				<c:if test="${priv eq 1 }">
 					<th><!-- 관리 권한 부여 시 조회 가능 -->
 						<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"> 
 		 				<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn">
@@ -172,12 +257,12 @@
 	
 	</table>
 	<div class="float-right">
-		<input type="button" value="신규등록" class = "btn btn-success m-2" name="">
+		<input type="button" value="신규등록" class = "btn btn-sm btn-success m-2" name="">
 	</div>
 
 </div>
 </div>
-
+<br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="inc/footer.jsp"></jsp:include>
     
 <!-- Scripts -->

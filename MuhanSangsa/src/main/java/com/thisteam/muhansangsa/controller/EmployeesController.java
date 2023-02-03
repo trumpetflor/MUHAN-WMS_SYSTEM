@@ -284,17 +284,20 @@ public class EmployeesController {
 		session.getAttribute("sId");
 		String sId = (String)session.getAttribute("sId");
 		
-//		sId="admin@muhan.com";
+		sId="admin@muhan.com";
 		if(sId != null) { 
 
 			//권한 조회 메서드
-			boolean isRightUser = service.getPrivilege(sId,Privilege.사원관리);
+			boolean isRightUser = service.getPrivilege(sId,Privilege.사원조회);
 			isRightUser = true;//TODO:
 			if(isRightUser) {
 				
 				//권한 있을 시에 조회 수행
 				List<Emp_viewVO> empList= service.getMemberList(searchType,keyword);
 				model.addAttribute("empList", empList);
+				isRightUser = service.getPrivilege(sId,Privilege.사원관리);
+				System.out.println("사원관리 권한: " + isRightUser);
+				model.addAttribute("priv", "1");
 			}
 		
 			System.out.println("sId   : "+sId);
@@ -382,7 +385,7 @@ public class EmployeesController {
 	}
 	
 	//상세조회
-	@GetMapping(value = "/employeesDetail")
+	@GetMapping(value = "/employees/detail")
 	public String emp_detail(Model model, HttpSession session){
 		
 		String ip;
@@ -403,7 +406,7 @@ public class EmployeesController {
 		//세션아이디
 		String sId = (String)session.getAttribute("sId");
 		
-//		sId="admin@muhan.com";
+		sId="admin@muhan.com";
 		System.out.println("sId   : "+sId);
 		
 		if(sId != null) {

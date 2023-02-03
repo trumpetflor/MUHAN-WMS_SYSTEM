@@ -20,7 +20,7 @@
 							</otherwise>
 						</choose>
 						<choose>
-							<when test="emp_Num eq null">
+							<when test="emp_num eq null">
 							,1
 							</when>
 							<otherwise>
