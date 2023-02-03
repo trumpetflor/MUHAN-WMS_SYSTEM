@@ -11,6 +11,15 @@
 			INSERT 
 				INTO employees
 					VALUES (
+<!-- 						<choose> -->
+<!-- 							<when test="idx eq '0'"> -->
+<!-- 							1 -->
+<!-- 							</when> -->
+<!-- 							<otherwise> -->
+<!-- 							(#{idx} + 1) -->
+<!-- 							</otherwise> -->
+<!-- 						</choose> -->
+						(#{idx} + 1)
 						<choose>
 							<when test="idx eq '0'">
 							1
