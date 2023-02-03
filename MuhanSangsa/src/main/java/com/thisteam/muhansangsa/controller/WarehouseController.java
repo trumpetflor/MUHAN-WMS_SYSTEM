@@ -1,6 +1,11 @@
 package com.thisteam.muhansangsa.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.thisteam.muhansangsa.service.WarehouseService;
 import com.thisteam.muhansangsa.vo.WarehouseVO;
@@ -20,41 +26,172 @@ public class WarehouseController {
 	
 	// 창고 등록 폼
 	@GetMapping(value = "/WarehouseInsertForm")
-	public String insert() {
+	public String insert(HttpSession session, Model model) {
 //		System.out.println("/////////////////insertForm/////////////////");
-		return "Warehouse/warehouse_insert_form";
+		
+		// 권한 = 물류팀
+//		String sId = (String)session.getAttribute("sId");
+//		System.out.println(sId);
+//		String privilege = service.getWhPrivilege(sId);
+//		
+//		if(privilege != "03") { // 권한 없음
+//			model.addAttribute("msg", "물류팀만 가능합니다!");
+//			return "fail_back";
+//		} else { // 물류팀
+			return "Warehouse/warehouse_insert_form";
+//		}
+		
 	}
 	
 	// 창고 등록 작업
 	@PostMapping(value = "/WarehouseInsertPro")
-	public String insertPro(@ModelAttribute WarehouseVO warehouse, Model model) {
+	public String insertPro(@ModelAttribute WarehouseVO warehouse,
+							Model model,
+							HttpSession session) {
 //		System.out.println("/////////////////insertPro/////////////////");
 //		System.out.println(warehouse);
-		int insertCount = service.registerWarehouse(warehouse);
 		
-		if(insertCount > 0) { // 성공
-			// 창고.... 조회로 가야하나?
-			return "redirect:/";
-		} else { // 실패
-			model.addAttribute("msg", "가입 실패!");
-			return "fail_back";
-		}
+		// 권한 = 물류팀
+//		String sId = (String)session.getAttribute("sId");
+//		String privilege = service.getWhPrivilege(sId);
+		
+//		if(privilege != "03") { // 권한 없음
+//			model.addAttribute("msg", "물류팀만 가능합니다!");
+//			return "fail_back";
+//		} else { // 물류팀
+			
+			// 창고 등록
+			int insertCount = service.registerWarehouse(warehouse);
+			
+			if(insertCount > 0) { // 성공
+				return "redirect:/WarehouseList";
+			} else { // 실패
+				model.addAttribute("msg", "등록 실패!");
+				return "fail_back";
+			}
+			
+//		}
 		
 	}
 	
 	// 창고 조회
 	@GetMapping(value = "/WarehouseList")
-	public String list(Model model) {
+	public String list(Model model, HttpSession session) {
 //		System.out.println("/////////////////List/////////////////");
 		
-		List<WarehouseVO> whList = service.getWarehouseList();
-//		System.out.println(whList);
-		model.addAttribute("whList", whList);
+		// 권한 = 물류팀
+//		String sId = (String)session.getAttribute("sId");
+//		String privilege = service.getWhPrivilege(sId);
 		
+//		if(privilege != "03") { // 권한 없음
+//			model.addAttribute("msg", "물류팀만 가능합니다!");
+//			return "fail_back";
+//		} else { // 물류팀
+			
+			// 조회
+			List<WarehouseVO> whList = service.getWarehouseList();
+	//		System.out.println(whList);
+			model.addAttribute("whList", whList);
+			
+			return "Warehouse/warehouse_list";
+//		}
 		
-		return "Warehouse/warehouse_list";
 	}
 	
+	// 창고 수정 폼
+	@GetMapping(value = "/WarehouseModifyForm")
+	public String modify(@ModelAttribute WarehouseVO warehouse,
+						@RequestParam String wh_cd,
+						Model model) {
+		
+		// 조회
+		List<WarehouseVO> whList = service.getWarehouseDetail(wh_cd);
+		System.out.println(whList);
+		model.addAttribute("whList", whList);
+		
+		return "Warehouse/warehouse_modify_form";
+	}
+	
+	// 창고 수정 작업
+	@PostMapping(value = "/WarehouseModifyPro")
+	public void modifyPro(@ModelAttribute WarehouseVO warehouse,
+							Model model,
+							HttpServletResponse response) {
+		System.out.println(warehouse);
+		
+		int modifyCount = service.modifyWarehouse(warehouse);
+		try {
+			
+			if(modifyCount > 0) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('창고 수정이 완료되었습니다!');");
+				out.println("opener.document.location.reload();");
+				out.println("self.close();");
+				out.println("</script>");
+				
+			} else {
+				
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('수정 실패!!');");
+				out.println("opener.document.location.reload();");
+				out.println("self.close();");
+				out.println("</script>");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	// 물류팀직원확인
+	@GetMapping(value = "/WarehouseCheckMan")
+	public void checkMan(@RequestParam String wh_man_name,
+						HttpServletResponse response
+						) {
+		try {
+			Boolean isChecked = service.WarehouseCheckMan(wh_man_name);
+			
+			if(!isChecked) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("true");
+			} else {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	// 창고코드 중복 확인
+	@GetMapping(value = "/WarehouseCheckCode")
+	public void CheckCode(@RequestParam String wh_cd,
+						HttpServletResponse response) {
+		try {
+			Boolean isChecked = service.WarehouseCheckCode(wh_cd);
+			
+			if(isChecked) { // 중복
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("true");
+			} else { // 중복아님
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 }
 

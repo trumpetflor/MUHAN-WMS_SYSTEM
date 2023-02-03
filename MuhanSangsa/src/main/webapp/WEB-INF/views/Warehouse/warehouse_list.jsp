@@ -29,7 +29,24 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+<script type="text/javascript">
+	// 창고코드 클릭 시 수정 페이지 이동
+	function modify_1(item){
+		var code = $(item).text();
+// 		alert(code);
+		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+	}
+	
+	// 창고명 클릭 시 수정 페이지 이동
+	function modify_2(){
+		var code = $("#begin").val();
 
+		alert(code);
+		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+	}
+	
+</script>
 </head>
 <body>
     <!-- Left Panel -->
@@ -272,12 +289,13 @@
                                             <th>창고명</th>
                                             <th>구분</th>
                                             <th>위치</th>
+                                            <th>우편번호</th>
                                             <th>주소</th>
                                             <th>전화번호</th>
                                             <th>관리자명</th>
                                             <th>사용여부</th>
                                             <th>적요</th>
-                                            <th>버튼</th>
+<!--                                             <th>버튼</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -286,24 +304,60 @@
                                     		<tr><td colspan="10">데이터가 없습니다.</td></tr>
                                     	</c:when>
                                     	<c:otherwise>
-	                                    	<c:forEach var="warehouse" items="${whList }">
+	                                    	<c:forEach var="warehouse" items="${whList }" varStatus="status">
 		                                    	<tr>
-		                                    		<td>${warehouse.wh_cd }</td>
-		                                    		<td>${warehouse.wh_name }</td>
-		                                    		<td>${warehouse.wh_gubun }</td>
-		                                    		<td>${warehouse.wh_location }</td>
+		                                    		<td><a id="wh_cd" href='javascript:void(0);' onclick="modify_1(this)">${warehouse.wh_cd }</a></td>
+		                                    		<td><a id="wh_name" href='javascript:void(0);' onclick="modify_2()">${warehouse.wh_name }</a></td>
+		                                    		<td>
+		                                    		<input type="hidden" value="${status.begin }" id="begin">
+		                                    			<c:choose>
+		                                    				<c:when test="${warehouse.wh_gubun eq '1'}">
+		                                    				창고
+		                                    				</c:when>
+		                                    				<c:otherwise>
+		                                    				공장
+		                                    				</c:otherwise>
+		                                    			</c:choose>
+		                                    		</td>
+		                                    		<td>
+		                                    			<c:choose>
+		                                    				<c:when test="${warehouse.wh_location eq '1'}">
+		                                    				내부
+		                                    				</c:when>
+		                                    				<c:otherwise>
+		                                    				외부
+		                                    				</c:otherwise>
+		                                    			</c:choose>
+		                                    		</td>
+		                                    		<td>${warehouse.wh_pcode}</td>
 		                                    		<td>${warehouse.wh_addr }</td>
 		                                    		<td>${warehouse.wh_tel }</td>
 		                                    		<td>${warehouse.wh_man_name }</td>
-		                                    		<td>${warehouse.wh_use }</td>
+		                                    		<td>
+		                                    			<c:choose>
+		                                    				<c:when test="${warehouse.wh_use eq '1'}">
+		                                    				사용
+		                                    				</c:when>
+		                                    				<c:otherwise>
+		                                    				미사용
+		                                    				</c:otherwise>
+		                                    			</c:choose>
+		                                    		</td>
 		                                    		<td>${warehouse.remarks }</td>
-		                                    		<td></td>
+<!-- 		                                    		<td> -->
+<!-- 		                                    			<input type="button" value="수정" -->
+<!-- 													class="btn btn-outline-dark" -->
+<%-- 													onclick="window.open('WarehouseModifyForm?wh_cd=${warehouse.wh_cd}','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');"> --%>
+<!-- 		                                    		</td> -->
 		                                    	</tr>
 	                                    	</c:forEach>
                                     	</c:otherwise>
                                     	</c:choose>
                                     </tbody>
                                 </table>
+									<div>
+										<input type="button" value="신규입력" class="btn btn-outline-dark" onclick="location.href='WarehouseInsertForm'">
+									</div>
                             </div>
                         </div>
                     </div>
@@ -312,7 +366,6 @@
                 </div>
             </div><!-- .animated -->
         </div><!-- .content -->
-
 
         <div class="clearfix"></div>
 

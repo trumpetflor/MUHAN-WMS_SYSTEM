@@ -23,6 +23,50 @@ public class WarehouseService {
 	public List<WarehouseVO> getWarehouseList() {
 		return mapper.selectWarehouseList();
 	}
+	
+	// 창고 권한
+	public String getWhPrivilege(String sId) {
+		return mapper.selectWhPrivilege(sId);
+	}
+	
+	// 창고 상세정보
+	public List<WarehouseVO> getWarehouseDetail(String wh_cd) {
+		return mapper.selectWarehouseDetail(wh_cd);
+	}
+	
+	// 창고 수정
+	public int modifyWarehouse(WarehouseVO warehouse) {
+		return mapper.updateWarehouse(warehouse);
+	}
+	
+	// 물류팀 직원 확인
+	public Boolean WarehouseCheckMan(String wh_man_name) {
+		Boolean isChecked = false;
+		
+		String checkMan = mapper.selectWarehouseMan(wh_man_name);
+		if(checkMan == null || checkMan.equals("")) {
+			isChecked = false;
+		} else {
+			isChecked = true;
+		}
+		
+		return isChecked;
+		
+	}
+
+	// 창고 코드 중복 확인
+	public Boolean WarehouseCheckCode(String wh_cd) {
+		Boolean isChecked = false;
+		
+		String checkCode = mapper.selectWarehouseCode(wh_cd);
+		if(checkCode == null || checkCode.equals("")) { // 중복 아님
+			isChecked = false;
+		} else { // 중복임
+			isChecked = true;
+		}
+		
+		return isChecked;
+	}
 
 }
 

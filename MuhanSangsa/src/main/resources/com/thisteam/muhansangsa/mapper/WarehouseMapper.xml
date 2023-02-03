@@ -11,11 +11,19 @@
 				#{wh_name},
 				#{wh_gubun},
 				#{wh_location},
+				<choose>
+				<when test="#{wh_addr}.equals(', ')">
+				'',
+				</when>
+				<otherwise>
 				CONCAT(#{wh_addr1}, ', ', #{wh_addr2}),
+				</otherwise>
+				</choose>
 				#{wh_tel},
 				#{wh_man_name},
 				#{wh_use},
-				#{remarks}
+				#{remarks},
+				#{wh_pcode}
 			)
 	</insert>
 	
@@ -23,6 +31,62 @@
 	<select id="selectWarehouseList" resultType="com.thisteam.muhansangsa.vo.WarehouseVO">
 		SELECT *
 			FROM warehouse
+	</select>
+	
+	<!-- 창고 권한 -->
+	<select id="selectWhPrivilege" resultType="string">
+		SELECT dept_cd
+			FROM employees
+			WHERE EMP_EMAIL = #{sId}
+	</select>
+	
+	<!-- 창고 상세정보 -->
+	<select id="selectWarehouseDetail" resultType="com.thisteam.muhansangsa.vo.WarehouseVO">
+		SELECT *
+			FROM warehouse
+			WHERE wh_cd = #{wh_cd}
+	</select>
+	
+	<!-- 창고 수정 -->
+	<update id="updateWarehouse">
+		UPDATE warehouse
+			SET
+				wh_name = #{wh_name},
+				wh_gubun = #{wh_gubun},
+				wh_location = #{wh_location},
+				<choose>
+				<when test="#{wh_addr}.equals(', ')">
+				'',
+				</when>
+				<otherwise>
+				wh_addr = CONCAT(#{wh_addr1}, ', ', #{wh_addr2}),
+				</otherwise>
+				</choose>
+				wh_tel = #{wh_tel},
+				wh_man_name = #{wh_man_name},
+				wh_use = #{wh_use},
+				remarks = #{remarks},
+				wh_pcode = #{wh_pcode}
+			WHERE
+				wh_cd = #{wh_cd}
+	</update>
+	
+	<!-- 물류팀 직원 확인 -->
+	<select id="selectWarehouseMan" resultType="string">
+		SELECT emp_name
+			FROM employees
+			WHERE
+				emp_name = '${wh_man_name}'
+				AND
+				dept_cd = '03'
+	</select>
+	
+	<!-- 창고코드 중복 확인 -->
+	<select id="selectWarehouseCode" resultType="string">
+		SELECT wh_cd
+			FROM warehouse
+			WHERE
+				wh_cd = '${wh_cd}'
 	</select>
 	
 </mapper>
