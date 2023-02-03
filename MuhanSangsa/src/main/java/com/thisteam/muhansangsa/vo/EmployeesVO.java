@@ -10,11 +10,14 @@ public class EmployeesVO {
 	   private String emp_num; // 사원번호
 	   private String emp_name; // 사원명
 	   private String dept_cd; // 부서코드
+	   private String dept_name; // 부서명
 	   private String grade_cd; //직급코드
+	   private String grade_name; //직급명
 	   private String emp_tel; //연락처(개인)
 	   private String emp_dtel; //연락처(사무실)
 	   private String emp_email; 
-	   private String emp_passwd; //로그인 시 사용 
+	   private String emp_passwd; //로그인 시 사용
+	   private String emp_comfirmPasswd; //변경된 비밀번호
 	   private String emp_post_No; 
 	   private String emp_addr;
 	   private Date hire_date; //입사일
@@ -47,12 +50,27 @@ public class EmployeesVO {
 		public void setDept_cd(String dept_cd) {
 			this.dept_cd = dept_cd;
 		}
+		
+		public String getDept_name() {
+			return dept_name;
+		}
+		public void setDept_name(String dept_name) {
+			this.dept_name = dept_name;
+		}
 		public String getGrade_cd() {
 			return grade_cd;
 		}
 		public void setGrade_cd(String grade_cd) {
 			this.grade_cd = grade_cd;
 		}
+		
+		public String getGrade_name() {
+			return grade_name;
+		}
+		public void setGrade_name(String grade_name) {
+			this.grade_name = grade_name;
+		}
+		
 		public String getEmp_tel() {
 			return emp_tel;
 		}
@@ -76,6 +94,12 @@ public class EmployeesVO {
 		}
 		public void setEmp_passwd(String emp_passwd) {
 			this.emp_passwd = emp_passwd;
+		}
+		public String getEmp_comfirmPasswd() {
+			return emp_comfirmPasswd;
+		}
+		public void setEmp_comfirmPasswd(String emp_comfirmPasswd) {
+			this.emp_comfirmPasswd = emp_comfirmPasswd;
 		}
 		public String getEmp_post_No() {
 			return emp_post_No;
@@ -114,12 +138,12 @@ public class EmployeesVO {
 			this.photo = photo;
 		}
 		
-		
 		@Override
 		public String toString() {
 			return "EmployeesVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_cd="
-					+ dept_cd + ", grade_cd=" + grade_cd + ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel
-					+ ", emp_email=" + emp_email + ", emp_passwd=" + emp_passwd + ", emp_post_No=" + emp_post_No
+					+ dept_cd + ", dept_name=" + dept_name + ", grade_cd=" + grade_cd + ", grade_name=" + grade_name
+					+ ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email=" + emp_email + ", emp_passwd="
+					+ emp_passwd + ", emp_comfirmPasswd=" + emp_comfirmPasswd + ", emp_post_No=" + emp_post_No
 					+ ", emp_addr=" + emp_addr + ", hire_date=" + hire_date + ", work_cd=" + work_cd + ", priv_cd="
 					+ priv_cd + ", photo=" + photo + "]";
 		}

@@ -44,13 +44,38 @@ public class EmployeesService {
 	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 
 	
-	//=============================== 인사관리 : 로그인(세원) =========================================
+	//=============================== sewon=========================================
+	// ----------------------------로그인----------------------------------- 
 	//로그인, 패스워드 확인 
 	// 파라미터 : 이메일(id 역할)
 	public String getPass(String emp_email) {
 		return mapper.selectPass(emp_email);
 	}
 
+	
+	//----------------------------마이페이지----------------------------------- 
+
+	
+	//마이페이지 뿌리기
+	public EmployeesVO getMypageInfo(String id) {
+		return mapper.selectMypageInfo(id);
+	}
+
+	
+	
+	//수정
+	public int updateMypageMember(EmployeesVO emp) {
+		
+		return mapper.updateMypageMember(emp) ;
+	}
+
+	//------------------사원 상세조회------------------------------------
+
+	//상세조회 수정(update)
+	public int updateDetailEmp(EmployeesVO employees) {
+		return mapper.updateDetail(employees);
+	}
+	
 
 	// ================================ hawon ================================
 	//---------------------------------------------------------------------------------------------------------------------
@@ -93,7 +118,7 @@ public class EmployeesService {
 		
 		return mapper.updateMember(emp) ;
 	}
-	
+
 
 	public Emp_viewVO getEmployee(String emp_email) {
 		
@@ -124,6 +149,7 @@ public class EmployeesService {
 		
 		return  mapper.selectWorkList();
 	}
+
 
 
 

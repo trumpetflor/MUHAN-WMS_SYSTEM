@@ -231,82 +231,151 @@ public class EmployeesController {
 	
 	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 
-
-
-
-
-
-
 	//=============================== 인사관리 : 로그인(세원) =========================================
 	// 로그인 페이지
 	@GetMapping(value = "/Login")
 	public String login() {
-		return "member/login"; // login.jsp 로 포워딩
+		return "employees/login"; // login.jsp 로 포워딩
 	}
 	
 	// 로그인 비즈니스 로직 작업
 	@PostMapping(value = "/Login")
 	public String loginPro(
-			@ModelAttribute EmployeesVO employee, 
+			@ModelAttribute EmployeesVO employees, 
 			Model model, 
 			HttpSession session) {
 		
-		// 비밀번호 암호화 !!DB에 비밀번호 재설정 필요(해싱, 솔팅 다름)!!
 		// 파라미터 : 이메일(id 역할)
-		BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
-		String pass = service.getPass(employee.getEmp_email()); //email(id) 에 해당하는 암호화 비밀번호 가져오기
-		System.out.println(pass);
+		String pass = service.getPass(employees.getEmp_email()); //email(id) 에 해당하는 비밀번호 가져오기
+		System.out.println("1==="+pass);
 		
-		//암호화 비밀번호 비교
-		if(pass == null || passwdEncoder.matches(employee.getEmp_passwd(), pass)) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)
+		// 비밀번호 비교
+		if(pass == null || !pass.equals(employees.getEmp_passwd())) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
+//			System.out.println("1======="+pass);
+//			System.out.println("1======="+employees.getEmp_email());
 			return "fail_back";
 			
 		} else { // 성공 시
-			session.setAttribute("sId", employee.getEmp_email());//세션 아이디 저장
+			session.setAttribute("sId", employees.getEmp_email());//세션 아이디 저장
 			System.out.println("sId");
-			return "redirect:/"; // 메인페이지로 리다이렉트
+			return "redirect:/employees"; // 사원목록페이지(메인)으로 리다이렉트
 		}
 		
 	}
-	//=============================== 인사관리 : 로그아웃(세원) =========================================
 	
+	//로그아웃
 	@GetMapping(value = "/Logout")
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 초기화
-		return "redirect:/";
+		return "redirect:/Login"; //리다이렉트 로그인페이지
 	}
 	
 	//=============================== 인사관리 : 마이페이지(세원) =========================================
 	
-	//사원 목록페이지 (테스트용)
-	// - 상세정보 페이지 접속차
-	@GetMapping(value = "/memberList")
-	public String selectMemberList() {
-		return "member/list"; // login.jsp 로 포워딩
+	//마이페이지 리스트
+	@GetMapping(value = "/Mypage")
+	public String emp_myPage(
+			Model model,
+			HttpSession session) {
+		
+		//로그인 id 는 sId = emp_email  
+		String id = (String)session.getAttribute("sId");
+		
+		// 세션 아이디 
+		if(id == null || id.equals("")) { //실패 시
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다");
+			return "fail_back";
+		} else { //성공시
+			EmployeesVO employees = service.getMypageInfo(id);
+			model.addAttribute("employees", employees);
+			
+			return "employees/myPage";
+		}
 	}
 	
-	//마이페이지
-	@GetMapping(value = "/Mypage")
-	public String insert() {
-		return "member/myPage";
+	//마이페이지 업데이트(수정)
+	@PostMapping(value = "/MypageUpdate")
+	public String mypage_updatePro(
+			@ModelAttribute EmployeesVO employees, 
+			Model model, 
+			HttpSession session){
+		
+		String sId = (String)session.getAttribute("sId");
+		System.out.print("employees.getEmp_email()::"+employees.getEmp_email());
+		
+		if(!employees.getEmp_passwd().equals(employees.getEmp_comfirmPasswd())) {
+			model.addAttribute("msg", "비밀번호가 일치하지않습니다.");
+			return "fail_back";
+		}
+		
+		//패스워드 값이 있을경우 암호화
+		if(employees.getEmp_passwd() != null && ! "".equals(employees.getEmp_passwd())) {
+			BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder();
+			employees.setEmp_passwd(passwdEncoder.encode(employees.getEmp_passwd()));
+		}
+
+		if(sId != null) {
+			//수정
+			int updateCount  = service.updateMypageMember(employees);
+			return "redirect:/Mypage";
+			
+		}else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
+	
 	}
 
+	
+	
+	
 	//=============================== 인사관리 : 사원 상세페이지 (세원) =========================================
 	
 	//사원 상세페이지 리스트
-	@GetMapping(value = "/memberListDetail")
-	public String memberListDetail() {
-		return "member/memberDetail";
+	@GetMapping(value = "/empListDetail")
+	public String memberListDetail(
+			@RequestParam(defaultValue = "") String id,
+			Model model) {
+		EmployeesVO employees = service.getMypageInfo(id);
+		model.addAttribute("employees", employees);
+		
+		return "employees/emp_ListDetail";
 	}	
 
 	//사원 상세정보 수정페이지
-	@GetMapping(value = "/memberListDetailModify")
-	public String memberListDetailModify() {
-		return "member/memberModify";
+	@GetMapping(value = "/empListDetailUpdate")
+	public String memberListDetailUpdate(
+			@RequestParam(defaultValue = "") String id,
+			Model model) {
+		EmployeesVO employees = service.getMypageInfo(id);
+		model.addAttribute("employees", employees);
+		
+		return "employees/emp_ListDetailUpdate";
 	}	
 	
+	//사원 상세정보 수정 진행 (update)
+	@PostMapping(value = "/empListDetailUpdatePro")
+	public String memberListDetailUpdatePro(
+			@ModelAttribute EmployeesVO employees, 
+			Model model, 
+			HttpSession session){
+		
+		String sId = (String)session.getAttribute("sId");
 
+		if(sId != null) {
+			//수정
+			int updateCount  = service.updateDetailEmp(employees);
+			return "redirect:employees/emp_ListDetailUpdate?id="+employees.getEmp_email();
+			
+		}else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
+	
+	}
+	
+	
 	// ================================= hawon =================================
 	//---------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------사원조회/상세정보조회 시작-----------------------------------------------------
@@ -540,3 +609,4 @@ public class EmployeesController {
 
 
 
+		
