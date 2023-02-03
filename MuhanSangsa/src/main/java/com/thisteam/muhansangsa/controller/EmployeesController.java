@@ -43,7 +43,7 @@ public class EmployeesController {
 	
 	@GetMapping(value = "/employeeRegisterForm")
 	public String register() {
-		return "employee_registartion_form";
+		return "employee_registration_form";
 	}
 	
 	@PostMapping(value = "/employeeRegisterPro")

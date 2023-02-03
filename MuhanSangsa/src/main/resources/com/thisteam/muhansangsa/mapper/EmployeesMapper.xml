@@ -24,21 +24,21 @@
 							,1
 							</when>
 							<otherwise>
-							, #{emp_Num}
+							, #{emp_num}
 							</otherwise>
 						</choose>
-						,#{emp_Name}
-						,#{dept_Cd}
-						,#{grade_Cd}
-						,#{emp_Tel}
-						,#{emp_Dtel}
-						,#{emp_Email}
-						,#{emp_Passwd}
-						,#{emp_Post_No}
-						,#{emp_Addr}
-						,#{hire_Date}
-						,#{work_Cd}
-						,#{priv_Cd}
+						,#{emp_name}
+						,#{dept_cd}
+						,#{grade_cd}
+						,#{emp_tel}
+						,#{emp_dtel}
+						,#{emp_email}
+						,#{emp_passwd}
+						,#{emp_post_No}
+						,#{emp_addr}
+						,#{hire_date}
+						,#{work_cd}
+						,#{priv_cd}
 						,#{photo}
 					
 					); 
@@ -50,7 +50,7 @@
 		<select id="selectDepartmentCode" resultType="string">
 			SELECT DEPT_CD
 				FROM department
-					WHERE DEPT_NAME = #{dept_Cd}
+					WHERE DEPT_NAME = #{dept_cd}
 		</select>
 
 		<!-- 사원 번호를 위한 idx 추출 -->
