@@ -146,7 +146,7 @@
 				,EMP_ADDR
 				,HIRE_DATE
 				,WORK_TYPE
-				,PRIV_TYPE
+				,PRIV_CD
 				,PHOTO
 		 FROM emp_view
 	 		<if test="!keyword.equals('')">

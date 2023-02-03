@@ -131,7 +131,7 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="department" class=" form-control-label">부서코드</label></div>
                                         <div class="col-12 col-md-9">
-                                            <select name="dept_Cd" id="department" class="form-control">
+                                            <select name="dept_cd" id="department" class="form-control">
                                                 <option>부서명을 선택하세요</option>
                                                 <option value="01" <c:if test="${employees.dept_cd eq '01'}">selected</c:if>>인사팀</option>
                                                 <option value="02" <c:if test="${employees.dept_cd eq '02'}">selected</c:if>>개발팀</option>
@@ -211,7 +211,7 @@
 	                                  <div class="row form-group">
                                         <div class="col col-md-3"><label for="hireDate" class=" form-control-label">입사일</label></div>
                                         <div class="col-12 col-md-9">
-                                        	<input type="date" id="hireDate" name="hire_Date" class="form-control" value="${employees.hire_date }">
+                                        	<input type="date" id="hire_date" name="hire_date" class="form-control" value="${employees.hire_date }">
                                         </div>
                                      </div>
                                      <!-- 입사일 -->                               

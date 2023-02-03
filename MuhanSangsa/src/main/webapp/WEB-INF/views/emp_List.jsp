@@ -241,7 +241,7 @@
 				<td><img class="id_pht" alt="증명사진" src="resources/images/id_photo01.jpg"></td>
 				<td>${emp.emp_num }</td>
 				<td>${emp.emp_name }</td>
-				<td>${emp.dept_name }</td>
+				<td>${emp.dept_cd }</td>
 				<td>${emp.grade_name }</td>
 				<td>${emp.emp_tel }</td>
 				<td><a href="#">${emp.emp_email }</a></td>
