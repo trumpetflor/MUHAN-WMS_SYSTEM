@@ -9,6 +9,7 @@ import com.thisteam.muhansangsa.vo.DepartmentVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.GradeVO;
+import com.thisteam.muhansangsa.vo.WorksVO;
 
 public interface EmployeesMapper {
 
@@ -38,7 +39,9 @@ public interface EmployeesMapper {
 	//---------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------사원조회/상세정보조회 시작------------------------------------------------
 	List<Emp_viewVO> selectMemberList(@Param("searchType") String searchType, 
-										@Param("keyword") String keyword);
+										@Param("keyword") String keyword,
+										@Param("startRow") int startRow, 
+										@Param("listLimit") int listLimit);
 	   
 	//권한 조회
 	String getPrivilege(@Param("id")String sId);
@@ -52,6 +55,10 @@ public interface EmployeesMapper {
 	List<Map<String, String>> selectDeptInfo_count(int dept_cd);
 	//부서 구성원 정보
 	List<Emp_viewVO> selectDeptMember(int dept_cd);
+
+	List<DepartmentVO> selectDeptList();
+
+	List<WorksVO> selectWorkList();
 
 	//-------------------------------------------사원조회/상세정보조회 끝------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------

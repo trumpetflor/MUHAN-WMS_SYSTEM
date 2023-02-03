@@ -79,22 +79,7 @@
 	<!-- ===================================== 사원 조회 시작===================================== -->
 	<select id="selectMemberList" resultType="Emp_viewVO">
 		<!-- 사원조회 -->
-		SELECT	IDX
-				,EMP_NUM
-				,EMP_NAME
-				,DEPT_CD
-				,DEPT_NAME
-				,GRADE_CD
-				,GRADE_NAME
-				,EMP_TEL
-				,EMP_DTEL
-				,EMP_EMAIL
-				,EMP_POST_NO
-				,EMP_ADDR
-				,HIRE_DATE
-				,WORK_TYPE
-				,PRIV_TYPE
-				,PHOTO
+		SELECT	*
 		 FROM emp_view
 	 		<if test="!keyword.equals('')">
 			
@@ -118,6 +103,8 @@
 				</otherwise>
 			</choose>		
 			</if>
+			
+			LIMIT #{startRow}, #{listLimit}
 		
 	</select>
 		
@@ -169,8 +156,21 @@
 		SELECT EMP_NUM,EMP_NAME , GRADE_NAME , EMP_TEL, EMP_DTEL, EMP_EMAIL
 		FROM emp_view  
 		WHERE DEPT_NAME = (select DEPT_NAME from department where DEPT_CD= #{dept_cd})
-		order by GRADE_CD desc;
+		order by GRADE_CD desc
 	</select>
+	
+	<!--  -->
+	<select id="selectDeptList" resultType="DepartmentVO">
+		SELECT *
+		FROM department
+	
+	</select>
+	<select id="selectWorkList" resultType="WorksVO">
+		SELECT *
+		FROM works
+	</select>
+	
+	
 	<!-- ===================================== 사원 조회 끝===================================== -->
 	<!-- ===================================================================================================== -->
 

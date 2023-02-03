@@ -3,13 +3,18 @@ package com.thisteam.muhansangsa.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
@@ -26,6 +33,7 @@ import com.thisteam.muhansangsa.vo.DepartmentVO;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.Privilege;
+import com.thisteam.muhansangsa.vo.WorksVO;
 
 @Controller
 public class EmployeesController {
@@ -39,7 +47,7 @@ public class EmployeesController {
 	
 	@GetMapping(value = "/employeeRegisterForm")
 	public String register() {
-		return "employee_registartion_form";
+		return "employee_registration_form";
 	}
 	
 	@PostMapping(value = "/employeeRegisterPro")
@@ -250,6 +258,7 @@ public class EmployeesController {
 	@GetMapping(value = "/employees")
 	public String emp_view(@RequestParam(defaultValue = "") String searchType,
 							@RequestParam(defaultValue = "") String keyword,
+							@RequestParam(defaultValue = "1") int pageNum,
 							Model model, HttpSession session){
 		InetAddress local;
 		String ip;
@@ -261,7 +270,9 @@ public class EmployeesController {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
 		session.getAttribute("sId");
 		String sId = (String)session.getAttribute("sId");
 		
@@ -274,11 +285,38 @@ public class EmployeesController {
 			if(isRightUser) {
 				
 				//권한 있을 시에 조회 수행
-				List<Emp_viewVO> empList= service.getMemberList(searchType,keyword);
+				List<Emp_viewVO> empList= service.getMemberList(searchType, keyword, startRow, listLimit);
 				model.addAttribute("empList", empList);
 				isRightUser = service.getPrivilege(sId,Privilege.사원관리);
 				System.out.println("사원관리 권한: " + isRightUser);
 				model.addAttribute("priv", "1");
+				
+				//부서 및 재직상태 변경을 위한 테이블 컬럼 가져오기
+				List<DepartmentVO> deptList= service.getdeptList();
+				List<WorksVO> workList= service.getworkList();
+				
+				System.out.println("deptList : "+ deptList);
+				System.out.println("workList : "+ workList);
+				
+				
+				
+				//JSON데이터로 변환
+				JSONArray deptArr = new JSONArray();
+				JSONArray workArr = new JSONArray();
+				
+				for ( DepartmentVO dept : deptList) {
+						System.out.println(dept);
+						deptArr.put(new JSONObject(dept));
+				}
+				for ( WorksVO work : workList) {
+					System.out.println(work);
+					workArr.put(new JSONObject(work));
+				}
+			
+				model.addAttribute("deptArr", deptArr);
+				model.addAttribute("workArr", workArr);
+				
+				
 			}
 		
 			System.out.println("sId   : "+sId);
@@ -288,14 +326,15 @@ public class EmployeesController {
 			return "fail_back";
 		}
 		
-		return "emp_List";
+		return "member/emp_List";
 	}
 	
 	@GetMapping(value = "/employees_search")
 	public String emp_view_sch( @RequestParam(defaultValue = "") String searchType,
 							@RequestParam(defaultValue = "") String keyword,
+							@RequestParam(defaultValue = "1") int pageNum,
 							Model model, HttpSession session){
-	
+		//공통코드
 		String ip;
 		try {
 			InetAddress local = InetAddress.getLocalHost();
@@ -306,9 +345,25 @@ public class EmployeesController {
 			e.printStackTrace();
 		}
 		
-		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
 		session.getAttribute("sId");
 		String sId = (String)session.getAttribute("sId");
+	
+
+		// ---------------------------------------------------------------------------
+		// org.json 패키지의 JSONObjectg 클래스를 활용하여 JSON 객체 1개를 생성하고
+		// JSONArray 클래스를 활용하여 JSONObject 객체 복수개에 대한 배열 생성
+		// 자바 클래스를 활용하여 JSONobject 객체 복수개에 대한  배열 생성
+//		JSONArray boardArr = new JSONArray();
+//		
+//		for (BoardVO board : boardList) {
+////			System.out.println(board);
+//			JSONObject obj =  new JSONObject(board);
+//			boardArr.put(obj);
+//		}
+
 
 		sId="admin@muhan.com";
 		if(sId != null) { 
@@ -316,127 +371,84 @@ public class EmployeesController {
 			boolean isRightUser = service.getPrivilege(sId,Privilege.사원관리);
 			isRightUser = true;//TODO:
 			if(isRightUser) {
-				
 				//권한 있을 시에 조회 수행
-				List<Emp_viewVO> empList= service.getMemberList(searchType,keyword);
+				List<Emp_viewVO> empList= service.getMemberList(searchType, keyword, startRow, listLimit);
 				model.addAttribute("empList", empList);
+				isRightUser = service.getPrivilege(sId,Privilege.사원관리);
+				System.out.println("사원관리 권한: " + isRightUser);
+				model.addAttribute("priv", "1");
+				
+				//부서 및 재직상태 변경을 위한 테이블 컬럼 가져오기
+				List<DepartmentVO> deptList= service.getdeptList();
+				List<WorksVO> workList= service.getworkList();
+				
+				System.out.println("deptList : "+ deptList);
+				System.out.println("workList : "+ workList);
+				
+				model.addAttribute("deptList", deptList);
+				model.addAttribute("workList", workList);
+		
 			}
-			}
-		
-		
-		return "emp_List";	
-	}
-		
-	@GetMapping(value = "/employeesUpdate")
-	public String emp_update(Model model, HttpSession session){
-		
-		session.getAttribute("sId");
-		
-		String sId = (String)session.getAttribute("sId");
-		sId="admin@muhan.com";
-		if(sId != null) {
-		
 		}
 		
-		return "";
+		
+		return "member/emp_List";	
 	}
-	
+		
 
 	
-	@PostMapping(value = "/employeesUpdate")
-	public String emp_updatePro(Model model, HttpSession session, EmployeesVO employees){
+
+	@ResponseBody
+	@PostMapping(value = "/emp_update_part.ajax")
+	public void emp_update_part(@RequestBody Map<String, Object> data,
+								Model model, HttpSession session){
+		//@RequestParam List<EmployeesVO> emp => 안됨
+//		work.getWork_type();
+//		dept.getDept_name();
+		System.out.println(data);
+//		System.out.println("employees"+ employees);
+//		System.out.println("work_type"+ work_type.getWork_type());
+//		System.out.println("dept_name"+ dept_name.getDept_name());
+//		System.out.println("selectedModalRadioVal: " +selectedModalRadioVal);
 		
-		session.getAttribute("sId");
 		
-		String sId = (String)session.getAttribute("sId");
-		if(sId != null) {
+//		if(	work.getWork_type() != null	) {
 			
+//				int updateWorkCount = service.updateEmpWork();
+//		}else {
 			
-			//1.수정
-				 
-			int updateCount  = service.updateMember(employees);
-			return "";
+//				int updateDeptCount = service.updateEmpDept();
+//		}
 			
-			 
-		}else {
-			model.addAttribute("msg", "잘못된 접근입니다.");
-			return "fail_back";
-		}
-	
+		
+		
+		
+		
+		
 	}
-	
-	//상세조회
-	@GetMapping(value = "/employees/detail")
-	public String emp_detail(Model model, HttpSession session){
+
+
+	@PostMapping(value = "/dept_detail.ajax")
+	public String dept_detail(DepartmentVO dept,HttpServletResponse response, Model model) {
+		Integer.parseInt(dept.getDept_cd());
+		dept.getDept_name();
 		
-		String ip;
+		
+		List<Map<String, String>> deptInfo =	service.getDeptInfo_count(Integer.parseInt(dept.getDept_cd()));
+		List<Emp_viewVO> deptInfoList = service.getDeptmemberComposition(Integer.parseInt(dept.getDept_cd()));
+		model.addAttribute("deptInfo", deptInfo);
+		model.addAttribute("deptInfoList", deptInfoList);
 		
 		try {
-			InetAddress local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	
-		//접속자 아이디
-		String emp_email = (String)model.getAttribute("emp_email");
-		
-		//세션아이디
-		String sId = (String)session.getAttribute("sId");
-		
-		sId="admin@muhan.com";
-		System.out.println("sId   : "+sId);
-		
-		if(sId != null) {
-			
-				//1.권한 조회 
-				boolean isRightUser = service.getPrivilege(sId,Privilege.사원관리);
-				isRightUser = true;//TODO:
-				if(isRightUser) {
-					
-					//2. 권한 있을 시에 조회 수행
-					Emp_viewVO emp= service.getEmployee(emp_email);
-					model.addAttribute("emp", emp);
-					return "emp_detail";
-				}else {
-					model.addAttribute("msg", "잘못된 접근입니다");
-					return "fail_back";
-				
-				}
-					
-			}else {
-				model.addAttribute("msg", "잘못된 접근입니다");
-				return "fail_back";
-			}
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().print(deptInfo); // toString() 생략됨
+		response.getWriter().print(deptInfo); // toString() 생략됨
+	} catch (IOException e) {
+		e.printStackTrace();
 	}
 		
-		
-		
-		@PostMapping("/dept_detail")
-		public String dept_detail(Model model, HttpSession session, DepartmentVO dept){
-			System.out.println("도착");
-			dept.getDept_cd();
-			dept.getDept_name();
-		
-			int dept_cd  = Integer.parseInt((dept.getDept_cd()));
-			List<Map<String, String>> deptInfo = service.getDeptInfo_count(dept_cd);
-			System.out.println("deptInfo:"+deptInfo);
-//			[{count(GRADE_NAME)=1, GRADE_NAME=사원}, {count(GRADE_NAME)=1, GRADE_NAME=대리}]
-			model.addAttribute("deptInfo", deptInfo);
-			
-			List<Emp_viewVO> deptInfoList = service.getDeptmemberComposition(dept_cd);
-			System.out.println("deptInfoList:"+deptInfoList);
-			//[Emp_viewVO [idx=0, emp_num=0322009, emp_name=최사원아, dept_name=null, grade_name=사원, emp_tel=1234, emp_dtel=1, emp_email=letmego@letmego, emp_post_no=null, emp_addr=null, hire_date=null, work_type=null, priv_type=null, photo=null]
-			// , Emp_viewVO [idx=0, emp_num=0323007, emp_name=김사원아, dept_name=null, grade_name=대리, emp_tel=12, emp_dtel=11, emp_email=letmego@letmego, emp_post_no=null, emp_addr=null, hire_date=null, work_type=null, priv_type=null, photo=null]]
-			model.addAttribute("deptInfoList", deptInfoList);
-			model.addAttribute("dept_name", dept.getDept_name());
-			
-			
-			return "dept_detail";
-		}
+		return "member/dept_detail";
+	}
 			
 		
 		
