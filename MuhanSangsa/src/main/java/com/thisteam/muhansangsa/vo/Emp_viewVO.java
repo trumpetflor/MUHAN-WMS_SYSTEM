@@ -4,36 +4,38 @@ import java.sql.Date;
 
 public class Emp_viewVO {
 	
-//	IDX	ÀÎµ¦½º
-//	EMP_NUM	»ç¿ø¹øÈ£
-//	EMP_NAME	»ç¿ø¸í
-//	DEPT_CD	ºÎ¼­ÄÚµå
-//	GRADE_CD	Á÷±ÞÄÚµå
-//	EMP_TEL	¿¬¶ôÃ³(°³ÀÎ)
-//	EMP_DTEL	¿¬¶ôÃ³(»ç¹«½Ç)
-//	EMP_EMAIL	ÀÌ¸ÞÀÏ
-//	EMP_PASSWD	ºñ¹Ð¹øÈ£
-//	EMP_POST_NO	¿ìÆí¹øÈ£
-//	EMP_ADDR	ÁÖ¼Ò
-//	HIRE_DATE	ÀÔ»çÀÏ
-//	WORK_CD	ÀçÁ÷ÄÚµå
-//	PRIV_CD	±ÇÇÑ
-//	PHOTO	»çÁøÀÌ¹ÌÁö
+//	IDX	ï¿½Îµï¿½ï¿½ï¿½
+//	EMP_NUM	ï¿½ï¿½ï¿½ï¿½ï¿½È£
+//	EMP_NAME	ï¿½ï¿½ï¿½ï¿½ï¿½
+//	DEPT_CD	ï¿½Î¼ï¿½ï¿½Úµï¿½
+//	GRADE_CD	ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½
+//	EMP_TEL	ï¿½ï¿½ï¿½ï¿½Ã³(ï¿½ï¿½ï¿½ï¿½)
+//	EMP_DTEL	ï¿½ï¿½ï¿½ï¿½Ã³(ï¿½ç¹«ï¿½ï¿½)
+//	EMP_EMAIL	ï¿½Ì¸ï¿½ï¿½ï¿½
+//	EMP_PASSWD	ï¿½ï¿½Ð¹ï¿½È£
+//	EMP_POST_NO	ï¿½ï¿½ï¿½ï¿½ï¿½È£
+//	EMP_ADDR	ï¿½Ö¼ï¿½
+//	HIRE_DATE	ï¿½Ô»ï¿½ï¿½ï¿½
+//	WORK_CD	ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½
+//	PRIV_CD	ï¿½ï¿½ï¿½ï¿½
+//	PHOTO	ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½
 	
-	int idx; //ÀÎµ¦½º
-	String emp_num;//»ç¿ø¹øÈ£
-	String emp_name;//»ç¿ø¸í
-	String dept_name;//ºÎ¼­¸í
-	String grade_name;//Á÷±Þ¸í
-	String emp_tel;//¿¬¶ôÃ³(°³ÀÎ)
-	String emp_dtel;//¿¬¶ôÃ³(»ç¹«½Ç)
-	String emp_email;//ÀÌ¸ÞÀÏ
-	String emp_post_no;//¿ìÆí¹øÈ£
-	String emp_addr;//ÁÖ¼Ò
-	Date hire_date;//ÀÔ»çÀÏ
-	String work_type;//ÀçÁ÷ (ÀçÁ÷/ÈÞÁ÷/Åð»ç)
-	String priv_type;//±ÇÇÑ
-	String photo;//»çÁøÀÌ¹ÌÁö
+	int idx; //ï¿½Îµï¿½ï¿½ï¿½
+	String emp_num;//ï¿½ï¿½ï¿½ï¿½ï¿½È£
+	String emp_name;//ï¿½ï¿½ï¿½ï¿½ï¿½
+	String dept_cd;//ï¿½Î¼ï¿½ï¿½ï¿½
+	String dept_name;//ï¿½Î¼ï¿½ï¿½ï¿½
+	String grade_cd;
+	String grade_name;//ï¿½ï¿½ï¿½Þ¸ï¿½
+	String emp_tel;//ï¿½ï¿½ï¿½ï¿½Ã³(ï¿½ï¿½ï¿½ï¿½)
+	String emp_dtel;//ï¿½ï¿½ï¿½ï¿½Ã³(ï¿½ç¹«ï¿½ï¿½)
+	String emp_email;//ï¿½Ì¸ï¿½ï¿½ï¿½
+	String emp_post_no;//ï¿½ï¿½ï¿½ï¿½ï¿½È£
+	String emp_addr;//ï¿½Ö¼ï¿½
+	Date hire_date;//ï¿½Ô»ï¿½ï¿½ï¿½
+	String work_type;//ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½)
+	String priv_cd;//ï¿½ï¿½ï¿½ï¿½
+	String photo;//ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½
 	public int getIdx() {
 		return idx;
 	}
@@ -52,11 +54,23 @@ public class Emp_viewVO {
 	public void setEmp_name(String emp_name) {
 		this.emp_name = emp_name;
 	}
+	public String getDept_cd() {
+		return dept_cd;
+	}
+	public void setDept_cd(String dept_cd) {
+		this.dept_cd = dept_cd;
+	}
 	public String getDept_name() {
 		return dept_name;
 	}
 	public void setDept_name(String dept_name) {
 		this.dept_name = dept_name;
+	}
+	public String getGrade_cd() {
+		return grade_cd;
+	}
+	public void setGrade_cd(String grade_cd) {
+		this.grade_cd = grade_cd;
 	}
 	public String getGrade_name() {
 		return grade_name;
@@ -106,11 +120,11 @@ public class Emp_viewVO {
 	public void setWork_type(String work_type) {
 		this.work_type = work_type;
 	}
-	public String getPriv_type() {
-		return priv_type;
+	public String getPriv_cd() {
+		return priv_cd;
 	}
-	public void setPriv_type(String priv_type) {
-		this.priv_type = priv_type;
+	public void setPriv_cd(String priv_cd) {
+		this.priv_cd = priv_cd;
 	}
 	public String getPhoto() {
 		return photo;
@@ -120,15 +134,14 @@ public class Emp_viewVO {
 	}
 	@Override
 	public String toString() {
-		return "Emp_viewVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_name=" + dept_name
-				+ ", grade_name=" + grade_name + ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email="
-				+ emp_email + ", emp_post_no=" + emp_post_no + ", emp_addr=" + emp_addr + ", hire_date=" + hire_date
-				+ ", work_type=" + work_type + ", priv_type=" + priv_type + ", photo=" + photo + "]";
+		return "Emp_viewVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_cd=" + dept_cd
+				+ ", dept_name=" + dept_name + ", grade_cd=" + grade_cd + ", grade_name=" + grade_name + ", emp_tel="
+				+ emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email=" + emp_email + ", emp_post_no=" + emp_post_no
+				+ ", emp_addr=" + emp_addr + ", hire_date=" + hire_date + ", work_type=" + work_type + ", priv_cd="
+				+ priv_cd + ", photo=" + photo + "]";
 	}
-	
-	
 
-
+	
 	
 	
 }

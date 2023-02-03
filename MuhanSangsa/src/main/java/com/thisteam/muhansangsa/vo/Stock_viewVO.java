@@ -18,6 +18,7 @@ public class Stock_viewVO {
 	String wh_loc_in_area;//위치명
 	int stock_qty;//재고수량
 	int sum;//재고 합
+
 	
 	
 	

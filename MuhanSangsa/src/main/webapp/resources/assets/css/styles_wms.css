@@ -11385,12 +11385,8 @@ body {
   height: 100vh;
   z-index: 1038;
 }
-
-/* 전체 넓이 관여하는 부분*/
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav {
   padding-top: 56px;
-  width: 400px;
-  background-color: white;
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu {
   overflow-y: auto;

@@ -26,6 +26,7 @@ public class StockController {
 	@Autowired
 	private EmployeesService service_emp;
 	
+
 	
 	
 	@GetMapping(value = "/Inventory_View")
@@ -76,4 +77,5 @@ public class StockController {
 	}
 	
 	
+
 }
