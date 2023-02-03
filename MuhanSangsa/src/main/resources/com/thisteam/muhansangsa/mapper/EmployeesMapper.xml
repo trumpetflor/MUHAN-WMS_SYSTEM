@@ -11,15 +11,6 @@
 			INSERT 
 				INTO employees
 					VALUES (
-<!-- 						<choose> -->
-<!-- 							<when test="idx eq '0'"> -->
-<!-- 							1 -->
-<!-- 							</when> -->
-<!-- 							<otherwise> -->
-<!-- 							(#{idx} + 1) -->
-<!-- 							</otherwise> -->
-<!-- 						</choose> -->
-						(#{idx} + 1)
 						<choose>
 							<when test="idx eq '0'">
 							1
@@ -29,7 +20,7 @@
 							</otherwise>
 						</choose>
 						<choose>
-							<when test="emp_num eq null">
+							<when test="emp_Num eq null">
 							,1
 							</when>
 							<otherwise>
