@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -28,111 +29,189 @@
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
-<style>
-.grandchildren {
-	display: none;
-	position: absolute;
-}
+<style type="text/css">
+	
+	@font-face {
+	    font-family: 'Pretendard-Regular';
+	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+	    font-weight: 400;
+	    font-style: normal;
+	}
 
-.children {
-	position: relative;
-}
-
-.children:hover .grandchildren {
-	display: block;
-}
-
+	
+	@font-face {
+	    font-family: 'NEXON Lv1 Gothic OTF';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+	
+	body {
+	 font-family: 'NEXON Lv1 Gothic OTF';
+	}
+		
+	#client_table{
+		 vertical-align: middle;
+	}
+	table{
+	 text-align: center;
+	}
+	
+	td {
+	height: 100px;
+	}
+		
+	.id_pht{
+	 width: 80px;
+	 transition: 0.5s;
+	}
+	
 </style>
+
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+<script type="text/javascript">
+
+	//AJAX 를 활용한 게시물 목록 표시에 사용될 페이지 번호값 미리 저장
+	let pageNum = 1;
+	
+	$(function() {
+		
+		let searchType = $("#searchType").val(); // 검색 타입
+		let keyword = $("#keyword").val(); // 검색어
+		
+		load_list(searchType, keyword); // 게시물 목록 조회 함수 호출
+		
+	});
+	
+	// 게시물 목록 조회 함수
+	function load_list(searchType, keyword) {
+		$.ajax({
+			type: "GET",
+			url: "ClientListJson?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword,
+			dataType: "json"
+		})
+		.done(function(clientList) { // 요청 성공 시
+			for(let client of clientList) {
+// 				alert(client.business_no);
+				let strBn = '"' + client.business_no + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
+				let result = "<tr>"
+							+ "<td onclick='openClientDetail(" + strBn + ")'>" + client.business_no + "</td>"
+							+ "<td onclick='openClientDetail(" + strBn + ")'>" + client.cust_name + "</td>"
+// 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.business_no + "</a></td>"
+// 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.cust_name + "</a></td>"
+							+ "<td>" + client.boss_name + "</td>"
+							+ "<td>" + client.tel + "</td>"
+							+ "<td>" + client.mobile_no + "</td>"
+							+ "<td>" + client.addr + "</td>"
+							+ "<td>" + client.remarks + "</td>"
+							+ "</tr>";
+				$("#client_table").append(result);
+			}
+		})
+		.fail(function() {
+			$("#client_table").append("요청 실패..ㅠㅠ");
+		});
+	}
+	
+	// 거래처 세부 정보 창 - 아아ㅏ아가가각가가각!!!1!!!!!! 파라미터 왜 이따구로 넘어와ㅠㅠㅠ 해겨류ㅠㅠㅠㅠㅠㅠ!!!!! - by. 킹갓제너럴영진
+	function openClientDetail(business_no) {
+// 		let business_no = strBn.replace("N", "");
+// 		alert(business_no);
+		window.open("ClientDetail?business_no=" + business_no, "_blank", "width=650, height=800, top=100, left=1000");
+		
+	}
+	
+</script>
 
 </head>
 <body>
     <!-- Left Panel -->
+<jsp:include page="../inc/left.jsp"></jsp:include>
+<!--     <aside id="left-panel" class="left-panel"> -->
+<!--         <nav class="navbar navbar-expand-sm navbar-default"> -->
 
-    <aside id="left-panel" class="left-panel">
-        <nav class="navbar navbar-expand-sm navbar-default">
+<!--             <div id="main-menu" class="main-menu collapse navbar-collapse"> -->
+<!--                 <ul class="nav navbar-nav"> -->
+<!--                     <li> -->
+<!--                         <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard </a> -->
+<!--                     </li> -->
+<!--                     <li class="menu-title">인사</li>/.menu-title -->
+<!--                     <li class="menu-item-has-children dropdown"> -->
+<!--                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>사원 등록</a> -->
+<!--                         <ul class="sub-menu children dropdown-menu">                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">a</a></li> -->
+<!--                             <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">b</a></li> -->
+<!--                             <li><i class="fa fa-bars"></i><a href="ui-tabs.html">c</a></li> -->
 
-            <div id="main-menu" class="main-menu collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
-                    </li>
-                    <li class="menu-title">인사</li><!-- /.menu-title -->
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>사원 등록</a>
-                        <ul class="sub-menu children dropdown-menu">                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">a</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">b</a></li>
-                            <li><i class="fa fa-bars"></i><a href="ui-tabs.html">c</a></li>
+<!--                             <li><i class="fa fa-id-card-o"></i><a href="ui-cards.html">Cards</a></li> -->
+<!--                             <li><i class="fa fa-exclamation-triangle"></i><a href="ui-alerts.html">Alerts</a></li> -->
+<!--                             <li><i class="fa fa-spinner"></i><a href="ui-progressbar.html">Progress Bars</a></li> -->
+<!--                             <li><i class="fa fa-fire"></i><a href="ui-modals.html">Modals</a></li> -->
+<!--                             <li><i class="fa fa-book"></i><a href="ui-switches.html">Switches</a></li> -->
+<!--                             <li><i class="fa fa-th"></i><a href="ui-grids.html">Grids</a></li> -->
+<!--                             <li><i class="fa fa-file-word-o"></i><a href="ui-typgraphy.html">Typography</a></li> -->
+<!--                         </ul> -->
+<!--                     </li> -->
+<!--                     <li class="menu-item-has-children dropdown"> -->
+<!--                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>사원 조회</a> -->
+<!--                         <ul class="sub-menu children dropdown-menu"> -->
+<!--                             <li><i class="fa fa-table"></i><a href="tables-basic.html">Basic Table</a></li> -->
+<!--                             <li><i class="fa fa-table"></i><a href="tables-data.html">Data Table</a></li> -->
+<!--                         </ul> -->
+<!--                     </li> -->
 
-                            <li><i class="fa fa-id-card-o"></i><a href="ui-cards.html">Cards</a></li>
-                            <li><i class="fa fa-exclamation-triangle"></i><a href="ui-alerts.html">Alerts</a></li>
-                            <li><i class="fa fa-spinner"></i><a href="ui-progressbar.html">Progress Bars</a></li>
-                            <li><i class="fa fa-fire"></i><a href="ui-modals.html">Modals</a></li>
-                            <li><i class="fa fa-book"></i><a href="ui-switches.html">Switches</a></li>
-                            <li><i class="fa fa-th"></i><a href="ui-grids.html">Grids</a></li>
-                            <li><i class="fa fa-file-word-o"></i><a href="ui-typgraphy.html">Typography</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>사원 조회</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">Basic Table</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-data.html">Data Table</a></li>
-                        </ul>
-                    </li>
+<!--                     <li class="menu-title">재고 관리</li>/.menu-title -->
 
-                    <li class="menu-title">재고 관리</li><!-- /.menu-title -->
+<!--                     <li class="menu-item-has-children active dropdown"> -->
+<!--                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>기본 등록</a> -->
+<!--                         <ul class="sub-menu children dropdown-menu"> -->
+<!--                             <li><i class="menu-icon fa fa-fort-awesome active dropdown-toggle" id="client" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i><a href="ClientList">거래처 등록</a> -->
+<!--                             	<span class="dropdown-menu grandchildren" aria-labelledby="client"> -->
+<!-- 	                                <a class="dropdown-item media" href="ClientList"> -->
+<!-- 	                                    <i class="fa fa-check"></i> -->
+<!-- 	                                    <p>거래처 조회</p> -->
+<!-- 	                                </a> -->
+<!-- 	                                <a class="dropdown-item media" href="ClientInsertForm"> -->
+<!-- 	                                    <i class="fa fa-info"></i> -->
+<!-- 	                                    <p>거래처 등록</p> -->
+<!-- 	                                </a> -->
+<!--                             	</span> -->
+<!--                             </li> -->
+<!--                             <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">창고 등록</a></li> -->
+<!--                             <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">품목 등록</a></li> -->
+<!--                         </ul> -->
+<!--                     </li> -->
+<!--                     <li> -->
+<!--                         <a href="widgets.html"> <i class="menu-icon ti-email"></i>Widgets </a> -->
+<!--                     </li> -->
+<!--                     <li class="menu-item-has-children dropdown"> -->
+<!--                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-bar-chart"></i>Charts</a> -->
+<!--                         <ul class="sub-menu children dropdown-menu"> -->
+<!--                             <li><i class="menu-icon fa fa-line-chart"></i><a href="charts-chartjs.html">Chart JS</a></li> -->
+<!--                             <li><i class="menu-icon fa fa-area-chart"></i><a href="charts-flot.html">Flot Chart</a></li> -->
+<!--                             <li><i class="menu-icon fa fa-pie-chart"></i><a href="charts-peity.html">Peity Chart</a></li> -->
+<!--                         </ul> -->
+<!--                     </li> -->
 
-                    <li class="menu-item-has-children active dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>기본 등록</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-fort-awesome active dropdown-toggle" id="client" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i><a href="ClientList">거래처 등록</a>
-                            	<span class="dropdown-menu grandchildren" aria-labelledby="client">
-	                                <a class="dropdown-item media" href="ClientList">
-	                                    <i class="fa fa-check"></i>
-	                                    <p>거래처 조회</p>
-	                                </a>
-	                                <a class="dropdown-item media" href="ClientInsertForm">
-	                                    <i class="fa fa-info"></i>
-	                                    <p>거래처 등록</p>
-	                                </a>
-                            	</span>
-                            </li>
-                            <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">창고 등록</a></li>
-                            <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">품목 등록</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="widgets.html"> <i class="menu-icon ti-email"></i>Widgets </a>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-bar-chart"></i>Charts</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-line-chart"></i><a href="charts-chartjs.html">Chart JS</a></li>
-                            <li><i class="menu-icon fa fa-area-chart"></i><a href="charts-flot.html">Flot Chart</a></li>
-                            <li><i class="menu-icon fa fa-pie-chart"></i><a href="charts-peity.html">Peity Chart</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-area-chart"></i>Maps</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-map-o"></i><a href="maps-gmap.html">Google Maps</a></li>
-                            <li><i class="menu-icon fa fa-street-view"></i><a href="maps-vector.html">Vector Maps</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-title">Extras</li><!-- /.menu-title -->
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-glass"></i>Pages</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-sign-in"></i><a href="page-login.html">Login</a></li>
-                            <li><i class="menu-icon fa fa-sign-in"></i><a href="page-register.html">Register</a></li>
-                            <li><i class="menu-icon fa fa-paper-plane"></i><a href="pages-forget.html">Forget Pass</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </nav>
-    </aside><!-- /#left-panel -->
+<!--                     <li class="menu-item-has-children dropdown"> -->
+<!--                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-area-chart"></i>Maps</a> -->
+<!--                         <ul class="sub-menu children dropdown-menu"> -->
+<!--                             <li><i class="menu-icon fa fa-map-o"></i><a href="maps-gmap.html">Google Maps</a></li> -->
+<!--                             <li><i class="menu-icon fa fa-street-view"></i><a href="maps-vector.html">Vector Maps</a></li> -->
+<!--                         </ul> -->
+<!--                     </li> -->
+<!--                     <li class="menu-title">Extras</li>/.menu-title -->
+<!--                     <li class="menu-item-has-children dropdown"> -->
+<!--                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-glass"></i>Pages</a> -->
+<!--                         <ul class="sub-menu children dropdown-menu"> -->
+<!--                             <li><i class="menu-icon fa fa-sign-in"></i><a href="page-login.html">Login</a></li> -->
+<!--                             <li><i class="menu-icon fa fa-sign-in"></i><a href="page-register.html">Register</a></li> -->
+<!--                             <li><i class="menu-icon fa fa-paper-plane"></i><a href="pages-forget.html">Forget Pass</a></li> -->
+<!--                         </ul> -->
+<!--                     </li> -->
+<!--                 </ul> -->
+<!--             </div>/.navbar-collapse -->
+<!--         </nav> -->
+<!--     </aside>/#left-panel -->
 
     <!-- Left Panel -->
 
@@ -182,86 +261,26 @@
                             </div>
                         </div>
 
-                        <div class="dropdown for-message">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="message" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-envelope"></i>
-                                <span class="count bg-primary">4</span>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="message">
-                                <p class="red">You have 4 Mails</p>
-                                <a class="dropdown-item media" href="#">
-                                    <span class="photo media-left"><img alt="avatar" src="${pageContext.request.contextPath}/resources/images/avatar/1.jpg"></span>
-                                    <div class="message media-body">
-                                        <span class="name float-left">Jonathan Smith</span>
-                                        <span class="time float-right">Just now</span>
-                                        <p>Hello, this is an example msg</p>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item media" href="#">
-                                    <span class="photo media-left"><img alt="avatar" src="${pageContext.request.contextPath}/resources/images/avatar/2.jpg"></span>
-                                    <div class="message media-body">
-                                        <span class="name float-left">Jack Sanders</span>
-                                        <span class="time float-right">5 minutes ago</span>
-                                        <p>Lorem ipsum dolor sit amet, consectetur</p>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item media" href="#">
-                                    <span class="photo media-left"><img alt="avatar" src="${pageContext.request.contextPath}/resources/images/avatar/3.jpg"></span>
-                                    <div class="message media-body">
-                                        <span class="name float-left">Cheryl Wheeler</span>
-                                        <span class="time float-right">10 minutes ago</span>
-                                        <p>Hello, this is an example msg</p>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item media" href="#">
-                                    <span class="photo media-left"><img alt="avatar" src="${pageContext.request.contextPath}/resources/images/avatar/4.jpg"></span>
-                                    <div class="message media-body">
-                                        <span class="name float-left">Rachel Santos</span>
-                                        <span class="time float-right">15 minutes ago</span>
-                                        <p>Lorem ipsum dolor sit amet, consectetur</p>
-                                    </div>
-                                </a>
+	<jsp:include page="../inc/left.jsp"></jsp:include>
+
+		<div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
+        <div class=" breadcrumbs m-0">
+            <div class="breadcrumbs-inner rounded-start p-2 " >
+                <div class="row m-0 ">
+                    <div class="col-sm-4 ">
+                        <div class="page-header float-left rounded-start ">
+                            <div class="page-title ">
+                               <h1 class="m-1"><b>거래처 조회</b></h1>   
                             </div>
                         </div>
                     </div>
-
-                    <div class="user-area dropdown float-right">
-                        <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="${pageContext.request.contextPath}/resources/images/admin.jpg" alt="User Avatar">
-                        </a>
-
-                        <div class="user-menu dropdown-menu">
-                            <a class="nav-link" href="#"><i class="fa fa-user"></i>My Profile</a>
-
-                            <a class="nav-link" href="#"><i class="fa fa-bell-o"></i>Notifications <span class="count">13</span></a>
-
-                            <a class="nav-link" href="#"><i class="fa fa-cog"></i>Settings</a>
-
-                            <a class="nav-link" href="#"><i class="fa fa-power-off"></i>Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header><!-- /header -->
-        <!-- Header-->
-
-        <div class="breadcrumbs">
-            <div class="breadcrumbs-inner">
-                <div class="row m-0">
-                    <div class="col-sm-4">
-                        <div class="page-header float-left">
-                            <div class="page-title">
-                                <h1>Dashboard</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="page-header float-right">
-                            <div class="page-title">
+                    <div class="col-sm-8 rounded-pill ">
+                        <div class="page-header float-right rounded-start ">
+                            <div class="page-title ">
                                 <ol class="breadcrumb text-right">
-                                    <li><a href="#">Dashboard</a></li>
-                                    <li><a href="#">Table</a></li>
-                                    <li class="active">Data table</li>
+                                    <li><a href="#">기본 등록</a></li>
+                                    <li><a href="ClientList">거래처 등록</a></li>
+                                    <li class="active">거래처 조회</li>
                                 </ol>
                             </div>
                         </div>
@@ -272,394 +291,49 @@
 
         <div class="content">
             <div class="animated fadeIn">
-                <div class="row">
+            	<section id="searchSection" class="m-0 d-flex justify-content-end">
+				   <form action=ClientList>
+						<!-- 검색 타입 추가 -->
+						<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
+							<option value="business_no" <c:if test="${param.searchType eq 'business_no'}">selected</c:if>>거래처 코드</option>
+							<option value="cust_name" <c:if test="${param.searchType eq 'cust_name'}">selected</c:if>>거래처명</option>
+							<option value="boss_name" <c:if test="${param.searchType eq 'boss_name'}">selected</c:if>>대표자명</option>
+							<option value="addr" <c:if test="${param.searchType eq 'addr'}">selected</c:if>>주소</option>
+						</select>			
+						<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
+						<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
+					</form>
+				</section>
 
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <strong class="card-title">Data Table</strong>
-                            </div>
-                            <div class="card-body">
-                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                <table id="client_table" class="table ">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Salary</th>
+                                            <th>거래처 코드</th>
+                                            <th>거래처명</th>
+                                            <th>대표자명</th>
+                                            <th>전화번호1</th>
+                                            <th>전화번호2</th>
+                                            <th>주소</th>
+                                            <th>비고</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>$320,800</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>$170,750</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td>San Francisco</td>
-                                            <td>$86,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cedric Kelly</td>
-                                            <td>Senior Javascript Developer</td>
-                                            <td>Edinburgh</td>
-                                            <td>$433,060</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>$162,700</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brielle Williamson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>New York</td>
-                                            <td>$372,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Herrod Chandler</td>
-                                            <td>Sales Assistant</td>
-                                            <td>San Francisco</td>
-                                            <td>$137,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Rhona Davidson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>Tokyo</td>
-                                            <td>$327,900</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Colleen Hurst</td>
-                                            <td>Javascript Developer</td>
-                                            <td>San Francisco</td>
-                                            <td>$205,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sonya Frost</td>
-                                            <td>Software Engineer</td>
-                                            <td>Edinburgh</td>
-                                            <td>$103,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jena Gaines</td>
-                                            <td>Office Manager</td>
-                                            <td>London</td>
-                                            <td>$90,560</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Quinn Flynn</td>
-                                            <td>Support Lead</td>
-                                            <td>Edinburgh</td>
-                                            <td>$342,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Charde Marshall</td>
-                                            <td>Regional Director</td>
-                                            <td>San Francisco</td>
-                                            <td>$470,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Haley Kennedy</td>
-                                            <td>Senior Marketing Designer</td>
-                                            <td>London</td>
-                                            <td>$313,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tatyana Fitzpatrick</td>
-                                            <td>Regional Director</td>
-                                            <td>London</td>
-                                            <td>$385,750</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Michael Silva</td>
-                                            <td>Marketing Designer</td>
-                                            <td>London</td>
-                                            <td>$198,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Paul Byrd</td>
-                                            <td>Chief Financial Officer (CFO)</td>
-                                            <td>New York</td>
-                                            <td>$725,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gloria Little</td>
-                                            <td>Systems Administrator</td>
-                                            <td>New York</td>
-                                            <td>$237,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Bradley Greer</td>
-                                            <td>Software Engineer</td>
-                                            <td>London</td>
-                                            <td>$132,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dai Rios</td>
-                                            <td>Personnel Lead</td>
-                                            <td>Edinburgh</td>
-                                            <td>$217,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jenette Caldwell</td>
-                                            <td>Development Lead</td>
-                                            <td>New York</td>
-                                            <td>$345,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Yuri Berry</td>
-                                            <td>Chief Marketing Officer (CMO)</td>
-                                            <td>New York</td>
-                                            <td>$675,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Caesar Vance</td>
-                                            <td>Pre-Sales Support</td>
-                                            <td>New York</td>
-                                            <td>$106,450</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Doris Wilder</td>
-                                            <td>Sales Assistant</td>
-                                            <td>Sidney</td>
-                                            <td>$85,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Angelica Ramos</td>
-                                            <td>Chief Executive Officer (CEO)</td>
-                                            <td>London</td>
-                                            <td>$1,200,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gavin Joyce</td>
-                                            <td>Developer</td>
-                                            <td>Edinburgh</td>
-                                            <td>$92,575</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jennifer Chang</td>
-                                            <td>Regional Director</td>
-                                            <td>Singapore</td>
-                                            <td>$357,650</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brenden Wagner</td>
-                                            <td>Software Engineer</td>
-                                            <td>San Francisco</td>
-                                            <td>$206,850</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Fiona Green</td>
-                                            <td>Chief Operating Officer (COO)</td>
-                                            <td>San Francisco</td>
-                                            <td>$850,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Shou Itou</td>
-                                            <td>Regional Marketing</td>
-                                            <td>Tokyo</td>
-                                            <td>$163,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Michelle House</td>
-                                            <td>Integration Specialist</td>
-                                            <td>Sidney</td>
-                                            <td>$95,400</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Suki Burks</td>
-                                            <td>Developer</td>
-                                            <td>London</td>
-                                            <td>$114,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Prescott Bartlett</td>
-                                            <td>Technical Author</td>
-                                            <td>London</td>
-                                            <td>$145,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gavin Cortez</td>
-                                            <td>Team Leader</td>
-                                            <td>San Francisco</td>
-                                            <td>$235,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Martena Mccray</td>
-                                            <td>Post-Sales support</td>
-                                            <td>Edinburgh</td>
-                                            <td>$324,050</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Unity Butler</td>
-                                            <td>Marketing Designer</td>
-                                            <td>San Francisco</td>
-                                            <td>$85,675</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Howard Hatfield</td>
-                                            <td>Office Manager</td>
-                                            <td>San Francisco</td>
-                                            <td>$164,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Hope Fuentes</td>
-                                            <td>Secretary</td>
-                                            <td>San Francisco</td>
-                                            <td>$109,850</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Vivian Harrell</td>
-                                            <td>Financial Controller</td>
-                                            <td>San Francisco</td>
-                                            <td>$452,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Timothy Mooney</td>
-                                            <td>Office Manager</td>
-                                            <td>London</td>
-                                            <td>$136,200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jackson Bradshaw</td>
-                                            <td>Director</td>
-                                            <td>New York</td>
-                                            <td>$645,750</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Olivia Liang</td>
-                                            <td>Support Engineer</td>
-                                            <td>Singapore</td>
-                                            <td>$234,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Bruno Nash</td>
-                                            <td>Software Engineer</td>
-                                            <td>London</td>
-                                            <td>$163,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sakura Yamamoto</td>
-                                            <td>Support Engineer</td>
-                                            <td>Tokyo</td>
-                                            <td>$139,575</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Thor Walton</td>
-                                            <td>Developer</td>
-                                            <td>New York</td>
-                                            <td>$98,540</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Finn Camacho</td>
-                                            <td>Support Engineer</td>
-                                            <td>San Francisco</td>
-                                            <td>$87,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Serge Baldwin</td>
-                                            <td>Data Coordinator</td>
-                                            <td>Singapore</td>
-                                            <td>$138,575</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Zenaida Frank</td>
-                                            <td>Software Engineer</td>
-                                            <td>New York</td>
-                                            <td>$125,250</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Zorita Serrano</td>
-                                            <td>Software Engineer</td>
-                                            <td>San Francisco</td>
-                                            <td>$115,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jennifer Acosta</td>
-                                            <td>Junior Javascript Developer</td>
-                                            <td>Edinburgh</td>
-                                            <td>$75,650</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cara Stevens</td>
-                                            <td>Sales Assistant</td>
-                                            <td>New York</td>
-                                            <td>$145,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Hermione Butler</td>
-                                            <td>Regional Director</td>
-                                            <td>London</td>
-                                            <td>$356,250</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Lael Greer</td>
-                                            <td>Systems Administrator</td>
-                                            <td>London</td>
-                                            <td>$103,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jonas Alexander</td>
-                                            <td>Developer</td>
-                                            <td>San Francisco</td>
-                                            <td>$86,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Shad Decker</td>
-                                            <td>Regional Director</td>
-                                            <td>Edinburgh</td>
-                                            <td>$183,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Michael Bruce</td>
-                                            <td>Javascript Developer</td>
-                                            <td>Singapore</td>
-                                            <td>$183,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Donna Snider</td>
-                                            <td>Customer Support</td>
-                                            <td>New York</td>
-                                            <td>$112,000</td>
-                                        </tr>
+                                        <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
+						<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1 float-right" onclick="location.href='ClientInsertForm'">거래처 등록</button>
             </div><!-- .animated -->
         </div><!-- .content -->
 
     <div class="clearfix"></div>
 
-    <footer class="site-footer">
-        <div class="footer-inner bg-white">
-            <div class="row">
-                <div class="col-sm-6">
-                    Copyright &copy; 2018 Ela Admin
-                </div>
-                <div class="col-sm-6 text-right">
-                    Designed by <a href="https://colorlib.com">Colorlib</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- footer -->
+	   	<br><br><br><br><br><br><br><br><br><br><br><br>
+		<jsp:include page="../inc/footer.jsp"></jsp:include>
+	<!-- footer -->
 
 </div><!-- /#right-panel -->
-
+<jsp:include page="../inc/footer.jsp"></jsp:include>
 <!-- Right Panel -->
 
 <!-- Scripts -->
@@ -667,7 +341,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
 
 
 </body>

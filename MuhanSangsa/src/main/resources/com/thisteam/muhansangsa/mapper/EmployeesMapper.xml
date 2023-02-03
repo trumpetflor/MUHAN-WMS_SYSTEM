@@ -11,6 +11,15 @@
 			INSERT 
 				INTO employees
 					VALUES (
+<!-- 						<choose> -->
+<!-- 							<when test="idx eq '0'"> -->
+<!-- 							1 -->
+<!-- 							</when> -->
+<!-- 							<otherwise> -->
+<!-- 							(#{idx} + 1) -->
+<!-- 							</otherwise> -->
+<!-- 						</choose> -->
+						(#{idx} + 1)
 						<choose>
 							<when test="idx eq '0'">
 							1
@@ -20,25 +29,25 @@
 							</otherwise>
 						</choose>
 						<choose>
-							<when test="emp_Num eq null">
+							<when test="emp_num eq null">
 							,1
 							</when>
 							<otherwise>
-							, #{emp_Num}
+							, #{emp_num}
 							</otherwise>
 						</choose>
-						,#{emp_Name}
-						,#{dept_Cd}
-						,#{grade_Cd}
-						,#{emp_Tel}
-						,#{emp_Dtel}
-						,#{emp_Email}
-						,#{emp_Passwd}
-						,#{emp_Post_No}
-						,#{emp_Addr}
-						,#{hire_Date}
-						,#{work_Cd}
-						,#{priv_Cd}
+						,#{emp_name}
+						,#{dept_cd}
+						,#{grade_cd}
+						,#{emp_tel}
+						,#{emp_dtel}
+						,#{emp_email}
+						,#{emp_passwd}
+						,#{emp_post_No}
+						,#{emp_addr}
+						,#{hire_date}
+						,#{work_cd}
+						,#{priv_cd}
 						,#{photo}
 					
 					); 
@@ -50,7 +59,7 @@
 		<select id="selectDepartmentCode" resultType="string">
 			SELECT DEPT_CD
 				FROM department
-					WHERE DEPT_NAME = #{dept_Cd}
+					WHERE DEPT_NAME = #{dept_cd}
 		</select>
 
 		<!-- 사원 번호를 위한 idx 추출 -->
@@ -132,42 +141,34 @@
 <!-- ===================================== hawon =========================================  -->
 <!-- ===================================================================================================== -->
 	<!-- ===================================== 사원 조회 시작===================================== -->
-	<select id="selectMemberList" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
+	<select id="selectMemberList" resultType="Emp_viewVO">
 		<!-- 사원조회 -->
-		SELECT	IDX
-				,EMP_NUM
-				,EMP_NAME
-				,DEPT_NAME
-				,GRADE_NAME
-				,EMP_TEL
-				,EMP_DTEL
-				,EMP_EMAIL
-				,EMP_POST_NO
-				,EMP_ADDR
-				,HIRE_DATE
-				,WORK_TYPE
-				,PRIV_CD
-				,PHOTO
+		SELECT	*
 		 FROM emp_view
 	 		<if test="!keyword.equals('')">
-			WHERE
+			
 			<!-- 2. 검색타입(searchType) 에 따른 WHERE 대상 변경 -->
 			<!-- => 조건이 복수개이므로 choose 태그 사용 -->
 			<choose>
 				<when test="searchType.equals('emp_name')">
-					EMP_NAME LIKE '%${keyword}%'
+					WHERE EMP_NAME LIKE '%${keyword}%'
 				</when>
 				<when test="searchType.equals('emp_num')">
-					EMP_NUM LIKE '%${keyword}%'
+					WHERE EMP_NUM LIKE '%${keyword}%'
 				</when>
 				<when test="searchType.equals('emp_email')">
-					EMP_EMAIL LIKE '%${keyword}%'
+					WHERE EMP_EMAIL LIKE '%${keyword}%'
 				</when>
 				<when test="searchType.equals('dep_name')">
-					DEPT_NAME LIKE '%${keyword}%'
+					WHERE DEPT_NAME LIKE '%${keyword}%'
 				</when>
+				<otherwise>
+				
+				</otherwise>
 			</choose>		
 			</if>
+			
+			LIMIT #{startRow}, #{listLimit}
 		
 	</select>
 		
@@ -199,12 +200,39 @@
 	</update>
 	
 	<!-- 사원 상세조회 -->
-	<select id="selectEmployee" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
+	<select id="selectEmployee" resultType="Emp_viewVO">
 		SELECT *
 		FROM emp_view
 			WHERE EMP_EMAIL = #{emp_email}
 		
 	</select>
+	
+	<!-- 부서 직급 정보-->
+	<select id="selectDeptInfo_count" resultType="HashMap">
+		SELECT GRADE_NAME,count(GRADE_NAME) as count
+		FROM emp_view e, department d
+		WHERE e.DEPT_Name =d.DEPT_Name and  d.DEPT_CD = #{dept_cd} group by GRADE_NAME
+	</select>
+	
+	<select id="selectDeptMember" resultType="Emp_viewVO">
+		SELECT EMP_NUM,EMP_NAME , GRADE_NAME , EMP_TEL, EMP_DTEL, EMP_EMAIL
+		FROM emp_view  
+		WHERE DEPT_NAME = (select DEPT_NAME from department where DEPT_CD= #{dept_cd})
+		order by GRADE_CD desc
+	</select>
+	
+	<!--  -->
+	<select id="selectDeptList" resultType="DepartmentVO">
+		SELECT *
+		FROM department
+	
+	</select>
+	<select id="selectWorkList" resultType="WorksVO">
+		SELECT *
+		FROM works
+	</select>
+	
+	
 	<!-- ===================================== 사원 조회 끝===================================== -->
 	<!-- ===================================================================================================== -->
 

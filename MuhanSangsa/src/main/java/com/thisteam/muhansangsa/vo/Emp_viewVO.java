@@ -23,8 +23,9 @@ public class Emp_viewVO {
 	int idx; //�ε���
 	String emp_num;//�����ȣ
 	String emp_name;//�����
+	String dept_cd;//�μ���
 	String dept_name;//�μ���
-	String dept_cd;
+	String grade_cd;
 	String grade_name;//���޸�
 	String emp_tel;//����ó(����)
 	String emp_dtel;//����ó(�繫��)
@@ -33,7 +34,7 @@ public class Emp_viewVO {
 	String emp_addr;//�ּ�
 	Date hire_date;//�Ի���
 	String work_type;//���� (����/����/���)
-	String priv_type;//����
+	String priv_cd;//����
 	String photo;//�����̹���
 	public int getIdx() {
 		return idx;
@@ -53,6 +54,12 @@ public class Emp_viewVO {
 	public void setEmp_name(String emp_name) {
 		this.emp_name = emp_name;
 	}
+	public String getDept_cd() {
+		return dept_cd;
+	}
+	public void setDept_cd(String dept_cd) {
+		this.dept_cd = dept_cd;
+	}
 	public String getDept_name() {
 		return dept_name;
 	}
@@ -64,6 +71,12 @@ public class Emp_viewVO {
 	}
 	public void setDept_cd(String dept_cd) {
 		this.dept_cd = dept_cd;
+  }
+	public String getGrade_cd() {
+		return grade_cd;
+	}
+	public void setGrade_cd(String grade_cd) {
+		this.grade_cd = grade_cd;
 	}
 	public String getGrade_name() {
 		return grade_name;
@@ -113,11 +126,11 @@ public class Emp_viewVO {
 	public void setWork_type(String work_type) {
 		this.work_type = work_type;
 	}
-	public String getPriv_type() {
-		return priv_type;
+	public String getPriv_cd() {
+		return priv_cd;
 	}
-	public void setPriv_type(String priv_type) {
-		this.priv_type = priv_type;
+	public void setPriv_cd(String priv_cd) {
+		this.priv_cd = priv_cd;
 	}
 	public String getPhoto() {
 		return photo;
@@ -127,15 +140,14 @@ public class Emp_viewVO {
 	}
 	@Override
 	public String toString() {
-		return "Emp_viewVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_name=" + dept_name
-				+ ", grade_name=" + grade_name + ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email="
-				+ emp_email + ", emp_post_no=" + emp_post_no + ", emp_addr=" + emp_addr + ", hire_date=" + hire_date
-				+ ", work_type=" + work_type + ", priv_type=" + priv_type + ", photo=" + photo + "]";
+		return "Emp_viewVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_cd=" + dept_cd
+				+ ", dept_name=" + dept_name + ", grade_cd=" + grade_cd + ", grade_name=" + grade_name + ", emp_tel="
+				+ emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email=" + emp_email + ", emp_post_no=" + emp_post_no
+				+ ", emp_addr=" + emp_addr + ", hire_date=" + hire_date + ", work_type=" + work_type + ", priv_cd="
+				+ priv_cd + ", photo=" + photo + "]";
 	}
-	
-	
 
-
+	
 	
 	
 }
