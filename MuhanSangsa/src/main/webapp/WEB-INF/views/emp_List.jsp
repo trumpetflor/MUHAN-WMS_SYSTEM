@@ -80,6 +80,7 @@
 	
 	a.close-modal{
 		display: hidden;
+
 	}
 	
 /* 	.id_pht:hover{ */
@@ -144,6 +145,27 @@
 		      
 		    });
 	   
+
+	$(document).on("change","input[name=empChecked]:checked",function(){
+		
+		$("input[name=empChecked]").on("change",function(){
+			alert("체크됨: "+ this.val());
+		});
+
+		
+		
+		
+	});
+	
+	   $('a[href="#modal_container"]').click(function(event) {
+		      event.preventDefault();
+		 
+		      $(this).modal({
+		        fadeDuration: 250
+		      });
+		    });
+	
+	
 
 	$(function() {
 		
@@ -302,6 +324,7 @@
  	
  	</div>
  	</div>
+
  <input type="button" value="일괄 수정" class = "btn btn-primary btn-sm m-3 " name="" id="">
   <a href="#" rel="modal:close">Close</a>
  

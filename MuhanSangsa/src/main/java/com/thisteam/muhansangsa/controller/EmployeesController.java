@@ -29,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import com.thisteam.muhansangsa.service.EmployeesService;
+import com.thisteam.muhansangsa.service.MailService;
+
 import com.thisteam.muhansangsa.vo.DepartmentVO;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
@@ -41,7 +43,8 @@ public class EmployeesController {
 	@Autowired
 	private EmployeesService service;
 	
-	
+	@Autowired
+	private MailService mailService;
 
 	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 	
@@ -58,17 +61,17 @@ public class EmployeesController {
 		
 		// ---------------------------------------- 사원 번호 생성 
 		// 2. 부서코드(이름) -> 부서코드(코드)
-	      String deptCd = "";
-	      switch (employee.getDept_cd()) {
-	      case "인사팀": deptCd = "01"; break;
-	      case "개발팀": deptCd = "02"; break;
-	      case "물류관리팀": deptCd = "03"; break;
-	      case "영업팀": deptCd = "04"; break;
-
-	      default: deptCd = "00";
+//	      String deptCd = "";
+//	      switch (employee.getDept_cd()) {
+//	      case "인사팀": deptCd = "01"; break;
+//	      case "개발팀": deptCd = "02"; break;
+//	      case "물류관리팀": deptCd = "03"; break;
+//	      case "영업팀": deptCd = "04"; break;
+//
+//	      default: deptCd = "00";
 //	            employee.setDept_Cd("미정");
-	         break;
-	      }
+//	         break;
+//	      }
 	      
 	      // 3. IDX 값 0 일 시 기본값 1로 세팅
 	      if(employee.getIdx() == 0) {
@@ -98,7 +101,8 @@ public class EmployeesController {
 	   // ---------------------------------------- 권한 코드 생성 (2진수 적용 + reverse)
 		
 		// 1. 사원 번호를 위한 부서코드 추출
-		String departmentCode = service.getDepartmentCode(employee.getDept_cd());
+//		String departmentCode = service.getDepartmentCode(employee.getDept_cd());
+	    String departmentCode = employee.getDept_cd();
 		System.out.println("부서코드 잘 추출됐냐 : " + departmentCode);
 		
 		// 2. 사원 번호를 위한 입사년도 추출
@@ -145,18 +149,23 @@ public class EmployeesController {
 		String[] arr = employee.getPriv_cd().split(",");
 		for(String code : arr) {
 			// 권한 int타입으로 변환하여 계산
-			
+
 			// 23/01/30
 			// 2진수로 바로 처리해도 됩니다
 			priv_code += Integer.parseInt(code, 2);
 			System.out.println("권한코드 잘 계산되고 있니 : " + priv_code);
-			
+
 			// 권한코드 내의 빈 값을 0으로 채우는 코드 추가
 			privCd = String.format("%5s", Integer.toBinaryString(priv_code)).replaceAll(" ", "0");
-			
+
 			// 권한 설정
 			employee.setPriv_cd(privCd);
 		}
+		
+		// 임시 패스워드 만드는 로직
+		String passwd = UUID.randomUUID().toString().substring(1, 8);
+		System.out.println("이메일 인증에 사용된 비밀번호 : " + passwd);
+		employee.setEmp_passwd(passwd);
 		
 		
 		// 7. 최종 : 사원 등록 
@@ -164,6 +173,15 @@ public class EmployeesController {
 		
 		
 		if(insertCount > 0) { // 등록 성공 시
+			// 메일 발송
+			String addr = "switwillbs@gmail.com";
+			String subject = "[muhansangsa] 임시 패스워드 입니다.";
+			String body = employee.getEmp_name() 
+							+ " 님의 임시 패스워드 : "
+							+ employee.getEmp_passwd() 
+							+ " 입니다.";
+			
+			mailService.sendEmail(employee.getEmp_email(),addr,subject,body);
 			return "redirect:/";
 		} else {
 			model.addAttribute("msg", "사원 등록 실패!");
@@ -290,6 +308,7 @@ public class EmployeesController {
 				isRightUser = service.getPrivilege(sId,Privilege.사원관리);
 				System.out.println("사원관리 권한: " + isRightUser);
 				model.addAttribute("priv", "1");
+
 				
 				//부서 및 재직상태 변경을 위한 테이블 컬럼 가져오기
 				List<DepartmentVO> deptList= service.getdeptList();
@@ -317,6 +336,7 @@ public class EmployeesController {
 				model.addAttribute("workArr", workArr);
 				
 				
+
 			}
 		
 			System.out.println("sId   : "+sId);
@@ -420,6 +440,18 @@ public class EmployeesController {
 //				int updateDeptCount = service.updateEmpDept();
 //		}
 			
+
+			 
+		}else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
+	
+	}
+	
+	//상세조회
+	@GetMapping(value = "/employees/detail")
+	public String emp_detail(Model model, HttpSession session){
 		
 		
 		
