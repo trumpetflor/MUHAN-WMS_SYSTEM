@@ -19,6 +19,12 @@ public class StockService {
 		return mapper.selectStockList(searchType, keyword, startRow, listLimit);
 	}
 	
+	//상품 검색
+	public List<Stock_viewVO> getProductAtSameLoc(String product_cd) {
+		
+		return mapper.selectProductInLoc(product_cd);
+	}
+	
 	
 	
 	

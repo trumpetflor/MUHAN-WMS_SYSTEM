@@ -24,4 +24,11 @@
 			LIMIT #{startRow}, #{listLimit}
 	</select>
 
+	<!-- 재고테이블에서 특정 상품 가져오는 태그  -->
+	<select id="selectProductInLoc" resultType="Stock_viewVO">
+	
+		SELECT *
+		FROM STOCK_VIEW 
+		WHERE PRODUCT_CD = #{product_cd};
+	</select>
 </mapper>

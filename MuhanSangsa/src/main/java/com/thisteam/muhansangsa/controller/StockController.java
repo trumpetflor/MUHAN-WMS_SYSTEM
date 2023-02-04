@@ -1,16 +1,21 @@
 package com.thisteam.muhansangsa.controller;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.StockService;
@@ -75,5 +80,47 @@ public class StockController {
 		
 	}
 	
+	@GetMapping(value = "/InventoryHistory")
+	public String inventoryView(){
+		return "stock/stock_code_history";
+				
+	}
+	
+	
+	@GetMapping(value = "/StockAdjustment")
+	public String stock_adjustment(){
+		
+		return "stock/stock_adjustment";
+		
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/StockAdjust_loc.ajax")
+	public void ajax(Stock_viewVO vo, HttpServletResponse response){
+		vo.getProduct_cd();
+		String product_cd = "1000";
+		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
+		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(product_cd);
+		 
+		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
+		JSONArray arr = new JSONArray();
+		for( Stock_viewVO stock : productLoc) {
+			arr.put(new JSONObject(stock));
+		}
+		
+		System.out.println("JSONArray : " + arr);
+	
+		
+	
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(arr); // toString() 생략됨
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 }

@@ -53,9 +53,11 @@
 	table{
 	 text-align: center;
 	}
-	
+	input[type=number]{
+		width: 70px;
+	}
 
-	 a{
+	a{
 	 text-decoration: none;
 	 color: 	#000080;
 	}
@@ -73,6 +75,43 @@
 	  left: 50%;
 	  overflow-y: scroll;
 	}
+	
+	tr{
+	 position: relative;
+	}
+	
+	#search_div{
+	    width: 400px;
+	    height: 100px;
+	    background-color: white;
+	    position: absolute;
+	    top: 35px;
+	    margin-left: 10px;
+	    overflow: scroll;
+	    display: none;
+	    z-index: 1;
+	}
+	
+	#search_div::-webkit-scrollbar {
+    width: 3px;
+  }
+	#search_div ul{
+	padding-left: 0
+	}
+	#search_div li{
+	
+	text-align: left;
+	vertical-align: middle;
+	background:  url(${pageContext.request.contextPath}/resources/images/loc_pin.png) no-repeat 0px 1px;
+    list-style-type: none;
+    padding: 1px 1px 8px 20px;
+    transition: 0.5s;
+	}
+	
+	#search_div li:hover {
+	background-color: rgba(169, 168, 167, 0.7);
+	cursor: pointer;
+	}
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
 
@@ -86,7 +125,69 @@ function openStockModal() {
 	
 }
 
+$(function () {
+	$(".loc_search").on("click",function(){
+		
+		let product_cd = $(this).closest('td').attr('id');
+		console.log("td의 아이디:" + $(this).closest('td').attr('id') )
+		 $(this).next().show();
+	
+		console.log("div의 아이디:" + $(this).next().attr('class') )
+		
+		
+		$.ajax({
+			
+	        type: "get",
+	        url: "StockAdjust_loc.ajax",
+	        data: {
+	        	"product_cd":product_cd
+	        },
+	         
+	        contentType: 'application/json;charset=UTF-8',
+	        success: function(data,status,xhr) {
+				//JSON데이터 이상함 ! 나중에 물어볼것
+// 	               JSON.parse(JSON.stringify(data));
+// 		     	   alert(JSON.parse(JSON.stringify(data)));
+		     	   
+		     	   let parsingData = JSON.parse(data);
+// 		     	  alert(parsingData);
+// 		     	  alert(JSON.stringify(parsingData));
+					
+		     	   JSON.stringify(parsingData)
+		     		 for(let prod of parsingData){
+		     			 
+		     		  let inner_var1 = "\""+prod.wh_loc_in_area_cd+"',";
+		     		  let inner_var2 = "\""+prod.wh_loc_in_area_cd+"\"";
+		     			let result = "<li onclick=\"selected_loc("+ inner_var1+inner_var2+");'> ["+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + "] "
+		     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
+		     		 	
+				     		$("#"+product_cd + "  #search_div ul").append(result);
+		     		 }
+	     	 
+	        },
+	        error: function(xhr,status,error) {
+	            console.log(error);
+	        }
+		
+		});//$.ajax({
+		
+	});
+	
+	
+	$("#closeBtn").on("click",function(){
+		$("#search_div").css("display","none");
+	});
+	
+});
 
+function openSearchArea() {
+  document.getElementById("search_div").style.display = 'block';
+ alert("openSearchArea");
+}
+
+function selected_loc(wh_loc_in_area_cd , product_cd) {
+	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd)
+}
 
 </script>
 <body>
@@ -138,9 +239,8 @@ function openStockModal() {
 				<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
 		</form>
 	   </section>
-<!-- 창고 구역 내의 상세 위치에 등록되어 있는 재고 목록 표시 
-	 재고번호, 품목명, 규격, 창고명, 구역명, 위치명, 재고수량 표시 
-	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 -->
+<!-- 재고번호, 품목명 , 구역명(창고명), 선반위치, 재고수량, //
+  조정수량, 이동재고번호, 이동위치, 이동수량, 합계수량 -->
 
 	 
 	<table class="table"  id="">
@@ -148,26 +248,84 @@ function openStockModal() {
 			<tr>
 				<th>재고번호</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
 				<th>품목명</th>
-				<th>창고명</th>
-				<th>구역명</th>
-				<th>위치명</th>
+				<th>창고 및 구역명</th>
+				<th>세부위치</th>
 				<th>재고수량</th>
+				<th>작업 선택</th>
+				<th>조정수량</th>
+				<th>이동재고번호(이동위치)</th>
+				<th>이동수량</th>
+				<th>합계수량</th>
 			</tr> 
 		</thead>
 		<tbody>
-		<c:forEach items="${stockList }" var="stock" varStatus="status" >
 			<tr>
-				<td onclick="openStockModal('${stock.stock_cd }')">${stock.stock_cd }</td>
-				<td>${stock.product_name}</td>
-				<td>${stock.wh_name }</td>
-				<td>${stock.wh_area }</td>
-				<td>${stock.wh_loc_in_area }</td>
-				<td>${stock.stock_qty }</td>
-			</tr>
-			</c:forEach>
+				<td>111111</td>
+				<td>[농심]신라면</td>
+				<td>A - 4 zone</td>
+				<td>7-a</td>
+				<td>1000개</td>
+				<td>
+					<select class=" bg-light border border-secondary rounded-1 px-1">
+						<option>입고</option>
+						<option>출고</option>
+						<option>이동</option>
+						<option>조정</option>
+					</select>
+				</td>
+				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1"></td>
+				<td style="position: relative;" id="1번">
+					<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-1">
+				    <div id="search_div" class="  rounded-1 ">
+				    <div class="float-right" id="closeBtn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
+				    <div class="mt-3"> 새 위치 추가 + </div>
+				       <hr>
+				     	<ul>
+				     		<li>[B창고-3zone-7] 신라면</li>
+				     		<li>[C창고-5zone-7] 신라면</li>
+				     		<li>[A창고-7zone-7] 신라면</li>
+				     	</ul>
+				     	
+				    </div>
+				</td>
+				<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1"></td>
+				<td></td>
+				<td></td>
+			</tr> 
 			<tr>
-				<td colspan="5" align="right">합계 :</td><td>${stock.sum }</td>
-			<tr>
+				<td>111111</td>
+				<td>[농심]신라면</td>
+				<td>A - 4 zone</td>
+				<td>7-a</td>
+				<td>1000개</td>
+				<td>
+					<select class=" bg-light border border-secondary rounded-1 px-1">
+						<option>입고</option>
+						<option>출고</option>
+						<option>이동</option>
+						<option>조정</option>
+					</select>
+				</td>
+				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1"></td>
+				<td style="position: relative;" id="2번">
+					<input type="text" placeholder="위치를 선택하세요" class=" loc_search bg-light border border-secondary rounded-1 px-1" id="loc_search">
+				    <div id="search_div" class="search_div  rounded-1 ">
+					    <div class="float-right" id="closeBtn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
+					    <div class="mt-3"> 새 위치 추가 + </div>
+					       <hr>
+					     	<ul>
+					     		<li>[B창고-3zone-7] 신라면</li>
+					     		<li>[C창고-5zone-7] 신라면</li>
+					     		<li>[A창고-7zone-7] 신라면</li>
+					     	</ul>
+				     	
+				    </div>
+				</td>
+				<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1"></td>
+				<td></td>
+				<td></td>
+			</tr> 
+
 		</tbody>
 	
 	</table>
