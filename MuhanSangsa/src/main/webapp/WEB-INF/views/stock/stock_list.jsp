@@ -107,7 +107,7 @@
 <div class="content">
    <div class="animated fadeIn">
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
-  		<form action="stock_search ">
+  		<form action="Inventory_View ">
 				<!-- 검색 타입 추가 -->
 				<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
 					<option value="STOCK_CD" <c:if test="${param.searchType eq 'STOCK_CD'}">selected</c:if>>재고번호</option>
@@ -127,23 +127,26 @@
 			<tr>
 				<th>재고번호</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
 				<th>품목명</th>
-				<th>규격</th>
 				<th>창고명</th>
 				<th>구역명</th>
 				<th>위치명</th>
 				<th>재고수량</th>
-			</tr>
+			</tr> 
 		</thead>
 		<tbody>
+		<c:forEach items="${stockList }" var="stock" varStatus="status" >
 			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td>${stock.stock_cd }</td>
+				<td>${stock.product_name}</td>
+				<td>${stock.wh_name }</td>
+				<td>${stock.wh_area }</td>
+				<td>${stock.wh_loc_in_area }</td>
+				<td>${stock.stock_qty }</td>
 			</tr>
+			</c:forEach>
+			<tr>
+				<td colspan="5" align="right">합계 :</td><td>${stock.sum }</td>
+			<tr>
 		</tbody>
 	
 	</table>
