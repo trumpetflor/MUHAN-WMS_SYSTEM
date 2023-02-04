@@ -66,12 +66,6 @@ public class Emp_viewVO {
 	public void setDept_name(String dept_name) {
 		this.dept_name = dept_name;
 	}
-	public String getDept_cd() {
-		return dept_cd;
-	}
-	public void setDept_cd(String dept_cd) {
-		this.dept_cd = dept_cd;
-  }
 	public String getGrade_cd() {
 		return grade_cd;
 	}

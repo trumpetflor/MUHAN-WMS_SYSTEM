@@ -105,11 +105,33 @@
 		});
 	});
 </script>
-<style>
-.col-lg-6 {
-	flex: 100%;
-    max-width: 100%;
-}
+<style type="text/css">
+
+	@font-face {
+	    font-family: 'Pretendard-Regular';
+	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+	    font-weight: 400;
+	    font-style: normal;
+	}
+
+	
+	@font-face {
+	    font-family: 'NEXON Lv1 Gothic OTF';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+	
+	body {
+	 font-family: 'NEXON Lv1 Gothic OTF';
+	 width: 100%;
+	 height: 100%;
+	}
+	
+	.col-lg-6 {
+		flex: 100%;
+	    max-width: 100%;
+	}
 </style>
 </head>
 <body>
@@ -327,19 +349,8 @@
 
     <div class="clearfix"></div>
 
-    <footer class="site-footer">
-        <div class="footer-inner bg-white">
-            <div class="row">
-                <div class="col-sm-6">
-                    Copyright &copy; 2018 Ela Admin
-                </div>
-                <div class="col-sm-6 text-right">
-                    Designed by <a href="https://colorlib.com">Colorlib</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 <!-- Right Panel -->
 

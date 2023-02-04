@@ -22,7 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;o
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,9 +49,6 @@ public class EmployeesController {
 	@Autowired
 	private MailService mailService;
 	
-	@Autowired
-	private MailService mailService;
-
 	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 	
 	@GetMapping(value = "/employeeRegisterForm")
@@ -415,7 +412,6 @@ public class EmployeesController {
 				isRightUser = service.getPrivilege(sId,Privilege.사원관리);
 				System.out.println("사원관리 권한: " + isRightUser);
 				model.addAttribute("priv", "1");
-
 				
 				//부서 및 재직상태 변경을 위한 테이블 컬럼 가져오기
 				List<DepartmentVO> deptList= service.getdeptList();
@@ -443,7 +439,6 @@ public class EmployeesController {
 				model.addAttribute("workArr", workArr);
 				
 				
-
 			}
 		
 			System.out.println("sId   : "+sId);
@@ -475,22 +470,11 @@ public class EmployeesController {
 		// 페이징 처리를 위한 변수 선언
 		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
 		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
-		session.getAttribute("sId");
-		String sId = (String)session.getAttribute("sId");
-	
-
-		// ---------------------------------------------------------------------------
-		// org.json 패키지의 JSONObjectg 클래스를 활용하여 JSON 객체 1개를 생성하고
-		// JSONArray 클래스를 활용하여 JSONObject 객체 복수개에 대한 배열 생성
-		// 자바 클래스를 활용하여 JSONobject 객체 복수개에 대한  배열 생성
-//		JSONArray boardArr = new JSONArray();
-//		
-//		for (BoardVO board : boardList) {
-////			System.out.println(board);
-//			JSONObject obj =  new JSONObject(board);
-//			boardArr.put(obj);
-//		}
-
+		
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		}
 
 		sId="admin@muhan.com";
 		if(sId != null) { 
@@ -547,18 +531,6 @@ public class EmployeesController {
 //				int updateDeptCount = service.updateEmpDept();
 //		}
 			
-
-			 
-		}else {
-			model.addAttribute("msg", "잘못된 접근입니다.");
-			return "fail_back";
-		}
-	
-	}
-	
-	//상세조회
-	@GetMapping(value = "/employees/detail")
-	public String emp_detail(Model model, HttpSession session){
 		
 		
 		
@@ -595,7 +567,7 @@ public class EmployeesController {
 	
 	//-------------------------------------------사원조회/상세정보조회 끝------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------
-}//end of MemberController
+}//end of EmployeesController
 
 
 

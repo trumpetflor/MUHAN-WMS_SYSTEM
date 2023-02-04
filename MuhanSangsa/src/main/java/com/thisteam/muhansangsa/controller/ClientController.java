@@ -289,18 +289,20 @@ public class ClientController {
 		
 		// 권한에 따른 접근 허용 여부 판단
 		// 세션 아이디 저장
-		session.getAttribute("sId");
-		String sId = (String)session.getAttribute("sId");
-		System.out.println("sId : "+ sId);
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+			System.out.println("sId : "+ sId);
+		}
 		
 		sId = "maltesers@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
 
 		if(sId != null && !sId.equals("")) { 
 
 			//권한 조회 메서드
-			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
+//			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
 			
-			isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
+			boolean isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
 			
 			if(isRightUser) { // 권한 존재할 경우
 				
