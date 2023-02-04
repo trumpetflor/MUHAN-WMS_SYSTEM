@@ -2,6 +2,7 @@ package com.thisteam.muhansangsa.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -32,9 +33,9 @@ public class WMSWhController {
 		
 		List<WarehouseVO> whList = null; // 창고 목록
 		List<WhAreaVO> whaList = null; // 창고 구역 목록
-		HashMap<String, List<WhAreaVO>> whWhaList = null; // 특정 창고에 해당하는 창고 구역의 목록
+		Map<String, List<WhAreaVO>> whWhaList = null; // 특정 창고에 해당하는 창고 구역의 목록
 		List<WhLocAreaVO> whlaList = null; // 창고 구역 내 위치 목록
-		HashMap<String, List<WhLocAreaVO>> whWhlaList = null; // 특정 창고 구역에 해당하는 창고 구역 내 위치 목록
+		Map<String, List<WhLocAreaVO>> whWhlaList = null; // 특정 창고 구역에 해당하는 창고 구역 내 위치 목록
 		
 		// 창고 가져오기
 		whList = whService.getWarehouseList();
