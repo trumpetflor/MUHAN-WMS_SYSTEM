@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title> 재고조회 | 재고관리</title>
+	<title> 재고 조정 | 재고관리</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -68,8 +68,8 @@
 	
 	/* 모달 */
 	#modal_container_stock{
-	  width: 70%;
-	  height: 700px;
+	  width: 100%;
+	  height: 100%;
 	  position: fixed;
 	  top: 10%;
 	  left: 50%;
@@ -80,9 +80,9 @@
 	 position: relative;
 	}
 	
-	#search_div{
+	.search_div{
 	    width: 400px;
-	    height: 100px;
+	    height: 350px;
 	    background-color: white;
 	    position: absolute;
 	    top: 35px;
@@ -90,27 +90,44 @@
 	    overflow: scroll;
 	    display: none;
 	    z-index: 1;
+	    box-shadow: 1px 1px 30px 3px rgba(169, 168, 167, 0.1);
+	    border-color: rgba(169, 168, 167, 0.2);
 	}
 	
-	#search_div::-webkit-scrollbar {
+	.search_div::-webkit-scrollbar {
     width: 3px;
   }
-	#search_div ul{
+	.search_div ul{
 	padding-left: 0
 	}
-	#search_div li{
+	.search_div li{
 	
 	text-align: left;
 	vertical-align: middle;
 	background:  url(${pageContext.request.contextPath}/resources/images/loc_pin.png) no-repeat 0px 1px;
     list-style-type: none;
-    padding: 1px 1px 8px 20px;
+    padding: 1px 1px 8px 30px;
     transition: 0.5s;
+    margin-top: 2px;
+    height: 50px;
+    
+  
 	}
 	
-	#search_div li:hover {
-	background-color: rgba(169, 168, 167, 0.7);
+	.search_div li:hover {
+	background-color: rgba(169, 168, 167, 0.5);
 	cursor: pointer;
+	}
+	
+	/* 위치검색 div내의 X버튼 --- 안됨 ㅠ*/
+
+	.close-loc-Btn :hover {
+		cursor: pointer;
+		background-color: rgba(169, 168, 167, 0.3);
+	}
+	/* 새 위치 추가 버튼 --- 안됨 ㅠ*/
+	.search_div .add-New-loc :hover {
+		cursor: pointer;  
 	}
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
@@ -129,10 +146,13 @@ $(function () {
 	$(".loc_search").on("click",function(){
 		
 		let product_cd = $(this).closest('td').attr('id');
-		console.log("td의 아이디:" + $(this).closest('td').attr('id') )
+		console.log("td의 아이디:" + $(this).closest('td').attr('id'));
+		$(".search_div").css("display","none");
 		 $(this).next().show();
+		//div버튼 보이기
+		
 	
-		console.log("div의 아이디:" + $(this).next().attr('class') )
+		console.log("class의 아이디:" + $(this).next().attr('class') )
 		
 		
 		$.ajax({
@@ -145,6 +165,8 @@ $(function () {
 	         
 	        contentType: 'application/json;charset=UTF-8',
 	        success: function(data,status,xhr) {
+	        	$("#"+product_cd + "  .search_div ul").empty();
+	        
 				//JSON데이터 이상함 ! 나중에 물어볼것
 // 	               JSON.parse(JSON.stringify(data));
 // 		     	   alert(JSON.parse(JSON.stringify(data)));
@@ -156,12 +178,14 @@ $(function () {
 		     	   JSON.stringify(parsingData)
 		     		 for(let prod of parsingData){
 		     			 
-		     		  let inner_var1 = "\""+prod.wh_loc_in_area_cd+"',";
-		     		  let inner_var2 = "\""+prod.wh_loc_in_area_cd+"\"";
-		     			let result = "<li onclick=\"selected_loc("+ inner_var1+inner_var2+");'> ["+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + "] "
+		     		  let inner_var1 = "\'"+product_cd+"',";//재고번호
+		     		  let inner_var2 = "\'"+prod.wh_loc_in_area_cd+"\',";//위치코드
+		     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\'";
+		     		 
+		     			let result = "<li onclick=\"selected_loc("+ inner_var1+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
 		     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
 		     		 	
-				     		$("#"+product_cd + "  #search_div ul").append(result);
+				     		$("#"+product_cd + "  .search_div ul").append(result);
 		     		 }
 	     	 
 	        },
@@ -173,10 +197,22 @@ $(function () {
 		
 	});
 	
-	
-	$("#closeBtn").on("click",function(){
-		$("#search_div").css("display","none");
+	//위치검색 div내의 X버튼 클릭시
+	$(".close-loc-Btn").on("click",function(){
+		$(".search_div").css("display","none");
 	});
+	
+	//새 위치 추가 버튼 클릭시
+	$("a[href='modal_container_stock']").on("click",function(){
+// 		alert("");C
+		
+	});
+	
+	$(".search_div ul li").on("click",function(){
+		alert();
+	});
+	
+	
 	
 });
 
@@ -185,9 +221,12 @@ function openSearchArea() {
  alert("openSearchArea");
 }
 
-function selected_loc(wh_loc_in_area_cd , product_cd) {
-	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd)
+function selected_loc(wh_loc_in_area_cd , product_cd, wh_loc_in_area) {
+	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd+"/"+wh_loc_in_area );
+	//https://hianna.tistory.com/718
+	document.getElementsByClassName("loc_search").value = wh_loc_in_area_cd;
 }
+
 
 </script>
 <body>
@@ -276,15 +315,13 @@ function selected_loc(wh_loc_in_area_cd , product_cd) {
 				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1"></td>
 				<td style="position: relative;" id="1번">
 					<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-1">
-				    <div id="search_div" class="  rounded-1 ">
-				    <div class="float-right" id="closeBtn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
-				    <div class="mt-3"> 새 위치 추가 + </div>
-				       <hr>
-				     	<ul>
-				     		<li>[B창고-3zone-7] 신라면</li>
-				     		<li>[C창고-5zone-7] 신라면</li>
-				     		<li>[A창고-7zone-7] 신라면</li>
-				     	</ul>
+				    <div class=" rounded-1 search_div">
+					    <div class="float-right close-loc-Btn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
+					    	<a href="#modal_container_stock" rel="modal:open"><div class="mt-3 add-New-loc"> 새 위치 추가 + </div></a>
+					       <hr>
+					     	<ul>
+					     		
+					     	</ul>
 				     	
 				    </div>
 				</td>
@@ -310,7 +347,7 @@ function selected_loc(wh_loc_in_area_cd , product_cd) {
 				<td style="position: relative;" id="2번">
 					<input type="text" placeholder="위치를 선택하세요" class=" loc_search bg-light border border-secondary rounded-1 px-1" id="loc_search">
 				    <div id="search_div" class="search_div  rounded-1 ">
-					    <div class="float-right" id="closeBtn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
+					    <div class="float-right close-loc-Btn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
 					    <div class="mt-3"> 새 위치 추가 + </div>
 					       <hr>
 					     	<ul>
@@ -336,7 +373,7 @@ function selected_loc(wh_loc_in_area_cd , product_cd) {
 
 	<div id="modal_container_stock" class="modal">
 
- 		 <a href="#" rel="modal:close">Close</a>
+<!--  		 <a href="#" rel="modal:close">Close</a> -->
  
 	</div><!-- end of DIV #modal_container -->
 <br><br><br><br><br><br><br><br><br><br><br><br>
