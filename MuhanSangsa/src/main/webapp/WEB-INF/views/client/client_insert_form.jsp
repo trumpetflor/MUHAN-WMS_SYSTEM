@@ -266,7 +266,7 @@
                                     </div>
                                     <div class="row form-group">
 										<div class="col col-md-3">
-											<label for="post_no" class="form-control-label font-weight-bold">주소<font color="red">*</font></label>
+											<label for="post_no" class="form-control-label">주소<font color="red">*</font></label>
 										</div>
 										<div class="col-12 col-md-6 d-flex">
 											<input type="text" id="post_no" name="post_no" placeholder="ex) 00000" class="form-control bg-gradient-light" required="required">

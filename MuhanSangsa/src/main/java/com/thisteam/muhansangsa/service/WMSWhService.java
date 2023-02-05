@@ -36,6 +36,36 @@ public class WMSWhService {
 	public List<Wms_wh_viewVO> getWhViewList() {
 		return whViewMapper.selectWhViewList();
 	}
+
+	// 창고 구역 등록
+	public int registWhArea(WhAreaVO whArea) {
+		return areaMapper.insertWhArea(whArea);
+	}
+
+	// 창고 구역 내 위치 등록
+	public int registWhLocArea(WhLocAreaVO whLocArea) {
+		return locMapper.insertWhLocArea(whLocArea);
+	}
+
+	// 창고 구역 수정
+	public int modifyWhArea(WhAreaVO whArea, String newWhArea) {
+		return areaMapper.updateWhArea(whArea, newWhArea);
+	}
+
+	// 창고 구역 내 위치 수정
+	public int modifyWhLocArea(WhLocAreaVO whLocArea, String newWhLocArea) {
+		return locMapper.updateWhLocArea(whLocArea, newWhLocArea);
+	}
+
+	// 창고 구역 삭제
+	public int deleteWhArea(WhAreaVO whArea) {
+		return areaMapper.deleteWhArea(whArea);
+	}
+
+	// 창고 구역 내 위치 삭제
+	public int deleteWhLocArea(WhLocAreaVO whLocArea) {
+		return locMapper.deleteWhLocArea(whLocArea);
+	}
 	
 	
 }

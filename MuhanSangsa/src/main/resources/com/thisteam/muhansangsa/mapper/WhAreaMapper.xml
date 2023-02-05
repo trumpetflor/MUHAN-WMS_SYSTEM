@@ -8,5 +8,29 @@
 			FROM warehouse_area
 			WHERE wh_cd = #{wh_cd}
 	</select>
+	
+	<!-- 창고 구역 등록 -->
+	<insert id="insertWhArea">
+		INSERT warehouse_area
+			VALUES(
+				#{wh_cd},
+				#{wh_area},
+				0
+			)
+	</insert>
+	
+	<!-- 창고 구역 수정 -->
+	<update id="updateWhArea">
+		UPDATE warehouse_area
+			SET wh_area = #{newWhArea}
+			WHERE wh_area_cd = #{whArea.wh_area_cd}
+	</update>
+	
+	<!-- 창고 구역 삭제 -->
+	<delete id="deleteWhArea">
+		DELETE FROM warehouse_area
+			WHERE wh_area_cd = #{wh_area_cd}
+	</delete>
+	
 
 </mapper>
