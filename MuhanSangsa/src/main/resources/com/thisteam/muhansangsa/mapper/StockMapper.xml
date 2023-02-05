@@ -24,4 +24,24 @@
 			LIMIT #{startRow}, #{listLimit}
 	</select>
 
+	<!-- 재고이력 목록 조회 -->
+	<select id="selectHistoryList" resultType="StockHistoryViewVO">
+		SELECT * 
+			FROM stock_history_view
+			WHERE STOCK_CD = #{stock_cd}
+	</select>
+	
+	<!-- 이동 & 조정수량 입력을 통한 재고 수량 변경 -->
+	<update id="updateStockQty" >
+		UPDATE stock 
+			SET STOCK_QTY = #{qty}
+				WHERE STOCK_CD = #{stock_cd}
+	</update>
+
+	<!--  sId를 통한 사원번호 조회 -->
+	<select id="selectEmpNum" resultType="String">
+		SELECT emp_num 
+			FROM employees
+			WHERE emp_email = #{sId}
+	</select>
 </mapper>
