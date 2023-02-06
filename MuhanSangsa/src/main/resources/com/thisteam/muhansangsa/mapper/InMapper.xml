@@ -5,7 +5,32 @@
 	<select id="selectInProList" resultType="com.thisteam.muhansangsa.vo.inProcessingVO">
 		SELECT *
 			FROM in_processing_view
+  </select>
+	
+	<select id="getClientList" resultType="ClientVO">
+		SELECT business_no,cust_name
+			FROM client
+  </select>
+	
+	<select id="getEmployeeList" resultType="EmployeesVO">
+		SELECT e.emp_num, e.emp_name, e.dept_cd, d.dept_name
+			FROM employees e
+			JOIN department d
+			ON e.dept_cd = d.dept_cd
 	</select>
 	
-
+	<select id="getInList" resultType="InVO">
+		SELECT i.in_schedule_cd,it.in_type_name,c.cust_name,e.emp_name,pd.product_name,i.in_date 
+			FROM in_schedule i
+			JOIN in_type it
+			ON i.in_type_cd = it.in_type_cd
+			JOIN client c
+			ON i.business_no = c.business_no
+			JOIN employees e
+			ON i.emp_num = e.emp_num
+			JOIN in_schedule_per_product ipp
+			ON i.in_schedule_cd = ipp.in_schedule_cd
+			JOIN product pd
+			ON ipp.product_cd = pd.product_cd
+	</select>
 </mapper>
