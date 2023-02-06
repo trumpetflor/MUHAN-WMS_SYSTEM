@@ -29,8 +29,8 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <!-- jQuery Modal -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script> -->
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" /> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 </head>
 <style type="text/css">
 
@@ -70,43 +70,6 @@
 	 width: 80px;
 	 transition: 0.5s;
 	}
-	
-
-/* 	#empChecked{ */
-/* 		margin: 10px; */
-	
-/* 	} */
-
-
-
-/* 모달 */
-/* #modal_container{ */
-/*   position: absolute; */
-/*   width:1800px; */
-/*   height: auto; */
-/*   position: fixed; */
-/*   top:50%; */
-/*   left: 50%; */
-/*   transform:translate(-50%,-50%); */
-/*   overflow-y: scroll; */
-
-
-/* } */
-/* .close-modal{ */
-/*   display: none; */
-/* } */
-	
-/* #modal_container_dept{ */
-/*   position: absolute; */
-/*    height: 70%; */
-/*   position: fixed; */
-/*   top:50%; */
-/*   left: 50%; */
-/*   transform:translate(-50%,-50%); */
-/*   overflow-y: scroll; */
-/*   padding: 2px; */
-
-/* } */
 	
 /* 스크롤바 크기 설정*/
   #modal_container::-webkit-scrollbar {
@@ -160,6 +123,23 @@
 			window.open('InRegisterForm','InRegisterForm', 'width=1000, height=920,location=no,status=no,scrollbars=yes');
 		});
 	});
+	
+	// 1. 입고 버튼 클릭시 - 모달창 open
+	$("#inSchedule").on("click", function(){
+		// 선택된 내용 없을 경우
+		if($('input:checkbox[name=inChecked]:checked').length == 0 ){
+			$("#selected_empList").append("선택된 사원이 없습니다.");
+		}else{
+			$("#selected_empList").empty();
+		}
+	})
+	
+	
+	
+	
+	
+	
+	
 	
 	$("#inButton").on("click", function(){
 		let in_schedule_cd = [];
@@ -248,7 +228,7 @@
 		<tbody>
 		<c:forEach items="${inProList }" var="inlist" varStatus="status" >
 			<tr>
-				<td><input type="checkbox" name="empChecked" id="empChecked" class="form-check-input" value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
+				<td><input type="checkbox" name="inChecked" id="inChecked" class="form-check-input" value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
 				<td>${inlist.in_schedule_cd }</td>
 				<td>${inlist.cust_name }</td>
 				<td>${inlist.product_name }</td>
@@ -263,7 +243,9 @@
 	
 	</table>
 	<div class="float-left">
-		<input type="button" value="입고" class = "btn btn-sm btn-success m-2" name="inButton" id="inButton">
+	<div id="modal-btn-div" class="float-right mt-4">
+		<a href="#modal_container" rel="modal:open"><input type="button" value="입고" class = "btn btn-sm btn-success m-2" id="inSchedule"></a>
+	</div>
 	</div>
 
 

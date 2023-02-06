@@ -153,7 +153,7 @@
                         </div>
                         <div class="card-body card-block">
                         	<form action="WarehouseModifyPro" method="post" enctype="multipart/form-data" class="form-horizontal">
-                        	<c:forEach var="warehouse" items="${inproList }">
+<%--                         	<c:forEach var="warehouse" items="${inproList }"> --%>
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">입고예정번호</label></div>
                         			<div class="col-12 col-md-9">
@@ -204,7 +204,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </c:forEach>
+<%--                             </c:forEach> --%>
                         	</form>
                         </div>
             		</div>
