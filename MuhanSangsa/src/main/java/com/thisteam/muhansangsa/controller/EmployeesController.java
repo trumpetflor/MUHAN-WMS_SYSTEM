@@ -158,13 +158,16 @@ public class EmployeesController {
 		// 임시 패스워드 만드는 로직
 		String passwd = UUID.randomUUID().toString().substring(1, 8);
 		System.out.println("이메일 인증에 사용된 비밀번호 : " + passwd);
+		
+		//23/02/05 사원 등록시 패스워드 암호화 작업 필요함 -> 일단 코드 주석처리 해둠
+		//BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
+		//employee.setEmp_passwd(passwdEncoder.encode(passwd));
 		employee.setEmp_passwd(passwd);
 		
 		
 		// 7. 최종 : 사원 등록 
 		int insertCount = service.registerEmployee(employee);
-		
-		
+				
 		if(insertCount > 0) { // 등록 성공 시
 			// 메일 발송
 			String addr = "switwillbs@gmail.com";
@@ -216,7 +219,7 @@ public class EmployeesController {
 		if(pass == null || passwdEncoder.matches(employee.getEmp_passwd(), pass)) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
 			return "fail_back";
-			
+	
 		} else { // 성공 시
 			session.setAttribute("sId", employee.getEmp_email());//세션 아이디 저장
 			System.out.println("sId");
@@ -234,17 +237,102 @@ public class EmployeesController {
 	
 	//=============================== 인사관리 : 마이페이지(세원) =========================================
 	
-	//사원 목록페이지 (테스트용)
-	// - 상세정보 페이지 접속차
-	@GetMapping(value = "/memberList")
-	public String selectMemberList() {
-		return "member/list"; // login.jsp 로 포워딩
+	//마이페이지 리스트
+	@GetMapping(value = "/Mypage")
+	public String mypage(
+			@RequestParam(defaultValue = "") String msg,
+			Model model, HttpSession session) {
+		
+		//로그인 id 는 sId = emp_email  
+		String id = (String)session.getAttribute("sId");
+		model.addAttribute("msg", msg);
+		
+		// 세션 아이디 
+		if(id == null || id.equals("")) { //실패 시
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다");
+			return "fail_back";
+		} else { //성공시
+			EmployeesVO employees = service.getMypageInfo(id);
+			model.addAttribute("employees", employees);
+			return "employees/myPage";
+		}
 	}
 	
-	//마이페이지
-	@GetMapping(value = "/Mypage")
-	public String insert() {
-		return "member/myPage";
+	//마이페이지 업데이트(수정)
+	@PostMapping(value = "/MypageUpdate")
+	public String mypageUpdate(
+			@RequestParam(defaultValue = "") String msg,
+			@ModelAttribute EmployeesVO employees, 
+			@RequestParam(value ="file", required=false) MultipartFile file,
+			MultipartRequest request,
+			Model model, 
+			HttpSession session){
+		
+		String sId = (String)session.getAttribute("sId");
+		
+		System.out.print("employees.getEmp_email()::"+employees.getEmp_email());
+		
+		if(sId != null) { // 세션아이디가 있을 경우 시작 
+			
+			//비밀번호 확인
+			if(!employees.getEmp_passwd().equals(employees.getEmp_comfirmPasswd())) {
+				model.addAttribute("msg", "비밀번호가 일치하지않습니다.");
+				return "fail_back";
+			}
+			
+			//패스워드 값이 있을경우 암호화
+			if(employees.getEmp_passwd() != null && ! "".equals(employees.getEmp_passwd())) {
+				BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder();
+				employees.setEmp_passwd(passwdEncoder.encode(employees.getEmp_passwd()));
+			}
+	
+			//---------- 파일 수정 관련 시작 ---------
+			if(file.getSize() >0 ) { // 첨부파일을 수정할 경우 1이상 카운트 되기때문에 이렇게 조건문 줬음! 
+				//파일업로드 시작
+				// 파일 업로드를 위한 변수 설정
+				String uploadDir = "/resources/upload";
+				String saveDir = session.getServletContext().getRealPath(uploadDir);
+				
+				// 5. 이미지 파일명 추출하기 (파일명이 중복일 경우 발생하는 문제 해결해야함)
+				String photo = file.getOriginalFilename().toString();
+				System.out.println("뭐가 넘어오나 : " + photo);
+				employees.setPhoto(photo);
+				
+				File f = new File(saveDir, photo);
+				
+					try {
+						file.transferTo(f);
+					} catch (IllegalStateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+						
+					// 파일 경로가 존재하지 않을 경우 파일 경로 생성
+					if(!f.exists()) {
+						f.mkdirs();
+					}
+			
+				} //---------- 파일 수정 관련 끝 ---------
+			
+			
+			int updateCount  = service.updateMypageMember(employees);
+			
+			if(updateCount > 0) { // 등록 성공 시
+				return "redirect:/Mypage?&msg="+"1"; //성공일땐 1, 실패일땐 2
+
+			} else {
+				model.addAttribute("msg", "마이페이지 수정 실패");
+				return "fail_back";
+			}
+			
+		} else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
+	
 	}
 
 	//=============================== 인사관리 : 사원 상세페이지 (세원) =========================================
@@ -255,12 +343,24 @@ public class EmployeesController {
 		return "member/memberDetail";
 	}	
 
-	//사원 상세정보 수정페이지
-	@GetMapping(value = "/memberListDetailModify")
-	public String memberListDetailModify() {
-		return "member/memberModify";
+	//사원 상세정보 수정 (update)
+	@GetMapping(value = "/empListDetailUpdate")
+	public String memberListDetailUpdate(
+			@RequestParam(defaultValue = "") String id,
+			Model model) {
+		EmployeesVO employees = service.getMypageInfo(id);
+		model.addAttribute("employees", employees);
+		
+		return "employees/emp_ListDetailUpdate";
 	}	
 	
+	@PostMapping(value = "/empListDetailUpdatePro")
+	public String memberListDetailUpdatePro(
+			@ModelAttribute EmployeesVO employees, 
+			Model model, 
+			HttpSession session){
+		
+		String sId = (String)session.getAttribute("sId");
 
 	// ================================= hawon =================================
 	//---------------------------------------------------------------------------------------------------------------------
@@ -343,8 +443,32 @@ public class EmployeesController {
 		return "emp_List";	
 	}
 		
-	@GetMapping(value = "/employeesUpdate")
-	public String emp_update(Model model, HttpSession session){
+
+	
+
+	@ResponseBody
+	@PostMapping(value = "/emp_update_part.ajax")
+	public void emp_update_part(@RequestBody Map<String, Object> map,
+								Model model, HttpSession session){
+		//@RequestParam List<EmployeesVO> emp => 안됨
+//		work.getWork_type();
+//		dept.getDept_name();
+		System.out.println("ajax성공 data : "+map);
+//		System.out.println("employees"+ employees);
+//		System.out.println("work_type"+ work_type.getWork_type());
+//		System.out.println("dept_name"+ dept_name.getDept_name());
+//		System.out.println("selectedModalRadioVal: " +selectedModalRadioVal);
+		
+		
+//		if(	work.getWork_type() != null	) {
+			
+//				int updateWorkCount = service.updateEmpWork();
+//		}else {
+			
+//				int updateDeptCount = service.updateEmpDept();
+//		}
+			
+		
 		
 		session.getAttribute("sId");
 		

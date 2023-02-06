@@ -53,10 +53,10 @@ public class EmployeesService {
 
 		boolean isRightUser = false;
 	
-	
+		
 		String priv_cp = mapper.getPrivilege(sId);
-		priv_cp = "00111";
-		System.out.println("priv_cp: " + priv_cp);
+		priv_cp = "11111111";
+		System.out.println(" 나중에 주석지우기 ! priv_cp: " + priv_cp);
 		
 		StringBuffer buffer = new StringBuffer(priv_cp);
 		priv_cp = buffer.reverse().toString();

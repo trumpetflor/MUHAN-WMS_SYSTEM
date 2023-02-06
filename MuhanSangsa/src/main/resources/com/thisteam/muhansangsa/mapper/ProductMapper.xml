@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.thisteam.muhansangsa.mapper.ProductMapper">
+
+	<!-- 품목 등록 (insert) -->
+	<insert id="insertProduct" >
+			INSERT 
+				INTO product
+				(
+				product_name
+				, product_group_bottom_cd
+				, unit
+				, barcode
+				, in_unit_price
+				, out_unit_price
+				, product_type_cd
+				, business_no
+				, product_image
+				, remarks
+				)
+				VALUES
+				(
+					#{product_name}
+					,#{product_group_bottom_cd}
+					,#{unit}
+					,#{barcode}
+					,#{in_unit_price}
+					,#{out_unit_price}
+					,#{product_type_cd}
+					,#{business_no}
+					,#{product_image}
+					,#{remarks}
+				); 
+		</insert>
+		
+	<!-- 그룹명(코드) 목록을 조회하는 SELECT -->
+	<select id="selectGroupList" resultType="com.thisteam.muhansangsa.vo.Product_group_bottomVO">
+		SELECT 
+				product_group_top_cd
+				, product_group_bottom_cd
+				, product_group_bottom_name
+		FROM product_group_bottom
+			<if test="!keyword.equals('')">
+			WHERE
+			<choose>
+				<when test="searchType.equals('product_group_bottom_cd')">
+					product_group_bottom_cd LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('product_group_bottom_name')">
+					product_group_bottom_name LIKE '%${keyword}%'
+				</when>
+			</choose>		
+		</if>
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>	
+	
+	<!-- 품목 목록 조회 SELECT  -->
+	<!-- 조인! product p, product_group_bottom pgb (품목그룹 소분류), client c (거래처)  -->
+	<select id="selectProductList" resultType="com.thisteam.muhansangsa.vo.ProductVO">
+		SELECT
+			p.product_cd
+			, p.product_name
+			, p.product_group_bottom_cd
+			, pgb.product_group_bottom_name
+			, p.unit
+			, p.barcode
+			, p.in_unit_price
+			, p.out_unit_price
+			, p.product_type_cd
+			, p.business_no
+			, c.cust_name
+			, p.product_image
+			, p.remarks
+		FROM
+			product p, product_group_bottom pgb, client c  
+		WHERE 
+			p.product_group_bottom_cd = pgb.product_group_bottom_cd
+			AND p.business_no = c.business_no
+			<if test="!keyword.equals('')">
+			<choose>
+				<when test="searchType.equals('product_name')">
+					AND p.product_name LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('product_group_bottom_name')">
+					AND pgb.product_group_bottom_name LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('cust_name')">
+					AND c.cust_name LIKE '%${keyword}%'
+				</when>				
+			</choose>
+			</if>
+		ORDER BY 
+			p.product_cd DESC
+		LIMIT 
+			#{startRow} , #{listLimit}	
+	</select>
+
+	<!-- 전체 품목 수량 조회 SELECT  -->
+	<select id="selectProductListCount" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM product p, product_group_bottom pgb, client c  
+		WHERE 
+			p.product_group_bottom_cd = pgb.product_group_bottom_cd
+			AND p.business_no = c.business_no
+		<if test="!keyword.equals('')">
+		<choose>
+			<when test="searchType.equals('product_name')">
+				AND p.product_name LIKE '%${keyword}%'
+			</when>
+			<when test="searchType.equals('product_group_bottom_name')">
+				AND pgb.product_group_bottom_name LIKE '%${keyword}%'
+			</when>
+			<when test="searchType.equals('cust_name')">
+				AND c.cust_name LIKE '%${keyword}%'
+			</when>				
+		</choose>
+		</if>
+	</select>
+
+	<!-- 5. 품목 그룹 목록 상세조회 페이지 출력용  -->
+	<select id="selectProdUpdate" resultType="com.thisteam.muhansangsa.vo.ProductVO">
+		SELECT
+			p.product_cd
+			,p.product_name
+			, p.product_group_bottom_cd
+			, pgb.product_group_bottom_name
+			, p.unit
+			, p.barcode
+			, p.in_unit_price
+			, p.out_unit_price
+			, p.product_type_cd
+			, p.business_no
+			, c.cust_name
+			, p.product_image
+			, p.remarks
+		FROM
+			product p, product_group_bottom pgb, client c  
+		WHERE 
+			p.product_group_bottom_cd = pgb.product_group_bottom_cd
+			AND p.business_no = c.business_no
+			and p.PRODUCT_CD = #{product_cd};
+	
+	</select>
+
+	<!-- 품목 상세정보 수정 진행(update) -->
+	<!-- 
+	주의! 사진은 수정을 하지않은 경우가 있다! 다만 조건문이 없을 경우 기존 등록된 사진이 삭제되므로,
+	if 조건문 사용(image가 null 또는 공백이 아닌경우)
+	 -->
+		<update id="updateProdUpdate">
+		UPDATE product
+			SET
+				product_name = #{product_name},
+				product_group_bottom_cd = #{product_group_bottom_cd},
+				unit = #{unit},
+				in_unit_price = #{in_unit_price},
+				out_unit_price = #{out_unit_price},
+				product_type_cd = #{product_type_cd},
+				business_no = #{business_no},
+				<if test='product_image != null and product_image != ""'>
+					product_image = #{product_image},
+				</if>
+				remarks = #{remarks}
+			WHERE
+				product_cd = #{product_cd};
+	</update>
+	
+	<!-- 품목 그룹 신규 등록(Modal)  -->
+	<!-- 내가 만든 규칙! product_group_top_cd은 무조건 1이다 -->
+	<insert id="insertProdGroupBottomNameInsert" >
+			INSERT 
+				INTO product_group_bottom
+				(
+				product_group_top_cd
+				, product_group_bottom_name
+				)
+				VALUES
+				(
+					1
+					,#{product_group_bottom_name}
+					); 
+		</insert>	
+</mapper>

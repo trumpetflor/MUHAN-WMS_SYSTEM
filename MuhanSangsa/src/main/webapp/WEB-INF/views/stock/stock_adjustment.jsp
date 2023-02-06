@@ -3,6 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
+
 	<title> 재고조회 | 재고관리</title>
 
     <meta charset="utf-8">
@@ -27,6 +28,7 @@
 <!-- 모달창 -->
 <!-- Remember to include jQuery :) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src= "${pageContext.request.contextPath }/resources/js/jquery-3.6.3.js"></script>
 
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
@@ -53,9 +55,13 @@
 	table{
 	 text-align: center;
 	}
-	
-
-	 a{
+	input[type=number]{
+		width: 70px;
+	}
+	input[type=text]{
+		width: 70px;
+	}
+	a{
 	 text-decoration: none;
 	 color: 	#000080;
 	}
@@ -73,10 +79,43 @@
 	  left: 50%;
 	  overflow-y: scroll;
 	}
+	
+	tr{
+	position: relative;
+	}
+	
+	#search_div{
+	    width: 300px;
+	    height: 100px;
+	    background-color: white;
+	    position: absolute;
+	    top: 35px;
+	    margin-left: 10px;
+	    overflow: scroll;
+	    display: none;
+	    z-index: 1;
+	}
+	
+	#search_div::-webkit-scrollbar {
+    width: 3px;
+  }
+	#search_div ul{
+	padding-left: 0
+	}
+	#search_div li{
+	
+	text-align: left;
+	vertical-align: middle;
+	background:  url(${pageContext.request.contextPath}/resources/images/loc_pin.png) no-repeat 0px 1px;
+    list-style-type: none;
+    padding: 1px 1px 8px 20px;
+	}
+	
+	li::maker{
+	 content: url(${pageContext.request.contextPath}/resources/images/loc_pin.svg);
+	}
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
-
-
 
 
 
@@ -86,111 +125,44 @@ function openStockModal() {
 	
 }
 
-
-
-
-
-$(function(){
-	//전체선택 버튼 클릭
-	$('input:checkbox[name=AllChecked]').on("click",function(){
-		if($(this).is(":checked") == true){
-			$("input[name=stockChecked]").prop("checked",true);
-		}else{
-			$("input[name=stockChecked]").prop("checked",false);
-		}
-	});
+$(function () {
+	$("#loc_search").on("click",function(){
 	
-	//체크박스 클릭
-	$(document).on("change","input[name=stockChecked]",function(){
-		$("#selectCount > small").html($('input:checkbox[name=stockChecked]:checked').length +" 개 선택됨");
-		let stock_cd = $(this).val();
-		
-		
-		
-		
-	});
-	//하단 조정버튼 클릭시
-	$("#stockAdjustmentBtn").on("click",function(){
-		
-		let stock_cd = [];//배열 선언, 변수명 컨트롤러 파라미터명과 동일
-     	$('input:checkbox[name=stockChecked]').each(function (index) {
-     		
-     		if($(this).is(":checked")==true){
-     	    	console.log("id값=stock_cd :"+$(this).val());
-     	   		stock_cd.push($(this).val());//배열에 추가
-     	    }
-     	});
-		
-    	console.log("stock_cd[] : "+ stock_cd);
-    	let result = confirm("재고번호 "+$('input:checkbox[name=stockChecked]:checked').length+ " 개를 조정하시겠습니까? ");
-    	if(result){
-	    	location.href="StockAdjustment?stock_cd="+stock_cd
-    	}
+		$("#search_div").css("display","block");
 	});
 	
 	
+	$("#closeBtn").on("click",function(){
+		$("#search_div").css("display","none");
+	});
 	
+// 	var total = $("#RealStockQty").val();
+//     $('.bg-light border border-secondary rounded-1 px-1').on("change",function(){
+//         total += Number($(this).val());
+//     });
+//     $('input[id="TotalStockQty"]').val(total - Number($("#RealStockQty").val()));
 	
-	//-----------------------------
-	//전체합을 계산할 변수 선언
-	let sum = 0;
-	
-	$('.stock_qty').each(function(index,item){
+    $('#RemoveStockQty, #MVStockQty').on('change', function() {
+		$('#TotalStockQty').val(Number($('#RealStockQty').val()) - Number($('#RemoveStockQty').val()) - Number($('#MVStockQty').val())
+		)
+	});
+    
+});
 
-// 		console.log($(".stock_qty").eq(index).text());
-// 		console.log(typeof(Number($(".stock_qty").eq(index).text())));
-// 		console.log(isNaN(Number($(".stock_qty").eq(index).text())));
-		sum += Number($(".stock_qty").eq(index).text());
-		
-		
-	  });
-	//전체합 계산
-	$("#sum_result").html("<b>"+sum+"</b>");
-	
-});//$(function(){------------------------------------------------
-
-function productInfo(product_cd) {
-// 	$.ajax({
-		
-//         type: "get",
-//         url: "getProduct_StockInfo.ajax",
-//         data: {
-//         	"product_cd":product_cd
-//         },
-         
-//         contentType: 'application/json;charset=UTF-8',
-//         success: function(data,status,xhr) {
-//         	$("#"+product_cd + "  .search_div ul").empty();
-        
-// 			//JSON데이터 이상함 ! 나중에 물어볼것
-// //	               JSON.parse(JSON.stringify(data));
-// //		     	   alert(JSON.parse(JSON.stringify(data)));
-	     	   
-// 	     	   let parsingData = JSON.parse(data);
-// //		     	  alert(parsingData);
-// //		     	  alert(JSON.stringify(parsingData));
-				
-// 	     	   JSON.stringify(parsingData)
-// 	     		 for(let prod of parsingData){
-	     			 
-// 	     		  let inner_stock_cd_product_cd = "\'"+stock_cd+"','"+product_cd+"'," //재고번호
-// 	     		  let inner_var2 = "\'"+prod.wh_loc_in_area_cd+"\',";//위치코드
-// 	     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\'";
-	     		 
-// 	     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
-// 	     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
-	     		 	
-// 			     		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").prepend(result);
-// 	     		 }
-     	 
-//         },
-//         error: function(xhr,status,error) {
-//             console.log(error);
-//         }
-	
-// 	});//$.ajax({
-	
+function openSearchArea() {
+	$("#search_div").css("display","none");
 }
+
+// 합계수량 자동계산 (재고-조정-이동)
+function autoCal(){
+// 	alert("자동수량");
+//     var total = 0;
+//     $('.bg-light border border-secondary rounded-1 px-1').each(function(){
+//         total += Number($(this).val());
+//     });
+//     $('input[id="TotalStockQty"]').val(total - Number($("#RealStockQty").val()));
+}
+
 </script>
 <body>
 
@@ -213,6 +185,7 @@ function productInfo(product_cd) {
                                 <ol class="breadcrumb text-right ">
                                     <li><a href="employees">재고 관리</a></li>
                                     <li><a href="#">재고 조회</a></li>
+                                   
                                 </ol>
                             </div>
                         </div>
@@ -240,51 +213,101 @@ function productInfo(product_cd) {
 				<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
 		</form>
 	   </section>
-<!-- 창고 구역 내의 상세 위치에 등록되어 있는 재고 목록 표시 
-	 재고번호, 품목명, 규격, 창고명, 구역명, 위치명, 재고수량 표시 
-	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 -->
+<!-- 재고번호, 품목명 , 구역명(창고명), 선반위치, 재고수량, //
+  조정수량, 이동재고번호, 이동위치, 이동수량, 합계수량 -->
 
-	<div id = "selectCount"><small class="text-secondary"> 0 개 선택됨</small></div>
+	<form action="StockModifyPro" method="post">
 	<table class="table"  id="">
+
 		<thead>
 			<tr>
-				<th><input type="checkbox" name="AllChecked"></th>
 				<th>재고번호</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
 				<th>품목명</th>
-				<th>창고명</th>
-				<th>구역명</th>
-				<th>위치명</th>
+				<th>창고 및 구역명</th>
+				<th>세부위치</th>
 				<th>재고수량</th>
+				<th>작업 선택</th>
+				<th>조정수량</th>
+				<th>이동재고번호(이동위치)</th>
+				<th>이동수량</th>
+				<th>합계수량</th>
 			</tr> 
 		</thead>
 		<tbody>
-		<c:forEach items="${stockList }" var="stock" varStatus="status" >
 			<tr>
-			<td align="center"><input type="checkbox" name="stockChecked" class="form-check-input" value="${stock.stock_cd }"></td>
-<%-- 				<td onclick="openStockModal('${stock.stock_cd }')">${stock.stock_cd }</td> --%>
-				<td><a href="Inventory_History_View?stock_cd=${stock.stock_cd }">${stock.stock_cd }</a></td>
-				<td onclick="productInfo('${stock.product_cd}');">${stock.product_name}</td>
-				<td>${stock.wh_name }</td>
-				<td>${stock.wh_area }</td>
-				<td>${stock.wh_loc_in_area }</td>
-				<td class="stock_qty">${stock.stock_qty }</td>
-			</tr>
-			</c:forEach>
+				<td><input type="text" name="stock_cd" class="bg-light border border-secondary rounded-1 px-1" ></td>
+				<td>[농심]신라면</td>
+				<td>A - 4 zone</td>
+				<td>7-a</td>
+				<td><input type="text" id="RealStockQty" value="2000" name="qty" class="RealStockQty bg-light border border-secondary rounded-1 px-1" ></td>
+				<td>
+					<select class=" bg-light border border-secondary rounded-1 px-1" name="stock_control_type_cd">
+						<option value="0">입고</option>
+						<option value="1">출고</option>
+						<option value="2">이동</option>
+						<option value="3">조정</option>
+					</select>
+				</td>
+				<td><input type="number" id="RemoveStockQty" name="RemoveStockQty" class=" bg-light border border-secondary rounded-1 px-1" ></td>
+				<td><input type="text" placeholder="위치를 선택하세요" class=" bg-light border border-secondary rounded-1 px-1" id="loc_search"
+				name="target_stock_cd">
+				    <div id="search_div" class="  rounded-1 ">
+				    <div class="float-right" id="closeBtn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
+				    <div class="mt-3"> 새 위치 추가 + </div>
+				       <hr>
+				     	<ul>
+				     		<li>[B창고-3zone-7] 신라면</li>
+				     		<li>[C창고-5zone-7] 신라면</li>
+				     		<li>[A창고-7zone-7] 신라면</li>
+				     	</ul>
+				     	
+				    </div>
+				</td>
+				<td><input type="number" id="MVStockQty"  name="MVStockQty" class=" bg-light border border-secondary rounded-1 px-1" ></td>
+				<td><input type="text" id="TotalStockQty" name="TotalStockQty" class="bg-light border border-secondary rounded-1 px-1" ></td>
+			</tr> 
 			<tr>
-				<td colspan="6" align="right"><b>합계 :</b></td><td id="sum_result"></td>
-			<tr>
+				<td>111111</td>
+				<td>[농심]신라면</td>
+				<td>A - 4 zone</td>
+				<td>7-a</td>
+				<td>1000개</td>
+				<td>
+					<select class=" bg-light border border-secondary rounded-1 px-1">
+						<option>입고</option>
+						<option>출고</option>
+						<option>이동</option>
+						<option>조정</option>
+					</select>
+				</td>
+				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1"></td>
+				<td><input type="text" placeholder="위치를 선택하세요" class=" bg-light border border-secondary rounded-1 px-1" id="loc_search">
+				    <div id="search_div" class="  rounded-1 ">
+				    <div class="float-right" onclick="openSearchArea()"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
+				    <div class="mt-3"> 새 위치 추가 + </div>
+				       <hr>
+				     	<ul>
+				     		<li>[B창고-3zone-7] 신라면</li>
+				     		<li>[C창고-5zone-7] 신라면</li>
+				     		<li>[A창고-7zone-7] 신라면</li>
+				     	</ul>
+				     	
+				    </div>
+				</td>
+				<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1"></td>
+				<td></td>
+				<td></td>
+			</tr> 
 		</tbody>
-	
 	</table>
-	<div id="modal-btn-div" class="float-right">
-		 <input type="button" value="조정" class = "btn btn-primary btn-sm  " id="stockAdjustmentBtn">
-	</div>
-
+		<input type="submit" value="조정" class=" mx-1 btn btn-sm btn-dark rounded-1">
+		<input type="reset" value="초기화" class=" mx-1 btn btn-sm btn-dark rounded-1">
+	</form>
 </div>
 </div>
 <!-- 재고번호 클릭시 보이는 모달 영역 DIV  -->
 
-	<div id="modal_container_product" class="modal">
+	<div id="modal_container_stock" class="modal">
 
  		 <a href="#" rel="modal:close">Close</a>
  
