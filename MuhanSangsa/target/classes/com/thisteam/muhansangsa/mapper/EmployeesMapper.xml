@@ -20,7 +20,7 @@
 							</otherwise>
 						</choose>
 						<choose>
-							<when test="emp_num eq null">
+							<when test="emp_Num eq null">
 							,1
 							</when>
 							<otherwise>
@@ -66,12 +66,67 @@
     
 
 <!-- =============================== 인사관리 : 로그인(세원) =========================================  -->
-<!-- 로그인, 패스워드 확인  -->
-<select id="selectPass" resultType="string">
-	SELECT emp_passwd
-		FROM employees
-		WHERE emp_email = #{emp_email}
-</select>
+	<!-- 로그인, 패스워드 확인  -->
+	<select id="selectPass" resultType="string">
+		SELECT emp_passwd
+			FROM employees
+			WHERE emp_email = #{emp_email}
+	</select>
+
+	<!-- 마이페이지 정보 조회 -->
+	<!-- 로그인 id 는 sId = emp_email    -->
+	<select id="selectMypageInfo" resultType="com.thisteam.muhansangsa.vo.EmployeesVO">
+	SELECT e.emp_num
+			, e.emp_name
+			, e.dept_cd
+			, d.dept_name
+			, e.grade_cd
+            , g.grade_name
+			, e.emp_tel
+			, e.emp_dtel
+			, e.emp_email
+			, e.emp_passwd
+			, e.emp_post_No
+			, e.emp_addr
+			, e.hire_date
+			, e.work_cd 
+			, e.photo
+		FROM  employees e, department d, grade g
+		WHERE 
+		 	e.DEPT_CD = d.DEPT_CD
+            AND e.grade_cd = g.grade_cd
+			AND e.emp_email = #{id}
+	</select>
+
+	<!-- 마이페이지 수정 (업데이트 작업) -->
+	<update id="updateMypageMember">
+		UPDATE	employees 
+			SET EMP_TEL = #{emp_tel}
+				,EMP_DTEL = #{emp_dtel}
+				<if test='emp_passwd != null and emp_passwd != ""'>
+					,EMP_PASSWD = #{emp_passwd}
+				</if>
+				,PHOTO = #{photo}
+			WHERE EMP_EMAIL = #{emp_email}
+	</update>
+
+	<!-- 상세페이지 수정(업데이트 작업) -->
+	<update id="updateDetail">
+		UPDATE	employees 
+			SET EMP_NUM = #{emp_num}
+				,EMP_NAME = #{emp_name}
+				,DEPT_CD = #{dept_cd}
+				,GRADE_CD = #{grade_cd}
+				,EMP_TEL = #{emp_tel}
+				,EMP_DTEL = #{emp_dtel}
+				,EMP_EMAIL = #{emp_email}
+				,HIRE_DATE = #{hire_date}
+				,WORK_CD = #{work_cd}
+				,PHOTO = #{photo}
+			WHERE EMP_EMAIL = #{emp_email}
+	
+	</update>
+
 
 
 <!-- ===================================== hawon =========================================  -->
@@ -79,22 +134,7 @@
 	<!-- ===================================== 사원 조회 시작===================================== -->
 	<select id="selectMemberList" resultType="Emp_viewVO">
 		<!-- 사원조회 -->
-		SELECT	IDX
-				,EMP_NUM
-				,EMP_NAME
-				,DEPT_CD
-				,DEPT_NAME
-				,GRADE_CD
-				,GRADE_NAME
-				,EMP_TEL
-				,EMP_DTEL
-				,EMP_EMAIL
-				,EMP_POST_NO
-				,EMP_ADDR
-				,HIRE_DATE
-				,WORK_TYPE
-				,PRIV_TYPE
-				,PHOTO
+		SELECT	*
 		 FROM emp_view
 	 		<if test="!keyword.equals('')">
 			
@@ -118,6 +158,8 @@
 				</otherwise>
 			</choose>		
 			</if>
+			
+			LIMIT #{startRow}, #{listLimit}
 		
 	</select>
 		
@@ -140,8 +182,6 @@
 				,EMP_DTEL = #{emp_dtel}
 				,EMP_EMAIL = #{emp_email}
 				,EMP_PASSWD = #{emp_passwd}
-				,EMP_POST_NO = #{emp_post_no}
-				,EMP_ADDR = #{emp_addr}
 				,HIRE_DATE = #{hire_date}
 				,WORK_CD = #{work_cd}
 				,PRIV_CD = #{priv_cd}
@@ -169,8 +209,21 @@
 		SELECT EMP_NUM,EMP_NAME , GRADE_NAME , EMP_TEL, EMP_DTEL, EMP_EMAIL
 		FROM emp_view  
 		WHERE DEPT_NAME = (select DEPT_NAME from department where DEPT_CD= #{dept_cd})
-		order by GRADE_CD desc;
+		order by GRADE_CD desc
 	</select>
+	
+	<!--  -->
+	<select id="selectDeptList" resultType="DepartmentVO">
+		SELECT *
+		FROM department
+	
+	</select>
+	<select id="selectWorkList" resultType="WorksVO">
+		SELECT *
+		FROM works
+	</select>
+	
+	
 	<!-- ===================================== 사원 조회 끝===================================== -->
 	<!-- ===================================================================================================== -->
 
