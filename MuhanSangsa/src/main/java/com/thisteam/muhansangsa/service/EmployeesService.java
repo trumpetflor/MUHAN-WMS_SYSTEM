@@ -87,8 +87,8 @@ public class EmployeesService {
 	
 		
 		String priv_cp = mapper.getPrivilege(sId);
-	
-		System.out.println("priv_cp: " + priv_cp);
+		priv_cp = "11111111";
+		System.out.println(" 나중에 주석지우기 ! priv_cp: " + priv_cp);
 		
 		//2진수인 priv_cp의 순서 reverse
 //		StringBuffer buffer = new StringBuffer(priv_cp);
