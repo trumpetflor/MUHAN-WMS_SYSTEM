@@ -266,7 +266,7 @@
                                     </div>
                                     <div class="row form-group">
 										<div class="col col-md-3">
-											<label for="post_no" class="form-control-label font-weight-bold">주소<font color="red">*</font></label>
+											<label for="post_no" class="form-control-label">주소<font color="red">*</font></label>
 										</div>
 										<div class="col-12 col-md-6 d-flex">
 											<input type="text" id="post_no" name="post_no" placeholder="ex) 00000" class="form-control bg-gradient-light" required="required">
@@ -342,11 +342,11 @@
 <!-- Right Panel -->
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
+<%-- <script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script> --%>
 <script src="${pageContext.request.contextPath}/resources/assets/js/lib/chosen/chosen.jquery.min.js"></script>
 
 <script>

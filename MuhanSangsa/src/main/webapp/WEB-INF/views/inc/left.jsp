@@ -78,13 +78,8 @@
                     </li>
                     
                     <li class="menu-title">WMS</li><!-- /.menu-title -->
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>창고 관리</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="#">거래처 등록</a></li>
-                            <li><i class="fa fa-table"></i><a href="#">창고 등록</a></li>
-                            <li><i class="fa fa-table"></i><a href="Wms-item">품목 등록</a></li>
-                        </ul>
+                    <li>
+                        <a href="WmsWarehouse"><i class="menu-icon ti-email"></i>창고 관리</a>
                     </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>입고 관리</a>
