@@ -1,3 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
-<configuration></configuration>
+<configuration>
+
+
+<!-- XXXmapper.xml파일에서 com.thisteam.muhansangsa.vo.EmployeesVO 쓰는 대신 EmployeesVO만 쓰면 됨 ! -->
+	<typeAliases>
+		<typeAlias type="com.thisteam.muhansangsa.vo.EmployeesVO" alias="EmployeesVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.DepartmentVO" alias="DepartmentVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.GradeVO" alias="GradeVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.PrivilegeVO" alias="PrivilegeVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.WarehouseVO" alias="WarehouseVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.ClientVO" alias="ClientVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.WorksVO" alias="WorksVO"/><!-- 테이블명 변경으로 VO도 변경 -->
+		<typeAlias type="com.thisteam.muhansangsa.vo.Emp_viewVO" alias="Emp_viewVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.WhAreaVO" alias="WhAreaVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.WhLocAreaVO" alias="WhLocAreaVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.Stock_viewVO" alias="Stock_viewVO"/>
+	</typeAliases>
+	
+	
+</configuration>

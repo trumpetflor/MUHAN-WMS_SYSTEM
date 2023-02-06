@@ -77,14 +77,12 @@
 <!-- ===================================== hawon =========================================  -->
 <!-- ===================================================================================================== -->
 	<!-- ===================================== 사원 조회 시작===================================== -->
-	<select id="selectMemberList" resultType="Emp_viewVO">
+	<select id="selectMemberList" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
 		<!-- 사원조회 -->
 		SELECT	IDX
 				,EMP_NUM
 				,EMP_NAME
-				,DEPT_CD
 				,DEPT_NAME
-				,GRADE_CD
 				,GRADE_NAME
 				,EMP_TEL
 				,EMP_DTEL
@@ -97,25 +95,22 @@
 				,PHOTO
 		 FROM emp_view
 	 		<if test="!keyword.equals('')">
-			
+			WHERE
 			<!-- 2. 검색타입(searchType) 에 따른 WHERE 대상 변경 -->
 			<!-- => 조건이 복수개이므로 choose 태그 사용 -->
 			<choose>
 				<when test="searchType.equals('emp_name')">
-					WHERE EMP_NAME LIKE '%${keyword}%'
+					EMP_NAME LIKE '%${keyword}%'
 				</when>
 				<when test="searchType.equals('emp_num')">
-					WHERE EMP_NUM LIKE '%${keyword}%'
+					EMP_NUM LIKE '%${keyword}%'
 				</when>
 				<when test="searchType.equals('emp_email')">
-					WHERE EMP_EMAIL LIKE '%${keyword}%'
+					EMP_EMAIL LIKE '%${keyword}%'
 				</when>
 				<when test="searchType.equals('dep_name')">
-					WHERE DEPT_NAME LIKE '%${keyword}%'
+					DEPT_NAME LIKE '%${keyword}%'
 				</when>
-				<otherwise>
-				
-				</otherwise>
 			</choose>		
 			</if>
 		
@@ -151,25 +146,11 @@
 	</update>
 	
 	<!-- 사원 상세조회 -->
-	<select id="selectEmployee" resultType="Emp_viewVO">
+	<select id="selectEmployee" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
 		SELECT *
 		FROM emp_view
 			WHERE EMP_EMAIL = #{emp_email}
 		
-	</select>
-	
-	<!-- 부서 직급 정보-->
-	<select id="selectDeptInfo_count" resultType="HashMap">
-		SELECT GRADE_NAME,count(GRADE_NAME) as count
-		FROM emp_view e, department d
-		WHERE e.DEPT_Name =d.DEPT_Name and  d.DEPT_CD = #{dept_cd} group by GRADE_NAME
-	</select>
-	
-	<select id="selectDeptMember" resultType="Emp_viewVO">
-		SELECT EMP_NUM,EMP_NAME , GRADE_NAME , EMP_TEL, EMP_DTEL, EMP_EMAIL
-		FROM emp_view  
-		WHERE DEPT_NAME = (select DEPT_NAME from department where DEPT_CD= #{dept_cd})
-		order by GRADE_CD desc;
 	</select>
 	<!-- ===================================== 사원 조회 끝===================================== -->
 	<!-- ===================================================================================================== -->

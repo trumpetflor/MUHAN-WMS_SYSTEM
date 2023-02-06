@@ -511,12 +511,12 @@ public class EmployeesController {
 
 	@ResponseBody
 	@PostMapping(value = "/emp_update_part.ajax")
-	public void emp_update_part(@RequestBody Map<String, Object> data,
+	public void emp_update_part(@RequestBody Map<String, Object> map,
 								Model model, HttpSession session){
 		//@RequestParam List<EmployeesVO> emp => 안됨
 //		work.getWork_type();
 //		dept.getDept_name();
-		System.out.println(data);
+		System.out.println("ajax성공 data : "+map);
 //		System.out.println("employees"+ employees);
 //		System.out.println("work_type"+ work_type.getWork_type());
 //		System.out.println("dept_name"+ dept_name.getDept_name());

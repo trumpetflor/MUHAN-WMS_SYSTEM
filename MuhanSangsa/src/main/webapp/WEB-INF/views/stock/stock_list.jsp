@@ -41,6 +41,8 @@
 	    font-style: normal;
 	}
 	
+	select * from
+	
 	body {
 	 font-family: 'NEXON Lv1 Gothic OTF';
 	 width: 100%;
@@ -88,6 +90,109 @@ function openStockModal() {
 
 
 
+
+
+$(function(){
+	//전체선택 버튼 클릭
+	$('input:checkbox[name=AllChecked]').on("click",function(){
+		if($(this).is(":checked") == true){
+			$("input[name=stockChecked]").prop("checked",true);
+		}else{
+			$("input[name=stockChecked]").prop("checked",false);
+		}
+	});
+	
+	//체크박스 클릭
+	$(document).on("change","input[name=stockChecked]",function(){
+		$("#selectCount > small").html($('input:checkbox[name=stockChecked]:checked').length +" 개 선택됨");
+		let stock_cd = $(this).val();
+		
+		
+		
+		
+	});
+	//하단 조정버튼 클릭시
+	$("#stockAdjustmentBtn").on("click",function(){
+		
+		let stock_cd = [];//배열 선언, 변수명 컨트롤러 파라미터명과 동일
+     	$('input:checkbox[name=stockChecked]').each(function (index) {
+     		
+     		if($(this).is(":checked")==true){
+     	    	console.log("id값=stock_cd :"+$(this).val());
+     	   		stock_cd.push($(this).val());//배열에 추가
+     	    }
+     	});
+		
+    	console.log("stock_cd[] : "+ stock_cd);
+    	let result = confirm("재고번호 "+$('input:checkbox[name=stockChecked]:checked').length+ " 개를 조정하시겠습니까? ");
+    	if(result){
+	    	location.href="StockAdjustment?stock_cd="+stock_cd
+    	}
+	});
+	
+	
+	
+	
+	//-----------------------------
+	//전체합을 계산할 변수 선언
+	let sum = 0;
+	
+	$('.stock_qty').each(function(index,item){
+
+// 		console.log($(".stock_qty").eq(index).text());
+// 		console.log(typeof(Number($(".stock_qty").eq(index).text())));
+// 		console.log(isNaN(Number($(".stock_qty").eq(index).text())));
+		sum += Number($(".stock_qty").eq(index).text());
+		
+		
+	  });
+	//전체합 계산
+	$("#sum_result").html("<b>"+sum+"</b>");
+	
+});//$(function(){------------------------------------------------
+
+function productInfo(product_cd) {
+// 	$.ajax({
+		
+//         type: "get",
+//         url: "getProduct_StockInfo.ajax",
+//         data: {
+//         	"product_cd":product_cd
+//         },
+         
+//         contentType: 'application/json;charset=UTF-8',
+//         success: function(data,status,xhr) {
+//         	$("#"+product_cd + "  .search_div ul").empty();
+        
+// 			//JSON데이터 이상함 ! 나중에 물어볼것
+// //	               JSON.parse(JSON.stringify(data));
+// //		     	   alert(JSON.parse(JSON.stringify(data)));
+	     	   
+// 	     	   let parsingData = JSON.parse(data);
+// //		     	  alert(parsingData);
+// //		     	  alert(JSON.stringify(parsingData));
+				
+// 	     	   JSON.stringify(parsingData)
+// 	     		 for(let prod of parsingData){
+	     			 
+// 	     		  let inner_stock_cd_product_cd = "\'"+stock_cd+"','"+product_cd+"'," //재고번호
+// 	     		  let inner_var2 = "\'"+prod.wh_loc_in_area_cd+"\',";//위치코드
+// 	     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\'";
+	     		 
+// 	     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
+// 	     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
+	     		 	
+// 			     		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").prepend(result);
+// 	     		 }
+     	 
+//         },
+//         error: function(xhr,status,error) {
+//             console.log(error);
+//         }
+	
+// 	});//$.ajax({
+	
+}
 </script>
 <body>
 
@@ -110,7 +215,6 @@ function openStockModal() {
                                 <ol class="breadcrumb text-right ">
                                     <li><a href="employees">재고 관리</a></li>
                                     <li><a href="#">재고 조회</a></li>
-                                   
                                 </ol>
                             </div>
                         </div>
@@ -142,10 +246,11 @@ function openStockModal() {
 	 재고번호, 품목명, 규격, 창고명, 구역명, 위치명, 재고수량 표시 
 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 -->
 
-	 
+	<div id = "selectCount"><small class="text-secondary"> 0 개 선택됨</small></div>
 	<table class="table"  id="">
 		<thead>
 			<tr>
+				<th><input type="checkbox" name="AllChecked"></th>
 				<th>재고번호</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
 				<th>품목명</th>
 				<th>창고명</th>
@@ -157,26 +262,31 @@ function openStockModal() {
 		<tbody>
 		<c:forEach items="${stockList }" var="stock" varStatus="status" >
 			<tr>
-				<td onclick="openStockModal('${stock.stock_cd }')">${stock.stock_cd }</td>
-				<td>${stock.product_name}</td>
+			<td align="center"><input type="checkbox" name="stockChecked" class="form-check-input" value="${stock.stock_cd }"></td>
+<%-- 				<td onclick="openStockModal('${stock.stock_cd }')">${stock.stock_cd }</td> --%>
+				<td><a href="Inventory_History_View?stock_cd=${stock.stock_cd }">${stock.stock_cd }</a></td>
+				<td onclick="productInfo('${stock.product_cd}');">${stock.product_name}</td>
 				<td>${stock.wh_name }</td>
 				<td>${stock.wh_area }</td>
 				<td>${stock.wh_loc_in_area }</td>
-				<td>${stock.stock_qty }</td>
+				<td class="stock_qty">${stock.stock_qty }</td>
 			</tr>
 			</c:forEach>
 			<tr>
-				<td colspan="5" align="right">합계 :</td><td>${stock.sum }</td>
+				<td colspan="6" align="right"><b>합계 :</b></td><td id="sum_result"></td>
 			<tr>
 		</tbody>
 	
 	</table>
+	<div id="modal-btn-div" class="float-right">
+		 <input type="button" value="조정" class = "btn btn-primary btn-sm  " id="stockAdjustmentBtn">
+	</div>
 
 </div>
 </div>
 <!-- 재고번호 클릭시 보이는 모달 영역 DIV  -->
 
-	<div id="modal_container_stock" class="modal">
+	<div id="modal_container_product" class="modal">
 
  		 <a href="#" rel="modal:close">Close</a>
  
