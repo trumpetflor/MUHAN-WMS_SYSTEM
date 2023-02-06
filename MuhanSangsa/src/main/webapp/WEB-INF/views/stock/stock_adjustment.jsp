@@ -27,7 +27,7 @@
 <!-- 모달창 -->
 <!-- Remember to include jQuery :) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-
+<script src= "${pageContext.request.contextPath }/resources/js/jquery-3.6.3.js"></script>
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
@@ -136,13 +136,17 @@ $(function () {
 		$("#search_div").css("display","none");
 	});
 	
-// 	alert("자동수량");
-	var total = 0;
-    $('.bg-light border border-secondary rounded-1 px-1').on("change",function(){
-        total += Number($(this).val());
-    });
-    $('input[id="TotalStockQty"]').val(total - Number($("#RealStockQty").val()));
+// 	var total = $("#RealStockQty").val();
+//     $('.bg-light border border-secondary rounded-1 px-1').on("change",function(){
+//         total += Number($(this).val());
+//     });
+//     $('input[id="TotalStockQty"]').val(total - Number($("#RealStockQty").val()));
 	
+    $('#RemoveStockQty, #MVStockQty').on('change', function() {
+		$('#TotalStockQty').val(Number($('#RealStockQty').val()) - Number($('#RemoveStockQty').val()) - Number($('#MVStockQty').val())
+		)
+	});
+    
 });
 
 function openSearchArea() {
@@ -151,18 +155,12 @@ function openSearchArea() {
 
 // 합계수량 자동계산 (재고-조정-이동)
 function autoCal(){
-	alert("자동수량");
-    var total = 0;
-    $('.bg-light border border-secondary rounded-1 px-1').each(function(){
-        total += Number($(this).val());
-    });
-    $('input[id="TotalStockQty"]').val(total - Number($("#RealStockQty").val()));
-}
-
-function calculateStockQty() {
-	$("#RemoveStockQty", "#MVStockQty").on("change", function() {
-		$("#TotalStockQty").val( Number($("#RealStockQty").val()) - Number($("#RemoveStockQty").val()) - Number($("#MVStockQty").val()) )
-	});
+// 	alert("자동수량");
+//     var total = 0;
+//     $('.bg-light border border-secondary rounded-1 px-1').each(function(){
+//         total += Number($(this).val());
+//     });
+//     $('input[id="TotalStockQty"]').val(total - Number($("#RealStockQty").val()));
 }
 
 </script>
@@ -240,7 +238,7 @@ function calculateStockQty() {
 				<td>[농심]신라면</td>
 				<td>A - 4 zone</td>
 				<td>7-a</td>
-				<td><input type="text" id="RealStockQty" name="qty" class="bg-light border border-secondary rounded-1 px-1" ></td>
+				<td><input type="text" id="RealStockQty" value="2000" name="qty" class="RealStockQty bg-light border border-secondary rounded-1 px-1" ></td>
 				<td>
 					<select class=" bg-light border border-secondary rounded-1 px-1" name="stock_control_type_cd">
 						<option value="0">입고</option>
