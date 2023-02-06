@@ -95,7 +95,7 @@
 
 		// menu 클래스 바로 하위에 있는 a 태그를 클릭했을때 (창고목록 > 창고구역명 )
 		
-		$(".menu a").click(function() {
+		$(".menu > a").click(function() {
 			
 			// 창고 구역 목록 보이기
 			var submenu = $(this).next("ul");
@@ -110,9 +110,10 @@
 		});
 
 		// 창고구역명 > 창고 구역 내 위치명       
-		$(".hide>.w1").click(function() {
-			var submenu2 = $(this).next("ul");
-
+		$(".w1 > .warehouse-loc-area").click(function() {
+// 			alert("w1(창고 구역) 클릭");
+			var submenu2 = $(this).next("li");
+			
 			if (submenu2.is(":visible")) {
 				submenu2.slideUp();
 			} else {
@@ -188,6 +189,9 @@
 	}); // document
 	
 	function whArea(wh_cd) { // 한 번만 되게 만들기... 어떻게..?
+		
+		$("#" + wh_cd).empty();
+			
 		$.ajax({
 			type: "GET",
 			url: "WmsWarehouseArea?wh_cd=" + wh_cd,
@@ -195,13 +199,15 @@
 		})
 		.done(function(whaList) { // 요청 성공 시
 			for(let whArea of whaList) {
+// 				let wh_cd = whArea.wh_cd; // 창고 코드 변수에 저장
 				let wh_area_cd = whArea.wh_area_cd; // 창고 구역 코드 변수에 저장
-// 				alert("창고 코드 : " + whArea.wh_cd + "창고 구역 코드 : " + wh_area_cd);
-				let result = "<li class='w1'>"
-							+ "<a href='javascript:whLocArea(" + wh_area_cd + ")'><img src='./resources/images/right-arrow.png' width='10px' />"
+// 				alert("창고 코드 : " + wh_cd + "창고 구역 코드 : " + wh_area_cd);
+				let result = "<li class='w1' id=" + wh_area_cd + ">"
+							+ "<a href='javascript:whLocArea(" + whArea.wh_area_cd + ", " + whArea.wh_cd + ")'><img src='./resources/images/right-arrow.png' width='10px' />"
 							+ "&nbsp;" + whArea.wh_area 
 							+ "<input type='button' value='+' style='float: right;'>"
-							+ "<input type='button' value='-' style='float: right;'></a></li>";
+							+ "<input type='button' value='-' style='float: right;'></a>"
+							+ "<ul class='warehouse-loc-area'></ul></li>";
 				$("#" + whArea.wh_cd).append(result);
 				
 			}
@@ -211,7 +217,11 @@
 		});
 	}
 	
-	function whLocArea(wh_area_cd) { // 걍 안 뜸
+	function whLocArea(wh_area_cd, wh_cd) { // 걍 안 뜸
+		
+// 		console.log($("#" + wh_area_cd).attr("class"));
+		$("#" + wh_area_cd + "> ul").empty();
+		
 		$.ajax({
 			type: "GET",
 			url: "WmsWarehouseLocArea?wh_area_cd=" + wh_area_cd,
@@ -219,16 +229,16 @@
 		})
 		.done(function(whlaList) { // 요청 성공 시
 			for(let whLocArea of whlaList) {
-				alert("창고 구역 코드 : " + whLocArea.wh_area_cd + "창고 구역 위치 코드 : " + whLocArea.wh_loc_in_area_cd);
-				let html = "<ul class='hide warehouse-loc-area' id='" + whLocArea.wh_loc_in_area_cd + "'>"
-							+ "<li class='w2'>"
+// 				alert("창고 구역 코드 : " + whLocArea.wh_area_cd + "창고 구역 위치 코드 : " + whLocArea.wh_loc_in_area_cd);
+				let result = "<li class='w2'>" // "<ul class='hide warehouse-loc-area'>"
 							+ "<a>&nbsp;" + whLocArea.wh_loc_in_area
 							+ "<input type='button' value='+' style='float: right;'>"
-							+ "<input type='button' value='-' style='float: right;'></a></li>"
-							+ "</ul>";
-				alert(html);
-// 				alert($(".warehouse-loc-area").text());
-				$(".warehouse-loc-area").html(html);
+							+ "<input type='button' value='-' style='float: right;'></a></li>";
+// 							+ "</ul>";
+// 				alert(result);
+// 				alert(wh_area_cd);
+// 				$("#" + wh_area_cd).append(result);
+				$("#" + wh_area_cd + "> ul").append(result);
 			}
 		})
 		.fail(function() {
