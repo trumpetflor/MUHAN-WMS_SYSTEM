@@ -66,12 +66,76 @@
     
 
 <!-- =============================== 인사관리 : 로그인(세원) =========================================  -->
-<!-- 로그인, 패스워드 확인  -->
-<select id="selectPass" resultType="string">
-	SELECT emp_passwd
-		FROM employees
-		WHERE emp_email = #{emp_email}
-</select>
+	<!-- 로그인, 패스워드 확인  -->
+	<select id="selectPass" resultType="string">
+		SELECT emp_passwd
+			FROM employees
+			WHERE emp_email = #{emp_email}
+	</select>
+
+	<!-- 마이페이지 정보 조회 -->
+	<!-- 로그인 id 는 sId = emp_email    -->
+	<select id="selectMypageInfo" resultType="com.thisteam.muhansangsa.vo.EmployeesVO">
+	SELECT e.emp_num
+			, e.emp_name
+			, e.dept_cd
+			, d.dept_name
+			, e.grade_cd
+            , g.grade_name
+			, e.emp_tel
+			, e.emp_dtel
+			, e.emp_email
+			, e.emp_passwd
+			, e.emp_post_No
+			, e.emp_addr
+			, e.hire_date
+			, e.work_cd 
+			, e.photo
+		FROM  employees e, department d, grade g
+		WHERE 
+		 	e.DEPT_CD = d.DEPT_CD
+            AND e.grade_cd = g.grade_cd
+			AND e.emp_email = #{id}
+	</select>
+
+	<!-- 마이페이지 수정 (업데이트 작업) -->
+	<!--
+	1) 패스워드가 null 또는 공백이 아닌경우를 위해 if조건문 사용
+	2) 주의! 사진은 수정을 하지않은 경우가 있다!
+	사진은 수정을 하지않은 경우가 있다! 다만 조건문이 없을 경우 기존 등록된 사진이 삭제되므로,
+	if 조건문 사용(photo가 null 또는 공백이 아닌경우)
+	-->
+	<update id="updateMypageMember">
+		UPDATE	employees 
+			SET EMP_TEL = #{emp_tel}
+				,EMP_DTEL = #{emp_dtel}
+				<if test='emp_passwd != null and emp_passwd != ""'>
+					,EMP_PASSWD = #{emp_passwd}
+				</if>
+				<if test='photo != null and photo !="" '>
+					,PHOTO = #{photo}
+				</if>
+			WHERE 
+				EMP_EMAIL = #{emp_email}
+	</update>
+
+	<!-- 상세페이지 수정(업데이트 작업) -->
+	<update id="updateDetail">
+		UPDATE	employees 
+			SET EMP_NUM = #{emp_num}
+				,EMP_NAME = #{emp_name}
+				,DEPT_CD = #{dept_cd}
+				,GRADE_CD = #{grade_cd}
+				,EMP_TEL = #{emp_tel}
+				,EMP_DTEL = #{emp_dtel}
+				,EMP_EMAIL = #{emp_email}
+				,HIRE_DATE = #{hire_date}
+				,WORK_CD = #{work_cd}
+				,PHOTO = #{photo}
+			WHERE EMP_EMAIL = #{emp_email}
+	
+	</update>
+
 
 
 <!-- ===================================== hawon =========================================  -->

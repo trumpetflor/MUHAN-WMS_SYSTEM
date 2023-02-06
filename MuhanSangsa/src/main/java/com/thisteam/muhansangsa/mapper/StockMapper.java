@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.thisteam.muhansangsa.vo.StockHistoryVO;
+import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
 import com.thisteam.muhansangsa.vo.WarehouseVO;
 import com.thisteam.muhansangsa.vo.WhAreaVO;
@@ -33,6 +35,21 @@ public interface StockMapper {
 	int insertNewStock(@Param("product_cd") String product_cd,
 						@Param("wh_loc_in_area_cd") String wh_loc_in_area_cd);
 
+	
+	// 재고이력 목록 조회 
+	List<StockHistoryViewVO> selectHistoryList(int stock_cd);
+
+	// 이동 & 조정수량 입력을 통한 재고 수량 변경
+	int updateStockQty(
+			@Param("stock_cd") int stock_cd, 
+			@Param("qty") int totalStockQty);
+
+	// sId를 통한 사원번호 조회
+	String selectEmpNum(String sId);
+
+	// 재고 이력 페이지를 위한 stockHistoryVO 타입 리스트 생성
+	List<StockHistoryVO> insertStockHistory(
+			@Param("stock") StockHistoryVO stockHistory);
 
 
 

@@ -2,5 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.thisteam.muhansangsa.mapper.WhLocAreaMapper">
 	
+	<!-- 창고 구역 내 위치 목록 조회 -->
+	<select id="selectWhLocAreaList" resultType="WhLocAreaVO">
+		SELECT *
+			FROM warehouse_in_area
+			WHERE wh_area_cd = #{wh_area_cd}
+	</select>
 
+	<!-- 창고 구역 내 위치 등록 -->
+	<insert id="insertWhLocArea">
+		INSERT warehouse_in_area
+			VALUES(
+				#{wh_area_cd},
+				#{wh_loc_in_area},
+				0
+			)
+	</insert>
+	
+	<!-- 창고 구역 내 위치 수정 -->
+	<update id="updateWhLocArea">
+		UPDATE warehouse_in_area
+			SET wh_loc_in_area = #{newWhLocArea}
+			WHERE wh_loc_in_area_cd = #{whLocArea.wh_loc_in_area_cd}
+	</update>
+	
+	<!-- 창고 구역 내 위치 삭제 -->
+	<delete id="deleteWhLocArea">
+		DELETE FROM warehouse_in_area
+			WHERE wh_loc_in_area_cd = #{wh_loc_in_area_cd}
+	</delete>	
+	
+	
+	
 </mapper>

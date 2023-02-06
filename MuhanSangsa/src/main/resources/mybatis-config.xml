@@ -11,11 +11,16 @@
 		<typeAlias type="com.thisteam.muhansangsa.vo.PrivilegeVO" alias="PrivilegeVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.WarehouseVO" alias="WarehouseVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.ClientVO" alias="ClientVO"/>
-		<typeAlias type="com.thisteam.muhansangsa.vo.WorksVO" alias="WorksVO"/><!-- 테이블명 변경으로 VO도 변경 -->
+		<typeAlias type="com.thisteam.muhansangsa.vo.WorksVO" alias="WorksVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.Emp_viewVO" alias="Emp_viewVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.WhAreaVO" alias="WhAreaVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.WhLocAreaVO" alias="WhLocAreaVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.Stock_viewVO" alias="Stock_viewVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.InVO" alias="InVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.StockHistoryViewVO" alias="StockHistoryViewVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.StockHistoryVO" alias="StockHistoryVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.Wms_wh_viewVO" alias="Wms_wh_viewVO"/>
+    
 	</typeAliases>
 	
 	

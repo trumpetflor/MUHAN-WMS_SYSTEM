@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.StockService;
 import com.thisteam.muhansangsa.vo.Privilege;
+import com.thisteam.muhansangsa.vo.StockHistoryVO;
+import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
 import com.thisteam.muhansangsa.vo.WarehouseVO;
 import com.thisteam.muhansangsa.vo.WhAreaVO;
@@ -84,6 +87,7 @@ public class StockController {
 		
 	}
 	
+
 	@GetMapping(value = "/InventoryHistory")
 	public String inventoryView(){
 		return "stock/stock_code_history";
@@ -212,6 +216,7 @@ public class StockController {
 	}
 	
 	
+
 	//wh_cd 코드가 있는 창고 내 구역 값 가져오기
 	@ResponseBody
 	@GetMapping(value = "/searchWarehouseArea.ajax")
