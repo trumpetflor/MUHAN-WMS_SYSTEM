@@ -140,84 +140,56 @@
 
         <div class="content">
             <div class="animated fadeIn">
-            
-            <div class="row">
-            	<div class="col-lg-6">
-            		<div class="card">
-            			<div class="card-header">
-                        	<strong class="card-title">창고 정보 수정</strong>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title">입고</strong>
+                            </div>
+                            <div class="card-body">
+                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>입고예정번호</th>
+                                            <th>창고품목명명</th>
+                                            <th>입고예정수량</th>
+                                            <th>입고수량</th>
+                                            <th>재고번호</th>
+                                            <th>구역명_선반위치</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    	<c:choose>
+                                    	<c:when test="${empty whList }">
+                                    		<tr><td colspan="6">데이터가 없습니다.</td></tr>
+                                    	</c:when>
+                                    	<c:otherwise>
+	                                    	<c:forEach var="inList" items="${inRegisterList }" varStatus="status">
+		                                    	<tr>
+		                                    		<td>${inList.in_schedule_cd }</td>
+		                                    		<td>${inList.product_name }</td>
+		                                    		<td>${inList.in_schedule_qty }</td>
+		                                    		<td><input type="text" id="in_qty" value="${inList.in_schedule_qty }"></td>
+		                                    		<td><input type="text" id="stock_cd" name="stock_cd"></td>
+		                                    		<td><input type="text" id="wh_loc_in_area" name="wh_loc_in_area"></td>
+		                                    	</tr>
+	                                    	</c:forEach>
+                                    	</c:otherwise>
+                                    	</c:choose>
+                                    </tbody>
+                                </table>
+									<div>
+										<input type="button" value="저장" class="btn btn-outline-dark" onclick="location.href='InRegisterPro'">
+									</div>
+                            </div>
                         </div>
-                        <div class="row form-group">
-	                        <div class="col col-md-3"><label for="hireDate" class=" form-control-label">일자</label></div>
-	                        <div class="col-12 col-md-9"><input type="date" id="inDate" name="in_date" class="form-control"></div>
-                        </div>
-                        <div class="card-body card-block">
-                        	<form action="WarehouseModifyPro" method="post" enctype="multipart/form-data" class="form-horizontal">
-<%--                         	<c:forEach var="warehouse" items="${inproList }"> --%>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">입고예정번호</label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_cd" value="${warehouse.wh_cd}" readonly="readonly" class="form-control">
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">품목명<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_name" value="${warehouse.wh_name }" class="form-control" required="required">
-	                        			<small class="form-text text-muted">최대 100자</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">입고예정수량<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_tel" value="${warehouse.wh_tel }" class="form-control" required="required">
-	                        			<small class="form-text text-muted">(ex : 010-0000-0000)</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">입고지시수량<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_man_name" name="wh_man_name" value="${warehouse.wh_man_name }" class="form-control" required="required">
-	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">재고번호<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_man_name" name="wh_man_name" value="${warehouse.wh_man_name }" class="form-control" required="required">
-	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">구역명_선반위치<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_man_name" name="wh_man_name" value="${warehouse.wh_man_name }" class="form-control" required="required">
-	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-12">
-                                        <div class="input-group">
-                                            <div class="input-group-btn">
-                                            	<button class="btn btn-primary" onclick="javascript:confirm_modify()">저장</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-<%--                             </c:forEach> --%>
-                        	</form>
-                        </div>
-            		</div>
-            	</div>
-            </div>
+                    </div>
 
 
-
-
-
-        	</div><!-- .animated -->
-    	</div><!-- .content -->
-
+                </div>
+            </div><!-- .animated -->
+        </div><!-- .content -->
     <div class="clearfix"></div>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>

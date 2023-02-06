@@ -1,24 +1,18 @@
 package com.thisteam.muhansangsa.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.thisteam.muhansangsa.service.InService;
-
-import com.thisteam.muhansangsa.vo.inProcessingVO;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InVO;
+import com.thisteam.muhansangsa.vo.inProcessingVO;
+import com.thisteam.muhansangsa.vo.inRegisterVO;
 
 
 @Controller
@@ -31,7 +25,7 @@ public class InController {
 	
 	// ======================== yeram ==============================
 	
-	@GetMapping(value = "/InScheduleInsert")
+	@GetMapping(value = "/InProcessing")
 	public String processing(Model model) {
 		
 		List<inProcessingVO> inProList = service.getInProList();
@@ -42,7 +36,14 @@ public class InController {
 	}
 	
 	@GetMapping(value = "/InRegisterForm")
-	public String register(Model model) {
+	public String register(String[] in_schedule_cd, Model model) {
+		//일단 in_register_view => VO 만들어야함
+		//체크박스에 체크된 입고예정코드를 받아와서 검색해서
+		
+		List<inRegisterVO> inRegisterList = service.getInRegisterList(in_schedule_cd);
+		
+		model.addAttribute("inRegisterList", inRegisterList);
+		
 		return "in/in_register_form";
 	}
 	

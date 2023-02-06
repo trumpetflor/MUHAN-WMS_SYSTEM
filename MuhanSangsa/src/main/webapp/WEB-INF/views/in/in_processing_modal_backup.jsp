@@ -138,13 +138,22 @@
 	
 	$(function(){
 		// 입고버튼 클릭... 팝업창 버전
-		$("#inScheduleBtn").on("click", function(){
-			window.open('InRegisterForm','InRegisterForm', 'width=1000, height=920,location=no,status=no,scrollbars=yes');
-		});
+// 		$("#inButton").on("click", function(){
+// 			window.open('InRegisterForm','InRegisterForm', 'width=1000, height=920,location=no,status=no,scrollbars=yes');
+// 		});
 		
 		let inMap = new Map();
 		let selectedModalCheckedVal;
 	
+		// 1. 입고 버튼 클릭시 - 모달창 open
+		$("#inSchedule").on("click", function(){
+			// 선택된 내용 없을 경우
+			if($('input:checkbox[name=inChecked]:checked').length == 0 ){
+				$("#selected_empList").append("선택된 사원이 없습니다.");
+			}else{
+				$("#selected_empList").empty();
+			}
+		}); //입고버튼
 		
 		//전체선택 버튼 클릭
 		$('input:checkbox[name=AllChecked]').on("click",function(){
@@ -282,11 +291,38 @@
 	</table>
 	<div class="float-left">
 	<div id="modal-btn-div" class="float-right mt-4">
-		<input type="button" value="입고" class = "btn btn-sm btn-success m-2" id="inScheduleBtn">
+		<a href="#modal_container" rel="modal:open"><input type="button" value="입고" class = "btn btn-sm btn-success m-2" id="inSchedule"></a>
 	</div>
 	</div>
 
 
+<!-- 입고 버튼 모달 DIV -->
+<div id="modal_container" class="modal">
+	<div class="col col-md-3"><label for="inDate" class=" form-control-label">일자</label></div>
+	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
+	<table>
+	<tr>
+		<th>입고예정번호</th>
+		<th>보낸곳명</th>
+		<th>품목명[규격]</th>
+		<th>납기일자</th>
+		<th>입고예정수량</th>
+		<th>입고수량</th>
+		<th>미입고수량</th>
+		<th>적요</th>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	</table>
+</div>
 
 
 

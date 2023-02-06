@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.thisteam.muhansangsa.mapper.InMapper;
 
 import com.thisteam.muhansangsa.vo.inProcessingVO;
+import com.thisteam.muhansangsa.vo.inRegisterVO;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InVO;
@@ -36,6 +37,10 @@ public class InService {
 
 	public List<InVO> getInList() {
 		return mapper.getInList();
+	}
+	public List<inRegisterVO> getInRegisterList(String[] in_schedule_cd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 
