@@ -151,22 +151,14 @@
                             <img class="user-avatar rounded-circle" src="${pageContext.request.contextPath}/resources/images/admin.jpg" alt="User Avatar">
                         </a>
 
-                        <div class="user-menu dropdown-menu login" >
-                        	<c:choose>
-                        	<%-- 로그인 상태일 경우 아이디 표시, 마이페이지, Logout 링크 표시 --%>
-							<%-- EL 을 사용하여 세션 객체 접근 시 sessionScope.속성명 으로 접근 --%>
-							<c:when test="${not empty sessionScope.sId }">
-                            	<a class="nav-link" href="./Mypage"><i class="fa fa-user"></i>${sessionScope.sId } 님</a>
-                            	<a class="nav-link" href="./Mypage"><i class="fa fa-bell-o"></i>MYPAGE <span class="count">13</span></a>
-<!-- 	                           	<a class="nav-link" href="#"><i class="fa fa-cog"></i>Settings</a> -->
-	                            <a class="nav-link" href="javascript:logout()"><i class="fa fa-power-off"></i>Logout</a>
-                        	</c:when>
-                        		<c:otherwise>
-                        	<%-- 로그인 상태가 아닐 경우 Login, Join 링크 표시 --%>
-                        			<a class="nav-link" href="./Login"><i class="fa fa-user"></i>LOGIN</a>
-<!--                         			<a class="nav-link" href="#"><i class="fa fa-cog"></i>Settings</a> -->
-                        		</c:otherwise>
-                        	</c:choose>
+                        <div class="user-menu dropdown-menu" >
+                            <a class="nav-link" href="./Login"><i class="fa fa-user"></i>로그인/로그아웃</a>
+
+                            <a class="nav-link" href="./Mypage"><i class="fa fa-bell-o"></i>마이페이지 <span class="count">13</span></a>
+
+                            <a class="nav-link" href="#"><i class="fa fa-cog"></i>Settings</a>
+
+                            <a class="nav-link" href="javascript:logout()"><i class="fa fa-power-off"></i>Logout</a>
                         </div>
                     </div>
                 </div>

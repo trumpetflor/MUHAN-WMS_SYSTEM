@@ -99,6 +99,12 @@
 	</select>
 
 	<!-- 마이페이지 수정 (업데이트 작업) -->
+	<!--
+	1) 패스워드가 null 또는 공백이 아닌경우를 위해 if조건문 사용
+	2) 주의! 사진은 수정을 하지않은 경우가 있다!
+	사진은 수정을 하지않은 경우가 있다! 다만 조건문이 없을 경우 기존 등록된 사진이 삭제되므로,
+	if 조건문 사용(photo가 null 또는 공백이 아닌경우)
+	-->
 	<update id="updateMypageMember">
 		UPDATE	employees 
 			SET EMP_TEL = #{emp_tel}
@@ -106,8 +112,11 @@
 				<if test='emp_passwd != null and emp_passwd != ""'>
 					,EMP_PASSWD = #{emp_passwd}
 				</if>
-				,PHOTO = #{photo}
-			WHERE EMP_EMAIL = #{emp_email}
+				<if test='photo != null and photo !="" '>
+					,PHOTO = #{photo}
+				</if>
+			WHERE 
+				EMP_EMAIL = #{emp_email}
 	</update>
 
 	<!-- 상세페이지 수정(업데이트 작업) -->
