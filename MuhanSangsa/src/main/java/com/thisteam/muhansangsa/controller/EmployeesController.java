@@ -171,9 +171,12 @@ public class EmployeesController {
 		// 23/01/31 이메일 인증을 이용하여 임시비밀번호 전송 및 비밀번호 세팅
 //		String passwd = mailService.sendPasswdToEmail(employee.getEmp_email());
 		
-
 		String passwd = UUID.randomUUID().toString().substring(1, 8);
 		System.out.println("이메일 인증에 사용된 비밀번호 : " + passwd);
+		
+		//23/02/05 사원 등록시 패스워드 암호화 작업 필요함 -> 일단 코드 주석처리 해둠
+		//BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
+		//employee.setEmp_passwd(passwdEncoder.encode(passwd));
 		employee.setEmp_passwd(passwd);
 		
 		// 이메일을 보내봅니다...
@@ -181,8 +184,7 @@ public class EmployeesController {
 		
 		// 7. 최종 : 사원 등록 
 		int insertCount = service.registerEmployee(employee);
-		
-		
+				
 		if(insertCount > 0) { // 등록 성공 시
 			String employeeEmail = employee.getEmp_email();
 			String addr = "miju.kim.kr@gmail.com";
@@ -242,17 +244,17 @@ public class EmployeesController {
 			Model model, 
 			HttpSession session) {
 		
+		// 비밀번호 암호화 !!DB에 비밀번호 재설정 필요(해싱, 솔팅 다름)!!
 		// 파라미터 : 이메일(id 역할)
+		BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
 		String pass = service.getPass(employees.getEmp_email()); //email(id) 에 해당하는 비밀번호 가져오기
 		System.out.println("1==="+pass);
 		
-		// 비밀번호 비교
-		if(pass == null || !pass.equals(employees.getEmp_passwd())) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
+		//암호화 비밀번호 비교
+		if(pass == null || !passwdEncoder.matches(employees.getEmp_passwd(), pass)) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
-//			System.out.println("1======="+pass);
-//			System.out.println("1======="+employees.getEmp_email());
 			return "fail_back";
-			
+	
 		} else { // 성공 시
 			session.setAttribute("sId", employees.getEmp_email());//세션 아이디 저장
 			System.out.println("sId");
@@ -272,12 +274,13 @@ public class EmployeesController {
 	
 	//마이페이지 리스트
 	@GetMapping(value = "/Mypage")
-	public String emp_myPage(
-			Model model,
-			HttpSession session) {
+	public String mypage(
+			@RequestParam(defaultValue = "") String msg,
+			Model model, HttpSession session) {
 		
 		//로그인 id 는 sId = emp_email  
 		String id = (String)session.getAttribute("sId");
+		model.addAttribute("msg", msg);
 		
 		// 세션 아이디 
 		if(id == null || id.equals("")) { //실패 시
@@ -286,38 +289,81 @@ public class EmployeesController {
 		} else { //성공시
 			EmployeesVO employees = service.getMypageInfo(id);
 			model.addAttribute("employees", employees);
-			
 			return "employees/myPage";
 		}
 	}
 	
 	//마이페이지 업데이트(수정)
 	@PostMapping(value = "/MypageUpdate")
-	public String mypage_updatePro(
+	public String mypageUpdate(
+			@RequestParam(defaultValue = "") String msg,
 			@ModelAttribute EmployeesVO employees, 
+			@RequestParam(value ="file", required=false) MultipartFile file,
+			MultipartRequest request,
 			Model model, 
 			HttpSession session){
 		
 		String sId = (String)session.getAttribute("sId");
+		
 		System.out.print("employees.getEmp_email()::"+employees.getEmp_email());
 		
-		if(!employees.getEmp_passwd().equals(employees.getEmp_comfirmPasswd())) {
-			model.addAttribute("msg", "비밀번호가 일치하지않습니다.");
-			return "fail_back";
-		}
-		
-		//패스워드 값이 있을경우 암호화
-		if(employees.getEmp_passwd() != null && ! "".equals(employees.getEmp_passwd())) {
-			BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder();
-			employees.setEmp_passwd(passwdEncoder.encode(employees.getEmp_passwd()));
-		}
-
-		if(sId != null) {
-			//수정
-			int updateCount  = service.updateMypageMember(employees);
-			return "redirect:/Mypage";
+		if(sId != null) { // 세션아이디가 있을 경우 시작 
 			
-		}else {
+			//비밀번호 확인
+			if(!employees.getEmp_passwd().equals(employees.getEmp_comfirmPasswd())) {
+				model.addAttribute("msg", "비밀번호가 일치하지않습니다.");
+				return "fail_back";
+			}
+			
+			//패스워드 값이 있을경우 암호화
+			if(employees.getEmp_passwd() != null && ! "".equals(employees.getEmp_passwd())) {
+				BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder();
+				employees.setEmp_passwd(passwdEncoder.encode(employees.getEmp_passwd()));
+			}
+	
+			//---------- 파일 수정 관련 시작 ---------
+			if(file.getSize() >0 ) { // 첨부파일을 수정할 경우 1이상 카운트 되기때문에 이렇게 조건문 줬음! 
+				//파일업로드 시작
+				// 파일 업로드를 위한 변수 설정
+				String uploadDir = "/resources/upload";
+				String saveDir = session.getServletContext().getRealPath(uploadDir);
+				
+				// 5. 이미지 파일명 추출하기 (파일명이 중복일 경우 발생하는 문제 해결해야함)
+				String photo = file.getOriginalFilename().toString();
+				System.out.println("뭐가 넘어오나 : " + photo);
+				employees.setPhoto(photo);
+				
+				File f = new File(saveDir, photo);
+				
+					try {
+						file.transferTo(f);
+					} catch (IllegalStateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+						
+					// 파일 경로가 존재하지 않을 경우 파일 경로 생성
+					if(!f.exists()) {
+						f.mkdirs();
+					}
+			
+				} //---------- 파일 수정 관련 끝 ---------
+			
+			
+			int updateCount  = service.updateMypageMember(employees);
+			
+			if(updateCount > 0) { // 등록 성공 시
+				return "redirect:/Mypage?&msg="+"1"; //성공일땐 1, 실패일땐 2
+
+			} else {
+				model.addAttribute("msg", "마이페이지 수정 실패");
+				return "fail_back";
+			}
+			
+		} else {
 			model.addAttribute("msg", "잘못된 접근입니다.");
 			return "fail_back";
 		}
@@ -340,7 +386,7 @@ public class EmployeesController {
 		return "employees/emp_ListDetail";
 	}	
 
-	//사원 상세정보 수정페이지
+	//사원 상세정보 수정 (update)
 	@GetMapping(value = "/empListDetailUpdate")
 	public String memberListDetailUpdate(
 			@RequestParam(defaultValue = "") String id,
@@ -351,7 +397,6 @@ public class EmployeesController {
 		return "employees/emp_ListDetailUpdate";
 	}	
 	
-	//사원 상세정보 수정 진행 (update)
 	@PostMapping(value = "/empListDetailUpdatePro")
 	public String memberListDetailUpdatePro(
 			@ModelAttribute EmployeesVO employees, 
@@ -511,12 +556,12 @@ public class EmployeesController {
 
 	@ResponseBody
 	@PostMapping(value = "/emp_update_part.ajax")
-	public void emp_update_part(@RequestBody Map<String, Object> data,
+	public void emp_update_part(@RequestBody Map<String, Object> map,
 								Model model, HttpSession session){
 		//@RequestParam List<EmployeesVO> emp => 안됨
 //		work.getWork_type();
 //		dept.getDept_name();
-		System.out.println(data);
+		System.out.println("ajax성공 data : "+map);
 //		System.out.println("employees"+ employees);
 //		System.out.println("work_type"+ work_type.getWork_type());
 //		System.out.println("dept_name"+ dept_name.getDept_name());

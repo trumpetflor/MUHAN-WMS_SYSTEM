@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
+import com.thisteam.muhansangsa.vo.WarehouseVO;
+import com.thisteam.muhansangsa.vo.WhAreaVO;
+import com.thisteam.muhansangsa.vo.Wms_wh_viewVO;
 
 public interface StockMapper {
 
@@ -30,8 +33,6 @@ public interface StockMapper {
 	// 재고 이력 페이지를 위한 stockHistoryVO 타입 리스트 생성
 	List<StockHistoryVO> insertStockHistory(
 			@Param("stock") StockHistoryVO stockHistory);
-
-
 
 
 

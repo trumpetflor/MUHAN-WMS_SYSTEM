@@ -37,8 +37,18 @@
 	
 	}
 
-	//라디오 버튼 변경 비활성화
 	$(function() {
+		
+		//등록 성공 시 alert창
+		var msg = '${msg}'; //컨트롤러에서 액션이후 msg값이 있을 경우 해당 msg alert창 실행하기 위한 용도
+		
+		if(msg==1){
+			alert('수정이 완료되었습니다.');
+			 opener.location.reload();
+
+		}
+		
+		//라디오 버튼 변경 비활성화
 		$("input:radio[name=inline-radios]").prop('disabled', 'disabled');
 		
 	});
@@ -94,7 +104,7 @@
                                  <div class="row form-group">   
                                  	<div class="col col-md-3"><label class=" form-control-label" style="margin-top: 80px;">사진 이미지</label></div>
                                   		<div class=" col-12 col-md-4" id="imgWapper">
-											<img id="id_photo" alt="증명사진" style="width: 150px"
+											<img id="photo" alt="증명사진" style="width: 150px" name="photo"
 											src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }"	
 											onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';" width="150px" />
 									</div>
@@ -103,58 +113,74 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원번호(코드)</label></div>
-                                        <div class="col-12 col-md-4">
-                                            <p class="form-control-static">${employees.emp_num }</p>
-                                        </div>
+    									<div class="col-12 col-md-4">
+											<input type="text" id="emp_num" name="emp_num" value="${employees.emp_num }"
+												class="form-control bg-gradient-light" readonly="readonly">
+										</div>                                     
+                                        
                                     </div>
                                     <!-- 사원번호(코드) -->
                                     <!-- 사원명 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">사원명</label></div>
-                                        <div class="col-12 col-md-4">
-                                            <p class="form-control-static">${employees.emp_name }</p>
-                                        </div>
+    									<div class="col-12 col-md-4">
+											<input type="text" id="emp_name" name="emp_name" value="${employees.emp_name }"
+												class="form-control bg-gradient-light" readonly="readonly">
+										</div>                                            
+                                        
                                     </div>
                                     <!-- 부서명 -->
                                      <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">부서명</label></div>
                                         <div class="col-12 col-md-4">
-                                            <p class="form-control-static">${employees.dept_name }</p>
-                                        </div>
+											<input type="text" id="dept_name" name="dept_name" value="${employees.dept_name }"
+												class="form-control bg-gradient-light" readonly="readonly">
+										</div>  
                                     </div>
                                     <!-- 직급 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">직급</label></div>
                                         <div class="col-12 col-md-4">
-                                            <p class="form-control-static">${employees.grade_name }</p>
-                                        </div>
+											<input type="text" id="grade_name" name="grade_name" value="${employees.grade_name }"
+												class="form-control bg-gradient-light" readonly="readonly">
+										</div>
                                     </div>
                                     <!-- 연락처(개인) -->
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(개인)</label></div>
-                                        <div class="col-12 col-md-4"><input type="text" id="phone_number" name="emp_tel" value="${employees.emp_tel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
+                                        <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(개인)*</label></div>
+                                        <div class="col-12 col-md-4">
+                                        	<input type="text" id="phone_number" name="emp_tel" value="${employees.emp_tel}" 
+                                        		placeholder="전화번호를 입력하세요" class="form-control">
+                                     	</div>
                                     </div>
                                     <!-- 연락처(사무실) -->
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(사무실)</label></div>
+                                        <div class="col col-md-3"><label for="email-input" class=" form-control-label">연락처(사무실)*</label></div>
                                         <div class="col-12 col-md-4"><input type="text" id="office_number" name="emp_dtel" value="${employees.emp_dtel}" placeholder="전화번호를 입력하세요" class="form-control"></div>
                                     </div>
                                     <!-- 이메일 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
                                         <label class=" form-control-label">이메일</label></div>
-                                        <div class="col-12 col-md-4">
-                                            <p class="form-control-static">${employees.emp_email}</p>
-                                            <input type="hidden" name="emp_email" value="${employees.emp_email}">
-                                        </div>
+<!--                                         <div class="col-12 col-md-4"> -->
+<%--                                             <p class="form-control-static">${employees.emp_email}</p> --%>
+<%--                                             <input type="hidden" name="emp_email" value="${employees.emp_email}"> --%>
+<!--                                         </div> -->
+                                         <div class="col-12 col-md-4">
+											<input type="text" id="emp_email" name="emp_email" value="${employees.emp_email }"
+												class="form-control bg-gradient-light" readonly="readonly">
+											 <input type="hidden" name="emp_email" value="${employees.emp_email}">	
+										</div>  
+                                        
+                                        
                                     </div>
                                     <!-- 신규 비밀번호 -->
 									<div class="row form-group">
 										<div class="col col-md-3">
-											<label for="newPass" class=" form-control-label">신규 비밀번호</label>
+											<label for="newPass" class=" form-control-label">신규 비밀번호*</label>
 										</div>
 										<div class="col-12 col-md-4">
 											<input type="password" id="emp_passwd" name="emp_passwd"
@@ -167,7 +193,7 @@
 									<div class="row form-group">
 										<div class="col col-md-3">
 											<label for="confirmNewPass"
-												class="form-control-label">신규 비밀번호 확인</label>
+												class="form-control-label">신규 비밀번호 확인*</label>
 										</div>
 										<div class="col-12 col-md-4">
 											<input type="password" id="emp_passwd" name="emp_comfirmPasswd"
@@ -178,9 +204,9 @@
 									</div>
 	                                 <!-- 입사일 -->
 	                                  <div class="row form-group">
-                                        <div class="col col-md-3"><label for="hireDate" class=" form-control-label">입사일</label></div>
+                                        <div class="col col-md-3"><label for="hire_date" class=" form-control-label">입사일</label></div>
                                         <div class="col-12 col-md-4">
-                                        	<input type="date" id="hireDate" name="hire_Date" class="form-control" value="${employees.hire_date }" readonly="readonly">
+                                        	<input type="date" id="hire_date" name="hire_date" class="form-control" value="${employees.hire_date }" readonly="readonly">
                                         </div>
                                      </div>
                                      <!-- 입사일 -->                          
@@ -208,10 +234,13 @@
                                     </div>
                                     <!--사진이미지 -->
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지</label></div>
-                                        <div class="col-12 col-md-4"><input type="file" id="file-input" name="file-input" class="form-control-file"></div>
+                                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지*</label></div>
+                                        <div class="col-12 col-md-4"><input type="file" id="file-input" name="file-input" class="form-control-file">
+                                        	<br><small>(기존파일 : ${product.photo })</small>
+                                        </div>
                                     </div>
                                     <!--사진이미지 -->
+                                    <!--수정, 확인 버튼 -->
 									<div align="center">
 										<input class="btn btn-outline-dark" type="button" value="수정" onclick="javascript:confirm_modify()">&nbsp;&nbsp;
 										<input class="btn btn-outline-dark" type="button" value="확인" onclick="history.back()">&nbsp;&nbsp;

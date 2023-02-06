@@ -3,6 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
+
 	<title> 재고조회 | 재고관리</title>
 
     <meta charset="utf-8">
@@ -28,6 +29,7 @@
 <!-- Remember to include jQuery :) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 <script src= "${pageContext.request.contextPath }/resources/js/jquery-3.6.3.js"></script>
+
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
@@ -114,8 +116,6 @@
 	}
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
-
-
 
 
 
@@ -218,6 +218,7 @@ function autoCal(){
 
 	<form action="StockModifyPro" method="post">
 	<table class="table"  id="">
+
 		<thead>
 			<tr>
 				<th>재고번호</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 

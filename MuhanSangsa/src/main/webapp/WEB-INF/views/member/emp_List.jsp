@@ -155,36 +155,35 @@
 		
 	});
 	
-	function dept_workChange_ajax(employees,work_type,dept_name,selectedModalRadioVal ) {
+	function dept_workChange_ajax(jsonArr) {
 		
-		console.log('employees : ' + employees + "/ typeof : "+typeof(employees));
-		console.log('work_type : ' + work_type+ "/ typeof : "+typeof(work_type));
-		console.log('dept_name : ' + dept_name+ "/ typeof : "+typeof(dept_name));
-		console.log('selectedModalRadioVal : ' + selectedModalRadioVal+ "/ typeof : "+typeof(selectedModalRadioVal));
+// 		console.log('employees : ' + employees + "/ typeof : "+typeof(employees));
+// 		console.log('work_type : ' + work_type+ "/ typeof : "+typeof(work_type));
+// 		console.log('dept_name : ' + dept_name+ "/ typeof : "+typeof(dept_name));
+// 		console.log('selectedModalRadioVal : ' + selectedModalRadioVal+ "/ typeof : "+typeof(selectedModalRadioVal));
+		console.log("jsonArr:"+  JSON.stringify(jsonArr));
+// 		let data = ",\"info\": {\"dept_name\":\"" + dept_name + "\", \"work_type\":\"" + work_type + "\",\"selectedModalRadioVal\":\""+selectedModalRadioVal+"\"}";
+// 		let result = "{\"employees\": "+ employees + data + "}";
+// 		console.log("result : "+result);
+			$.ajax({
+				
+		        type: "post",
+		        url: "emp_update_part.ajax",
+	// 	        traditional:true,
+		        data: JSON.stringify(jsonArr)
+		        
+		        ,
+		        contentType: 'application/json;charset=UTF-8',
+		        success: function(data,status,xhr) {
+		               
+		        	 alert("성공");
 		
-		let str = employees+work_type+dept_name+selectedModalRadioVal;
-		console.log('str : ' + str+ "/ typeof : "+typeof(str));
-		$.ajax({
+		        },
+		        error: function(xhr,status,error) {
+		            console.log(error);
+		        }
 			
-	        type: "post",
-	        url: "emp_update_part.ajax",
-// 	        traditional:true,
-	        data: {
-	        	"data":str
-	        }
-	        ,
-	         
-	        contentType: 'application/json;charset=UTF-8',
-	        success: function(data,status,xhr) {
-	               
-	         alert("성공");
-	
-	        },
-	        error: function(xhr,status,error) {
-	            console.log(error);
-	        }
-		
-	});
+		});
 		
 	}
 
@@ -285,18 +284,19 @@
 			if(selectedModalRadioVal == "work_change"){
 				selectedModalRadioVal ="work";
 				
+				jsonArr.push({"selectedModalRadioVal":selectedModalRadioVal});
 				console.log('selectedModalRadioVal : ' + selectedModalRadioVal);
-				
-				dept_workChange_ajax(JSON.stringify(jsonArr),seleced,seleced,selectedModalRadioVal );
+				//employees,work_type,dept_name,selectedModalRadioVal
+				dept_workChange_ajax(jsonArr);
 		
 				
 			}else if(selectedModalRadioVal == "dept_change"){
 				selectedModalRadioVal ="dept";
-				
+				jsonArr.push({"selectedModalRadioVal":selectedModalRadioVal});
 			
 				console.log('selectedModalRadioVal : ' + selectedModalRadioVal);
 				
-				dept_workChange_ajax(JSON.stringify(jsonArr),seleced,seleced,selectedModalRadioVal );
+				dept_workChange_ajax(jsonArr);
 				
 			}
 			
