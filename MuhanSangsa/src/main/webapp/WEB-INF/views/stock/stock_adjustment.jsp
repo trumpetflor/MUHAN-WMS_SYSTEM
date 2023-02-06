@@ -3,8 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-
-	<title> 재고조회 | 재고관리</title>
+	<title> 재고 조정 | 재고관리</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -28,7 +27,6 @@
 <!-- 모달창 -->
 <!-- Remember to include jQuery :) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-<script src= "${pageContext.request.contextPath }/resources/js/jquery-3.6.3.js"></script>
 
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
@@ -56,11 +54,13 @@
 	 text-align: center;
 	}
 	input[type=number]{
-		width: 70px;
+		width: 75px;
 	}
 	input[type=text]{
-		width: 70px;
+	
+		align-content: center;
 	}
+
 	a{
 	 text-decoration: none;
 	 color: 	#000080;
@@ -71,22 +71,28 @@
 	}
 	
 	/* 모달 */
+	.modal{
+	max-width: 1000px;
+	}
 	#modal_container_stock{
-	  width: 70%;
-	  height: 700px;
+	  width:800PX;
+ 	 height: 500px;
 	  position: fixed;
-	  top: 10%;
-	  left: 50%;
+	  top: 20%;
+	  left: 40%;
 	  overflow-y: scroll;
 	}
+	.modal_container_stock::-webkit-scrollbar {
+    width: 2px;
+  }
 	
 	tr{
-	position: relative;
+	 position: relative;
 	}
 	
-	#search_div{
-	    width: 300px;
-	    height: 100px;
+	.search_div{
+	    width: 400px;
+	    height: 350px;
 	    background-color: white;
 	    position: absolute;
 	    top: 35px;
@@ -94,28 +100,51 @@
 	    overflow: scroll;
 	    display: none;
 	    z-index: 1;
+	    box-shadow: 1px 1px 20px 3px rgba(169, 168, 167, 0.2);
+	    border-color: rgba(169, 168, 167, 0.2);
 	}
 	
-	#search_div::-webkit-scrollbar {
+	.search_div::-webkit-scrollbar {
     width: 3px;
   }
-	#search_div ul{
+	.search_div ul{
 	padding-left: 0
 	}
-	#search_div li{
+	.search_div li{
 	
 	text-align: left;
 	vertical-align: middle;
 	background:  url(${pageContext.request.contextPath}/resources/images/loc_pin.png) no-repeat 0px 1px;
     list-style-type: none;
-    padding: 1px 1px 8px 20px;
+    padding: 1px 1px 8px 30px;
+    transition: 0.5s;
+    margin-top: 2px;
+    height: 50px;
+  
 	}
 	
-	li::maker{
-	 content: url(${pageContext.request.contextPath}/resources/images/loc_pin.svg);
+	.search_div li:hover {
+	background-color: rgba(169, 168, 167, 0.5);
+	cursor: pointer;
+	}
+	
+	/* 위치검색 div내의 X버튼 --- 안됨 ㅠ*/
+
+	.close-loc-Btn :hover {
+		cursor: pointer;
+		background-color: rgba(169, 168, 167, 0.3);
+	}
+	/* 새 위치 추가 버튼 --- 안됨 ㅠ*/
+	.search_div .add-New-loc :hover {
+		cursor: pointer;  
+	}
+	
+	#stock-table  input:disabled {
+    background-color: rgba(169, 168, 167, 0.2) !important;
 	}
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
+
 
 
 
@@ -126,43 +155,155 @@ function openStockModal() {
 }
 
 $(function () {
-	$("#loc_search").on("click",function(){
+	$(".loc_search").on("click",function(){
+		
 	
-		$("#search_div").css("display","block");
+		//id="재고번호_상품번호" 로 넘어옴
+		let stock_cd = $(this).closest('td').attr('id').split("_")[0];
+		let product_cd = $(this).closest('td').attr('id').split("_")[1];
+		
+
+		$(".search_div").css("display","none");
+		
+		//div버튼 보이기
+		 $(this).next().show();
+		
+		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").empty();
+		
+		$.ajax({
+			
+	        type: "get",
+	        url: "StockAdjust_loc.ajax",
+	        data: {
+	        	"product_cd":product_cd
+	        },
+	         
+	        contentType: 'application/json;charset=UTF-8',
+	        success: function(data,status,xhr) {
+	        	$("#"+product_cd + "  .search_div ul").empty();
+	        
+				//JSON데이터 이상함 ! 나중에 물어볼것
+// 	               JSON.parse(JSON.stringify(data));
+// 		     	   alert(JSON.parse(JSON.stringify(data)));
+		     	   
+		     	   let parsingData = JSON.parse(data);
+// 		     	  alert(parsingData);
+// 		     	  alert(JSON.stringify(parsingData));
+					
+		     	   JSON.stringify(parsingData)
+		     		 for(let prod of parsingData){
+		     			 
+		     		  let inner_stock_cd_product_cd = "\'"+stock_cd+"','"+product_cd+"'," //재고번호
+		     		  let inner_var2 = "\'"+prod.wh_loc_in_area_cd+"\',";//위치코드
+		     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\'";
+		     		 
+		     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
+		     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
+		     		 	
+				     		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").prepend(result);
+		     		 }
+	     	 
+	        },
+	        error: function(xhr,status,error) {
+	            console.log(error);
+	        }
+		
+		});//$.ajax({
+		
+	});
+	
+	//위치검색 div내의 X버튼 클릭시
+	$(".close-loc-Btn").on("click",function(){
+		$(".search_div").css("display","none");
+	});
+	
+	//새 위치 추가 버튼 클릭시
+	$("a[href='modal_container_stock']").on("click",function(){
+		
+		
+	});
+	
+	$(".search_div ul li").on("click",function(){
+		alert();
 	});
 	
 	
-	$("#closeBtn").on("click",function(){
-		$("#search_div").css("display","none");
+	//셀렉트박스 '조정' 선택시에만 조정항목 able처리
+	$("select").on("change", function(){
+		
+		if($(this).val() == "adjust"){
+			console.log("select option:selected : 조정선택됨");
+			
+			//조정수량 input able처리
+			$(this).closest("td").next().children("input").prop("disabled", false);
+			//위치선택 input disable처리
+			$(this).closest("td").next().next().children("input").prop("disabled", true);
+			$(this).closest("td").next().next().children("input").val("");
+			//이동수량 input disable처리
+			$(this).closest("td").next().next().next().children("input").prop("disabled", true);
+			$(this).closest("td").next().next().next().children("input").val("");
+		}else{
+			//조정수량 input disabled처리
+			$(this).closest("td").next().children("input").prop("disabled", true);
+			$(this).closest("td").next().children("input").val("");
+			//위치선택 input able처리
+			$(this).closest("td").next().next().children("input").prop("disabled", false);
+			//이동수량 input able처리
+			$(this).closest("td").next().next().next().children("input").prop("disabled", false);
+		}
+		
 	});
 	
-// 	var total = $("#RealStockQty").val();
-//     $('.bg-light border border-secondary rounded-1 px-1').on("change",function(){
-//         total += Number($(this).val());
-//     });
-//     $('input[id="TotalStockQty"]').val(total - Number($("#RealStockQty").val()));
+	//합계수량 sum_result: 조정수량 + 이동수량 jquery로 만들기
 	
-    $('#RemoveStockQty, #MVStockQty').on('change', function() {
-		$('#TotalStockQty').val(Number($('#RealStockQty').val()) - Number($('#RemoveStockQty').val()) - Number($('#MVStockQty').val())
-		)
-	});
-    
+	
 });
 
 function openSearchArea() {
-	$("#search_div").css("display","none");
+  document.getElementById("search_div").style.display = 'block';
+ alert("openSearchArea");
 }
 
-// 합계수량 자동계산 (재고-조정-이동)
-function autoCal(){
-// 	alert("자동수량");
-//     var total = 0;
-//     $('.bg-light border border-secondary rounded-1 px-1').each(function(){
-//         total += Number($(this).val());
-//     });
-//     $('input[id="TotalStockQty"]').val(total - Number($("#RealStockQty").val()));
+//
+function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area) {
+	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd+"/"+wh_loc_in_area );
+	//https://hianna.tistory.com/718
+	$(function(){
+		$("#"+stock_cd+"_"+product_cd).children("input").val(stock_cd+"["+wh_loc_in_area+"]");
+		$("#"+stock_cd+"_"+product_cd).children("input").attr("value2",wh_loc_in_area_cd);
+		$("#"+stock_cd+"_"+product_cd).children(".search_div").css("display","none");
+	});
+	
 }
 
+//새위치 추가 버튼 클릭시 실행되는 함수
+function open_addLoc_modal(stock_cd,product_cd) {
+
+	console.log("stock_cd: "+ stock_cd);
+	console.log("product_cd: "+ product_cd);
+	
+	$.ajax({
+		
+        type: "get",
+        url: "Search_location.ajax",
+        data: {
+        	"product_cd":product_cd,
+        	"stock_cd":stock_cd
+        },
+        contentType: 'html',
+        success: function(data,status,xhr) {
+//         	alert(data);
+        
+			$("#modal_container_content").html(data);
+     	 
+        },
+        error: function(xhr,status,error) {
+            console.log(error);
+        }
+	
+	});//$.ajax({
+	
+}
 </script>
 <body>
 
@@ -216,9 +357,8 @@ function autoCal(){
 <!-- 재고번호, 품목명 , 구역명(창고명), 선반위치, 재고수량, //
   조정수량, 이동재고번호, 이동위치, 이동수량, 합계수량 -->
 
-	<form action="StockModifyPro" method="post">
-	<table class="table"  id="">
-
+	 
+	<table class="table"  id="stock-table">
 		<thead>
 			<tr>
 				<th>재고번호</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
@@ -234,83 +374,56 @@ function autoCal(){
 			</tr> 
 		</thead>
 		<tbody>
-			<tr>
-				<td><input type="text" name="stock_cd" class="bg-light border border-secondary rounded-1 px-1" ></td>
-				<td>[농심]신라면</td>
-				<td>A - 4 zone</td>
-				<td>7-a</td>
-				<td><input type="text" id="RealStockQty" value="2000" name="qty" class="RealStockQty bg-light border border-secondary rounded-1 px-1" ></td>
-				<td>
-					<select class=" bg-light border border-secondary rounded-1 px-1" name="stock_control_type_cd">
-						<option value="0">입고</option>
-						<option value="1">출고</option>
-						<option value="2">이동</option>
-						<option value="3">조정</option>
-					</select>
-				</td>
-				<td><input type="number" id="RemoveStockQty" name="RemoveStockQty" class=" bg-light border border-secondary rounded-1 px-1" ></td>
-				<td><input type="text" placeholder="위치를 선택하세요" class=" bg-light border border-secondary rounded-1 px-1" id="loc_search"
-				name="target_stock_cd">
-				    <div id="search_div" class="  rounded-1 ">
-				    <div class="float-right" id="closeBtn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
-				    <div class="mt-3"> 새 위치 추가 + </div>
-				       <hr>
-				     	<ul>
-				     		<li>[B창고-3zone-7] 신라면</li>
-				     		<li>[C창고-5zone-7] 신라면</li>
-				     		<li>[A창고-7zone-7] 신라면</li>
-				     	</ul>
-				     	
-				    </div>
-				</td>
-				<td><input type="number" id="MVStockQty"  name="MVStockQty" class=" bg-light border border-secondary rounded-1 px-1" ></td>
-				<td><input type="text" id="TotalStockQty" name="TotalStockQty" class="bg-light border border-secondary rounded-1 px-1" ></td>
-			</tr> 
-			<tr>
-				<td>111111</td>
-				<td>[농심]신라면</td>
-				<td>A - 4 zone</td>
-				<td>7-a</td>
-				<td>1000개</td>
-				<td>
-					<select class=" bg-light border border-secondary rounded-1 px-1">
-						<option>입고</option>
-						<option>출고</option>
-						<option>이동</option>
-						<option>조정</option>
-					</select>
-				</td>
-				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1"></td>
-				<td><input type="text" placeholder="위치를 선택하세요" class=" bg-light border border-secondary rounded-1 px-1" id="loc_search">
-				    <div id="search_div" class="  rounded-1 ">
-				    <div class="float-right" onclick="openSearchArea()"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
-				    <div class="mt-3"> 새 위치 추가 + </div>
-				       <hr>
-				     	<ul>
-				     		<li>[B창고-3zone-7] 신라면</li>
-				     		<li>[C창고-5zone-7] 신라면</li>
-				     		<li>[A창고-7zone-7] 신라면</li>
-				     	</ul>
-				     	
-				    </div>
-				</td>
-				<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1"></td>
-				<td></td>
-				<td></td>
-			</tr> 
-		</tbody>
+			<c:forEach items="${stockList }" var="stock" varStatus="status" >
+				<tr>
+					<td>${stock.stock_cd}</td>
+					<td>${stock.product_name}</td>
+					<td>${stock.wh_name} - ${stock.wh_area }</td>
+					<td>${stock.wh_loc_in_area}</td>
+					<td>${stock.stock_qty }</td>
+					<td>
+						<select class="bg-light border border-secondary rounded-1 px-1">
+							<option value="move">이동</option>
+							<option value="adjust">조정</option>
+						</select>
+					</td>
+					<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1 adjust" disabled="disabled"></td>
+					<td style="position: relative;" id="${stock.stock_cd}_${stock.product_cd}">
+						<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-2 " >
+					    <div class=" rounded-1 search_div">
+						    <div class="float-right close-loc-Btn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
+						    	<div class="mt-3 add-New-loc" onclick="open_addLoc_modal('${stock.stock_cd}','${stock.product_cd}');"> <a href="#modal_container_stock" rel="modal:open">새 위치 추가 + </a></div>
+						       <hr>
+						     	<ul>
+						     		
+						     	</ul>
+					    </div>
+					</td>
+					<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1" max="${stock.stock_qty }"></td>
+					<td></td>
+					<td class="sum_result"></td>
+				</tr> 
+			</c:forEach>
+			</tbody>
+	
 	</table>
-		<input type="submit" value="조정" class=" mx-1 btn btn-sm btn-dark rounded-1">
-		<input type="reset" value="초기화" class=" mx-1 btn btn-sm btn-dark rounded-1">
-	</form>
+
 </div>
 </div>
 <!-- 재고번호 클릭시 보이는 모달 영역 DIV  -->
 
 	<div id="modal_container_stock" class="modal">
+	<div id="modal_container_content">
+	
 
- 		 <a href="#" rel="modal:close">Close</a>
- 
+
+
+	</div>
+	 <div class="float-right">
+<!-- 		<a href="#" rel="modal:close"> -->
+		<input type="button" value="새 위치에 품목 추가" class="btn btn-primary" id="addProductTONewLoc">
+<!-- 		</a> -->
+	</div>
 	</div><!-- end of DIV #modal_container -->
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="../inc/footer.jsp"></jsp:include>

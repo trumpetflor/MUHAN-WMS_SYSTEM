@@ -24,6 +24,58 @@
 			LIMIT #{startRow}, #{listLimit}
 	</select>
 
+	<!-- 재고테이블에서 특정 상품 가져오는 태그  -->
+	<select id="selectProductInLoc" resultType="Stock_viewVO">
+	
+		SELECT *
+		FROM STOCK_VIEW 
+		WHERE PRODUCT_CD = #{product_cd}
+	</select>
+	
+
+	
+	<select id="selectWarehouseList" resultType="WarehouseVO">
+		SELECT * 
+		FROM WAREHOUSE 
+		ORDER BY WH_CD 
+	</select>
+	
+	<select id="selectWarehouseAraList" resultType="WhAreaVO">
+		SELECT * 
+		FROM WAREHOUSE_AREA 
+		WHERE WH_CD = #{wh_cd}
+	</select>
+	
+	<!-- 체크박스로 선택된 재고번호 리스트 가져오는 태그  -->
+	<select id="selectSelectedStock" resultType="Stock_viewVO">
+		SELECT *
+		FROM STOCK_VIEW 
+		WHERE STOCK_CD IN
+		<foreach collection="stock_cd" item="code" separator=","  open="(" close=")"  index="index">
+			#{code}		
+		</foreach>
+	</select>
+	<!-- 같은 품목 있는 선반 뺴고 특정 구역의 선반 리스트 뽑는 태그 -->
+	<select id="selectWhAreaLocationList" resultType="Wms_wh_viewVO">
+	SELECT WH_LOC_IN_AREA_CD, WH_LOC_IN_AREA 
+	FROM WMS_WH_VIEW
+		WHERE WH_AREA_CD = #{wh_area_cd}
+		AND WH_LOC_IN_AREA_CD NOT IN 
+									(SELECT WH_LOC_IN_AREA_CD 
+										FROM STOCK_VIEW 
+										WHERE PRODUCT_CD = #{product_cd})
+	</select>
+	
+	<!-- 새 재고번호 추가 -->
+	<insert id="insertNewStock"><!-- 만약 null이면..?-->
+		<selectKey order="BEFORE" keyProperty="STOCK_CD" resultType="int">
+			SELECT MAX(STOCK_CD) FROM STOCK;
+		</selectKey>
+		INSERT INTO STOCK VALUES( #{STOCK_CD}+1, #{product_cd} , #{wh_loc_in_area_cd} , 0)
+	</insert>
+</mapper>
+
+
 	<!-- 재고이력 목록 조회 -->
 	<select id="selectHistoryList" resultType="StockHistoryViewVO">
 		SELECT * 

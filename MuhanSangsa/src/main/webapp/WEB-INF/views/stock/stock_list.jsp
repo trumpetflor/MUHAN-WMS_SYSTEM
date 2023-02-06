@@ -41,6 +41,8 @@
 	    font-style: normal;
 	}
 	
+	select * from
+	
 	body {
 	 font-family: 'NEXON Lv1 Gothic OTF';
 	 width: 100%;
