@@ -1,34 +1,39 @@
 package com.thisteam.muhansangsa.controller;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
-import java.util.UUID;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
-
 import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.MailService;
+import com.thisteam.muhansangsa.vo.DepartmentVO;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.Privilege;
+import com.thisteam.muhansangsa.vo.WorksVO;
 
 @Controller
 public class EmployeesController {
@@ -199,40 +204,40 @@ public class EmployeesController {
 	// 로그인 페이지
 	@GetMapping(value = "/Login")
 	public String login() {
-		return "member/login"; // login.jsp 로 포워딩
+		return "employees/login"; // login.jsp 로 포워딩
 	}
 	
 	// 로그인 비즈니스 로직 작업
 	@PostMapping(value = "/Login")
 	public String loginPro(
-			@ModelAttribute EmployeesVO employee, 
+			@ModelAttribute EmployeesVO employees, 
 			Model model, 
 			HttpSession session) {
 		
 		// 비밀번호 암호화 !!DB에 비밀번호 재설정 필요(해싱, 솔팅 다름)!!
 		// 파라미터 : 이메일(id 역할)
 		BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
-		String pass = service.getPass(employee.getEmp_email()); //email(id) 에 해당하는 암호화 비밀번호 가져오기
-		System.out.println(pass);
+		String pass = service.getPass(employees.getEmp_email()); //email(id) 에 해당하는 비밀번호 가져오기
+		System.out.println("1==="+pass);
 		
 		//암호화 비밀번호 비교
-		if(pass == null || passwdEncoder.matches(employee.getEmp_passwd(), pass)) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)
+		if(pass == null || !passwdEncoder.matches(employees.getEmp_passwd(), pass)) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
 			return "fail_back";
 	
 		} else { // 성공 시
-			session.setAttribute("sId", employee.getEmp_email());//세션 아이디 저장
+			session.setAttribute("sId", employees.getEmp_email());//세션 아이디 저장
 			System.out.println("sId");
-			return "redirect:/"; // 메인페이지로 리다이렉트
+			return "redirect:/employees"; // 사원목록페이지(메인)으로 리다이렉트
 		}
 		
 	}
-	//=============================== 인사관리 : 로그아웃(세원) =========================================
 	
+	//로그아웃
 	@GetMapping(value = "/Logout")
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 초기화
-		return "redirect:/";
+		return "redirect:/Login"; //리다이렉트 로그인페이지
 	}
 	
 	//=============================== 인사관리 : 마이페이지(세원) =========================================
@@ -335,12 +340,20 @@ public class EmployeesController {
 	
 	}
 
+	
+	
+	
 	//=============================== 인사관리 : 사원 상세페이지 (세원) =========================================
 	
 	//사원 상세페이지 리스트
-	@GetMapping(value = "/memberListDetail")
-	public String memberListDetail() {
-		return "member/memberDetail";
+	@GetMapping(value = "/empListDetail")
+	public String memberListDetail(
+			@RequestParam(defaultValue = "") String id,
+			Model model) {
+		EmployeesVO employees = service.getMypageInfo(id);
+		model.addAttribute("employees", employees);
+		
+		return "employees/emp_ListDetail";
 	}	
 
 	//사원 상세정보 수정 (update)
@@ -362,142 +375,11 @@ public class EmployeesController {
 		
 		String sId = (String)session.getAttribute("sId");
 
-	// ================================= hawon =================================
-	//---------------------------------------------------------------------------------------------------------------------
-	//-------------------------------------------사원조회/상세정보조회 시작-----------------------------------------------------
-	
-	@GetMapping(value = "/employees")
-	public String emp_view(@RequestParam(defaultValue = "") String searchType,
-							@RequestParam(defaultValue = "") String keyword,
-							Model model, HttpSession session){
-		InetAddress local;
-		String ip;
-		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-			
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
-		session.getAttribute("sId");
-		String sId = (String)session.getAttribute("sId");
-		
-//		sId="admin@muhan.com";
-		if(sId != null) { 
-
-			//권한 조회 메서드
-			boolean isRightUser = service.getPrivilege(sId,Privilege.사원관리);
-			isRightUser = true;//TODO:
-			if(isRightUser) {
-				
-				//권한 있을 시에 조회 수행
-				List<Emp_viewVO> empList= service.getMemberList(searchType,keyword);
-				model.addAttribute("empList", empList);
-			}
-		
-			System.out.println("sId   : "+sId);
-			
-		}else {
-			model.addAttribute("msg", "권한이 없습니다");
-			return "fail_back";
-		}
-		
-		return "emp_List";
-	}
-	
-	@GetMapping(value = "/employees_search")
-	public String emp_view_sch( @RequestParam(defaultValue = "") String searchType,
-							@RequestParam(defaultValue = "") String keyword,
-							Model model, HttpSession session){
-	
-		String ip;
-		try {
-			InetAddress local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-			
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
-		
-		session.getAttribute("sId");
-		String sId = (String)session.getAttribute("sId");
-
-		sId="admin@muhan.com";
-		if(sId != null) { 
-			//권한 조회 메서드
-			boolean isRightUser = service.getPrivilege(sId,Privilege.사원관리);
-			isRightUser = true;//TODO:
-			if(isRightUser) {
-				
-				//권한 있을 시에 조회 수행
-				List<Emp_viewVO> empList= service.getMemberList(searchType,keyword);
-				model.addAttribute("empList", empList);
-			}
-			}
-		
-		
-		return "emp_List";	
-	}
-		
-
-	
-
-	@ResponseBody
-	@PostMapping(value = "/emp_update_part.ajax")
-	public void emp_update_part(@RequestBody Map<String, Object> map,
-								Model model, HttpSession session){
-		//@RequestParam List<EmployeesVO> emp => 안됨
-//		work.getWork_type();
-//		dept.getDept_name();
-		System.out.println("ajax성공 data : "+map);
-//		System.out.println("employees"+ employees);
-//		System.out.println("work_type"+ work_type.getWork_type());
-//		System.out.println("dept_name"+ dept_name.getDept_name());
-//		System.out.println("selectedModalRadioVal: " +selectedModalRadioVal);
-		
-		
-//		if(	work.getWork_type() != null	) {
-			
-//				int updateWorkCount = service.updateEmpWork();
-//		}else {
-			
-//				int updateDeptCount = service.updateEmpDept();
-//		}
-			
-		
-		
-		session.getAttribute("sId");
-		
-		String sId = (String)session.getAttribute("sId");
-		sId="admin@muhan.com";
 		if(sId != null) {
-		
-		}
-		
-		return "";
-	}
-	
-
-	
-	@PostMapping(value = "/employeesUpdate")
-	public String emp_updatePro(Model model, HttpSession session, EmployeesVO employees){
-		
-		session.getAttribute("sId");
-		
-		String sId = (String)session.getAttribute("sId");
-		if(sId != null) {
+			//수정
+			int updateCount  = service.updateDetailEmp(employees);
+			return "redirect:employees/emp_ListDetailUpdate?id="+employees.getEmp_email();
 			
-			
-			//1.수정
-				 
-			int updateCount  = service.updateMember(employees);
-			return "";
-			
-			 
 		}else {
 			model.addAttribute("msg", "잘못된 접근입니다.");
 			return "fail_back";
@@ -505,61 +387,204 @@ public class EmployeesController {
 	
 	}
 	
-	//상세조회
-	@GetMapping(value = "/employeesDetail")
-	public String emp_detail(Model model, HttpSession session){
-		
-		String ip;
-		
-		try {
-			InetAddress local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	
-		//접속자 아이디
-		String emp_email = (String)model.getAttribute("emp_email");
-		
-		//세션아이디
-		String sId = (String)session.getAttribute("sId");
-		
-//		sId="admin@muhan.com";
-		System.out.println("sId   : "+sId);
-		
-		if(sId != null) {
-			
-				//1.권한 조회 
-				boolean isRightUser = service.getPrivilege(sId,Privilege.사원관리);
-				isRightUser = true;//TODO:
-				if(isRightUser) {
-					
-					//2. 권한 있을 시에 조회 수행
-					Emp_viewVO emp= service.getEmployee(emp_email);
-					model.addAttribute("emp", emp);
-					return "emp_detail";
-				}else {
-					model.addAttribute("msg", "잘못된 접근입니다");
-					return "fail_back";
-				
-				}
-					
-					
-			}else {
-				model.addAttribute("msg", "잘못된 접근입니다");
-				return "fail_back";
-			}
-			
-		
-		
-	}
-	
-	//-------------------------------------------사원조회/상세정보조회 끝------------------------------------------------
-	//---------------------------------------------------------------------------------------------------------------------
-}//end of MemberController
+	// ================================= hawon =================================
+	   //---------------------------------------------------------------------------------------------------------------------
+	   //-------------------------------------------사원조회/상세정보조회 시작-----------------------------------------------------
+	   
+	   @GetMapping(value = "/employees")
+	   public String emp_view(@RequestParam(defaultValue = "") String searchType,
+	                     @RequestParam(defaultValue = "") String keyword,
+	                     @RequestParam(defaultValue = "1") int pageNum,
+	                     Model model, HttpSession session){
+	      InetAddress local;
+	      String ip;
+	      try {
+	         local = InetAddress.getLocalHost();
+	         ip = local.getHostAddress();
+	         model.addAttribute("ip", ip);
+	         
+	      } catch (UnknownHostException e) {
+	         e.printStackTrace();
+	      }
+	      // 페이징 처리를 위한 변수 선언
+	      int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+	      int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+	      session.getAttribute("sId");
+	      String sId = (String)session.getAttribute("sId");
+	      
+	      sId="admin@muhan.com";
+	      if(sId != null) { 
+
+	         //권한 조회 메서드
+	         boolean isRightUser = service.getPrivilege(sId,Privilege.사원조회);
+	         isRightUser = true;//TODO:
+	         if(isRightUser) {
+	            
+	            //권한 있을 시에 조회 수행
+	            List<Emp_viewVO> empList= service.getMemberList(searchType, keyword, startRow, listLimit);
+	            model.addAttribute("empList", empList);
+	            isRightUser = service.getPrivilege(sId,Privilege.사원관리);
+	            System.out.println("사원관리 권한: " + isRightUser);
+	            model.addAttribute("priv", "1");
+	            
+	            //부서 및 재직상태 변경을 위한 테이블 컬럼 가져오기
+	            List<DepartmentVO> deptList= service.getdeptList();
+	            List<WorksVO> workList= service.getworkList();
+	            
+	            System.out.println("deptList : "+ deptList);
+	            System.out.println("workList : "+ workList);
+	            
+	            
+	            
+	            //JSON데이터로 변환
+	            JSONArray deptArr = new JSONArray();
+	            JSONArray workArr = new JSONArray();
+	            
+	            for ( DepartmentVO dept : deptList) {
+	                  System.out.println(dept);
+	                  deptArr.put(new JSONObject(dept));
+	            }
+	            for ( WorksVO work : workList) {
+	               System.out.println(work);
+	               workArr.put(new JSONObject(work));
+	            }
+	         
+	            model.addAttribute("deptArr", deptArr);
+	            model.addAttribute("workArr", workArr);
+	            
+	            
+	         }
+	      
+	         System.out.println("sId   : "+sId);
+	         
+	      }else {
+	         model.addAttribute("msg", "권한이 없습니다");
+	         return "fail_back";
+	      }
+	      
+	      return "employees/emp_List";
+	   }
+	   
+	   @GetMapping(value = "/employees_search")
+	   public String emp_view_sch( @RequestParam(defaultValue = "") String searchType,
+	                     @RequestParam(defaultValue = "") String keyword,
+	                     @RequestParam(defaultValue = "1") int pageNum,
+	                     Model model, HttpSession session){
+	      //공통코드
+	      String ip;
+	      try {
+	         InetAddress local = InetAddress.getLocalHost();
+	         ip = local.getHostAddress();
+	         model.addAttribute("ip", ip);
+	         
+	      } catch (UnknownHostException e) {
+	         e.printStackTrace();
+	      }
+	      
+	      // 페이징 처리를 위한 변수 선언
+	      int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+	      int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+	      
+	      String sId;
+	      if(session.getAttribute("sId") != null) {
+	         sId = (String)session.getAttribute("sId");
+	      }
+
+	      sId="admin@muhan.com";
+	      if(sId != null) { 
+	         //권한 조회 메서드
+	         boolean isRightUser = service.getPrivilege(sId,Privilege.사원관리);
+	         isRightUser = true;//TODO:
+	         if(isRightUser) {
+	            //권한 있을 시에 조회 수행
+	            List<Emp_viewVO> empList= service.getMemberList(searchType, keyword, startRow, listLimit);
+	            model.addAttribute("empList", empList);
+	            isRightUser = service.getPrivilege(sId,Privilege.사원관리);
+	            System.out.println("사원관리 권한: " + isRightUser);
+	            model.addAttribute("priv", "1");
+	            
+	            //부서 및 재직상태 변경을 위한 테이블 컬럼 가져오기
+	            List<DepartmentVO> deptList= service.getdeptList();
+	            List<WorksVO> workList= service.getworkList();
+	            
+	            System.out.println("deptList : "+ deptList);
+	            System.out.println("workList : "+ workList);
+	            
+	            model.addAttribute("deptList", deptList);
+	            model.addAttribute("workList", workList);
+	      
+	         }
+	      }
+	      
+	      
+	      return "employees/emp_List";   
+	   }
+	      
+
+	   
+
+	   @ResponseBody
+	   @PostMapping(value = "/emp_update_part.ajax")
+	   public void emp_update_part(@RequestBody Map<String, Object> map,
+	                        Model model, HttpSession session){
+	      //@RequestParam List<EmployeesVO> emp => 안됨
+//	      work.getWork_type();
+//	      dept.getDept_name();
+	      System.out.println("ajax성공 data : "+map);
+//	      System.out.println("employees"+ employees);
+//	      System.out.println("work_type"+ work_type.getWork_type());
+//	      System.out.println("dept_name"+ dept_name.getDept_name());
+//	      System.out.println("selectedModalRadioVal: " +selectedModalRadioVal);
+	      
+	      
+//	      if(   work.getWork_type() != null   ) {
+	         
+//	            int updateWorkCount = service.updateEmpWork();
+//	      }else {
+	         
+//	            int updateDeptCount = service.updateEmpDept();
+//	      }
+	         
+	      
+	      
+	      
+	      	
+	      
+	   }
+
+
+	   @PostMapping(value = "/dept_detail.ajax")
+	   public String dept_detail(DepartmentVO dept,HttpServletResponse response, Model model) {
+	      Integer.parseInt(dept.getDept_cd());
+	      dept.getDept_name();
+	      
+	      
+	      List<Map<String, String>> deptInfo =   service.getDeptInfo_count(Integer.parseInt(dept.getDept_cd()));
+	      List<Emp_viewVO> deptInfoList = service.getDeptmemberComposition(Integer.parseInt(dept.getDept_cd()));
+	      model.addAttribute("deptInfo", deptInfo);
+	      model.addAttribute("deptInfoList", deptInfoList);
+	      
+	      try {
+	      response.setCharacterEncoding("UTF-8");
+	      response.getWriter().print(deptInfo); // toString() 생략됨
+	      response.getWriter().print(deptInfo); // toString() 생략됨
+	   } catch (IOException e) {
+	      e.printStackTrace();
+	   }
+	      
+	      return "employees/dept_detail";
+	   }
+	         
+	      
+	      
+	   
+	   
+	   //-------------------------------------------사원조회/상세정보조회 끝------------------------------------------------
+	   //---------------------------------------------------------------------------------------------------------------------
+	}//end of EmployeesController
+
+
+
 
 
 

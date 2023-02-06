@@ -75,7 +75,7 @@
 
 	<!-- 마이페이지 정보 조회 -->
 	<!-- 로그인 id 는 sId = emp_email    -->
-	<select id="selectMypageInfo" resultType="com.thisteam.muhansangsa.vo.EmployeesVO">
+	<select id="selectMypageInfo" resultType="EmployeesVO">
 	SELECT e.emp_num
 			, e.emp_name
 			, e.dept_cd
@@ -138,85 +138,102 @@
 
 
 
+
 <!-- ===================================== hawon =========================================  -->
 <!-- ===================================================================================================== -->
-	<!-- ===================================== 사원 조회 시작===================================== -->
-	<select id="selectMemberList" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
-		<!-- 사원조회 -->
-		SELECT	IDX
-				,EMP_NUM
-				,EMP_NAME
-				,DEPT_NAME
-				,GRADE_NAME
-				,EMP_TEL
-				,EMP_DTEL
-				,EMP_EMAIL
-				,EMP_POST_NO
-				,EMP_ADDR
-				,HIRE_DATE
-				,WORK_TYPE
-				,PRIV_TYPE
-				,PHOTO
-		 FROM emp_view
-	 		<if test="!keyword.equals('')">
-			WHERE
-			<!-- 2. 검색타입(searchType) 에 따른 WHERE 대상 변경 -->
-			<!-- => 조건이 복수개이므로 choose 태그 사용 -->
-			<choose>
-				<when test="searchType.equals('emp_name')">
-					EMP_NAME LIKE '%${keyword}%'
-				</when>
-				<when test="searchType.equals('emp_num')">
-					EMP_NUM LIKE '%${keyword}%'
-				</when>
-				<when test="searchType.equals('emp_email')">
-					EMP_EMAIL LIKE '%${keyword}%'
-				</when>
-				<when test="searchType.equals('dep_name')">
-					DEPT_NAME LIKE '%${keyword}%'
-				</when>
-			</choose>		
-			</if>
-		
-	</select>
-		
-	<!-- 권한 조회 -->
-	<select id="getPrivilege" resultType="String">
-		SELECT PRIV_CD
-		FROM employees
-			WHERE EMP_EMAIL = #{id}
-	</select>
-	
-	<!-- 사원 정보 수정 -->
-	<update id="updateMember">
-		UPDATE	employees 
-			SET IDX = #{idx}
-				,EMP_NUM = #{emp_num}
-				,EMP_NAME = #{emp_name}
-				,DEPT_CD = #{dept_cd}
-				,GRADE_CD = #{grade_cd}
-				,EMP_TEL = #{emp_tel}
-				,EMP_DTEL = #{emp_dtel}
-				,EMP_EMAIL = #{emp_email}
-				,EMP_PASSWD = #{emp_passwd}
-				,EMP_POST_NO = #{emp_post_no}
-				,EMP_ADDR = #{emp_addr}
-				,HIRE_DATE = #{hire_date}
-				,WORK_CD = #{work_cd}
-				,PRIV_CD = #{priv_cd}
-				,PHOTO = #{photo}
-			WHERE EMP_EMAIL = #{emp_email}
-	
-	</update>
-	
-	<!-- 사원 상세조회 -->
-	<select id="selectEmployee" resultType="com.thisteam.muhansangsa.vo.Emp_viewVO">
-		SELECT *
-		FROM emp_view
-			WHERE EMP_EMAIL = #{emp_email}
-		
-	</select>
-	<!-- ===================================== 사원 조회 끝===================================== -->
-	<!-- ===================================================================================================== -->
+   <!-- ===================================== 사원 조회 시작===================================== -->
+   <select id="selectMemberList" resultType="Emp_viewVO">
+      <!-- 사원조회 -->
+      SELECT   *
+       FROM emp_view
+          <if test="!keyword.equals('')">
+         
+         <!-- 2. 검색타입(searchType) 에 따른 WHERE 대상 변경 -->
+         <!-- => 조건이 복수개이므로 choose 태그 사용 -->
+         <choose>
+            <when test="searchType.equals('emp_name')">
+               WHERE EMP_NAME LIKE '%${keyword}%'
+            </when>
+            <when test="searchType.equals('emp_num')">
+               WHERE EMP_NUM LIKE '%${keyword}%'
+            </when>
+            <when test="searchType.equals('emp_email')">
+               WHERE EMP_EMAIL LIKE '%${keyword}%'
+            </when>
+            <when test="searchType.equals('dep_name')">
+               WHERE DEPT_NAME LIKE '%${keyword}%'
+            </when>
+            <otherwise>
+            
+            </otherwise>
+         </choose>      
+         </if>
+         
+         LIMIT #{startRow}, #{listLimit}
+      
+   </select>
+      
+   <!-- 권한 조회 -->
+   <select id="getPrivilege" resultType="String">
+      SELECT PRIV_CD
+      FROM employees
+         WHERE EMP_EMAIL = #{id}
+   </select>
+   
+   <!-- 사원 정보 수정 -->
+   <update id="updateMember">
+      UPDATE   employees 
+         SET IDX = #{idx}
+            ,EMP_NUM = #{emp_num}
+            ,EMP_NAME = #{emp_name}
+            ,DEPT_CD = #{dept_cd}
+            ,GRADE_CD = #{grade_cd}
+            ,EMP_TEL = #{emp_tel}
+            ,EMP_DTEL = #{emp_dtel}
+            ,EMP_EMAIL = #{emp_email}
+            ,EMP_PASSWD = #{emp_passwd}
+            ,HIRE_DATE = #{hire_date}
+            ,WORK_CD = #{work_cd}
+            ,PRIV_CD = #{priv_cd}
+            ,PHOTO = #{photo}
+         WHERE EMP_EMAIL = #{emp_email}
+   
+   </update>
+   
+   <!-- 사원 상세조회 -->
+   <select id="selectEmployee" resultType="Emp_viewVO">
+      SELECT *
+      FROM emp_view
+         WHERE EMP_EMAIL = #{emp_email}
+      
+   </select>
+   
+   <!-- 부서 직급 정보-->
+   <select id="selectDeptInfo_count" resultType="HashMap">
+      SELECT GRADE_NAME,count(GRADE_NAME) as count
+      FROM emp_view e, department d
+      WHERE e.DEPT_Name =d.DEPT_Name and  d.DEPT_CD = #{dept_cd} group by GRADE_NAME
+   </select>
+   
+   <select id="selectDeptMember" resultType="Emp_viewVO">
+      SELECT EMP_NUM,EMP_NAME , GRADE_NAME , EMP_TEL, EMP_DTEL, EMP_EMAIL
+      FROM emp_view  
+      WHERE DEPT_NAME = (select DEPT_NAME from department where DEPT_CD= #{dept_cd})
+      order by GRADE_CD desc
+   </select>
+   
+   <!--  -->
+   <select id="selectDeptList" resultType="DepartmentVO">
+      SELECT *
+      FROM department
+   
+   </select>
+   <select id="selectWorkList" resultType="WorksVO">
+      SELECT *
+      FROM works
+   </select>
+   
+   <!-- ===================================== 사원 조회 끝===================================== -->
+   <!-- ===================================================================================================== -->
 
 </mapper>

@@ -73,7 +73,6 @@
 		</selectKey>
 		INSERT INTO STOCK VALUES( #{STOCK_CD}+1, #{product_cd} , #{wh_loc_in_area_cd} , 0)
 	</insert>
-</mapper>
 
 
 	<!-- 재고이력 목록 조회 -->

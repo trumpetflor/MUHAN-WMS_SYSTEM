@@ -25,7 +25,7 @@ public class InService {
 
 	public List<inProcessingVO> getInProList() {
 		return mapper.selectInProList();
-
+	}
 	public List<ClientVO> getClientList() {
 		return mapper.getClientList();
 	}
