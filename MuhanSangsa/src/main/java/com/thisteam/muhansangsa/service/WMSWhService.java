@@ -53,8 +53,8 @@ public class WMSWhService {
 	}
 
 	// 창고 구역 내 위치 수정
-	public int modifyWhLocArea(WhLocAreaVO whLocArea, String newWhLocArea) {
-		return locMapper.updateWhLocArea(whLocArea, newWhLocArea);
+	public int modifyWhLocArea(WhLocAreaVO whLocArea) {
+		return locMapper.updateWhLocArea(whLocArea);
 	}
 
 	// 창고 구역 삭제

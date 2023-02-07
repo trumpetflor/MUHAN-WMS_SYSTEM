@@ -214,7 +214,7 @@ public class WMSWhController {
 	
 	// 창고 구역 수정
 	@PostMapping(value = "ModifyWhArea")
-	public void modifyWhArea (
+	public String modifyWhArea (
 			@ModelAttribute WhAreaVO whArea,
 			@RequestParam String newWhArea,
 			Model model,
@@ -225,29 +225,47 @@ public class WMSWhController {
 		int updateCount = service.modifyWhArea(whArea, newWhArea);
 		
 		if(updateCount > 0) {
+			try {
+				response.getWriter().print("<script>");
+				response.getWriter().print("alert('창고 구역 내 위치가 등록되었습니다.')");
+				response.getWriter().print("</script>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
+			return "redirect:/WmsWarehouse";
 		} else {
-			
+			model.addAttribute("msg", "창고 구역 내 위치가 등록되지 않았습니다.");
+			return "fail_back";
 		}
 		
 	}
 	
 	// 창고 구역 내 위치 수정
 	@PostMapping(value = "ModifyWhLocArea")
-	public void modifyWhArea (
+	public String modifyWhLocArea (
 			@ModelAttribute WhLocAreaVO whLocArea,
-			@RequestParam String newWhLocArea,
+//			@RequestParam String newWhLocArea,
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
 			) {
 		
-		int updateCount = service.modifyWhLocArea(whLocArea, newWhLocArea);
+		int updateCount = service.modifyWhLocArea(whLocArea);
 		
 		if(updateCount > 0) {
+			try {
+				response.getWriter().print("<script>");
+				response.getWriter().print("alert('창고 구역 내 위치가 등록되었습니다.')");
+				response.getWriter().print("</script>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
+			return "redirect:/WmsWarehouse";
 		} else {
-			
+			model.addAttribute("msg", "창고 구역 내 위치가 등록되지 않았습니다.");
+			return "fail_back";
 		}
 		
 	}

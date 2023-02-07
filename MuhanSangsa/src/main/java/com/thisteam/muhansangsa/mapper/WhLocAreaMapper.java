@@ -15,9 +15,7 @@ public interface WhLocAreaMapper {
 	int insertWhLocArea(WhLocAreaVO whLocArea);
 
 	// 창고 구역 내 위치 수정
-	int updateWhLocArea(
-			@Param("whLocArea") WhLocAreaVO whLocArea, 
-			@Param("newWhLocArea") String newWhLocArea);
+	int updateWhLocArea(WhLocAreaVO whLocArea);
 
 	// 창고 구역 내 위치 삭제
 	int deleteWhLocArea(int wh_loc_in_area_cd);
