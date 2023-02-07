@@ -5,24 +5,24 @@
 <head>
 	<title> 출고예정 | 출고관리</title>
 
-    <meta charset="utf-8">
-    <meta name="description" content="Ela Admin - HTML5 Admin Template">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="description" content="Ela Admin - HTML5 Admin Template">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
-    <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
+<link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-	<!-- CSS only -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+<!-- CSS only -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 <!-- 모달창 -->
 <!-- Remember to include jQuery :) -->
@@ -78,16 +78,57 @@
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
 
+	<script type="text/javascript">
+	function openStockModal() {
+		alert();
+		
+	}
 
+	//출고 예정 목록 조회 페이지 조회용(JSON)
+	//status (-1:전체, 0:진행중 1:완료)로 데이터 전송 구분함!
+	function load_list(status) {
+		$.ajax({
+			type: "GET",
+			url: "./OutWaitingSelectListJson?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() + "&status=" + status, 
+			dataType: "json"
+		})
+		.done(function(resultList) { // 요청 성공 시
+			let result ="";
+			for(let row of resultList) {
+				result += "<tr>"
+							+ "<td>"+ row.out_schedule_cd + "</td>" //출고예정번호
+							+ "<td>"+ "" + "</td>" //유형(테이블 컬럼없어서 일단 공백)
+							+ "<td>"+ row.cust_name + "</td>" //받는곳명(거래처명)
+							+ "<td>"+ row.emp_num + "</td>" //담당자명
+							+ "<td>"+ row.product_name + "</td>" //품목명
+							+ "<td>"+ row.out_date + "</td>" //납기일자
+							+ "<td>"+ row.out_schedule_qty + "</td>" //출고예정수량합계
+							;
+				result 	+= "<td>"+ "종결" + "</td>"; //종결
 
-<script type="text/javascript">
-function openStockModal() {
-	alert();
-	
-}
+						if(row.out_complete == 0){
+							result 	+= "<td>"+ "미완료" + "</td>"; //진행상태
+											
+						}	else{
+							result 	+= "<td>"+ "완료"  + "</td>"; //진행상태
+						}
+						
+				result 	+= "</tr>";
+				
+			}
+			$("#OutWaitingTable > tbody").html(result);
+		})
+		.fail(function() { //요청 실패 시
+			$("#OutWaitingTable").append("요청 실패!!");
+		});
+	}
 
 
 $(function(){
+	//전체 조회이므로 -1로 리스트 호출
+	load_list(-1);
+	
+	
 	//전체선택 버튼 클릭
 	$('input:checkbox[name=AllChecked]').on("click",function(){
 		if($(this).is(":checked") == true){
@@ -142,9 +183,6 @@ $(function(){
 	
 });//$(function(){------------------------------------------------
 
-function productInfo(product_cd) {
-
-}
 </script>
 <body>
 
@@ -184,8 +222,8 @@ function productInfo(product_cd) {
   		<form action="Inventory_View ">
 				<!-- 검색 타입 추가 -->
 				<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
-					<option value="STOCK_CD" <c:if test="${param.searchType eq 'STOCK_CD'}">selected</c:if>>출고예정번호</option>
-					<option value="PRODUCT_NAME" <c:if test="${param.searchType eq 'PRODUCT_NAME'}">selected</c:if>>품목명</option>
+					<option value="out_schedule_cd" <c:if test="${param.searchType eq 'out_schedule_cd'}">selected</c:if>>출고예정번호</option>
+					<option value="product_name" <c:if test="${param.searchType eq 'product_name'}">selected</c:if>>품목명</option>
 <%-- 					<option value="" <c:if test="${param.searchType eq ''}">selected</c:if>>창고명</option> --%>
 				</select>			
 				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
@@ -193,12 +231,13 @@ function productInfo(product_cd) {
 		</form>
 	   </section>
 			   <!-- nav바 (tab)  -->
+			   <!-- onclick 사용으로 상태(status) 구분 (-1:전체, 0:진행중 1:완료) -->
 		<div class="default-tab" style="margin-bottom: 35px">
 			<nav>
 				<div class="nav nav-tabs" id="nav-tab" role="tablist">
-					<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
-					<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">진행중</a>
-					<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">완료</a>
+					<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#" onclick="load_list(-1)" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
+					<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#" onclick="load_list(0)" role="tab" aria-controls="nav-profile" aria-selected="false">진행중</a>
+					<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#" onclick="load_list(1)" role="tab" aria-controls="nav-contact" aria-selected="false">완료</a>
 				</div>
 			</nav>
 		</div>
@@ -207,7 +246,7 @@ function productInfo(product_cd) {
 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 -->
 
 	<div id = "selectCount"><small class="text-secondary"> 0 개 선택됨</small></div>
-	<table class="table"  id="">
+	<table class="table"  id="OutWaitingTable">
 		<thead>
 			<tr>
 				<th><input type="checkbox" name="AllChecked"></th>

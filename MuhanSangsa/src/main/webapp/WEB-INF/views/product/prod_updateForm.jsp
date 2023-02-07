@@ -91,10 +91,10 @@
         <div class="breadcrumbs">
             <div class="breadcrumbs-inner">
                 <div class="row m-0">
-                    <div class="col-sm-4">
+                    <div class="col-lg-6" style="margin-top: 25px; margin-left: 31px;">
                         <div class="page-header float-left">
                             <div class="page-title">
-                              <!--   <h1>사원 상세 페이지</h1> -->
+                                <h2>상세 정보</h2> 
                             </div>
                         </div>
                     </div>

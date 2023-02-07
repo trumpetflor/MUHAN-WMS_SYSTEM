@@ -131,8 +131,8 @@
         <!-- Header-->
         <header id="header" class="header">
             <div class="top-left">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="./"><img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" style="width: 54px; margin: -5;"  alt="Logo"></a>
+                <div class="navbar-header"> <!-- margin: -5; 로고 이상하면 넣어보기  -->
+                    <a class="navbar-brand" href="./"><img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" style="width: 54px;" alt="Logo"></a>
                     <a class="navbar-brand hidden" href="./"><img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" alt="Logo"></a>
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>

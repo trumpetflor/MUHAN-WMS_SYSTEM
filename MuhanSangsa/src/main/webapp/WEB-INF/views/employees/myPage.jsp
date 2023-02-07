@@ -171,7 +171,6 @@
                                          <div class="col-12 col-md-4">
 											<input type="text" id="emp_email" name="emp_email" value="${employees.emp_email }"
 												class="form-control bg-gradient-light" readonly="readonly">
-											 <input type="hidden" name="emp_email" value="${employees.emp_email}">	
 										</div>  
                                     </div>
                                     <!-- 신규 비밀번호 -->
