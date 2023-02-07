@@ -100,15 +100,23 @@ public class StockController {
 			   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
 			   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
 			   
-			   // 기존재고번호, 이동재고번호, 변경수량
-			   int updateCount = service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
-			   if(updateCount > 0) {
-				   System.out.println("수량 업데이트 성공!"); 
-
-				   int insertCount = service.setStockHistory(stockHistory);
-				   if(insertCount > 0) {
-					   return "redirect:Inventory_History_View?stock_cd=" + stockHistory.getStock_cd();
-				   }
+			   // 기존재고(-), 이동재고(+), 변경수량
+			   // (1). 이동재고수량 + 변경수량
+			   int updateTargetCount = service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
+			   if(updateTargetCount > 0) {
+				   System.out.println("타겟 수량 업데이트 성공!"); 
+			   // (2). 기존재고수량 - 변경수량
+				   int updateSourceCount = service.setStockQty(stock_cd, qty);
+					   if(updateSourceCount > 0) {
+			   // (3). 진행된 재고 이력 stock_history 테이블에 insert
+						   System.out.println("기존 수량 업데이트 성공!");
+						   int insertCount = service.setStockHistory(stockHistory);
+			   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
+						   if(insertCount > 0) {
+							   return "redirect:Inventory_History_View?stock_cd=" + stockHistory.getStock_cd();
+						   }
+					   }
+					   
 			   } else {
 				   model.addAttribute("msg", "이동수량 업데이트 실패!");
 				   return "fail_back";
