@@ -433,7 +433,8 @@
 			})
 			.done(function() {
 				alert("해당 창고 구역이 삭제되었습니다.");
-				whArea(wh_cd);
+// 				whArea(wh_cd);
+				window.location.reload();
 			})
 			.fail(function() {
 				alert("창고 구역 삭제 실패");
@@ -457,6 +458,7 @@
 			.done(function() {
 				alert("해당 창고 구역의 위치가 삭제되었습니다.");
 // 				whArea(wh_area_cd);
+				window.location.reload();
 			})
 			.fail(function() {
 				alert("창고 구역 삭제 실패");
