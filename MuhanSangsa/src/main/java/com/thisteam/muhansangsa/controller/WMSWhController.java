@@ -1,6 +1,8 @@
 package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,29 @@ public class WMSWhController {
 			Model model,
 			HttpSession session
 			) {
+		
+		// 세션 아이디
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		}else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			return "fail_back";
+		}
+		
+		// 아이피 주소
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		// 권한 필요
 		
 		List<WarehouseVO> whList = null; // 창고 목록
 //		List<WhAreaVO> whaList = null; // 창고 구역 목록
@@ -98,6 +123,18 @@ public class WMSWhController {
 			HttpSession session,
 			HttpServletResponse response
 			) {
+		
+		// IP 주소
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		
 		List<WhAreaVO> whaList = service.getWhAreaList(wh_cd); // 특정 창고 구역 목록 가져오기
 		

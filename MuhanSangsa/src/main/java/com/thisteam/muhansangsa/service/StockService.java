@@ -77,6 +77,14 @@ public class StockService {
 		// TODO Auto-generated method stub
 		return mapper.insertNewStock(product_cd,wh_loc_in_area_cd);
 	}
+
+	// WMS 창고 관리 페이지 속 재고 리스트 조회 (창고별, 창고 구역별, 창고 구역 내 위치별)
+	public List<Stock_viewVO> getWmsStockList(
+			String searchType, String keyword, int startRow, int listLimit,
+			String wh_cd, int wh_area_cd, int wh_loc_in_area_cd) {
+		return mapper.selectWmsStockList(searchType, keyword, startRow, listLimit,
+											wh_cd, wh_area_cd, wh_loc_in_area_cd);
+	}
 	
 	
 	

@@ -11,7 +11,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Muhan - WMS Warehouse</title>
+<title>MuhanSangsa - WMS Warehouse</title>
 <meta name="description" content="Ela Admin - HTML5 Admin Template">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -35,7 +35,42 @@
    
 <style type="text/css">
 
-.col-lg-6{
+	@font-face {
+	    font-family: 'Pretendard-Regular';
+	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+	    font-weight: 400;
+	    font-style: normal;
+	}
+
+	
+	@font-face {
+	    font-family: 'NEXON Lv1 Gothic OTF';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+	
+	body {
+	 font-family: 'NEXON Lv1 Gothic OTF';
+	}
+		
+	#client_table{
+		 vertical-align: middle;
+	}
+	table{
+	 text-align: center;
+	}
+	
+	td {
+	height: 100px;
+	}
+		
+	.id_pht{
+	 width: 80px;
+	 transition: 0.5s;
+	}
+
+	.col-lg-6{
 		margin: auto;
 		max-width: 60%;
 		flex: 100 100;
@@ -89,8 +124,6 @@
 </style>
 <script type="text/javascript">
 
-
-
 	$(function() {
 
 		//---------------------------------------토글 처리 부분
@@ -106,6 +139,7 @@
 			
 			if (aNextTwo.is(":visible")) {
 				aNextTwo.slideUp();
+				// 열렸을 때만 + 버튼 보이게 하기
 			} else {
 				aNextTwo.slideDown();
 			}
@@ -219,23 +253,46 @@
 		})
 		.done(function(whaList) { // 요청 성공 시
 			for(let whArea of whaList) {
-// 				let wh_cd = whArea.wh_cd; // 창고 코드 변수에 저장
+				let whCd = "'" + whArea.wh_cd + "'"; // 창고 코드 변수에 저장
 				let wh_area_cd = whArea.wh_area_cd; // 창고 구역 코드 변수에 저장
 // 				alert("창고 코드 : " + wh_cd + "창고 구역 코드 : " + wh_area_cd);
 				let result = '<li class="w1" id=' + wh_area_cd + '>'
-							+ '<a href="javascript:whLocArea(' + whArea.wh_area_cd + ', ' + whArea.wh_cd + ')"><img src="./resources/images/right-arrow.png" width="10px" />'
+							+ '<a href="javascript:whLocArea(' + whArea.wh_area_cd + ', ' + whCd + ')"><img src="./resources/images/right-arrow.png" width="10px" />'
 							+ '&nbsp;' + whArea.wh_area + '</a>&nbsp;&nbsp;&nbsp;'
 							+ '<span class="ti-pencil-alt modify_wh_area"></span>&nbsp;<span class="ti-minus remove_wh_area"></span>'
 							+ '<span class="ti-plus" style="float: right;" onclick="addWhLocAreaDiv(' + whArea.wh_area_cd + ')"></span>'
 // 							+ '<li><div id="wh_area_div"></div></li>'
 							+ '<ul class="warehouse-loc-area"></ul></li>';
+				
 				$("#" + whArea.wh_cd).append(result);
 				
 			}
+		
+			$("#right").empty();
+		
+			// 재고 불러오기
+			$.ajax({
+				type: "GET",
+				url: "Wms_Inventory_View?wh_cd=" + wh_cd,
+				dataType: "html",
+			})
+			.done(function(result) { // 요청 성공 시
+				
+// 				let insert = $.html(result).find('li');
+				
+				$("#right").append(result);
+					
+			})
+			.fail(function() {
+				$("#" + whArea.wh_cd).append("요청 실패..ㅠㅠ");
+			});
+				
+				
 		})
 		.fail(function() {
 			$("#" + whArea.wh_cd).append("요청 실패..ㅠㅠ");
 		});
+		
 	}
 	
 	function whLocArea(wh_area_cd, wh_cd) { // 걍 안 뜸 -> 뜸 - by. 에이젝스 광공 하원
@@ -266,6 +323,29 @@
 // 				$("#" + wh_area_cd).append(result);
 				$("#" + wh_area_cd + "> ul").append(result);
 			}
+			
+			$("#right").empty();
+			
+// 			let whCd = wh_cd;
+//	 		alert(whCd);
+			
+			// 재고 불러오기
+			$.ajax({
+				type: "GET",
+				url: "Wms_Inventory_View?wh_cd=" + wh_cd + "&wh_area_cd=" + wh_area_cd,
+				dataType: "html",
+			})
+			.done(function(result) { // 요청 성공 시
+				
+// 				let insert = $.html(result).find('li');
+				
+				$("#right").append(result);
+					
+			})
+			.fail(function() {
+				$("#" + whArea.wh_cd).append("요청 실패..ㅠㅠ");
+			});
+		
 		})
 		.fail(function() {
 			$(".warehouse-loc-area").append("요청 실패..ㅠㅠ");
@@ -276,8 +356,10 @@
 // 		submenu2.css("display", "block");
 		
 		if($(".w1 ul").is(":visible")) { // 되긴 하는데 여러 창고 구역 위치가 같이 됨..
-			$(".w1 ul").slideUp();
+			$(".w1 ul").slideUp(); 
 //			submenu2.empty();
+			// 열렸을 때만 + 버튼 보이게 하기
+			
 		} else {
 			$(".w1 ul").slideDown();
 		}
@@ -425,23 +507,24 @@
 </head>
  <body class="sb-nav-fixed">
     <jsp:include page="../inc/left.jsp"></jsp:include>
-		<!-- employee_registration_form body 내용 시작  -->
-		
-        <div class="breadcrumbs">
-            <div class="breadcrumbs-inner">
-                <div class="row m-0">
-                    <div class="col-sm-4">
-                        <div class="page-header float-left">
-                            <div class="page-title">
-                                <h1>창고 관리</h1>
+
+		<div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
+        <div class=" breadcrumbs m-0">
+            <div class="breadcrumbs-inner rounded-start p-2 " >
+                <div class="row m-0 ">
+                    <div class="col-sm-4 ">
+                        <div class="page-header float-left rounded-start ">
+                            <div class="page-title ">
+                               <h1 class="m-1"><b>창고 관리</b></h1>   
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="page-header float-right">
-                            <div class="page-title">
+                    <div class="col-sm-8 rounded-pill ">
+                        <div class="page-header float-right rounded-start ">
+                            <div class="page-title ">
                                 <ol class="breadcrumb text-right">
-                                    <li class="active">사원등록</li>
+                                    <li><a href="">WMS</a></li>
+                                    <li><a href="WmsWarehouse">창고 관리</a></li>
                                 </ol>
                             </div>
                         </div>
@@ -450,21 +533,6 @@
             </div>
         </div>
         
-         <div class="breadcrumbs">
-         	<div class="breadcrumbs-inner">
-                <div class="row m-0">
-                	<div class="col-sm-4">
-                		<div class="page-header float-left">
-		                	<div class="page-title">
-		                		<h1>수정/삭제 추가 자리</h1>
-		                		<div style="display:inline"><input type="text" id="listW0"><input type="button" id="addListW0" value="+">
-		                		<input type="text" id="add_wh_area" name="wh_area"><input type="button" id="addListW2" value="+"><input type="button" id="deleteListW1" value="-"></div>
-		                		<input type="text" id="add_wh_loc_area" name="wh_loc_area"><input type="button" id="addListW2" value="+"><input type="button" id="deleteListW1" value="-"></div>
-		                	</div>
-                		</div>
-                	</div>
-                </div>
-            </div>    
 		<div class="content d-flex">
 			<div>
 			    <ul style=" width: 410px;" id="wareHouse">
@@ -494,7 +562,7 @@
 			</div>
 			
 			<div id="right">
-				
+<%-- 				<jsp:include page="../stock/stock_list.jsp"></jsp:include> --%>
 			</div>
 			
 		</div> <!-- content -->
