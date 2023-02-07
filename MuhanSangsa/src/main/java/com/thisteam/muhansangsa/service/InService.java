@@ -22,11 +22,29 @@ public class InService {
 
 	@Autowired
 	private InMapper mapper;
-
-
+	
+	// ======================== yeram ==============================
+	// 입고예정목록
 	public List<inProcessingVO> getInProList() {
 		return mapper.selectInProList();
 	}
+	
+	// 입고 처리 폼
+	public List<inRegisterVO> getInRegisterList(String[] in_schedule_cd) {
+		return mapper.selectInRegisterList(in_schedule_cd);
+	}
+	
+	
+	
+	
+	
+	
+	// ======================== yeram ==============================
+	
+	
+	
+	
+	
 	public List<ClientVO> getClientList() {
 		return mapper.getClientList();
 	}
@@ -38,11 +56,6 @@ public class InService {
 	public List<InVO> getInList() {
 		return mapper.getInList();
 	}
-	public List<inRegisterVO> getInRegisterList(String[] in_schedule_cd) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 
 
 

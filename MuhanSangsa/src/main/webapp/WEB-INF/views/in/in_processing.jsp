@@ -121,29 +121,34 @@
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
 <script type="text/javascript">
+	// 입고예정코드 클릭 시 수정 페이지 이동
+	function modify(item){
+		var code=$(item).text();
+		window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+
+	}
+	
 	
 	//체크박스 선택 시
-	$(document).on("change","input[name=inproChecked]",function(){
+// 	$(document).on("change","input[name=inChecked]",function(){
 		
-		$("#selectCount > small").html($('input:checkbox[name=inproChecked]:checked').length +" 개 선택됨");
+// 		$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
 		
-// 		alert("체크됨: "+ $(this).val());
-		let idx = $(this).val().split("/")[0];
-		let emp_name = $(this).val().split("/")[1];
-		let emp_num = $(this).val().split("/")[2];
-		let emp_info = {"emp_num":emp_num,"emp_name":emp_name};
+// // 		alert("체크됨: "+ $(this).val());
+// 		let idx = $(this).val().split("/")[0];
+// 		let emp_name = $(this).val().split("/")[1];
+// 		let emp_num = $(this).val().split("/")[2];
+// 		let emp_info = {"emp_num":emp_num,"emp_name":emp_name};
 	
 		
-	}); //체크박스선택시?
+// 	}); //체크박스선택시?
 	
 	$(function(){
 		// 입고버튼 클릭... 팝업창 버전
-		$("#inScheduleBtn").on("click", function(){
-			window.open('InRegisterForm','InRegisterForm', 'width=1000, height=920,location=no,status=no,scrollbars=yes');
-		});
+// 		$("#inScheduleBtn").on("click", function(){
+// 			window.open('InRegisterForm','InRegisterForm', 'width=1000, height=920,location=no,status=no,scrollbars=yes');
+// 		});
 		
-		let inMap = new Map();
-		let selectedModalCheckedVal;
 	
 		
 		//전체선택 버튼 클릭
@@ -162,20 +167,35 @@
 		});//체크박스
 		
 		// 입고 버튼 클릭 시
-		$("#inButton").on("click", function(){
-			let in_schedule_cd = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
+		$("#inScheduleBtn").on("click", function(){
+			let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
 			$('input:checkbox[name=inChecked]').each(function(index){
 				if($(this).is(":checked")==true){
 					console.log("id값=in_schedule_cd : "+$(this).val());
-					in_schedule_cd.push($(this).val()); // 배열에 추가
+					inRegisterList.push($(this).val()); // 배열에 추가
+					
+					console.log("inRegisterList[] : "+ inRegisterList);
+					let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
+					if(result){
+						location.href="InRegister?inRegisterList="+inRegisterList
+					}
 				}
-			});
 			
-			console.log("in_schedule_cd[] : "+ in_schedule_cd);
-			let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-			if(result){
-				location.href="InRegisterPro?in_schedule_cd="+in_schedule_cd
-			}
+			
+// 			$.ajax({
+// 				type: "GET",
+// 				url: "InRegister",
+// 				data: inRegisterList,
+// 				success: function(result){
+// 					window.open('InRegister?'+inRegisterList,'InRegister','width=1000, height=920,location=no,status=no,scrollbars=yes');
+// 				}
+// 			});
+			});
+// 			console.log("inRegisterList[] : "+ inRegisterList);
+// 			let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
+// 			if(result){
+// 				location.href="InRegister?inRegisterList="+inRegisterList
+// 			}
 		}); //입고버튼
 			
 			
@@ -266,8 +286,8 @@
 		<tbody>
 		<c:forEach items="${inProList }" var="inlist" varStatus="status" >
 			<tr>
-				<td><input type="checkbox" name="inChecked" id="inChecked" class="form-check-input" value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
-				<td>${inlist.in_schedule_cd }</td>
+				<td align="center"><input type="checkbox" name="inChecked" id="inChecked" class="form-check-input" value="${inlist.in_schedule_cd }/${inlist.product_name }/${inlist.in_date }"></td>
+				<td><a id="in_schedule_cd" href='javascript:void(0);' onclick="modify(this)">${inlist.in_schedule_cd }</a></td>
 				<td>${inlist.cust_name }</td>
 				<td>${inlist.product_name }</td>
 				<td>${inlist.in_date }</td>

@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Warehouse Modify</title>
+    <title>In Register</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -152,16 +152,16 @@
                                     <thead>
                                         <tr>
                                             <th>입고예정번호</th>
-                                            <th>창고품목명명</th>
+                                            <th>품목명</th>
                                             <th>입고예정수량</th>
-                                            <th>입고수량</th>
+                                            <th>입고지시수량</th>
                                             <th>재고번호</th>
                                             <th>구역명_선반위치</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:choose>
-                                    	<c:when test="${empty whList }">
+                                    	<c:when test="${empty inRegisterList }">
                                     		<tr><td colspan="6">데이터가 없습니다.</td></tr>
                                     	</c:when>
                                     	<c:otherwise>
