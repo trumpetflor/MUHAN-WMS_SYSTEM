@@ -42,16 +42,22 @@ public interface StockMapper {
 	// 이동 & 조정수량 입력을 통한 재고 수량 변경
 	int updateStockQty(
 			@Param("stock_cd") int stock_cd, 
-			@Param("qty") int totalStockQty);
+			@Param("qty") int qty);
 
 	// sId를 통한 사원번호 조회
 	String selectEmpNum(String sId);
 
 	// 재고 이력 페이지를 위한 stockHistoryVO 타입 리스트 생성
-	List<StockHistoryVO> insertStockHistory(
+	int insertStockHistory(
 			@Param("stock") StockHistoryVO stockHistory);
 
+	// --------------------------------------------------------23/02/07 추가
+	int updateTargetStockQty(
+			@Param("sourceStockCd") int sourceStockCd, 
+			@Param("targetStockCd") int targetStockCd, 
+			@Param("stockQty") int stockQty);
 
+	// --------------------------------------------------------23/02/07 추가
 
 	
 	

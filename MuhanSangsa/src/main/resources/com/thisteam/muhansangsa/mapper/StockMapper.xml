@@ -80,6 +80,7 @@
 		SELECT * 
 			FROM stock_history_view
 			WHERE STOCK_CD = #{stock_cd}
+			ORDER BY STOCK_DATE DESC
 	</select>
 	
 	<!-- 이동 & 조정수량 입력을 통한 재고 수량 변경 -->
@@ -97,22 +98,38 @@
 	</select>
 	
 	<insert id="insertStockHistory">
-		<selectKey keyProperty="PRODUCT_CD" order="BEFORE" resultType="String">
+		<selectKey keyProperty="PRODUCT_CD" order="BEFORE" resultType="int">
 			SELECT PRODUCT_CD 	
 				FROM stock 
 				WHERE STOCK_CD = #{stock.stock_cd}
 		</selectKey>
 		INSERT INTO stock_history
 			VALUES (
-				STOCK_CD = #{stock.stock_cd} 
-			    ,STOCK_CONTROL_TYPE_CD = #{stock.stock_control_type_cd}
-			    ,PRODUCT_CD = #{PRODUCT_CD}
-			    ,SOURCE_STOCK_CD = #{stock.source_stock_cd}
-			    ,TARGET_STOCK_CD = #{stock.target_stock_cd}
-			    ,QTY = #{stock.qty}
-				,EMP_NUM = #{stock.emp_num}
+				#{stock.stock_cd} 
+			    ,#{stock.stock_control_type_cd}
+			    ,#{PRODUCT_CD}
+			    ,#{stock.source_stock_cd}
+			    ,#{stock.target_stock_cd}
+			    ,#{stock.qty}
+				,#{stock.emp_num}
 				,now()
-				,REMARKS = ""
+				,""
 			)
 	</insert>
+	
+	<!-- ===========================23/02/07 추가======================= -->
+	
+	<update id="updateTargetStockQty">
+		<selectKey resultType="int" order="BEFORE" keyProperty="STOCK_QTY">
+			SELECT STOCK_QTY 
+				FROM STOCK 
+				WHERE STOCK_CD = #{targetStockCd}
+		</selectKey>
+		UPDATE stock 
+			SET STOCK_QTY = (#{STOCK_QTY} + #{stockQty})
+				WHERE STOCK_CD = #{targetStockCd}
+	</update>
+	
+	
+	<!-- ===========================23/02/07 추가======================= -->
 </mapper>
