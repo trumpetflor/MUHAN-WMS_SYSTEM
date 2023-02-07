@@ -20,7 +20,7 @@ public interface WhAreaMapper {
 			@Param("newWhArea") String newWhArea);
 
 	// 창고 구역 삭제
-	int deleteWhArea(WhAreaVO whArea);
+	int deleteWhArea(int wh_area_cd);
 
 
 	

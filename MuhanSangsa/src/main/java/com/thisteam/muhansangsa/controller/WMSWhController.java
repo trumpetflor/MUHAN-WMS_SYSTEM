@@ -153,38 +153,61 @@ public class WMSWhController {
 
 	// 창고 구역 등록
 	@PostMapping(value = "RegistWhArea")
-	public void registWhArea (
+	public String registWhArea (
 			@ModelAttribute WhAreaVO whArea,
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
 			) {
 		
+		System.out.println(whArea);
+		
 		int insertCount = service.registWhArea(whArea);
 		
 		if(insertCount > 0) {
 			
-		} else {
+			try {
+				response.getWriter().print("<script>");
+				response.getWriter().print("alert('창고 구역이 등록되었습니다.')");
+				response.getWriter().print("</script>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
+			return "redirect:/WmsWarehouse";
+		} else {
+			model.addAttribute("msg", "창고 구역이 등록되지 않았습니다.");
+			return "fail_back";
 		}
 		
 	}
 	
 	// 창고 구역 내 위치 등록
 	@PostMapping(value = "RegistWhLocArea")
-	public void registWhArea (
+	public String registWhArea (
 			@ModelAttribute WhLocAreaVO whLocArea,
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
 			) {
 		
+		System.out.println(whLocArea);
+		
 		int insertCount = service.registWhLocArea(whLocArea);
 		
 		if(insertCount > 0) {
+			try {
+				response.getWriter().print("<script>");
+				response.getWriter().print("alert('창고 구역 내 위치가 등록되었습니다.')");
+				response.getWriter().print("</script>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
+			return "redirect:/WmsWarehouse";
 		} else {
-			
+			model.addAttribute("msg", "창고 구역 내 위치가 등록되지 않았습니다.");
+			return "fail_back";
 		}
 		
 	}
@@ -230,15 +253,15 @@ public class WMSWhController {
 	}
 	
 	// 창고 구역 삭제
-	@PostMapping(value = "DeleteWhArea")
+	@GetMapping(value = "DeleteWhArea")
 	public void deleteWhArea (
-			@ModelAttribute WhAreaVO whArea,
+			@RequestParam int wh_area_cd, // 창고 구역 코드
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
 			) {
 		
-		int deleteCount = service.deleteWhArea(whArea);
+		int deleteCount = service.deleteWhArea(wh_area_cd);
 		
 		if(deleteCount > 0) {
 			
@@ -249,15 +272,15 @@ public class WMSWhController {
 	}
 	
 	// 창고 구역 내 위치 삭제
-	@PostMapping(value = "DeleteWhLocArea")
-	public void deleteWhArea (
-			@ModelAttribute WhLocAreaVO whLocArea,
+	@GetMapping(value = "DeleteWhLocArea")
+	public void deleteWhLocArea (
+			@RequestParam int wh_loc_in_area_cd,
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
 			) {
 		
-		int deleteCount = service.deleteWhLocArea(whLocArea);
+		int deleteCount = service.deleteWhLocArea(wh_loc_in_area_cd);
 		
 		if(deleteCount > 0) {
 			

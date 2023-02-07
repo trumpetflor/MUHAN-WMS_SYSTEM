@@ -58,12 +58,12 @@ public class WMSWhService {
 	}
 
 	// 창고 구역 삭제
-	public int deleteWhArea(WhAreaVO whArea) {
-		return areaMapper.deleteWhArea(whArea);
+	public int deleteWhArea(int whAreaCd) {
+		return areaMapper.deleteWhArea(whAreaCd);
 	}
 
 	// 창고 구역 내 위치 삭제
-	public int deleteWhLocArea(WhLocAreaVO whLocArea) {
+	public int deleteWhLocArea(int whLocArea) {
 		return locMapper.deleteWhLocArea(whLocArea);
 	}
 	

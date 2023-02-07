@@ -146,6 +146,9 @@
 
 // 		});
 		
+		
+		
+		
 		//---------------------------------------토글 처리 부분 		
 
 		// 이미지 롤오버 처리
@@ -197,16 +200,10 @@
 		// 			 $(".w1").after("<li class="w1"><a><img src="./resources/images/right-arrow.png" width="10px" />&nbsp;&nbsp;창고 구역명 1-3");
 
 		//             });
-		
-		
 
 	}); // document
 	
-	// 창고 입력창 삭제
-	$(document).on("click", "input[name=remove]", function(){
-// 		alert("입력창 삭제");
-		$(this).closest("li").remove();
-	});
+	
 	
 	function whArea(wh_cd) { // 한 번만 되게 만들기... 어떻게..? - by. 에이젝스 광공 하원
 		
@@ -222,13 +219,12 @@
 // 				let wh_cd = whArea.wh_cd; // 창고 코드 변수에 저장
 				let wh_area_cd = whArea.wh_area_cd; // 창고 구역 코드 변수에 저장
 // 				alert("창고 코드 : " + wh_cd + "창고 구역 코드 : " + wh_area_cd);
-				let result = '<li class="w1" id=' + wh_area_cd + '>'
-							+ '<a href="javascript:whLocArea(' + whArea.wh_area_cd + ', ' + whArea.wh_cd + ')"><img src="./resources/images/right-arrow.png" width="10px" />'
-							+ '&nbsp;' + whArea.wh_area + '</a>&nbsp;&nbsp;&nbsp;'
-							+ '<span class="ti-pencil-alt"></span>&nbsp;<span class="ti-minus remove_wh_area"></span>'
-							+ '<span class="ti-plus" style="float: right;" onclick="addWhLocAreaDiv(' + whArea.wh_area_cd + ')"></span>'
-// 							+ '<li><div id="wh_area_div"></div></li>'
-							+ '<ul class="warehouse-loc-area"></ul></li>';
+				let result = "<li class='w1' id=" + wh_area_cd + ">"
+							+ "<a href='javascript:whLocArea(" + whArea.wh_area_cd + ", " + whArea.wh_cd + ")'><img src='./resources/images/right-arrow.png' width='10px' />"
+							+ "&nbsp;" + whArea.wh_area 
+							+ "<input type='button' value='+' style='float: right;'>"
+							+ "<input type='button' value='-' style='float: right;'></a>"
+							+ "<ul class='warehouse-loc-area'></ul></li>";
 				$("#" + whArea.wh_cd).append(result);
 				
 			}
@@ -245,7 +241,7 @@
 //			var aNextUl = $(this).next();
 //			var submenu2 = aNextUl.next("ul");
 		
-// 		console.log("에이젝스");
+		console.log("에이젝스");
 		$("#" + wh_area_cd + "> ul").empty();
 		
 		$.ajax({
@@ -256,10 +252,10 @@
 		.done(function(whlaList) { // 요청 성공 시
 			for(let whLocArea of whlaList) {
 // 				alert("창고 구역 코드 : " + whLocArea.wh_area_cd + "창고 구역 위치 코드 : " + whLocArea.wh_loc_in_area_cd);
-				let result = '<li class="w2" id="' + whLocArea.wh_loc_in_area_cd +'">' // "<ul class='hide warehouse-loc-area'>"
-							+ '<a>&nbsp;' + whLocArea.wh_loc_in_area + '</a>&nbsp;&nbsp;&nbsp;'
-							+ '<span class="ti-pencil-alt"></span>&nbsp;<span class="ti-minus remove_wh_loc_area"></span>'
-							+ '</li>';
+				let result = "<li class='w2'>" // "<ul class='hide warehouse-loc-area'>"
+							+ "<a>&nbsp;" + whLocArea.wh_loc_in_area
+							+ "<input type='button' value='+' style='float: right;'>"
+							+ "<input type='button' value='-' style='float: right;'></a></li>";
 // 							+ "</ul>";
 // 				alert(result);
 // 				alert(wh_area_cd);
@@ -271,15 +267,15 @@
 			$(".warehouse-loc-area").append("요청 실패..ㅠㅠ");
 		});
 		
-		var submenu2 = $(".w1 ul");
+		var submenu2 = $(".w1 > ul");
 		
 // 		submenu2.css("display", "block");
 		
-		if($(".w1 ul").is(":visible")) { // 되긴 하는데 여러 창고 구역 위치가 같이 됨..
-			$(".w1 ul").slideUp();
+		if (!submenu2.is(":visible")) {
+			submenu2.slideDown();
 //			submenu2.empty();
 		} else {
-			$(".w1 ul").slideDown();
+			submenu2.slideUp();
 		}
 	}
 	
@@ -297,88 +293,6 @@
 // 			submenu2.slideDown();
 // 		}
 // 	});	
-	
-	// 창고 구역 추가
-	function addWhAreaDiv(wh_cd) {
-		
-// 		let whCd = wh_cd;
-		
-// 		alert("창고 코드 : " + wh_cd);
-		
-		let html = '<li><div id="wh_area_div">'
-					+ '<form action="RegistWhArea" method="post" class="form-horizontal">'
-					+ '<input type="hidden" value=' + wh_cd + ' name="wh_cd">'
-					+ '&nbsp;&nbsp;&nbsp;<input type="text" name="wh_area" placeholder="등록할 창고 구역명" class="form-control-sm" required="required">'
-					+ '<input type="submit" value="등록"><input type="button" value="취소" name="remove">'
-					+ '</form>'
-					+ '</div></li>';
-		
-		$("#" + wh_cd).append(html);
-		
-	} 
-
-	// 창고 구역 내 위치 추가
-	function addWhLocAreaDiv(wh_area_cd) {
-		
-// 		let whCd = wh_cd;
-		
-// 		alert("창고 구역 코드 : " + wh_area_cd);
-		
-		let html = '<li><div id="wh_loc_area_div">'
-					+ '<form action="RegistWhLocArea" method="post" class="form-horizontal">'
-					+ '<input type="hidden" value=' + wh_area_cd + ' name="wh_area_cd">'
-					+ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_loc_in_area" placeholder="등록할 창고 구역 내 위치명" class="form-control-sm" required="required">'
-					+ '<input type="submit" value="등록"><input type="button" value="취소" name="remove">'
-					+ '</form>'
-					+ '</div></li>';
-		
-		$("#" + wh_area_cd).append(html);
-		
-	} 
-	
-	// 창고 구역 삭제
-	$(document).on("click", ".remove_wh_area", function(){
-		let wh_cd = $(this).closest("ul").prop("id"); // 창고 코드
-		let wh_area_cd = $(this).closest("li").prop("id"); // 창고 구역 코드
-		let confirmDelete = confirm("삭제하시겠습니까?");
-		
-		if(confirmDelete) {
-			$.ajax({
-				type: "GET",
-				url: "DeleteWhArea?wh_area_cd=" + wh_area_cd
-			})
-			.done(function() {
-				alert("해당 창고 구역이 삭제되었습니다.");
-				whArea(wh_cd);
-			})
-			.fail(function() {
-				alert("창고 구역 삭제 실패");
-			});
-		}
-		
-	});
-	
-	// 창고 구역 내 위치 삭제
-	$(document).on("click", ".remove_wh_area", function(){
-		let wh_area_cd = $(this).closest("a").text(); // 창고 구역 코드
-		let wh_loc_in_area_cd = $(this).closest("li").prop("id"); // 창고 구역 내 위치 코드
-		let confirmDelete = confirm("삭제하시겠습니까?");
-		
-		if(confirmDelete) {
-			$.ajax({
-				type: "GET",
-				url: "DeleteWhArea?wh_loc_in_area_cd=" + wh_loc_in_area_cd
-			})
-			.done(function() {
-				alert("해당 창고 구역의 위치가 삭제되었습니다.");
-				whArea(wh_cd);
-			})
-			.fail(function() {
-				alert("창고 구역 삭제 실패");
-			});
-		}
-		
-	});
 	
 </script>
 
@@ -425,32 +339,39 @@
                 	</div>
                 </div>
             </div>    
+        						<div class="icon-container">
+                                    <span class="ti-pencil-alt"></span><span class="icon-name"> ti-pencil-alt</span>
+                                </div>
+                                <div class="icon-container">
+                                    <span class="ti-plus"></span><span class="icon-name"> ti-plus</span>
+                                </div>
+                                <div class="icon-container">
+                                    <span class="ti-minus"></span><span class="icon-name"> ti-minus</span>
+                                </div>
+                                <div class="icon-container">
+                                    <span class="ti-close"></span><span class="icon-name"> ti-close</span>
+                                </div>
+        
 		<div class="content d-flex">
 			<div>
-			    <ul style=" width: 410px;" id="wareHouse">
+			    <ul style=" width: 410px;">
 			    	<c:forEach var="wh" items="${whList }" varStatus="wh_idx"> <!-- 창고 반복 -->
-			        <li class="menu" style="" >
+			        <li class="menu" style="">
 			            <a href="javascript:whArea('${wh.wh_cd }')"><img src="./resources/images/right-arrow.png" width="10px" />&nbsp;<i>${wh.wh_name }</i></a>
-			            <span class="ti-plus add_wh_area" style="float: right;" onclick="addWhAreaDiv('${wh.wh_cd }')"></span>
+			            <span class="ti-plus"></span>
 			            <ul class="hide warehouse-area" id="${wh.wh_cd }">
 			                <li class="w1"><a><img src="./resources/images/right-arrow.png" width="10px" />&nbsp;창고 추가</a>
-			                <span class="ti-pencil-alt"></span><span class="ti-minus remove_wh_area"></span><span class="ti-plus" style="float: right;"></span>
+			                <span class="ti-pencil-alt"></span><span class="ti-close"></span><span class="ti-plus" style="float: right;"></span>
 			                	<ul class="hide warehouse-loc-area">
 			                 		<li class="w2">창고 구역 위치<a>&nbsp;</a>
-			                 		<span class="ti-pencil-alt"></span><span class="ti-minus remove_wh_loc_area"></span>
-			                 		</li> <!-- 창고 구역 위치 하나 -->
-			                 		<li>
-					        			<div id="wh_loc_area_div"></div>
-				      				</li>
-		                 		</ul> <!-- 창고 구역 위치 -->
-			                </li> <!-- 창고 구역 하나 -->
-				            <li>
-					        	<div id="wh_area_div"></div>
-				      		</li>
-			            </ul> <!-- 창고 구역 -->
-			        </li> <!-- 창고 하나 -->
+			                 		<span class="ti-pencil-alt"></span><span class="ti-close"></span>
+			                 		</li>
+		                 		</ul>
+			                </li>
+			            </ul>
+			        </li>
 			        </c:forEach>
-				</ul> <!-- 창고 -->
+				</ul>
 			</div>
 			
 			<div id="right">
