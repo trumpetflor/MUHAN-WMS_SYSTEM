@@ -128,7 +128,6 @@
 											<input type="text" id="emp_name" name="emp_name" value="${employees.emp_name }"
 												class="form-control bg-gradient-light" readonly="readonly">
 										</div>                                            
-                                        
                                     </div>
                                     <!-- 부서명 -->
                                      <div class="row form-group">
@@ -174,8 +173,6 @@
 												class="form-control bg-gradient-light" readonly="readonly">
 											 <input type="hidden" name="emp_email" value="${employees.emp_email}">	
 										</div>  
-                                        
-                                        
                                     </div>
                                     <!-- 신규 비밀번호 -->
 									<div class="row form-group">
@@ -235,8 +232,8 @@
                                     <!--사진이미지 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지*</label></div>
-                                        <div class="col-12 col-md-4"><input type="file" id="file-input" name="file-input" class="form-control-file">
-                                        	<br><small>(기존파일 : ${product.photo })</small>
+                                        <div class="col-12 col-md-4"><input type="file" id="file" name="file"  class="form-control-file">
+                                        	<br><small>(기존파일 : ${employees.photo })</small>
                                         </div>
                                     </div>
                                     <!--사진이미지 -->

@@ -268,8 +268,7 @@ public class EmployeesController {
 	public String mypageUpdate(
 			@RequestParam(defaultValue = "") String msg,
 			@ModelAttribute EmployeesVO employees, 
-			@RequestParam(value ="file", required=false) MultipartFile file,
-			MultipartRequest request,
+			@RequestParam(value ="file") MultipartFile file,
 			Model model, 
 			HttpSession session){
 		
@@ -297,6 +296,8 @@ public class EmployeesController {
 				// 파일 업로드를 위한 변수 설정
 				String uploadDir = "/resources/upload";
 				String saveDir = session.getServletContext().getRealPath(uploadDir);
+				
+//				System.out.println("11111111=======================");
 				
 				// 5. 이미지 파일명 추출하기 (파일명이 중복일 경우 발생하는 문제 해결해야함)
 				String photo = file.getOriginalFilename().toString();

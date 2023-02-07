@@ -160,11 +160,13 @@
 								</tr>								
 								<tr>
 									<th>입고단가</th>
-									<td>  <input type="text" class="form-control" name="in_unit_price" value="${product.in_unit_price }" required="required"></td>
+									<td><input type="text" class="form-control" name="in_unit_price" value="${product.in_unit_price }" 
+											placeholder="숫자만 입력해주세요 ex)15000" required="required"></td>
 								</tr>
 								<tr>
 									<th>출고단가</th>
-									<td>  <input type="text" class="form-control" name="out_unit_price" value="${product.out_unit_price }" required="required"></td>
+									<td><input type="text" class="form-control" name="out_unit_price" value="${product.out_unit_price }" 
+										placeholder="숫자만 입력해주세요 ex)55000"  required="required"></td>
 								</tr>
 								<tr>
 									<th>품목구분</th>
