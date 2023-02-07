@@ -27,11 +27,23 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/lib/chosen/chosen.min.css">
 
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+<!--     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'> -->
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 <style>
+	@font-face {
+	    font-family: 'NEXON Lv1 Gothic OTF';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+	
+	body {
+	 font-family: 'NEXON Lv1 Gothic OTF';
+	 width: 100%;
+	 height: 100%;
+	}
 	.grandchildren {
 		display: none;
 		position: absolute;
@@ -50,70 +62,102 @@
 		max-width: 85%;
 		flex: 100 100;
 	}
+	table, th, td { border: 1px solid #999999; 
+					padding-top: 5px;
+					padding-bottom: 5px;
+					padding-left: 10px;
+					padding-right: 10px;
+					}
+	thead {background-color: #e6e6e6;
+			text-align: center;}
+	small { text-align: left;}
+	#test{
+		width: 60px;
+		height: auto;
+	}
+	tfoot {background-color: #e6e6e6;
+		width: 60px;
+		height: auto;
+		text-align: right;
+	}
+	#hireDate1 {
+		width: 130px;
+		height: auto;
+	}
+	.input-field {
+		width: 70px;
+		height: auto;
+		text-align: right;
+	}
+	.product-f {
+		width: 150px;
+		height: auto;
+	}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
+	var index = 1;
+// 	$(document).on("change","input[class=test]",function(){
+// 		let sum = 0;
+// 		sum = parseInt(sum);
+// 		$(this).each(function(index){
+// 			$("input[class=test]").eq(index).val();
+// 			console.log($("input[class=test]").val());
+// 			sum += parseInt($("input[class=test]").eq(index).val());
+// 		});
+// 		$(".rowSum").text(sum);
+// 	});
+	function calculateSum() {
+    var sum = 0;
+    var inputElements = document.getElementsByClassName("input-field");
+    for (var i = 0; i < inputElements.length; i++) {
+    	if (!isNaN(inputElements[i].value) && inputElements[i].value.length != 0) {
+        sum += parseFloat(inputElements[i].value);
+    	}
+    }
+    document.getElementById("sum").innerHTML = "Sum: " + sum;
+  }
+
+	var inputFields = document.querySelectorAll(".input-field");
+	inputFields.forEach(function(inputField) {
+    inputField.addEventListener("input", calculateSum);
+	});
+	
 	
 	$(function() {
-
-		$isConfirmBn = false; // 거래처 코드 확인용 변수
 		
-		// 거래처 코드 중복 확인
-		$("#business_no").on("focusout", function(){
-			let business_no = $("#business_no").val();
-			let regex = /[0-9]{10,30}/; // 10 ~ 30 자리의 숫자
-			
-			if(!regex.exec(business_no)) {
-				alert(business_no + " 는 유효하지 않은 코드입니다.");
-// 				$("#business_no").focus();
-				$isConfirmBn = false;
-			} else {
-// 				alert("거래처 코드 중복 확인 완료");
-				$.ajax({
-					url: "DuplicateBusinessNo",
-					data: {
-						business_no : $("#business_no").val()
-					},
-					success: function(result) {
-						$("#check_bn").html(result);
-						
-						if(result == "true") { // 거래처 코드 존재 (중복 O)
-							$("#check_bn").html("이미 존재하는 코드입니다.").css("color","#00ff00");
-							$isConfirmBn = false;
-						} else { // 거래처 코드 존재 X (중복 X)
-							$("#check_bn").html("사용 가능한 코드입니다.").css("color","#00ff00");
-							$isConfirmBn = true;
-						}
-							
-					}
-					
-				});
-			}
-		});
+		$("select[name=business_no]").change(function() {
+			  var x = $(".cli").val();
+			  console.log($(this).val());
+			});
 		
-		$("form").submit(function() {
-			if(!$isConfirmBn) {
-				alert("거래처 코드를 확인해주세요.");
-				return false;
-			}
-		});
 		
 		
 		// 종목 입력창 추가
 		$("#add").on("click", function(){
-			$("#jongmokArea").append(
-					'<input type="text" name="jongmok" placeholder="ex) 동물용 사료 및 조제식품 제조업" class="form-control" required="required">'
-					+'<small class="form-text text-muted text-right" name="remove">- 삭제</small>');
+			$("tbody").append(
+// 					'<input type="text" name="jongmok" placeholder="ex) 동물용 사료 및 조제식품 제조업" class="form-control" required="required">'
+// 					+'<small class="form-text text-muted text-right" name="remove">- 삭제</small>');
+					'<tr>'
+                       + '<td></td>'
+                       + '<td></td>'
+//                        + '<td><input type="text" id="numberTest-"'+ index +' name="qty"></td>'
+                       + '<td><input type="text" class="input-field" onchange="calculateSum()"></td>'
+                       + '<td><input type="date" id="hireDate1" name="hire_date1" class="form-control"></td>'
+                       + '<td><input type="text"></td>'
+                   +'</tr>');
 		});
 	
-	});
+	
 
 	// 종목 입력창 삭제
 	$(document).on("click", "small[name=remove]", function(){
 // 		alert("종목 삭제");
 		$(this).prev().remove();
 		$(this).remove();
+	});
+	
 	});
 	
 </script>
@@ -176,7 +220,7 @@
                                 <strong>입고예정 물품등록</strong>
                             </div>
                             <div class="card-body card-block">
-                                <form action="ClientInsertPro" method="post" class="form-horizontal">
+                                <form action="InInsertPro" method="post" class="form-horizontal">
                                     
                                     <!-- 입고 유형 -->
                                     <div class="row form-group">
@@ -193,11 +237,11 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="client" class=" form-control-label">거래처<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
-                                        <select name="business_no" id="client" data-placeholder="거래처를 선택해주세요" multiple class="standardSelect" required="required">
+                                        <select name="business_no" id="client" data-placeholder="거래처를 선택해주세요" required="required">
                                                 <c:forEach var="client" items="${clientList }">
-                                                	<option value="${client.business_no }">${client.cust_name }</option>
+                                                	<option class="cli" value="${client.business_no }">${client.cust_name }</option>
                                                 </c:forEach>
-                                            </select>
+                                        </select>
                                         </div>
                                     </div>
                                     
@@ -205,7 +249,7 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="emp" class=" form-control-label">담당자<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
-                                            <select name="emp_num" id="emp" data-placeholder="담당자를 선택해주세요" multiple class="standardSelect" required="required">
+                                            <select name="emp_num" id="emp" data-placeholder="담당자를 선택해주세요" required="required">
                                                 <c:forEach var="emp" items="${empList }">
                                                 	<option value="${emp.emp_num }">${emp.emp_name } / ${emp.dept_name }</option>
                                                 </c:forEach>
@@ -224,90 +268,46 @@
                                     	<div class="col col-md-3"><label class="form-control-label">비고</label></div>
                                     	<div class="col-12 col-md-9"><input type="text" id="text" name="remarks" class="form-control"></div>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="jongmok" class=" form-control-label"><font style="color: red;">*</font></label></div>
-                                        <div class="col-12 col-md-9">
-                                        	<div id="jongmokArea">
-                                        	<input type="text" id="jongmok" name="jongmok" placeholder="" class="form-control" required="required">
-                                        	</div>
-                                        	<small class="form-text text-muted text-right" id="add">+ 종목 추가</small>
-                                        </div>
+                                    <div class="col col-md-3">
+                                    <small  id="add">+ 품목 추가</small>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="tel" class=" form-control-label">대표전화<font style="color: red;">*</font></label></div>
-                                        <div class="col-12 col-md-9">
-                                        	<input type="tel" id="tel" name="tel" placeholder="" class="form-control" required="required">
-                                        	<small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small>
-                                        </div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="email" class=" form-control-label">이메일</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="email" name="email" placeholder="Enter Email" class="form-control"><small class="help-block form-text">Please enter your email</small></div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="mobile_no" class=" form-control-label">모바일</label></div>
-                                        <div class="col-12 col-md-9">
-                                        	<input type="tel" id="mobile_no" name="mobile_no" placeholder="01012345678" class="form-control">
-                                        	<small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small>
-                                        </div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="fax" class=" form-control-label">Fax</label></div>
-                                        <div class="col-12 col-md-9">
-                                        	<input type="tel" id="fax" name="fax" placeholder="" class="form-control">
-                                        	<small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small>
-                                        </div>
-                                    </div>
-                                    <div class="row form-group">
-										<div class="col col-md-3">
-											<label for="post_no" class="form-control-label font-weight-bold">주소<font color="red">*</font></label>
-										</div>
-										<div class="col-12 col-md-6 d-flex">
-											<input type="text" id="post_no" name="post_no" placeholder="ex) 00000" class="form-control bg-gradient-light" required="required">
-											<input type="button" class=" mx-1 btn btn-outline-secondary" value="우편번호" onclick="kakaoAddr()">
-										</div>
-									</div>
-									<div class="row form-group">
-										<div class="col col-md-3"></div>
-										<div class="col-12 col-md-9">
-											<input type="text" id="addr" name="addr" placeholder="ex) 부산진구 동천로 1" class="form-control bg-gradient-light" required="required">
-											<small class="form-text text-muted">도로명주소</small>
-										</div>
-									</div>
-									<div class="row form-group">
-										<div class="col col-md-3">
-										</div>
-										<div class="col-12 col-md-9">
-											<input type="text" id="detailedAddr" name="detailedAddr" placeholder="" class="form-control bg-gradient-light">
-											<small class="form-text text-muted">상세주소</small>
-										</div>
-									</div>
-									<div class="row form-group">
-                                        <div class="col col-md-3"><label for="url_path" class=" form-control-label">홈페이지</label></div>
-                                        <div class="col-12 col-md-9">
-                                        	<input type="url" id="url_path" name="url_path" placeholder="ex) http://www.itwillbs.co.kr/" class="form-control">
-                                        	<small class="form-text text-muted"></small>
-                                        </div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="man_name" class=" form-control-label">담당자<font style="color: red;">*</font></label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="man_name" name="man_name" placeholder="ex) 김무한" class="form-control" required="required"><small class="form-text text-muted"></small></div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="man_tel" class=" form-control-label">담당자 전화번호<font style="color: red;">*</font></label></div>
-                                        <div class="col-12 col-md-9">
-                                        	<input type="tel" id="man_tel" name="man_tel" placeholder="" class="form-control" required="required">
-                                        	<small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small>
-                                        </div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="man_email" class=" form-control-label">담당자 이메일</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="man_email" name="man_email" placeholder="Enter Email" class="form-control"><small class="help-block form-text">Please enter your email</small></div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="remarks" class=" form-control-label">적요(비고)</label></div>
-                                        <div class="col-12 col-md-9"><textarea name="remarks" id="remarks" rows="9" placeholder="기타 입력 사항" class="form-control"></textarea></div>
-                                    </div>
+                                    <table>
+                                    	<thead>
+                                    		<tr>
+                                    			<th>품목코드</th>
+                                    			<th>품목명</th>
+                                    			<th>수량</th>
+                                    			<th>납기일자</th>
+                                    			<th>적요</th>
+                                    		</tr>
+                                    	</thead>
+                                    	<tbody>
+                                    		<tr>
+                                    			
+                                    			<td class="product-f">
+	                                    			<select name="business_no" id="client" data-placeholder="품목 선택"  required="required">
+		                                                	<c:forEach var="client" items="${clientList }">
+		                                                	<option value="${client.business_no }">${client.cust_name }</option>
+		                                                	</c:forEach>
+	                                        		</select>
+                                    			</td>
+                                    			
+                                    			<td class="product-f"></td>
+                                    			<td><input type="text" class="input-field" onchange="calculateSum()"></td>
+                                    			<td><input type="date" id="hireDate1" name="hire_date" class="form-control"></td>
+                                    			<td><input type="text"></td>
+                                    		</tr>
+                                    	</tbody>
+                                    	<tfoot>
+                                    		<tr>
+                                    			<td></td>
+                                    			<td></td>
+                                    			<td id="sum"></td>
+                                    			<td></td>
+                                    			<td></td>
+                                    		</tr>
+                                    	</tfoot>
+                                    </table>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary btn-sm">
                                     <i class="fa fa-dot-circle-o"></i> Submit
@@ -317,14 +317,15 @@
                                 </button>
                             </div>
                             </form>
+                            
                         </div>
 
-           			 </div>
-          		  </div>
-          		 </div>
+           			 </div><!-- card -->
+          		  </div><!-- col-lg-10 -->
+          		 </div><!-- .row -->
        		 </div><!-- .animated -->
     	</div><!-- .content -->
-
+	
     <div class="clearfix"></div>
 
 	<!-- footer -->
@@ -338,7 +339,7 @@
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
 <script src="${pageContext.request.contextPath}/resources/assets/js/lib/chosen/chosen.jquery.min.js"></script>
