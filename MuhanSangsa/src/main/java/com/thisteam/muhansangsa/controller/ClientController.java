@@ -332,7 +332,55 @@ public class ClientController {
 		}
 	
 	}
+	// =========================================hawon ===============================================
 	
+	//거래처 조회 페이지
+	@GetMapping(value = "/Product/ClientSelectList_Out")
+		public	String clientSelectList() {
+		return "product/client_selectList_outPage";
+	}
+	
+	
+	// 거래처 목록 조회
+	@ResponseBody
+	@GetMapping(value = "ClientListJsonOut")
+	public void clientListJson_out(
+			@RequestParam(defaultValue = "") String searchType,
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "1") int pageNum,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+		
+		// 거래처 목록 가져오기
+		List<ClientVO> clientList = service.getClientList(searchType, keyword, startRow, listLimit);
+		
+		// JSON 형식 변환
+		JSONArray jsonArray = new JSONArray();
+		
+		for(ClientVO client : clientList) {
+			client.setAddr(client.getAddr().split("/")[0]); // 도로명 주소만 가져오기
+			client.setRemarks(client.getRemarks().replace("\r\n", "<br>")); // 출력 시 줄바꿈 처리
+			System.out.println(client);
+			JSONObject jsonObject = new JSONObject(client);
+			System.out.println(jsonObject.get("business_no"));
+			
+			jsonArray.put(jsonObject);
+		}
+		
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 }
 

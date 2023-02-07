@@ -3,4 +3,17 @@
 <mapper namespace="com.thisteam.muhansangsa.mapper.OutMapper">
 
 
+<!-- ====================================HAWON=================================== -->
+	<!-- 사원검색 -->
+	<select id="selectEmp" resultType="Emp_viewVO">
+	  
+		 SELECT EMP_NUM, EMP_NAME, DEPT_NAME, GRADE_NAME 
+		 FROM emp_view
+		 WHERE EMP_NAME LIKE '%${keyword}%' 
+			 OR DEPT_NAME LIKE '%${keyword}%' 
+			 OR GRADE_NAME LIKE '%${keyword}%' 
+			 OR EMP_NUM LIKE '%${keyword}%' 
+		
+	</select>
+	<!-- ========================================================================= -->
 </mapper>
