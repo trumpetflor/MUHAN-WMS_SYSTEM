@@ -139,9 +139,9 @@
 			<if test="!wh_cd.equals('')">
 				WHERE wh_cd = #{wh_cd}
 				<if test="wh_area_cd neq 0">
-					AND WHERE wh_area_cd = #{wh_area_cd}
+					AND wh_area_cd = #{wh_area_cd}
 					<if test="wh_loc_in_area_cd neq 0">
-						AND WHERE wh_loc_in_area_cd = #{wh_loc_in_area_cd}
+						AND wh_loc_in_area_cd = #{wh_loc_in_area_cd}
 					</if>
 				</if>
 			</if>

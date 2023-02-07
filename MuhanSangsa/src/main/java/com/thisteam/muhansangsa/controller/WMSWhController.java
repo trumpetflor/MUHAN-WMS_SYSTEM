@@ -253,13 +253,13 @@ public class WMSWhController {
 	@PostMapping(value = "ModifyWhArea")
 	public String modifyWhArea (
 			@ModelAttribute WhAreaVO whArea,
-			@RequestParam String newWhArea,
+//			@RequestParam String newWhArea,
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
 			) {
 		
-		int updateCount = service.modifyWhArea(whArea, newWhArea);
+		int updateCount = service.modifyWhArea(whArea);
 		
 		if(updateCount > 0) {
 			try {
@@ -318,11 +318,11 @@ public class WMSWhController {
 		
 		int deleteCount = service.deleteWhArea(wh_area_cd);
 		
-		if(deleteCount > 0) {
-			
-		} else {
-			
-		}
+//		if(deleteCount > 0) {
+//			
+//		} else {
+//			
+//		}
 		
 	}
 	
@@ -337,11 +337,11 @@ public class WMSWhController {
 		
 		int deleteCount = service.deleteWhLocArea(wh_loc_in_area_cd);
 		
-		if(deleteCount > 0) {
-			
-		} else {
-			
-		}
+//		if(deleteCount > 0) {
+//			
+//		} else {
+//			
+//		}
 		
 	}
 	

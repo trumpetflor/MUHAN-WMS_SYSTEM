@@ -301,6 +301,7 @@
 //			var aNextA = $(this).next();
 //			var aNextUl = $(this).next();
 //			var submenu2 = aNextUl.next("ul");
+		let whCd = "'" + wh_cd + "'";
 		
 // 		console.log("에이젝스");
 		$("#" + wh_area_cd + "> ul").empty();
@@ -312,9 +313,10 @@
 		})
 		.done(function(whlaList) { // 요청 성공 시
 			for(let whLocArea of whlaList) {
+// 			let href = "Wms_Inventory_View?wh_cd=" + wh_cd + "&wh_area_cd=" + wh_area_cd + "&wh_loc_in_area_cd=" + whLocArea.wh_loc_in_area;
 // 				alert("창고 구역 코드 : " + whLocArea.wh_area_cd + "창고 구역 위치 코드 : " + whLocArea.wh_loc_in_area_cd);
 				let result = '<li class="w2" id="' + whLocArea.wh_loc_in_area_cd +'">' // "<ul class='hide warehouse-loc-area'>"
-							+ '<a>' + whLocArea.wh_loc_in_area + '</a>&nbsp;&nbsp;&nbsp;'
+							+ '<a href="javascript:getWhLocAreaStock(' + whCd + ', ' + wh_area_cd + ', ' + whLocArea.wh_loc_in_area_cd + ')">' + whLocArea.wh_loc_in_area + '</a>&nbsp;&nbsp;&nbsp;'
 							+ '<span class="ti-pencil-alt modify_wh_loc_area"></span>&nbsp;<span class="ti-minus remove_wh_loc_area"></span>'
 							+ '</li>';
 // 							+ "</ul>";
@@ -473,7 +475,7 @@
 		let html = '<li class="w1" id=' + wh_area_cd + '>'
 					+ '<form action="ModifyWhArea" method="post">'
 					+ '<input type="hidden" value=' + wh_area_cd + ' name="wh_area_cd">'
-					+ '&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_loc_in_area" value="'+ wh_area + '" class="form-control-inline" required="required">'
+					+ '&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_area" value="'+ wh_area + '" class="form-control-inline" required="required">'
 					+ '<input type="submit" value="수정"><input type="button" value="취소" onclick="whArea(' + wh_cd + ')">'
 					+ '</form>'
 					+ '</li>';
@@ -501,6 +503,32 @@
 		$("#" + wh_loc_in_area_cd).html(html);
 		
 	});
+	
+	// 창고 구역 내 위치 재고 리스트
+	function getWhLocAreaStock(wh_cd, wh_area_cd, wh_loc_in_area_cd) {
+		
+// 		alert("창고 코드 : " + wh_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 창고 구역 위치 코드 : " + wh_loc_in_area_cd);
+		
+		$("#right").empty();
+		
+		// 재고 불러오기
+		$.ajax({
+			type: "GET",
+			url: "Wms_Inventory_View?wh_cd=" + wh_cd + "&wh_area_cd=" + wh_area_cd + "&wh_loc_in_area_cd=" + wh_loc_in_area_cd,
+			dataType: "html",
+		})
+		.done(function(result) { // 요청 성공 시
+			
+//			let insert = $.html(result).find('li');
+			
+			$("#right").append(result);
+				
+		})
+		.fail(function() {
+			$("#" + whArea.wh_cd).append("요청 실패..ㅠㅠ");
+		});
+		
+	}	
 	
 </script>
 

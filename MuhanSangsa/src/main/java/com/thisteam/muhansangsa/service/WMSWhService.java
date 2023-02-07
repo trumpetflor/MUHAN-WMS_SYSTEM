@@ -48,8 +48,8 @@ public class WMSWhService {
 	}
 
 	// 창고 구역 수정
-	public int modifyWhArea(WhAreaVO whArea, String newWhArea) {
-		return areaMapper.updateWhArea(whArea, newWhArea);
+	public int modifyWhArea(WhAreaVO whArea) {
+		return areaMapper.updateWhArea(whArea);
 	}
 
 	// 창고 구역 내 위치 수정

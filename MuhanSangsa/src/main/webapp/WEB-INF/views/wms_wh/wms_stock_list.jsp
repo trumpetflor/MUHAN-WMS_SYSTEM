@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title> 재고조회 | 재고관리</title>
+	<title></title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">

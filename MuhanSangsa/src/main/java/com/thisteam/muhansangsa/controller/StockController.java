@@ -444,14 +444,14 @@ public class StockController {
 			if(isRightUser) {
 				
 				// 창고 코드 작은따옴표 떼기(임시)
-				String whCd = wh_cd.replace("'", "");
+//				String whCd = wh_cd.replace("'", "");
 				
 				List<Stock_viewVO> stockList = service.getWmsStockList(searchType, keyword, startRow, listLimit, 
-																		whCd, wh_area_cd, wh_loc_in_area_cd);
+																		wh_cd, wh_area_cd, wh_loc_in_area_cd);
 				
 				model.addAttribute("stockList", stockList);
 				System.out.println("stockList: "+ stockList);
-				if(!whCd.equals("")) {
+				if(!wh_cd.equals("")) {
 					model.addAttribute("wh_name", stockList.get(0).getWh_name());
 					if(wh_area_cd != 0) {
 						model.addAttribute("wh_area", stockList.get(0).getWh_area());
