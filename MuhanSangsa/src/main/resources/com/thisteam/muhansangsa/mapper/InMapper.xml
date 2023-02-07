@@ -17,6 +17,14 @@
 			<foreach collection="in_schedule_cd" item="code" separator="," open="(" close=")"  index="index">
 				#{code}
 			</foreach>
+			AND product_name IN
+			<foreach collection="product_name" item="name" separator="," open="(" close=")"  index="index">
+				#{name}
+			</foreach>
+			AND in_date IN
+			<foreach collection="in_date" item="date" separator="," open="(" close=")"  index="index">
+				#{date}
+			</foreach>
 	</select>
 	
 	<!-- ======================== yeram ============================== -->

@@ -1,7 +1,11 @@
 package com.thisteam.muhansangsa.controller;
 
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.thisteam.muhansangsa.service.InService;
 import com.thisteam.muhansangsa.vo.ClientVO;
@@ -38,78 +44,52 @@ public class InController {
 		return "in/in_processing";
 	}
 	
-	// 입고처리 폼
-	@GetMapping(value = "/InRegister")
-	public String register(String[] inRegisterList, Model model, inRegisterVO vos) {
+	// 입고처리 폼(입고버튼)
+	@PostMapping(value = "/InRegister")
+//	@RequestMapping(value = "/InRegister", method = {RequestMethod.GET, RequestMethod.POST})
+	public String register(String[] inRegisterList, Model model, HttpServletResponse response) {
 		System.out.println("inRegisterList : " + Arrays.toString(inRegisterList));
 		
-		String[] listA = {};
-//		String[] listB = {};
-//		String[] listC = {};
+		ArrayList<String> in_schedule_cd = new ArrayList<String>();
+		ArrayList<String> product_name = new ArrayList<String>();
+		ArrayList<String> in_date = new ArrayList<String>();
 		
 		for(int i = 0; i<inRegisterList.length; i++) {
 			String a = inRegisterList[i];
-			listA[i] = a.split("/")[0];
-//			listB = a.split("/");
-//			listC = a.split("/");
+			String b = a.split("/")[0];
+			String c = a.split("/")[1];
+			String d = a.split("/")[2];
+			
+			in_schedule_cd.add(b);
+			product_name.add(c);
+			in_date.add(d);
 		}
-		System.out.println("listA :" +Arrays.toString(listA));
-//		System.out.println("listB :" +Arrays.toString(listB));
-//		System.out.println("listC :" +Arrays.toString(listC));
+		System.out.println("in_schedule_cd :" + in_schedule_cd);
+		System.out.println("product_name :" + product_name);
+		System.out.println("in_date :" + in_date);
 		
-//		String[] codeList = {};
-//		String list = "";
-//		String[] proList;
-//		String[] dateList;
-//		String list="";
-//		for(String list : inRegisterList) {
-//			System.out.println("list : " +list);
-////			for(int i=0; i<list.length(); i++) {
-////				codeList[i] = list[i].split("/", 1);
-////			}
-//			codeList = list.split("/");
-////			System.out.println(code);
-//			System.out.println("codeList :" +Arrays.toString(codeList));
-//		}
-//		String list = inRegisterList[0];
-//		String list2 = inRegisterList[1];
-//		String code = list.split("/")[0];
-//		String code2 = list2.split("/")[0];
+		List<inRegisterVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
 		
-//		for(int i =0; i<inRegisterList.length; i++) {
-//			listA = inRegisterList[
-//		}
-//		System.out.println("list : " + list);
-//		System.out.println("code : " + code);
-//		System.out.println("list2 : " + list2);
-//		System.out.println("code2 : " + code2);
-//		for(int i =0; i<inRegisterList.length; i++) {
-//			System.out.println("inRegisterList : " + inRegisterList[i]);
-//			list = 
-////			for(int j=0; j<)
-////			listA[i] = inRegisterList[i].split("/")[0];
-////			listB[i] = inRegisterList[i].split("/")[1];
-////			listC[i] = inRegisterList[i].split("/")[2];
-//			
-////			list = inRegisterList[i];
-////			for(int j = 0; j)
-//		}
-//		for(int i = 0; i<list.length(); i++	) {
-//			codeList[i] = list.split("/")[0];
-//		}
-//		System.out.println("codeList :" +Arrays.toString(listA));
-//		System.out.println("codeList :" +Arrays.toString(listB));
-//		System.out.println("codeList :" +Arrays.toString(listC));
+		System.out.println(resultList);
+		model.addAttribute("resultList", resultList);
 		
-//		String[] codeList = list("/");
 		
-//		for(List<inRegisterVO> inList : inRegiseterList) {
-//			System.out.println(inList);
+//		try {
+//			response.setContentType("text/html; charset=UTF-8");
+//			PrintWriter out = response.getWriter();
+//			out.println("<script>");
+//			out.println("window.open('InRegisterForm','InRegisterForm','width=1000, height=920,location=no,status=no,scrollbars=yes');");
+//			out.println("</script>");
+//		} catch (Exception e) {
+//			e.printStackTrace();
 //		}
-//		List<inRegisterVO> resultList = service.getInRegisterList(inRegisterList);
-//		System.out.println("in_schedule_cd : " + resultList);
-//		model.addAttribute("inRegisterList", resultList);
 		
+		return "in/in_register_form";
+		
+	}
+	
+	@GetMapping("/InRegisterForm")
+	public String registerForm() {
 		return "in/in_register_form";
 	}
 	

@@ -1,6 +1,7 @@
 package com.thisteam.muhansangsa.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,11 @@ public class InService {
 		return mapper.selectInProList();
 	}
 	
-	// 입고 처리 폼
-	public List<inRegisterVO> getInRegisterList(String[] in_schedule_cd) {
-		return mapper.selectInRegisterList(in_schedule_cd);
+	// 입고처리 폼(입고버튼)
+	public List<inRegisterVO> getInRegisterList(ArrayList<String> in_schedule_cd,
+			ArrayList<String> product_name,
+			ArrayList<String> in_date) {
+		return mapper.selectInRegisterList(in_schedule_cd, product_name,in_date);
 	}
 	
 	

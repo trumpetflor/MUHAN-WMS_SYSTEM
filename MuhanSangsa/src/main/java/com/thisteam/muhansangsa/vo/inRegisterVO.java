@@ -1,5 +1,6 @@
 package com.thisteam.muhansangsa.vo;
 
+import java.sql.Date;
 import java.util.List;
 
 public class inRegisterVO {
@@ -9,26 +10,7 @@ public class inRegisterVO {
 	private int in_qty; //입고지시수량
 	private String stock_cd; //재고번호
 	private String wh_loc_in_area; //구역명_선반위치
-	
-	public inRegisterVO() {}
-	
-	public inRegisterVO(String in_schedule_cd, String product_name, int in_schedule_qty) {
-		super();
-		this.in_schedule_cd = in_schedule_cd;
-		this.product_name = product_name;
-		this.in_schedule_qty = in_schedule_qty;
-	}
-
-	public inRegisterVO(String in_schedule_cd, String product_name, int in_schedule_qty, int in_qty, String stock_cd,
-			String wh_loc_in_area) {
-		super();
-		this.in_schedule_cd = in_schedule_cd;
-		this.product_name = product_name;
-		this.in_schedule_qty = in_schedule_qty;
-		this.in_qty = in_qty;
-		this.stock_cd = stock_cd;
-		this.wh_loc_in_area = wh_loc_in_area;
-	}
+	private Date in_date; // 납기일자
 	public String getIn_schedule_cd() {
 		return in_schedule_cd;
 	}
@@ -65,28 +47,18 @@ public class inRegisterVO {
 	public void setWh_loc_in_area(String wh_loc_in_area) {
 		this.wh_loc_in_area = wh_loc_in_area;
 	}
+	public Date getIn_date() {
+		return in_date;
+	}
+	public void setIn_date(Date in_date) {
+		this.in_date = in_date;
+	}
 	@Override
 	public String toString() {
 		return "inRegisterVO [in_schedule_cd=" + in_schedule_cd + ", product_name=" + product_name
 				+ ", in_schedule_qty=" + in_schedule_qty + ", in_qty=" + in_qty + ", stock_cd=" + stock_cd
-				+ ", wh_loc_in_area=" + wh_loc_in_area + "]";
+				+ ", wh_loc_in_area=" + wh_loc_in_area + ", in_date=" + in_date + "]";
 	}
-//	@Override
-//	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-//	    argumentResolvers.add( new PageableHandlerMethodArgumentResolver());
-//	}
-//	public void addinRegisterVOs(List<inRegisterVO> inRegisterVOs) {
-//		inRegisterVOs.add(new inRegisterVO(in_schedule_cd, product_name, in_schedule_qty));
-//	}
 	
-	private List<inRegisterVO> inRegisterList;
-
-	
-	public List<inRegisterVO> getBoardVoList() {
-		return inRegisterList;
-	}
-	public void setBoardVoList(List<inRegisterVO> inRegisterList) {
-		this.inRegisterList = inRegisterList;
-	}
 	
 }

@@ -31,79 +31,7 @@
 <%-- <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script> --%>
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
-// 	var checkResult = false;
-	
-	//상품 수정 클릭 시 확인창
-	function confirm_modify() {
-		let result = confirm("창고 정보를 수정하시겠습니까?");
-		
-		if(result){
-			const form = document.getElementById('InRegisterForm');
-				form.submit();
-		}
-	
-	} // confirm_modify()
-	
-	// 위치=외부(2) 이거나 구분=공장(2) 일때 주소 입력
-	function isOut(){
-		let wh_location = $("input[name='wh_location']:checked").val();
-		let wh_gubun = $("input[name='wh_gubun']:checked").val();
-		if(wh_location == '1'){
-			alert("창고가 외부일 때만 입력해주세요!");
-		} else if(wh_location == '2' || wh_gubun == '2') {
-			kakaoAddr();
-		}
 
-	} // isOut()
-	
-	// 물류팀 확인
-	$(function() {
-		$checkResult = false;
-		
-		$("#wh_man_name").on("focusout", function(){
-			let wh_man_name = $("#wh_man_name").val();
-			$.ajax({
-				type: "GET",
-				url: "WarehouseCheckMan",
-				data: { wh_man_name: $("#wh_man_name").val()},
-				success: function(result) {
-					$("#checkMan").html(result);
-					
-					if(result == "true"){
-						$("#checkMan").html("물류팀 직원만 가능합니다!!!!").css("color", "red");
-						checkResult = false;
-					} else {
-						$("#checkMan").html("물류팀 직원입니다.").css("color", "green");
-						CheckResult = true;
-					}
-				},
-			});
-		}); // 물류팀 확인
-		
-		// 구분 = 창고 일때만 위치 선택
-		$("input[name='wh_gubun']").on("change", function(){
-			let wh_gubun = $("input[name='wh_gubun']:checked").val();
-//	 		alert(wh_gubun);
-//	 		alert(typeof(wh_gubun));
-			if(wh_gubun == '2'){ // 공장이면 선택 못하게함
-				$("input:radio[name=wh_location]").prop("disabled", true);
-				$("input:radio[name=wh_location]").prop("checked", false);
-			} else if(wh_gubun == '1') { // 창고는 선택 가능
-				$("input:radio[name=wh_location]").prop("disabled", false);
-			}
-		}); // 구분 제어
-		
-		// 위치 = 1:내부 => 주소 내용 clear
-		$("input[name='wh_location']").on("click", function(){
-			let wh_location = $("input[name='wh_location']:checked").val();
-			alert(wh_location);
-			if(wh_location == '1'){
-				$("#wh_addr1").val('');
-				$("#wh_addr2").val('');
-// 				$("text").empty();
-			}
-		});
-	});
 </script>
 <style type="text/css">
 
@@ -161,11 +89,11 @@
                                     </thead>
                                     <tbody>
                                     	<c:choose>
-                                    	<c:when test="${empty inRegisterList }">
+                                    	<c:when test="${empty resultList }">
                                     		<tr><td colspan="6">데이터가 없습니다.</td></tr>
                                     	</c:when>
                                     	<c:otherwise>
-	                                    	<c:forEach var="inList" items="${inRegisterList }" varStatus="status">
+	                                    	<c:forEach var="inList" items="${resultList }" varStatus="status">
 		                                    	<tr>
 		                                    		<td>${inList.in_schedule_cd }</td>
 		                                    		<td>${inList.product_name }</td>

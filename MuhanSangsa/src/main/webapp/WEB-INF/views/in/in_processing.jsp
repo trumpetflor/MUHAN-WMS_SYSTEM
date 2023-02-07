@@ -126,22 +126,27 @@
 		var code=$(item).text();
 		window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
 
-	}
+	} // 수정페이지
 	
+	// register form action
+// 	function register(){
+// 		let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
+// 		$('input:checkbox[name=inChecked]').each(function(index){
+// 			if($(this).is(":checked")==true){
+// 				console.log("id값=in_schedule_cd : "+$(this).val());
+// 				inRegisterList.push($(this).val()); // 배열에 추가
+				
+// // 				console.log("inRegisterList[] : "+ inRegisterList);
+// // 				let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
+// // 				if(result){
+// // 					location.href="InRegister?inRegisterList="+inRegisterList
+// 					inRegisterList.submit();
+// // 				}
+// 			}
+// 		});
 	
-	//체크박스 선택 시
-// 	$(document).on("change","input[name=inChecked]",function(){
-		
-// 		$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
-		
-// // 		alert("체크됨: "+ $(this).val());
-// 		let idx = $(this).val().split("/")[0];
-// 		let emp_name = $(this).val().split("/")[1];
-// 		let emp_num = $(this).val().split("/")[2];
-// 		let emp_info = {"emp_num":emp_num,"emp_name":emp_name};
+// 	} // register()
 	
-		
-// 	}); //체크박스선택시?
 	
 	$(function(){
 		// 입고버튼 클릭... 팝업창 버전
@@ -180,6 +185,19 @@
 						location.href="InRegister?inRegisterList="+inRegisterList
 					}
 				}
+					$.ajax({
+						type: "POST",
+						url: "InRegister",
+						data : {inRegisterList:'inRegisterList'},
+						success:
+							const form = document.getElementById('InRegisterForm');
+							form.submit();
+						});
+							
+					});
+					
+					
+					
 			
 			
 // 			$.ajax({
@@ -190,7 +208,7 @@
 // 					window.open('InRegister?'+inRegisterList,'InRegister','width=1000, height=920,location=no,status=no,scrollbars=yes');
 // 				}
 // 			});
-			});
+// 			});
 // 			console.log("inRegisterList[] : "+ inRegisterList);
 // 			let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
 // 			if(result){
@@ -269,6 +287,7 @@
  	 	<div id = "selectCount"><small class="text-secondary"> 0 개 선택됨</small></div>
 
   	</c:if>
+<!-- 	<form action="InRegister" method="post" name="form" enctype="multipart/form-data" class="form-horizontal"> -->
 	<table class="table  vertical-align"  id="empList-table">
 		<thead>
 			<tr>
@@ -305,8 +324,8 @@
 		<input type="button" value="입고" class = "btn btn-sm btn-success m-2" id="inScheduleBtn">
 	</div>
 	</div>
-
-
+<!-- 	</form> -->
+<!-- onclick="javascript:register();"  -->
 
 
 
