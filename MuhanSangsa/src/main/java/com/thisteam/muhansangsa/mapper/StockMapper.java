@@ -33,7 +33,7 @@ public interface StockMapper {
 	
 	//새 재고번호 생성
 	int insertNewStock(@Param("product_cd") String product_cd,
-						@Param("wh_loc_in_area_cd") String wh_loc_in_area_cd);
+						@Param("wh_loc_in_area_cd") int wh_loc_in_area_cd);
 
 	
 	// 재고이력 목록 조회 

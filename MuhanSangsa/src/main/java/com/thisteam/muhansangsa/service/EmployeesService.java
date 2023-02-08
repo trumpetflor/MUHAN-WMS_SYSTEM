@@ -59,9 +59,9 @@ public class EmployeesService {
 	
 	
 	//수정
-	public int updateMypageMember(EmployeesVO emp) {
+	public int updateMypageMember(EmployeesVO employees) {
 		
-		return mapper.updateMypageMember(emp) ;
+		return mapper.updateMypageMember(employees) ;
 	}
 
 	//------------------사원 상세조회------------------------------------
@@ -83,8 +83,9 @@ public class EmployeesService {
 	   
 	      
 	      String priv_cp = mapper.getPrivilege(sId);
-	      priv_cp = "11111111";
-	      System.out.println(" 나중에 주석지우기 ! priv_cp: " + priv_cp);
+	      System.out.println("sId: " + sId);
+	      System.out.println("priv_cp: " + priv_cp);
+
 	      
 	      //2진수인 priv_cp의 순서 reverse
 //	      StringBuffer buffer = new StringBuffer(priv_cp);
@@ -93,8 +94,9 @@ public class EmployeesService {
 	      
 	      for(int i = 0; i < requiredPermissions.length; i++) {
 	         isRightUser = (priv_cp.charAt(requiredPermissions[i].getCode()) == '1') ? true : false;
+	         isRightUser = (priv_cp.charAt(requiredPermissions[i].getCode()) == '1') ? true : false;
 //	         System.out.println("getCode :  "+requiredPermissions[i].getCode());
-	         System.out.println("isRightUser: " + isRightUser);
+	    
 	      }
 	      
 

@@ -1,6 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>   
 <html >
 <head>
 	<title>품목 조회</title>
@@ -136,6 +138,9 @@
  color: 	#000080;
 }
 
+a:hover {
+  text-decoration: underline;
+}
 
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
@@ -202,26 +207,50 @@
 				<th>출고단가</th>
 				<th>품목구분</th>
 				<th>대표이미지</th>
-				<th>관리</th>
+<!-- 				<th>관리</th> -->
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach var="productList" items="${productList }">
 			<tr>
-				<td>${productList.product_cd}</td>
-				<td>${productList.product_name}</td>
+				<td>
+				    <a id="updateBtn" href='javascript:void(0);' onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm','width=800, height=920,location=no,status=no,scrollbars=yes');">
+				    ${productList.product_cd}</a>
+				</td>
+				<td>
+				    <a id="updateBtn" href='javascript:void(0);' onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm','width=800, height=920,location=no,status=no,scrollbars=yes');">
+				    ${productList.product_name}</a>
+				</td>
 				<td>${productList.product_group_bottom_name}</td>
 				<td>${productList.cust_name}</td>
 				<td>${productList.barcode}</td>
-				<td>${productList.in_unit_price}</td>
-				<td>${productList.out_unit_price}</td>
-				<td>${productList.product_type_cd}</td>
-				<td><img class="id_pht" src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/product/${productList.product_image }"
-					onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';" style="width: 80px;height: 80px"></td>
+				<td><fmt:formatNumber value="${productList.in_unit_price}" pattern="#,###" />원</td>
+				<td><fmt:formatNumber value="${productList.out_unit_price}" pattern="#,###" />원</td>
 				<td>
-					<input type="button" value="상세정보" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn"
-                  	 onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm?','width=800, height=920,location=no,status=no,scrollbars=yes');">
+				    <c:choose>
+				        <c:when test="${productList.product_type_cd eq '1'}">
+				            ${fn:replace(productList.product_type_cd, '1', '원재료')}    
+				        </c:when>
+				        <c:when test="${productList.product_type_cd eq '2'}">
+				            ${fn:replace(productList.product_type_cd, '2', '부재료')}     
+				        </c:when>
+				        <c:when test="${productList.product_type_cd eq '3'}">
+				            ${fn:replace(productList.product_type_cd, '3', '제품')}    
+				        </c:when>
+				        <c:when test="${productList.product_type_cd eq '4'}">
+				            ${fn:replace(productList.product_type_cd, '4', '반제품')}     
+				        </c:when>
+				        <c:when test="${productList.product_type_cd eq '5'}">
+				            ${fn:replace(productList.product_type_cd, '5', '제품')}     
+				        </c:when>
+				    </c:choose>
 				</td>
+				<td><img class="id_pht" src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/product/${productList.product_image }"
+					onerror="this.src='${pageContext.request.contextPath}/resources/images/prod_img.png';" style="width: 80px;height: 80px"></td>
+<!-- 				<td> -->
+<!-- 					<input type="button" value="상세정보" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn" -->
+<%--                   	 onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm?','width=800, height=920,location=no,status=no,scrollbars=yes');"> --%>
+<!-- 				</td> -->
 			</tr>
 			</c:forEach>
 		</tbody>

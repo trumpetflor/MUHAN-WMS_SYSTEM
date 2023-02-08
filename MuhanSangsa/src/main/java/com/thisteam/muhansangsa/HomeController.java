@@ -35,6 +35,7 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
+
 		// 아이피 주소
 		InetAddress local;
 		String ip;
@@ -48,6 +49,7 @@ public class HomeController {
 		}
 		
 		return "index";
+
 	}
 	
 }
