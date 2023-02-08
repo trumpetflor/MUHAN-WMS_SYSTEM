@@ -93,7 +93,7 @@ public class OutController {
 		JSONArray jsonArray = new JSONArray();
 		
 		for(Out_scheduleListVO out : outList) {
-			JSONObject jsonObject = new JSONObject(outList);
+			JSONObject jsonObject = new JSONObject(out);
 			
 			jsonArray.put(jsonObject);
 		}

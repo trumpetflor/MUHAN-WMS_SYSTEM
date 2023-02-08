@@ -132,7 +132,8 @@
         <header id="header" class="header">
             <div class="top-left">
                 <div class="navbar-header"> <!-- margin: -5; 로고 이상하면 넣어보기  -->
-                    <a class="navbar-brand" href="./"><img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" style="width: 54px;" alt="Logo"></a>
+                    <a class="navbar-brand" href="./">
+                    <img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" style="width: 54px;" alt="Logo"></a>
                     <a class="navbar-brand hidden" href="./"><img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" alt="Logo"></a>
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
@@ -143,7 +144,10 @@
 
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="${pageContext.request.contextPath}/resources/images/login.png" alt="User Avatar">
+<%--                        <img class="user-avatar rounded-circle" src="${pageContext.request.contextPath}/resources/images/login.png" alt="User Avatar"> --%>
+							<img id="photo" name="photo" 
+							src="<%=request.getScheme()+" ://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }" 
+							onerror="this.src='${pageContext.request.contextPath}/resources/images/login.png';" style="width: 40px;" alt="Logo">
                         </a>
 
                         <div class="user-menu dropdown-menu login" >

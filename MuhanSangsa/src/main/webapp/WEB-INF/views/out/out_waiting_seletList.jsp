@@ -96,8 +96,9 @@
 			let result ="";
 			for(let row of resultList) {
 				result += "<tr>"
+							+ "<th align='center'>"+ "<input type='checkbox' name='stockChecked' id='stockChecked'>" + "</th>" // 체크박스
 							+ "<td>"+ row.out_schedule_cd + "</td>" //출고예정번호
-							+ "<td>"+ "" + "</td>" //유형(테이블 컬럼없어서 일단 공백)
+							+ "<td>"+ "발주서" + "</td>" //유형(테이블 컬럼없어서 일단 공백)
 							+ "<td>"+ row.cust_name + "</td>" //받는곳명(거래처명)
 							+ "<td>"+ row.emp_num + "</td>" //담당자명
 							+ "<td>"+ row.product_name + "</td>" //품목명
@@ -115,12 +116,14 @@
 						
 				result 	+= "</tr>";
 				
+				console.log(resultList);
 			}
 			$("#OutWaitingTable > tbody").html(result);
 		})
 		.fail(function() { //요청 실패 시
 			$("#OutWaitingTable").append("요청 실패!!");
 		});
+		
 	}
 
 
@@ -249,7 +252,7 @@ $(function(){
 	<table class="table"  id="OutWaitingTable">
 		<thead>
 			<tr>
-				<th><input type="checkbox" name="AllChecked"></th>
+				<td align="center"><input type="checkbox" name="AllChecked"></td>
 				<th>출고예정번호</th>
 				<th>유형</th>
 				<th>받는곳명(거래처명)</th>
@@ -262,10 +265,11 @@ $(function(){
 			</tr> 
 		</thead>
 		<tbody>
+		<!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
 		<c:forEach items="${outList }" var="out" varStatus="status" >
 			<tr>
-			<td align="center"><input type="checkbox" name="stockChecked" class="form-check-input" value="${stock.stock_cd }"></td>
-				<td><a href="Inventory_History_View?stock_cd=${stock.stock_cd }">${stock.stock_cd }</a></td>
+			<th align="center"><input type="checkbox" name="stockChecked" id="stockChecked" class="form-check-input" value=""></th>
+				<td> </td>
 				<td> </td>
 				<td> </td>
 				<td> </td>
@@ -275,7 +279,7 @@ $(function(){
 				<td> </td>
 				<td><a href="#">조회</a></td>
 			</tr>
-			</c:forEach>
+		</c:forEach>
 			<tr>
 				<td colspan="9" align="right"><b>합계 :</b></td><td id="sum_result"></td>
 			<tr>
