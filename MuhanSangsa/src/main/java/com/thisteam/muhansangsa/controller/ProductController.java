@@ -2,6 +2,8 @@ package com.thisteam.muhansangsa.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +40,20 @@ public class ProductController {
 				@RequestParam(defaultValue = "") String msg,
 				Model model) {
 		model.addAttribute("msg", msg);
+		
+		// 접속 ip 확인 코드
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
 		return "product/prod_insertForm";
+		
 	}
 
 	
@@ -94,7 +109,7 @@ public class ProductController {
 				Model model) {
 		
 		model.addAttribute("msg", msg);
-		
+				
 		return "product/group_bottom_selectList";
 	}
 	
@@ -192,6 +207,18 @@ public class ProductController {
 		model.addAttribute("searchType", searchType);		
 		model.addAttribute("productList", productList);
 		model.addAttribute("pageInfo", pageInfo);		
+		
+		
+		// 접속 ip 확인 코드
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		
 		return "product/prod_selectList";
 		

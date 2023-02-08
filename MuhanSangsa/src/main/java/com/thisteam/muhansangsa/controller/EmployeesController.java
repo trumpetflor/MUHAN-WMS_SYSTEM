@@ -164,10 +164,9 @@ public class EmployeesController {
 		String passwd = UUID.randomUUID().toString().substring(1, 8);
 		System.out.println("이메일 인증에 사용된 비밀번호 : " + passwd);
 		
-		//23/02/05 사원 등록시 패스워드 암호화 작업 필요함 -> 일단 코드 주석처리 해둠
-		//BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
-		//employee.setEmp_passwd(passwdEncoder.encode(passwd));
-		employee.setEmp_passwd(passwd);
+		//23/02/08 사원 등록시 패스워드 암호화 작업 진행
+		BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
+		employee.setEmp_passwd(passwdEncoder.encode(passwd)); // 암호화된 패스워드 저장
 		
 		
 		// 7. 최종 : 사원 등록 
@@ -179,7 +178,7 @@ public class EmployeesController {
 			String subject = "[muhansangsa] 임시 패스워드 입니다.";
 			String body = employee.getEmp_name() 
 							+ " 님의 임시 패스워드 : "
-							+ employee.getEmp_passwd() 
+							+ passwd
 							+ " 입니다.";
 			
 			mailService.sendEmail(employee.getEmp_email(),addr,subject,body);
@@ -268,8 +267,7 @@ public class EmployeesController {
 	public String mypageUpdate(
 			@RequestParam(defaultValue = "") String msg,
 			@ModelAttribute EmployeesVO employees, 
-			@RequestParam(value ="file", required=false) MultipartFile file,
-			MultipartRequest request,
+			@RequestParam(value ="file") MultipartFile file,
 			Model model, 
 			HttpSession session){
 		
@@ -297,6 +295,8 @@ public class EmployeesController {
 				// 파일 업로드를 위한 변수 설정
 				String uploadDir = "/resources/upload";
 				String saveDir = session.getServletContext().getRealPath(uploadDir);
+				
+//				System.out.println("11111111=======================");
 				
 				// 5. 이미지 파일명 추출하기 (파일명이 중복일 경우 발생하는 문제 해결해야함)
 				String photo = file.getOriginalFilename().toString();
