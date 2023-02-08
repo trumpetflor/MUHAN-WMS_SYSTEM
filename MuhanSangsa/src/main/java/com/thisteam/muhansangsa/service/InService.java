@@ -37,6 +37,10 @@ public class InService {
 		return mapper.selectInRegisterList(in_schedule_cd, product_name,in_date);
 	}
 	
+	// 입고예정코드 목록
+	public List<inProcessingVO> getSelectedInList(String in_schedule_cd) {
+		return mapper.selectSelectedInList(in_schedule_cd);
+	}
 	
 	
 	
@@ -59,6 +63,7 @@ public class InService {
 	public List<InVO> getInList() {
 		return mapper.getInList();
 	}
+	
 
 
 

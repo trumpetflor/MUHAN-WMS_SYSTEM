@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>In Register</title>
+    <title>입고 등록 | 입고 관리</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -29,6 +29,14 @@
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 <%-- <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script> --%>
+<!-- 모달창 -->
+<!-- Remember to include jQuery :) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+<!-- jQuery Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
 	console.log(${resultList});
@@ -67,15 +75,70 @@
 	
 	.table thead th, td {
     	text-align: center;
+    	vertical-align: middle;
     }
     
-    input[type=text]{
+    .table td, .table th {
+    	padding: 0.75rem;
+    	vertical-align: middle;
+    }
+    
+    input[type=text], input[type=number], #in_qty_result{
     	text-align: right;
     }
     
     .form-control {
     	display: inline-block; 
 	}
+	
+/* 모달 */
+#modal_container{
+  position: absolute;
+  width:600px;
+  height: auto;
+  position: fixed;
+  top:50%;
+  left: 50%;
+  transform:translate(-50%,-50%);
+  overflow-y: scroll;
+
+
+}
+.close-modal{
+  display: none;
+}
+	
+#modal_container_dept{
+  position: absolute;
+   height: 70%;
+  position: fixed;
+  top:50%;
+  left: 50%;
+  transform:translate(-50%,-50%);
+  overflow-y: scroll;
+  padding: 2px;
+}
+
+#modal_container > th {
+	height: 50px;
+}
+ a{
+ text-decoration: none;
+ color: 	#000080;
+}
+ a:visited :active{
+ text-decoration: none;
+ color: 	#000080;
+}
+
+
+#modal_container select{
+/* 	display: none; */
+}
+
+.modal a.close-modal{
+	display: none;
+}
 </style>
 <script type="text/javascript">
 	// 현재 시간 설정
@@ -90,18 +153,22 @@
 	
 	// 입고지시수량 계산
 	$(function(){
-		var qty_result = 0;
-		$("#in_qty").on("focusout", function(){
-			qty_result = $("#in_qty"+${i.index }).val();
-			alert(qty_result);
-			$("#in_qty_result").text(qty_result);
+		$("input[type=number]").on("focusout", function(){
+			let sum = 0;
+			$("input[type=number]").each(function(){
+				sum += Number($(this).val()); 
+				document.getElementById('in_qty_result').innerText = sum;
+				
+				if(sum > )
+			});
+		    
 		});
-	});
+	}); // 입고지시수량 계산
 	
 </script>
 </head>
 <body>
-<br><br>
+<br>
 
 
         <div class="content">
@@ -118,7 +185,7 @@
                                 </strong>
                             </div>
                             <div class="card-body">
-                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                <table id="reg_table bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
                                             <th>입고예정번호</th>
@@ -136,24 +203,50 @@
                                     	</c:when>
                                     	<c:otherwise>
                                     		<c:set var = "in_schedule_qty_total" value = "0" />
-                                    		==================================입고수량 합계 만들기 =================================================== 
+                                    		<c:set var = "in_qty_total" value = "0" />
 	                                    	<c:forEach var="inList" items="${resultList }" varStatus="i">
 	                                    		<tr>
 		                                    		<td>${inList.in_schedule_cd }</td>
 		                                    		<td>${inList.product_name }</td>
 		                                    		<td>${inList.in_schedule_qty }</td>
-		                                    		<td><input type="text" id="in_qty${i.index }" value="${inList.in_schedule_qty }"></td>
-		                                    		<td><input type="text" id="stock_cd" name="stock_cd"></td>
-		                                    		<td><input type="text" id="wh_loc_in_area" name="wh_loc_in_area"></td>
+		                                    		<td><input type="number" id="in_qty${i.index }" value="${inList.in_schedule_qty }"></td>
+		                                    		<td>
+<!-- 		                                    		<input type="text" id="stock_cd" name="stock_cd"> -->
+		                                    			<div>
+														<div class="input-group">
+														 <input type="hidden" class="form-control" name="business_no" id="business_no"
+														  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
+														 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
+														  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
+														  <button class="btn btn-outline-secondary " type="button" id="button-addon"
+														  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
+														  </button>
+														</div>
+														</div>
+		                                    		</td>
+		                                    		<td>
+<!-- 		                                    		<input type="text" id="wh_loc_in_area" name="wh_loc_in_area"> -->
+														<div> <!-- 수정필요 -->
+															<div class="input-group">
+															 <input type="hidden" class="form-control" name="business_no" id="business_no"
+															  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
+															 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
+															  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
+															  <a href="#modal_container" rel="modal:open"><button class="btn btn-outline-secondary " type="button" id="button-addon">검색
+															  </button></a>
+															</div>
+														</div> 
+		                                    		</td>
 		                                    	</tr>
-		                                    	<c:set var="in_qty_total" value=""/>
+		                                    	<c:set var="in_schedule_qty_total" value="${in_schedule_qty_total+inList.in_schedule_qty }"/>
+		                                    	<c:set var="in_qty_total" value="${in_qty_total+inList.in_schedule_qty }"/>
 	                                    	</c:forEach>
                                     	</c:otherwise>
                                     	</c:choose>
 												<tr>
 													<td colspan="2">합계</td>
 													<td><c:out value="${in_schedule_qty_total }" /></td>
-													<td id="in_qty_result"></td>
+													<td id="in_qty_result"><c:out value="${in_qty_total }" /></td>
 													<td></td>
 													<td></td>
 												</tr>
@@ -177,6 +270,27 @@
 <jsp:include page="../inc/footer.jsp"></jsp:include>
 
 <!-- Right Panel -->
+
+
+<!-- 입고 버튼 모달 DIV -->
+<div id="modal_container" class="modal">
+	<div class="col col-md-3"><label for="inDate" class=" form-control-label">일자</label></div>
+	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
+
+</div>
+
+
+
+<!-- <div id="container"> -->
+<!-- 	<ul class="tab"> -->
+<!-- 		<li data-tab="in_schedule_form" class='tabmenu'><a href="#">TabExample1</a></li> -->
+<!-- 		<li data-tab="in_waiting_form" class='tabmenu'><a href="#">TabExample2</a></li> -->
+<!-- 		<li data-tab="in_completed_form" class='tabmenu'><a href="#">TabExample3</a></li> -->
+<!-- 	</ul> -->
+<!-- 	<div id="tabcontent"></div> -->
+<!-- </div> -->
+
+
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>

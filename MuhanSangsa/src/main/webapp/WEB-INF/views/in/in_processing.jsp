@@ -128,34 +128,8 @@
 
 	} // 수정페이지
 	
-	// register form action
-// 	function register(){
-// 		let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
-// 		$('input:checkbox[name=inChecked]').each(function(index){
-// 			if($(this).is(":checked")==true){
-// 				console.log("id값=in_schedule_cd : "+$(this).val());
-// 				inRegisterList.push($(this).val()); // 배열에 추가
-				
-// // 				console.log("inRegisterList[] : "+ inRegisterList);
-// // 				let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-// // 				if(result){
-// // 					location.href="InRegister?inRegisterList="+inRegisterList
-// 					inRegisterList.submit();
-// // 				}
-// 			}
-// 		});
-	
-// 	} // register()
-	
 	
 	$(function(){
-		// 입고버튼 클릭... 팝업창 버전
-// 		$("#inScheduleBtn").on("click", function(){
-// 			window.open('InRegisterForm','InRegisterForm', 'width=1000, height=920,location=no,status=no,scrollbars=yes');
-// 		});
-		
-	
-		
 		//전체선택 버튼 클릭
 		$('input:checkbox[name=AllChecked]').on("click",function(){
 			if($(this).is(":checked") == true){
@@ -180,12 +154,8 @@
 					inRegisterList.push($(this).val()); // 배열에 추가
 					
 					console.log("inRegisterList[] : "+ inRegisterList);
-// 					let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-// 					if(result){
 						window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
-// 						location.href="InRegister?inRegisterList="+inRegisterList
 						console.log(inRegisterList);
-// 					}
 				}
 							
 			});

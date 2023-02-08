@@ -394,10 +394,10 @@ function open_addLoc_modal(stock_cd,product_cd) {
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${inProList }" var="inList" varStatus="status" >
+			<c:forEach items="${modList }" var="inList" varStatus="status" >
 				<tr>
 					<!-- 품목코드 -->
-					<td><input type="text" value="${inList.stock_cd}" readonly="readonly"></td>
+					<td><input type="text" value="${inList.product_cd}" readonly="readonly"></td>
 					<!-- 품목명 -->
 					<td>
 						<div class="input-group">

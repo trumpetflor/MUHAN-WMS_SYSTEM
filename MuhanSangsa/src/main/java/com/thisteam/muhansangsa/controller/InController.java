@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thisteam.muhansangsa.service.InService;
@@ -81,8 +82,12 @@ public class InController {
 	
 	// 입고처리 수정 페이지
 	@GetMapping("/InProcessingModifyForm")
-	public String modify() {
+	public String modify(@RequestParam("in_schedule_cd") String in_schedule_cd,
+			Model model) {
 		
+		List<inProcessingVO> modList = service.getSelectedInList(in_schedule_cd);
+		
+		model.addAttribute("modList", modList);
 		
 		return "in/in_processing_modify";
 	}

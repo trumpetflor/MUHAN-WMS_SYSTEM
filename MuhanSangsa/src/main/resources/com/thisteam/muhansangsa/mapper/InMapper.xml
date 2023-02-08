@@ -27,6 +27,12 @@
 			</foreach>
 	</select>
 	
+	<select id="selectSelectedInList" resultType="inProcessingVO">
+		SELECT *
+			FROM IN_PROCESSING_VIEW
+			WHERE IN_SCHEDULE_CD = #{in_schedule_cd}
+	</select>
+	
 	<!-- ======================== yeram ============================== -->
 	
 	<select id="getClientList" resultType="ClientVO">

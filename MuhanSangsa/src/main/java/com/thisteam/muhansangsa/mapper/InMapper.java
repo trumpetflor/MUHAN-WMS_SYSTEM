@@ -22,6 +22,9 @@ public interface InMapper {
 			@Param("product_name")ArrayList<String> product_name,
 			@Param("in_date")ArrayList<String> in_date);
 	
+	// 입고예정번호 목록
+	public List<inProcessingVO> selectSelectedInList(String in_schedule_cd);
+	
 	// ======================== yeram ==============================
 	
 	
@@ -30,6 +33,7 @@ public interface InMapper {
 	List<EmployeesVO> getEmployeeList();
 
 	List<InVO> getInList();
+
 
 
 
