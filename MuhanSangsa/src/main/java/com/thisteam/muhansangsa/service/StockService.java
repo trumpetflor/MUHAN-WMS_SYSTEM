@@ -30,9 +30,9 @@ public class StockService {
 	}
 
 	// 이동 & 조정수량 입력을 통한 재고 수량 변경
-	public int setStockQty(int stock_cd, int totalStockQty) {
-		System.out.println("서비스로 넘어온 " + totalStockQty );
-		return mapper.updateStockQty(stock_cd, totalStockQty);
+	public int setStockQty(int stock_cd, int qty) {
+		System.out.println("서비스로 넘어온 " + qty );
+		return mapper.updateStockQty(stock_cd, qty);
 	}
 
 	// sId를 통한 사원번호 조회
@@ -41,7 +41,7 @@ public class StockService {
 	}
 	
 	// 재고 이력 페이지를 위한 stockHistoryVO 타입 리스트 생성 
-	public List<StockHistoryVO> setStockHistory(StockHistoryVO stockHistory) {
+	public int setStockHistory(StockHistoryVO stockHistory) {
 		return mapper.insertStockHistory(stockHistory);
 	}
 	
@@ -84,8 +84,17 @@ public class StockService {
 			String wh_cd, int wh_area_cd, int wh_loc_in_area_cd) {
 		return mapper.selectWmsStockList(searchType, keyword, startRow, listLimit,
 											wh_cd, wh_area_cd, wh_loc_in_area_cd);
+ }
+
+	// --------------------------------------------------------23/02/07 추가
+	
+	// 기존재고수량에서 이동수량만큼 차감 & 이동 대상 재고의 수량 증감
+	public int setTargetStockQty(int sourceStockCd, int targetStockCd, int stockQty) {
+		return mapper.updateTargetStockQty(sourceStockCd, targetStockCd, stockQty);
+
 	}
 	
+	// --------------------------------------------------------23/02/07 추가
 	
 	
 

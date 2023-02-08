@@ -1,6 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html >
 <head>
 	<title> 재고조회 | 재고이력</title>
@@ -126,13 +127,13 @@
 	<table class="table"  id="">
 		<thead>
 			<tr>
-				<th>작업일자</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
-				<th>작업구분</th>
-				<th>품목명</th>
-				<th>보내는 재고번호</th>
-				<th>받는 재고번호</th>
-				<th>수량</th>
-				<th>작업자명</th>
+				<th width="220px">작업일자</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
+				<th width="100px">작업구분</th>
+				<th width="450px">품목명</th>
+				<th width="150px">보내는 재고번호</th>
+				<th width="150px">받는 재고번호</th>
+				<th width="150px">수량</th>
+				<th width="150px">작업자명</th>
 				<th>적요</th>
 			</tr> 
 		</thead>
@@ -140,13 +141,26 @@
 		<c:forEach items="${stockHistoryList }" var="stockHistory" varStatus="status" >
 			<tr>
 				<td>${stockHistory.stock_date }</td>
-				<td>${stockHistory.stock_control_type_cd}</td>
+				<c:choose >
+					<c:when test="${stockHistory.stock_control_type_cd eq '0'}">
+						<td>${fn:replace(stockHistory.stock_control_type_cd, '0', '입고')}
+					</c:when>
+					<c:when test="${stockHistory.stock_control_type_cd eq '1'}">
+						<td>${fn:replace(stockHistory.stock_control_type_cd, '1', '출고')}
+					</c:when>
+					<c:when test="${stockHistory.stock_control_type_cd eq '2'}">
+						<td>${fn:replace(stockHistory.stock_control_type_cd, '2', '조정')}
+					</c:when>
+					<c:when test="${stockHistory.stock_control_type_cd eq '3'}">
+						<td>${fn:replace(stockHistory.stock_control_type_cd, '3', '이동')}
+					</c:when>
+				</c:choose>
 				<td>${stockHistory.product_name }</td>
-				<td>${stockHistory.source_stock_cd }</td>
-				<td>${stockHistory.target_stock_cd }</td>
-				<td>${stockHistory.target_stock_cd }</td>
-				<th>${stockHistory.emp_num }</th>
-				<th>${stockHistory.remarks }</th>
+				<td><a href="Inventory_History_View?stock_cd=${stockHistory.source_stock_cd }">${stockHistory.source_stock_cd }</a></td>
+				<td><a href="Inventory_History_View?stock_cd=${stockHistory.target_stock_cd }">${stockHistory.target_stock_cd }</a></td>
+				<td>${stockHistory.qty }</td>
+				<td>${stockHistory.emp_name }</td>
+				<td>${stockHistory.remarks }</td>
 			</tr>
 			</c:forEach>
 		</tbody>

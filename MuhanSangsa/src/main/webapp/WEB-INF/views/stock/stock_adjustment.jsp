@@ -196,9 +196,10 @@ $(function () {
 		     			 
 		     		  let inner_stock_cd_product_cd = "\'"+stock_cd+"','"+product_cd+"'," //재고번호
 		     		  let inner_var2 = "\'"+prod.wh_loc_in_area_cd+"\',";//위치코드
-		     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\'";
+		     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\',";
+		     		  let inner_var4 = "\'"+prod.stock_cd+"\'";
 		     		 
-		     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
+		     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+inner_var4+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
 		     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
 		     		 	
 				     		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").prepend(result);
@@ -255,8 +256,42 @@ $(function () {
 		
 	});
 	
-	//합계수량 sum_result: 조정수량 + 이동수량 jquery로 만들기
+	//-------------------------------------------------------- 23/02/07 추가
+	// 이동수량과 조정수량 입력 시 합계수량 변겅
+	// 합계수량 sum_result: 조정수량 + 이동수량 jquery로 만들기
+	// input type = number min = "0"으로 세팅 변경	
+	$("#stock-table td").on("change", function() {
+		
+		// 1. 조정수량, 이동수량 name 설정 가능한 경우	
+// 		$(this).closest("tr").find('.sum_result').text(
+// 			Number($(this).closest("tr").find(".stockQty").text()) -
+// 			($(this).closest("tr").find("input[name=RemoveStockQty]").val()) -
+// 			($(this).closest("tr").find("input[name=MVStockQty]").val()) 
+// 		)
+
+		// 2. qty 로 조정수량, 이동수량 묶는 경우
+		
+		// (1). 합계 수량 = 재고 수량 - (이동수량 or 조정수량)
+		var qty = Number($(this).closest("tr").find(".stockQty").text()) - 
+				  $(this).closest("td").find("input[type=Number]").val();
+		// (2). 만약, 이동수량과 조정수량이 선택되지 않았다면 "합계수량 == 재고수량"
+		if($(this).closest("td").find("input[type=Number]").val() == undefined) {
+			qty = Number($(this).closest("tr").find(".stockQty").text());
+		}
+		// (3). 이동수량과 조정수량이 선택된 경우 합계수량을 표시한다
+		$(this).closest("tr").find('.sum_result').text(qty);
+		
+		alert($("select[name=stock_control_type_cd]").val());
+		$("#stock-table").closest("tbody").find("input[type=hidden]").val($("select[name=stock_control_type_cd] option:selected").val());
+// 		console.log($("#stock-table").closest("tbody").find("input[name=stockHistoryList[${ i.index}].stock_control_type_cd]").val($("select[name=stock_control_type_cd]").val()));
+// 		alert($("#stock-table").closest("tbody").find("input[name=stockHistoryList[${ i.index}].stock_control_type_cd]").val($("select[name=stock_control_type_cd]").val()));
+		alert($(this).closest("td").find("input[type=Number]").val());
+		$("#stock-table").closest("tbody").find("input[type=hidden]").next(2).val($(this).closest("td").find("input[type=Number]").val());
+	});
 	
+
+	
+	//-------------------------------------------------------- 23/02/07 추가
 	
 });
 
@@ -266,13 +301,17 @@ function openSearchArea() {
 }
 
 //
-function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area) {
+function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area,change_stock_cd) {
 	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd+"/"+wh_loc_in_area );
 	//https://hianna.tistory.com/718
 	$(function(){
-		$("#"+stock_cd+"_"+product_cd).children("input").val(stock_cd+"["+wh_loc_in_area+"]");
-		$("#"+stock_cd+"_"+product_cd).children("input").attr("value2",wh_loc_in_area_cd);
+		$("#"+stock_cd+"_"+product_cd).children("input").val(change_stock_cd+"["+wh_loc_in_area+"]");
 		$("#"+stock_cd+"_"+product_cd).children(".search_div").css("display","none");
+		//
+		
+		$("#"+stock_cd+"_"+product_cd).closest("tbody").find("input[name=target_stock_cd]").val(parseInt(change_stock_cd));
+		$("#"+stock_cd+"_"+product_cd).closest("tr").find("input[name=stockHistoryList[${ i.index}].target_stock_cd]").val(parseInt(change_stock_cd));
+		console.log(change_stock_cd);
 	});
 	
 }
@@ -303,8 +342,28 @@ function open_addLoc_modal(stock_cd,product_cd) {
         }
 	
 	});//$.ajax({
+		
+		
 	
 }
+	
+//--------------------23/02/08 추가---------------------------
+function stockModifyPro() {
+	
+	$.ajax({
+		type: "POST",
+		url: "StockModifyPro",
+		contentType : $('#stockTable').serialize(),
+		dataType: "json",
+		success : function(json) {
+			alert("성공");
+		}
+	})
+	
+	
+
+}
+//--------------------23/02/08 추가---------------------------
 </script>
 <body>
 
@@ -358,8 +417,9 @@ function open_addLoc_modal(stock_cd,product_cd) {
 <!-- 재고번호, 품목명 , 구역명(창고명), 선반위치, 재고수량, //
   조정수량, 이동재고번호, 이동위치, 이동수량, 합계수량 -->
 
-	 
+	<form action="StockModifyPro" method="post" name="formName" id="stockTable"> 
 	<table class="table"  id="stock-table">
+		
 		<thead>
 			<tr>
 				<th>재고번호</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
@@ -375,20 +435,35 @@ function open_addLoc_modal(stock_cd,product_cd) {
 			</tr> 
 		</thead>
 		<tbody>
-			<c:forEach items="${stockList }" var="stock" varStatus="status" >
-				<tr>
+			<c:forEach items="${stockList }" var="stock" varStatus="i" >
+				<input type="hidden" name="stock_cd" value="${stock.stock_cd}" >
+				<input type="hidden" name="TotalStockQty" value="${stock.stock_qty }" >
+				<input type="hidden" name="product_cd" value="${stock.product_cd }" >
+				<input type="hidden" name="source_stock_cd" value="${stock.stock_cd}" >
+				<input type="hidden" name="target_stock_cd" value=0 >
+				
+			 	
+				<input type="hidden" name="stockHistoryList[${ i.index}].stock_cd" value="${stock.stock_cd}" >
+				<input type="hidden" name="stockHistoryList[${ i.index}].stock_control_type_cd" value=0 >
+				<input type="hidden" name="stockHistoryList[${ i.index}].product_cd" value="${stock.product_cd }" >
+				<input type="hidden" name="stockHistoryList[${ i.index}].source_stock_cd" value="${stock.stock_cd}" >
+				<input type="hidden" name="stockHistoryList[${ i.index}].target_stock_cd" value=0 >
+				<input type="hidden" name="stockHistoryList[${ i.index}].qty" value=0 >
+				
+				<tr class="Stocktr">
+					
 					<td>${stock.stock_cd}</td>
 					<td>${stock.product_name}</td>
 					<td>${stock.wh_name} - ${stock.wh_area }</td>
 					<td>${stock.wh_loc_in_area}</td>
-					<td>${stock.stock_qty }</td>
+					<td class="stockQty">${stock.stock_qty }</td>
 					<td>
-						<select class="bg-light border border-secondary rounded-1 px-1">
+						<select name="stock_control_type_cd" class="bg-light border border-secondary rounded-1 px-1">
 							<option value="move">이동</option>
 							<option value="adjust">조정</option>
 						</select>
 					</td>
-					<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1 adjust" disabled="disabled"></td>
+					<td><input type="number" name="qty" class=" bg-light border border-secondary rounded-1 px-1 adjust" disabled="disabled" min="0"></td>
 					<td style="position: relative;" id="${stock.stock_cd}_${stock.product_cd}">
 						<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-2 " >
 					    <div class=" rounded-1 search_div">
@@ -400,15 +475,16 @@ function open_addLoc_modal(stock_cd,product_cd) {
 						     	</ul>
 					    </div>
 					</td>
-					<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1" max="${stock.stock_qty }"></td>
-					<td></td>
+					<td><input type="number" name="qty" class=" bg-light border border-secondary rounded-1 px-1" max="${stock.stock_qty }" min="0"></td>
 					<td class="sum_result"></td>
 				</tr> 
 			</c:forEach>
 			</tbody>
 	
 	</table>
-
+		<input type="submit" value="조정" class=" mx-1 btn btn-sm btn-dark rounded-1" >
+		<input type="reset" value="초기화" class="mx-1 btn btn-sm btn-dark rounded-1">
+	</form>
 </div>
 </div>
 <!-- 재고번호 클릭시 보이는 모달 영역 DIV  -->

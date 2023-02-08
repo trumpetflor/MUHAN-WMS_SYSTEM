@@ -1,6 +1,7 @@
 package com.thisteam.muhansangsa.vo;
 
 import java.sql.Date;
+import java.util.List;
 
 public class StockHistoryVO {
 	
@@ -23,6 +24,8 @@ public class StockHistoryVO {
 	private String emp_num; // 작업자
 	private Date stock_date; // 작업일자
 	private String remarks; // 적요
+	// 다중 데이터 처리 작업을 위한 컬럼 추가 (23/02/08)
+	private List<StockHistoryVO> stockHistoryList;
 	
 	public int getStock_cd() {
 		return stock_cd;
@@ -79,15 +82,18 @@ public class StockHistoryVO {
 		this.remarks = remarks;
 	}
 	
+	public List<StockHistoryVO> getStockHistoryList() {
+		return stockHistoryList;
+	}
+	public void setStockHistoryList(List<StockHistoryVO> stockHistoryList) {
+		this.stockHistoryList = stockHistoryList;
+	}
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("StockHistoryVO [stock_cd=").append(stock_cd).append(", stock_control_type_cd=")
-				.append(stock_control_type_cd).append(", product_cd=").append(product_cd).append(", source_stock_cd=")
-				.append(source_stock_cd).append(", target_stock_cd=").append(target_stock_cd).append(", qty=")
-				.append(qty).append(", emp_num=").append(emp_num).append(", stock_date=").append(stock_date)
-				.append(", remarks=").append(remarks).append("]");
-		return builder.toString();
+		return "StockHistoryVO [stock_cd=" + stock_cd + ", stock_control_type_cd=" + stock_control_type_cd
+				+ ", product_cd=" + product_cd + ", source_stock_cd=" + source_stock_cd + ", target_stock_cd="
+				+ target_stock_cd + ", qty=" + qty + ", emp_num=" + emp_num + ", stock_date=" + stock_date
+				+ ", remarks=" + remarks + ", stockHistoryList=" + stockHistoryList + "]";
 	}
 	
 }
