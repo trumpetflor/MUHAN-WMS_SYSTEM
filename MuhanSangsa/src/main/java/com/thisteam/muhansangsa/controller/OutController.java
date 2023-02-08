@@ -18,11 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.muhansangsa.service.OutService;
+import com.thisteam.muhansangsa.service.ProductService;
+
+import com.thisteam.muhansangsa.vo.Emp_viewVO;
+import com.thisteam.muhansangsa.vo.Stock_viewVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleVO;
 import com.thisteam.muhansangsa.vo.PageInfo;
 import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.Product_group_bottomVO;
+
 
 @Controller
 public class OutController {
@@ -30,31 +35,10 @@ public class OutController {
 	@Autowired	
 	private OutService service ;
 	
-	//========================= HAWON ======================================= 
-	
-	//출고 등록
-	@GetMapping(value = "/OutInsertForm")
-		public	String outInsertForm(
-			@RequestParam(defaultValue = "") String msg,
-			Model model) {
-		model.addAttribute("msg", msg);
-		
-		// 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
-		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
-		return "out/out_insertForm";
-		
-	}	
+
 	
 	
+
 	//========================= SEWON ======================================= 
 	
 	//출고 예정 목록
@@ -67,6 +51,7 @@ public class OutController {
 			
 	return "out/out_waiting_seletList";
 }
+
 	
 	//출고 예정 목록 조회 페이지 조회용(JSON)
 	//출고 예정목록은 전체, 진행중, 완료 탭으로 구분한다!
@@ -110,7 +95,6 @@ public class OutController {
 	
 	
 	
-	
 	//출고 처리목록
 	@GetMapping(value = "/OutProcessingSeletList")
 		public	String outProcessingSelectList(
@@ -134,8 +118,92 @@ public class OutController {
 	}
 	
 
+	//==========================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//======================================= hawon =================================================
+	
+	//출고 등록
+	@GetMapping(value = "/OutInsertForm")
+		public	String outInsertForm(
+				@RequestParam(defaultValue = "") String msg,
+				Model model) {
+		model.addAttribute("msg", msg);
+		
+		// 접속 ip 확인 코드
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		return "out/out_insertForm";
+		
+	}	
+
 	
 	
+	@ResponseBody
+	@GetMapping(value = "/Search_emp.ajax")
+	public void Search_emp(@RequestParam(defaultValue = "") String keyword,
+							HttpServletResponse response) {
+			
+		List<Emp_viewVO> empList =  service.searchEmp(keyword);
+		JSONArray empArr = new JSONArray();
+		for(Emp_viewVO emp : empList) {
+			empArr.put(new JSONObject(emp));
+			
+		}
+	      try {
+			      response.setCharacterEncoding("UTF-8");
+			      response.getWriter().print(empArr); // toString() 생략됨
+			      System.out.println("empList: " + empArr);
+		   } catch (IOException e) {
+		      e.printStackTrace();
+		   }
+	
+	
+	}
+
+	
+	//품목검색 ajax요청 받는 서블릿주소
+	@GetMapping(value = "/findProduct_StockExist.ajax")
+	public String findProduct_stockExist(Model model) {
+		
+			List<Stock_viewVO> product = service.getproduct_stockExist();
+			model.addAttribute("product", product);
+		
+		return "out/productList_StockExist";
+	}
+ 
+ 	//========================= HAWON 끝 ======================================= 
+  
+  
+  
+  
+  
+  
+  
+  
 }
 
 

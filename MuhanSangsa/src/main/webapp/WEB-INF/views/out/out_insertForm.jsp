@@ -31,16 +31,6 @@
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-<script type="text/javascript">
-
-//거래처 팝업 결과값 등록
-function fn_selectClient(business_no,cust_name) {
-	$("#business_no").val(business_no);
-	$("#cust_name").val(cust_name);
-	
-}
-</script>
-
 </head>
 <style type="text/css">
 	
@@ -57,23 +47,6 @@ function fn_selectClient(business_no,cust_name) {
 	 height: 100%;
 	}
 	
-	.table thead th {
-    vertical-align: middle;
-    }
-	
-	#vertical-align{
-		 vertical-align: middle;
-	}
-	table{
-	 text-align: center;
-	}
-	input[type=number]{
-		width: 75px;
-	}
-	input[type=text]{
-	
-		align-content: center;
-	}
 
 	a{
 	 text-decoration: none;
@@ -84,9 +57,39 @@ function fn_selectClient(business_no,cust_name) {
 	 color: 	#000080;
 	}
 	
+	#table_top {
+		vertical-align: middle;
+	}
+	
+	#table_top th {
+		height: 100px;
+		vertical-align: middle;
+	}
+	#table_top td {
+		vertical-align: middle;
+	}
+	#table_top input[type=date] {
+		width: 150px;	
+	}
+	#table_top input[type=text]{
+		width: 300px;;	
+	}
+	#table_top .rounded-start{
+		width: 300px;;	
+		border: 1px;
+	}
+	
+
+	
 	/* 모달 */
 	.modal{
 	max-width: 1000px;
+	
+	}
+	
+	.modal a.close-modal{
+	 display: none;
+
 	}
 	#modal_container_stock{
 	  width:800PX;
@@ -137,6 +140,17 @@ function fn_selectClient(business_no,cust_name) {
   
 	}
 	
+	
+	th {
+	
+	 width: 150px;
+	 border-left: 1px;
+	}
+	td{
+	 width: 200px;
+	}
+	
+
 	.search_div li:hover {
 	background-color: rgba(169, 168, 167, 0.5);
 	cursor: pointer;
@@ -156,6 +170,38 @@ function fn_selectClient(business_no,cust_name) {
 	#stock-table  input:disabled {
     background-color: rgba(169, 168, 167, 0.2) !important;
 	}
+
+	/* ------------------------------------------------------------------------- */
+	/*사원검색 모달창*/
+	#emp_search_modalDiv{
+	width: 500px;
+	height: 600px;
+	}
+	
+	#emp_search_modalDiv table tbody tr :hover{
+	cursor: pointer;
+	}
+	#emp_search_modalDiv::-webkit-scrollbar {
+    width: 2px;
+  }
+	
+	#client_search_modalDiv{
+	width: 500px;
+	height: 600px;
+	 position: fixed;
+	 top: 20%;
+	  left: 40%;
+	 overflow-y: scroll;
+	
+	}
+	
+	/*emp_search_modalDiv 켰을때 검색버튼보여서 수정함*/
+.input-group .btn{
+		z-index: 0;
+	}
+.input-group .btn:focus {
+z-index: 0;
+}
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
 
@@ -163,69 +209,102 @@ function fn_selectClient(business_no,cust_name) {
 
 
 <script type="text/javascript">
-function openStockModal() {
-	alert();
+$(document).on("click","#client_search_modalDiv #client_table > tbody tr",function(){
+		console.log($(this).children("td").attr("id"));
+		console.log($(this).children("td").next().attr("id"));
 	
-}
+		$("#cust_name").val($(this).children("td").next().attr("id"));
+		$("#business_no").val($(this).children("td").attr("id"));
+		
+		
+		
+		 $('#client_search_modalDiv').modal('hide'); 
+		     $('#client_search_modalDiv').hide();
+		     $('.jquery-modal').click();
+	
+	});
 
 $(function () {
-	$(".loc_search").on("click",function(){
-		
+	$("#search_emp").on("keyup",function(){
 	
-		//id="재고번호_상품번호" 로 넘어옴
-		let stock_cd = $(this).closest('td').attr('id').split("_")[0];
-		let product_cd = $(this).closest('td').attr('id').split("_")[1];
+		let keyword = $(this).val();
 		
-
-		$(".search_div").css("display","none");
+		var regex_pattern = /([^가-힣\x20])/i;
+		console.log("keyword: "+ keyword);
+		console.log("regex_pattern.exec(keyword): "+ !regex_pattern.test(cust_name));
 		
-		//div버튼 보이기
-		 $(this).next().show();
 		
-		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").empty();
+		if(!regex_pattern.test(keyword)){//자음+모음으로 글자가 완성됐을때만 실행
+			$("#emp_search_modalDiv table tbody").empty();
 		
-		$.ajax({
-			
-	        type: "get",
-	        url: "StockAdjust_loc.ajax",
-	        data: {
-	        	"product_cd":product_cd
-	        },
-	         
-	        contentType: 'application/json;charset=UTF-8',
-	        success: function(data,status,xhr) {
-	        	$("#"+product_cd + "  .search_div ul").empty();
-	        
-				//JSON데이터 이상함 ! 나중에 물어볼것
-// 	               JSON.parse(JSON.stringify(data));
-// 		     	   alert(JSON.parse(JSON.stringify(data)));
-		     	   
-		     	   let parsingData = JSON.parse(data);
-// 		     	  alert(parsingData);
-// 		     	  alert(JSON.stringify(parsingData));
+				$.ajax({
 					
-		     	   JSON.stringify(parsingData)
-		     		 for(let prod of parsingData){
-		     			 
-		     		  let inner_stock_cd_product_cd = "\'"+stock_cd+"','"+product_cd+"'," //재고번호
-		     		  let inner_var2 = "\'"+prod.wh_loc_in_area_cd+"\',";//위치코드
-		     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\'";
-		     		 
-		     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
-		     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
-		     		 	
-				     		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").prepend(result);
-		     		 }
-	     	 
-	        },
-	        error: function(xhr,status,error) {
-	            console.log(error);
-	        }
-		
-		});//$.ajax({
-		
-	});
+			        type: "get",
+			        url: "Search_emp.ajax",
+			        data: {
+			        	"keyword":keyword
+			        },
+			        contentType: 'application/json;charset=UTF-8',
+			        success: function(data,status,xhr) {
+	// 		        	alert(JSON.stringify(JSON.parse(data)));
+							if(JSON.stringify(JSON.parse(data)) == "[]"){
+								let msg = "<tr><td colspan='4'>검색된 결과가 없습니다.</td></tr>"
+							
+								$("#emp_search_modalDiv table tbody").prepend(msg);
+							}
+				     		 for(let emp of JSON.parse(data)){
+								let result = "<tr id="+emp.emp_num+" onclick=\'selectedEmp(\""+ emp.emp_num+"\",\""+emp.emp_name+"\")'>"
+												+"<td>"+ emp.emp_num +"</td>"
+												+"<td>"+ emp.emp_name +"</td>"
+												+"<td>"+ emp.dept_name +"</td>"
+												+"<td>"+ emp.grade_name +"</td>"
+											+"</tr>"
+				     		 
+	// 			     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
+	// 			     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
+				     		 	
+						     		$("#emp_search_modalDiv table tbody").prepend(result);
+				     		 }
+			     	 
+			        },
+			        error: function(xhr,status,error) {
+			            console.log(error);
+			        }
+				
+				});//$.ajax({
+		}
+	});//$("#search_emp")
 	
+			
+			$("#cust_searchBtn").on("click",function(){
+				
+					$.ajax({
+						
+				        type: "get",
+				        url: "Product/ClientSelectList_Out",
+				        contentType: 'html',
+				        success: function(data,status,xhr) {
+				        	$('#client_search_modalDiv').html(data);
+				    
+				        	
+				        },
+				        error: function(xhr,status,error) {
+				            console.log(error);
+				        }
+				        
+					});
+					
+				
+				//모달창 열기
+				 $('#client_search_modalDiv').modal('show'); 
+// 			     $('#client_search_modalDiv').show();
+// 			     $('.jquery-modal').click();
+			});
+			
+			
+			
+			
+
 	//위치검색 div내의 X버튼 클릭시
 	$(".close-loc-Btn").on("click",function(){
 		$(".search_div").css("display","none");
@@ -241,83 +320,46 @@ $(function () {
 		alert();
 	});
 	
-	
-	//셀렉트박스 '조정' 선택시에만 조정항목 able처리
-	$("select").on("change", function(){
-		
-		if($(this).val() == "adjust"){
-			console.log("select option:selected : 조정선택됨");
-			
-			//조정수량 input able처리
-			$(this).closest("td").next().children("input").prop("disabled", false);
-			//위치선택 input disable처리
-			$(this).closest("td").next().next().children("input").prop("disabled", true);
-			$(this).closest("td").next().next().children("input").val("");
-			//이동수량 input disable처리
-			$(this).closest("td").next().next().next().children("input").prop("disabled", true);
-			$(this).closest("td").next().next().next().children("input").val("");
-		}else{
-			//조정수량 input disabled처리
-			$(this).closest("td").next().children("input").prop("disabled", true);
-			$(this).closest("td").next().children("input").val("");
-			//위치선택 input able처리
-			$(this).closest("td").next().next().children("input").prop("disabled", false);
-			//이동수량 input able처리
-			$(this).closest("td").next().next().next().children("input").prop("disabled", false);
-		}
-		
-	});
+
 	
 	//합계수량 sum_result: 조정수량 + 이동수량 jquery로 만들기
 	
 	
 });
 
+
+	
+//==============================================	
+	//사원검색에서 사원번호 클릭 시
+	function selectedEmp(emp_num, emp_name){
+	
+	$("#emp_num").val(emp_name);
+	$("#emp_name").val(emp_name);
+	
+	
+		//모달창 닫기
+		 $('#emp_search_modalDiv').modal('hide'); 
+	     $('#emp_search_modalDiv').hide();
+	     $('.jquery-modal').click();
+	}
+	
+	
+	function fn_selectClient(business_no,cust_name) {
+		alert();
+	}
+	
+//==============================================	
+	
+	
+	
 function openSearchArea() {
   document.getElementById("search_div").style.display = 'block';
- alert("openSearchArea");
+  alert("openSearchArea");
 }
 
-//
-function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area) {
-	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd+"/"+wh_loc_in_area );
-	//https://hianna.tistory.com/718
-	$(function(){
-		$("#"+stock_cd+"_"+product_cd).children("input").val(stock_cd+"["+wh_loc_in_area+"]");
-		$("#"+stock_cd+"_"+product_cd).children("input").attr("value2",wh_loc_in_area_cd);
-		$("#"+stock_cd+"_"+product_cd).children(".search_div").css("display","none");
-	});
-	
-}
 
-//새위치 추가 버튼 클릭시 실행되는 함수
-function open_addLoc_modal(stock_cd,product_cd) {
 
-	console.log("stock_cd: "+ stock_cd);
-	console.log("product_cd: "+ product_cd);
-	
-	$.ajax({
-		
-        type: "get",
-        url: "Search_location.ajax",
-        data: {
-        	"product_cd":product_cd,
-        	"stock_cd":stock_cd
-        },
-        contentType: 'html',
-        success: function(data,status,xhr) {
-//         	alert(data);
-        
-			$("#modal_container_content").html(data);
-     	 
-        },
-        error: function(xhr,status,error) {
-            console.log(error);
-        }
-	
-	});//$.ajax({
-	
-}
+
 </script>
 <body>
 
@@ -355,44 +397,47 @@ function open_addLoc_modal(stock_cd,product_cd) {
 <div class="content">
    <div class="animated fadeIn">
 	 
-	<table class="table" id=" ">
+
+	<table class="table" id="table_top">
 		<thead>
             <tr>
 				<th>일 자</th>
 				<td><input type="date" class="form-control" name=" " value=" " required="required"></td>
 				<th>유형</th> <!-- 수정해서 사용하세요!! 기존꺼 복붙해둠!! -->
-				<td><div class="input-group mb-3"> 
-						  <input type="hidden" class="form-control" id="product_group_bottom_cd" name="product_group_bottom_cd"
-						  	value="${product.product_group_bottom_cd }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px">									
-						  <input type="text" class="form-control" id="product_group_bottom_name" name="product_group_bottom_name"
-						   value="${product.product_group_bottom_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" readonly="readonly" required="required">
-						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-						  onclick="window.open('Product/GroupBottomSelectList','GroupBottomSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색</button>
-					</div>
+				<td align="left">
+					<div class="m-1"><input type="radio" value="1" name="out_type" class="form-check-input" id="Purchase_Order"> 발주서</div>
+					<div class="m-1"><input type="radio" value="2" name="out_type" class="form-check-input" id="release"> 출고</div>
 				 </td>
 			</tr>
 			<tr><!-- 구매거래처(거래처 테이블에서 검색하여 선택)  -->
 				<th>거래처</th>
-				<td>
-					<div> 
-						<div class="input-group">
-						 <input type="hidden" class="form-control" name="business_no" id="business_no"
-						  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
-						 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
-						  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
-						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-						  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
-						  </button>
+					<td>	
+						<div class='d-flex'>
+					 	  <input type="text" class="form-control rounded-start" id="cust_name" readonly="readonly" placeholder=" 검색하세요."> 
+					 	  <input type="hidden" name="business_no" id="business_no" value="">
+<!-- 							 <a href="#client_search_modalDiv" rel="modal:open"> -->
+							 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="cust_searchBtn">
+<!-- 							 </a> -->
 						</div>
-					</div> 
-				</td>
+					</td>
 				<th>납기 일자</th>
 				<td><input type="date" class="form-control" name=" " value=" " required="required"></td>
 			</tr>
 			<tr>
-				<th>비고</th>
-				<td><input type="text" class="form-control" value=" " name=" "></td>
+				<th>담당자</th>
+				<td>	
+					<div class='d-flex'>
+				 	  <input type="text" class="form-control rounded-start" id="emp_name" readonly="readonly" placeholder=" 검색하세요."> 
+				 	  <input type="hidden" name="emp_num" id="emp_num" value="">
+						 <a href="#emp_search_modalDiv" rel="modal:open"><input type="button" value="검색" class="btn btn-sm btn-dark p-2"></a>
+					</div>
+				</td>
 			</tr>
+			</table>
+			
+			<!-- 품목 추가  -->
+			<table class="table" id="table_bottom">
+			<thead>
 			<tr><td class="space" colspan="10" /></tr>
 			<tr>
 				<th>품목코드</th><!-- 	 품목코드 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
@@ -403,60 +448,49 @@ function open_addLoc_modal(stock_cd,product_cd) {
 				<th>적요</th>
 				<th>출고대상 재고</th>
 			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${stockList }" var="stock" varStatus="status" >
-				<tr>
-					<td>${stock.stock_cd}</td>
-					<td>${stock.product_name}</td>
-					<td>${stock.wh_name} - ${stock.wh_area }</td>
-					<td>${stock.wh_loc_in_area}</td>
-					<td>${stock.stock_qty }</td>
-					<td>
-						<select class="bg-light border border-secondary rounded-1 px-1">
-							<option value="move">이동</option>
-							<option value="adjust">조정</option>
-						</select>
-					</td>
-					<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1 adjust" disabled="disabled"></td>
-					<td style="position: relative;" id="${stock.stock_cd}_${stock.product_cd}">
-						<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-2 " >
-					    <div class=" rounded-1 search_div">
-						    <div class="float-right close-loc-Btn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
-						    	<div class="mt-3 add-New-loc" onclick="open_addLoc_modal('${stock.stock_cd}','${stock.product_cd}');"> <a href="#modal_container_stock" rel="modal:open">새 위치 추가 + </a></div>
-						       <hr>
-						     	<ul>
-						     		
-						     	</ul>
-					    </div>
-					</td>
-					<td><input type="number"  class=" bg-light border border-secondary rounded-1 px-1" max="${stock.stock_qty }"></td>
-					<td></td>
-					<td class="sum_result"></td>
-				</tr> 
-			</c:forEach>
-			</tbody>
+			</thead>
+			<tbody>
 	
+			</tbody>
+		
+
 	</table>
 	<input type="submit" value="등록" class = "btn btn-primary mx-4"  onclick="OutInsertForm"/>
 </div>
 </div>
-<!-- 재고번호 클릭시 보이는 모달 영역 DIV  -->
+<!-- 거래처 검색 DIV -->
+<div id="client_search_modalDiv" class="modal">
 
-	<div id="modal_container_stock" class="modal">
-	<div id="modal_container_content">
-	
+</div>
+<!-- 담당자 검색 모달 영역 DIV -->
+<!-- Modal HTML embedded directly into document -->
+<div id="emp_search_modalDiv" class="modal">
+	<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
+		<div class="p-2 bg-light text-black well rounded-2" >&#128270;사원 검색</div>
+		
+	<div class="input-group m-3">
+	  <input type="search" class="form-control rounded-start" placeholder="Search" aria-label="Search" aria-describedby="search-addon" id="search_emp"/>
+	  <button type="button" class="btn btn-dark">search</button>
+		</div>
+			<table class="mt-3 table table-hover">
+			<thead>
+				<tr>
+					<th>사번</th>
+					<th>이름</th>
+					<th>부서</th>
+					<th>직급</th>
+				</tr>
+			</thead>
+			<tbody>
+			
+			
+			</tbody>
 
+			</table>		
+		</div>
+ </div><!-- end of DIV #modal_container -->
+ 
 
-
-	</div>
-	 <div class="float-right">
-<!-- 		<a href="#" rel="modal:close"> -->
-		<input type="button" value="새 위치에 품목 추가" class="btn btn-primary" id="addProductTONewLoc">
-<!-- 		</a> -->
-	</div>
-	</div><!-- end of DIV #modal_container -->
-<br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="../inc/footer.jsp"></jsp:include>
     
 <!-- Scripts -->
