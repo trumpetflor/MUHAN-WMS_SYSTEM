@@ -137,14 +137,17 @@
 			</tr> 
 		</thead>
 		<tbody>
-		<c:forEach items="${inList }" var="in" varStatus="status" >
+		<c:forEach items="${inList }" var="in" >
 			<tr>
 				<td>${in.in_schedule_cd }</td>
-				<td>${in.in_type_name}</td>
-				<td>${in.business_no }</td>
+				<td>${in.in_type_name }</td>
+				<td>${in.cust_name }</td>
 				<td>${in.emp_name }</td>
+				<td>${in.product_name }</td>
 				<td>${in.in_date }</td>
-				<td></td>
+				<td>1</td>
+				<td>2</td>
+				<td>3</td>
 			</tr>
 			</c:forEach>
 			

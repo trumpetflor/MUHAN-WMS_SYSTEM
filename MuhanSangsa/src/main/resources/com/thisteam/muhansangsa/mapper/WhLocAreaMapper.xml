@@ -22,8 +22,8 @@
 	<!-- 창고 구역 내 위치 수정 -->
 	<update id="updateWhLocArea">
 		UPDATE warehouse_in_area
-			SET wh_loc_in_area = #{newWhLocArea}
-			WHERE wh_loc_in_area_cd = #{whLocArea.wh_loc_in_area_cd}
+			SET wh_loc_in_area = #{wh_loc_in_area}
+			WHERE wh_loc_in_area_cd = #{wh_loc_in_area_cd}
 	</update>
 	
 	<!-- 창고 구역 내 위치 삭제 -->

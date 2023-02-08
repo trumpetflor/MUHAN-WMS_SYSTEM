@@ -31,7 +31,7 @@ public class ClientController {
 	
 	@Autowired
 	private ClientService service;
-//	@Autowired
+	@Autowired
 	private EmployeesService empService; // 사원 서비스
 	
 	@GetMapping(value = "ClientList")
@@ -40,7 +40,16 @@ public class ClientController {
 			HttpSession session
 			) {
 		
-		// 접속한 ip 주소 가져오기
+		// 세션 아이디
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		}else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			return "fail_back";
+		}
+		
+		// 아이피 주소
 		InetAddress local;
 		String ip;
 		try {
@@ -52,10 +61,6 @@ public class ClientController {
 			e.printStackTrace();
 		}
 		
-		// 세션 아이디 없을 경우 쫓아내기
-		String sId = (String)session.getAttribute("sId");
-		
-		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
 		if(sId != null && !sId.equals("")) { 
 
 			System.out.println("sId : "+ sId);
@@ -118,7 +123,16 @@ public class ClientController {
 			HttpSession session
 			) {
 		
-		// 접속한 ip 주소 가져오기
+		// 세션 아이디
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		}else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			return "fail_back";
+		}
+		
+		// 아이피 주소
 		InetAddress local;
 		String ip;
 		try {
@@ -129,28 +143,22 @@ public class ClientController {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
-		// 권한에 따른 접근 허용 여부 판단
-		// 세션 아이디 저장
-		String sId = "";
-		if(session.getAttribute("sId") != null) {
-			sId = (String)session.getAttribute("sId");
-			System.out.println("sId : "+ sId);
-		}
-		
-		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
 
-		if(!sId.equals("")) {  // 세션 아이디 있을 경우
+		if(sId != null && !sId.equals("")) {  // 세션 아이디 있을 경우
+			
+			System.out.println("sId : " + sId);
 
-			//권한 조회 메서드
-//			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
-			
-			boolean isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
-			
-			if(isRightUser) { // 권한 존재할 경우
+			// 권한 조회 메서드
+		    boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처등록);
+		    System.out.println("거래처등록 권한: " + isRightUser);
+		    isRightUser = true; // 임시
+		    
+		    if(isRightUser) { // 권한 존재할 경우
+	            model.addAttribute("priv", "1");
+		    	
 				return "client/client_insert_form"; // 거래처 등록 폼
 			} else { // 권한 없을 경우
-				model.addAttribute("msg", "거래처 관리 권한이 없습니다.");
+				model.addAttribute("msg", "권한이 없습니다.");
 				
 				return "fail_back";
 			}
@@ -219,23 +227,38 @@ public class ClientController {
 			HttpSession session
 			) {
 		
-		// 세션 아이디 저장
-		String sId = "";
+		// 세션 아이디
+		String sId;
 		if(session.getAttribute("sId") != null) {
 			sId = (String)session.getAttribute("sId");
-			System.out.println("sId : "+ sId);
+		}else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			return "fail_back";
 		}
 		
-		sId = "admin@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
-
-		if(!sId.equals("")) {  // 세션 아이디 있을 경우
-
-			//권한 조회 메서드
-//			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
+		// 아이피 주소
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
 			
-			boolean isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
+		if(sId != null && !sId.equals("")) {  // 세션 아이디 있을 경우
 			
-			if(isRightUser) { // 권한 존재할 경우
+			System.out.println("sId : " + sId);
+
+			// 권한 조회 메서드
+		    boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처등록);
+		    System.out.println("거래처등록 권한: " + isRightUser);
+		    isRightUser = true; // 임시
+		    
+		    if(isRightUser) { // 권한 존재할 경우
+	            model.addAttribute("priv", "1");
 				
 				// 거래처 상세 정보 조회
 				if(business_no != null && !business_no.equals("")) { // 거래처 코드가 "" 아닐 경우 (존재 O)
@@ -266,7 +289,7 @@ public class ClientController {
 				}
 				
 			} else { // 권한 없을 경우
-				model.addAttribute("msg", "거래처 관리 권한이 없습니다.");
+				model.addAttribute("msg", "권한이 없습니다.");
 				return "fail_back";
 			}
 		
@@ -287,24 +310,38 @@ public class ClientController {
 			HttpSession session
 			) {
 		
-		// 권한에 따른 접근 허용 여부 판단
-		// 세션 아이디 저장
-		String sId = "";
+		// 세션 아이디
+		String sId;
 		if(session.getAttribute("sId") != null) {
 			sId = (String)session.getAttribute("sId");
-			System.out.println("sId : "+ sId);
+		}else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			return "fail_back";
 		}
 		
-		sId = "maltesers@muhan.com"; // 임시 관리자 계정 설정 (주석 처리 필요)
-
-		if(sId != null && !sId.equals("")) { 
-
-			//권한 조회 메서드
-//			boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처관리);
+		// 아이피 주소
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
 			
-			boolean isRightUser = true; // 임시 권한 부여 (주석 처리 필요)
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
+		if(sId != null && !sId.equals("")) {  // 세션 아이디 있을 경우
 			
-			if(isRightUser) { // 권한 존재할 경우
+			System.out.println("sId : " + sId);
+
+			// 권한 조회 메서드
+		    boolean isRightUser = empService.getPrivilege(sId, Privilege.거래처등록);
+		    System.out.println("거래처등록 권한: " + isRightUser);
+		    isRightUser = true; // 임시
+		    
+		    if(isRightUser) { // 권한 존재할 경우
+	            model.addAttribute("priv", "1");
 				
 				// 거래처 상세 정보 수정
 				// 업태 및 종목을 / 로 구분
@@ -332,7 +369,55 @@ public class ClientController {
 		}
 	
 	}
+	// =========================================hawon ===============================================
 	
+	//거래처 조회 페이지
+	@GetMapping(value = "/Product/ClientSelectList_Out")
+		public	String clientSelectList() {
+		return "product/client_selectList_outPage";
+	}
+	
+	
+	// 거래처 목록 조회
+	@ResponseBody
+	@GetMapping(value = "ClientListJsonOut")
+	public void clientListJson_out(
+			@RequestParam(defaultValue = "") String searchType,
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "1") int pageNum,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+		
+		// 거래처 목록 가져오기
+		List<ClientVO> clientList = service.getClientList(searchType, keyword, startRow, listLimit);
+		
+		// JSON 형식 변환
+		JSONArray jsonArray = new JSONArray();
+		
+		for(ClientVO client : clientList) {
+			client.setAddr(client.getAddr().split("/")[0]); // 도로명 주소만 가져오기
+			client.setRemarks(client.getRemarks().replace("\r\n", "<br>")); // 출력 시 줄바꿈 처리
+			System.out.println(client);
+			JSONObject jsonObject = new JSONObject(client);
+			System.out.println(jsonObject.get("business_no"));
+			
+			jsonArray.put(jsonObject);
+		}
+		
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 }
 

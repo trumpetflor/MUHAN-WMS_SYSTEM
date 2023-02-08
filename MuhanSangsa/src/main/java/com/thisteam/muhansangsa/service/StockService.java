@@ -73,16 +73,25 @@ public class StockService {
 		return mapper.selectWhAreaLocationList(product_cd, wh_area_cd);
 	}
 
-	public int InsertNewStockCd(String product_cd, String wh_loc_in_area_cd) {
+	public int InsertNewStockCd(String product_cd, int wh_loc_in_area_cd) {
 		// TODO Auto-generated method stub
 		return mapper.insertNewStock(product_cd,wh_loc_in_area_cd);
 	}
+
+	// WMS 창고 관리 페이지 속 재고 리스트 조회 (창고별, 창고 구역별, 창고 구역 내 위치별)
+	public List<Stock_viewVO> getWmsStockList(
+			String searchType, String keyword, int startRow, int listLimit,
+			String wh_cd, int wh_area_cd, int wh_loc_in_area_cd) {
+		return mapper.selectWmsStockList(searchType, keyword, startRow, listLimit,
+											wh_cd, wh_area_cd, wh_loc_in_area_cd);
+ }
 
 	// --------------------------------------------------------23/02/07 추가
 	
 	// 기존재고수량에서 이동수량만큼 차감 & 이동 대상 재고의 수량 증감
 	public int setTargetStockQty(int sourceStockCd, int targetStockCd, int stockQty) {
 		return mapper.updateTargetStockQty(sourceStockCd, targetStockCd, stockQty);
+
 	}
 	
 	// --------------------------------------------------------23/02/07 추가

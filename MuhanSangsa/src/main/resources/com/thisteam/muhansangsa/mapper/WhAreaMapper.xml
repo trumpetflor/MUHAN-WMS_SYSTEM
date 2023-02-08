@@ -22,8 +22,8 @@
 	<!-- 창고 구역 수정 -->
 	<update id="updateWhArea">
 		UPDATE warehouse_area
-			SET wh_area = #{newWhArea}
-			WHERE wh_area_cd = #{whArea.wh_area_cd}
+			SET wh_area = #{wh_area}
+			WHERE wh_area_cd = #{wh_area_cd}
 	</update>
 	
 	<!-- 창고 구역 삭제 -->

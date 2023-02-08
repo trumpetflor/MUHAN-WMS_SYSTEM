@@ -161,6 +161,7 @@ $(function () {
 		//id="재고번호_상품번호" 로 넘어옴
 		let stock_cd = $(this).closest('td').attr('id').split("_")[0];
 		let product_cd = $(this).closest('td').attr('id').split("_")[1];
+	
 		
 
 		$(".search_div").css("display","none");
