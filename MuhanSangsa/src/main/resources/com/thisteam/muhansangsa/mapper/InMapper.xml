@@ -2,10 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.thisteam.muhansangsa.mapper.InMapper">
 
-	<select id="selectInProList" resultType="com.thisteam.muhansangsa.vo.inProcessingVO">
+	<!-- ======================== yeram ============================== -->
+	<!-- 입고예정목록 -->
+	<select id="selectInProList" resultType="inProcessingVO">
 		SELECT *
 			FROM in_processing_view
-  </select>
+	</select>
+	
+	<!-- 입고처리 폼 -->
+	<select id="selectInRegisterList" resultType="inRegisterVO">
+		SELECT in_schedule_cd, product_name, in_schedule_qty
+			FROM IN_REGISTER_VIEW
+			WHERE IN_SCHEDULE_CD IN
+			<foreach collection="in_schedule_cd" item="code" separator="," open="(" close=")"  index="index">
+				#{code}
+			</foreach>
+			AND product_name IN
+			<foreach collection="product_name" item="name" separator="," open="(" close=")"  index="index">
+				#{name}
+			</foreach>
+			AND in_date IN
+			<foreach collection="in_date" item="date" separator="," open="(" close=")"  index="index">
+				#{date}
+			</foreach>
+	</select>
+	
+	<!-- ======================== yeram ============================== -->
 	
 	<select id="getClientList" resultType="ClientVO">
 		SELECT business_no,cust_name

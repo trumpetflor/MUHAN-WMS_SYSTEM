@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Warehouse Modify</title>
+    <title>In Register</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -31,79 +31,7 @@
 <%-- <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script> --%>
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
-// 	var checkResult = false;
-	
-	//상품 수정 클릭 시 확인창
-	function confirm_modify() {
-		let result = confirm("창고 정보를 수정하시겠습니까?");
-		
-		if(result){
-			const form = document.getElementById('InRegisterForm');
-				form.submit();
-		}
-	
-	} // confirm_modify()
-	
-	// 위치=외부(2) 이거나 구분=공장(2) 일때 주소 입력
-	function isOut(){
-		let wh_location = $("input[name='wh_location']:checked").val();
-		let wh_gubun = $("input[name='wh_gubun']:checked").val();
-		if(wh_location == '1'){
-			alert("창고가 외부일 때만 입력해주세요!");
-		} else if(wh_location == '2' || wh_gubun == '2') {
-			kakaoAddr();
-		}
-
-	} // isOut()
-	
-	// 물류팀 확인
-	$(function() {
-		$checkResult = false;
-		
-		$("#wh_man_name").on("focusout", function(){
-			let wh_man_name = $("#wh_man_name").val();
-			$.ajax({
-				type: "GET",
-				url: "WarehouseCheckMan",
-				data: { wh_man_name: $("#wh_man_name").val()},
-				success: function(result) {
-					$("#checkMan").html(result);
-					
-					if(result == "true"){
-						$("#checkMan").html("물류팀 직원만 가능합니다!!!!").css("color", "red");
-						checkResult = false;
-					} else {
-						$("#checkMan").html("물류팀 직원입니다.").css("color", "green");
-						CheckResult = true;
-					}
-				},
-			});
-		}); // 물류팀 확인
-		
-		// 구분 = 창고 일때만 위치 선택
-		$("input[name='wh_gubun']").on("change", function(){
-			let wh_gubun = $("input[name='wh_gubun']:checked").val();
-//	 		alert(wh_gubun);
-//	 		alert(typeof(wh_gubun));
-			if(wh_gubun == '2'){ // 공장이면 선택 못하게함
-				$("input:radio[name=wh_location]").prop("disabled", true);
-				$("input:radio[name=wh_location]").prop("checked", false);
-			} else if(wh_gubun == '1') { // 창고는 선택 가능
-				$("input:radio[name=wh_location]").prop("disabled", false);
-			}
-		}); // 구분 제어
-		
-		// 위치 = 1:내부 => 주소 내용 clear
-		$("input[name='wh_location']").on("click", function(){
-			let wh_location = $("input[name='wh_location']:checked").val();
-			alert(wh_location);
-			if(wh_location == '1'){
-				$("#wh_addr1").val('');
-				$("#wh_addr2").val('');
-// 				$("text").empty();
-			}
-		});
-	});
+	console.log(${resultList});
 </script>
 <style type="text/css">
 
@@ -132,92 +60,117 @@
 		flex: 100%;
 	    max-width: 100%;
 	}
+	
+	#todayDate {
+		width: 15%;
+	}
+	
+	.table thead th, td {
+    	text-align: center;
+    }
+    
+    input[type=text]{
+    	text-align: right;
+    }
+    
+    .form-control {
+    	display: inline-block; 
+	}
 </style>
+<script type="text/javascript">
+	// 현재 시간 설정
+	window.onload = function() {
+		today = new Date();
+		console.log("today.toISOString() >>>" + today.toISOString());
+		today = today.toISOString().slice(0, 10);
+		console.log("today >>>> " + today);
+		bir = document.getElementById("todayDate");
+		bir.value = today;
+	}
+	
+	// 입고지시수량 계산
+	$(function(){
+		var qty_result = 0;
+		$("#in_qty").on("focusout", function(){
+			qty_result = $("#in_qty"+${i.index }).val();
+			alert(qty_result);
+			$("#in_qty_result").text(qty_result);
+		});
+	});
+	
+</script>
 </head>
 <body>
-
+<br><br>
 
 
         <div class="content">
             <div class="animated fadeIn">
-            
-            <div class="row">
-            	<div class="col-lg-6">
-            		<div class="card">
-            			<div class="card-header">
-                        	<strong class="card-title">창고 정보 수정</strong>
+            <h3>입고</h3>
+            <br>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title">
+                                일자 : <input type="date" class="form-control" id="todayDate">
+                                </strong>
+                            </div>
+                            <div class="card-body">
+                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>입고예정번호</th>
+                                            <th>품목명</th>
+                                            <th>입고예정수량</th>
+                                            <th>입고지시수량</th>
+                                            <th>재고번호</th>
+                                            <th>구역명_선반위치</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    	<c:choose>
+                                    	<c:when test="${empty resultList }">
+                                    		<tr><td colspan="6">데이터가 없습니다.</td></tr>
+                                    	</c:when>
+                                    	<c:otherwise>
+                                    		<c:set var = "in_schedule_qty_total" value = "0" />
+                                    		==================================입고수량 합계 만들기 =================================================== 
+	                                    	<c:forEach var="inList" items="${resultList }" varStatus="i">
+	                                    		<tr>
+		                                    		<td>${inList.in_schedule_cd }</td>
+		                                    		<td>${inList.product_name }</td>
+		                                    		<td>${inList.in_schedule_qty }</td>
+		                                    		<td><input type="text" id="in_qty${i.index }" value="${inList.in_schedule_qty }"></td>
+		                                    		<td><input type="text" id="stock_cd" name="stock_cd"></td>
+		                                    		<td><input type="text" id="wh_loc_in_area" name="wh_loc_in_area"></td>
+		                                    	</tr>
+		                                    	<c:set var="in_qty_total" value=""/>
+	                                    	</c:forEach>
+                                    	</c:otherwise>
+                                    	</c:choose>
+												<tr>
+													<td colspan="2">합계</td>
+													<td><c:out value="${in_schedule_qty_total }" /></td>
+													<td id="in_qty_result"></td>
+													<td></td>
+													<td></td>
+												</tr>
+                                    </tbody>
+                                </table>
+									<div>
+										<input type="button" value="저장" class="btn btn-outline-dark" onclick="location.href='InRegisterPro'">
+									</div>
+								</div>
+                            </div>
                         </div>
-                        <div class="row form-group">
-	                        <div class="col col-md-3"><label for="hireDate" class=" form-control-label">일자</label></div>
-	                        <div class="col-12 col-md-9"><input type="date" id="inDate" name="in_date" class="form-control"></div>
-                        </div>
-                        <div class="card-body card-block">
-                        	<form action="WarehouseModifyPro" method="post" enctype="multipart/form-data" class="form-horizontal">
-<%--                         	<c:forEach var="warehouse" items="${inproList }"> --%>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">입고예정번호</label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_cd" value="${warehouse.wh_cd}" readonly="readonly" class="form-control">
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">품목명<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_name" value="${warehouse.wh_name }" class="form-control" required="required">
-	                        			<small class="form-text text-muted">최대 100자</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">입고예정수량<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="text-input" name="wh_tel" value="${warehouse.wh_tel }" class="form-control" required="required">
-	                        			<small class="form-text text-muted">(ex : 010-0000-0000)</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">입고지시수량<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_man_name" name="wh_man_name" value="${warehouse.wh_man_name }" class="form-control" required="required">
-	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">재고번호<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_man_name" name="wh_man_name" value="${warehouse.wh_man_name }" class="form-control" required="required">
-	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">구역명_선반위치<font style="color: red;">*</font></label></div>
-                        			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_man_name" name="wh_man_name" value="${warehouse.wh_man_name }" class="form-control" required="required">
-	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
-                        			</div>
-                        		</div>
-                        		<div class="row form-group">
-                        			<div class="col col-md-12">
-                                        <div class="input-group">
-                                            <div class="input-group-btn">
-                                            	<button class="btn btn-primary" onclick="javascript:confirm_modify()">저장</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-<%--                             </c:forEach> --%>
-                        	</form>
-                        </div>
-            		</div>
-            	</div>
-            </div>
+                    </div>
 
 
-
-
-
-        	</div><!-- .animated -->
-    	</div><!-- .content -->
-
+                </div>
+            </div><!-- .animated -->
+        </div><!-- .content -->
     <div class="clearfix"></div>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>

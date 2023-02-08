@@ -20,6 +20,8 @@
 		<typeAlias type="com.thisteam.muhansangsa.vo.StockHistoryViewVO" alias="StockHistoryViewVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.StockHistoryVO" alias="StockHistoryVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.Wms_wh_viewVO" alias="Wms_wh_viewVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.inProcessingVO" alias="inProcessingVO"/>
+		<typeAlias type="com.thisteam.muhansangsa.vo.inRegisterVO" alias="inRegisterVO"/>
     
 	</typeAliases>
 	

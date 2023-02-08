@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>입고 처리 | 입고 관리</title>
+	<title>In Processing</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -121,40 +121,39 @@
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
 <script type="text/javascript">
-	// 입고예정코드 클릭 시 수정 페이지 이동
-	function modify(item){
-		var code=$(item).text();
-		window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
-
-	} // 수정페이지
 	
-	// register form action
-// 	function register(){
-// 		let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
-// 		$('input:checkbox[name=inChecked]').each(function(index){
-// 			if($(this).is(":checked")==true){
-// 				console.log("id값=in_schedule_cd : "+$(this).val());
-// 				inRegisterList.push($(this).val()); // 배열에 추가
-				
-// // 				console.log("inRegisterList[] : "+ inRegisterList);
-// // 				let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-// // 				if(result){
-// // 					location.href="InRegister?inRegisterList="+inRegisterList
-// 					inRegisterList.submit();
-// // 				}
-// 			}
-// 		});
+	//체크박스 선택 시
+	$(document).on("change","input[name=inproChecked]",function(){
+		
+		$("#selectCount > small").html($('input:checkbox[name=inproChecked]:checked').length +" 개 선택됨");
+		
+// 		alert("체크됨: "+ $(this).val());
+		let idx = $(this).val().split("/")[0];
+		let emp_name = $(this).val().split("/")[1];
+		let emp_num = $(this).val().split("/")[2];
+		let emp_info = {"emp_num":emp_num,"emp_name":emp_name};
 	
-// 	} // register()
-	
+		
+	}); //체크박스선택시?
 	
 	$(function(){
 		// 입고버튼 클릭... 팝업창 버전
-// 		$("#inScheduleBtn").on("click", function(){
+// 		$("#inButton").on("click", function(){
 // 			window.open('InRegisterForm','InRegisterForm', 'width=1000, height=920,location=no,status=no,scrollbars=yes');
 // 		});
 		
+		let inMap = new Map();
+		let selectedModalCheckedVal;
 	
+		// 1. 입고 버튼 클릭시 - 모달창 open
+		$("#inSchedule").on("click", function(){
+			// 선택된 내용 없을 경우
+			if($('input:checkbox[name=inChecked]:checked').length == 0 ){
+				$("#selected_empList").append("선택된 사원이 없습니다.");
+			}else{
+				$("#selected_empList").empty();
+			}
+		}); //입고버튼
 		
 		//전체선택 버튼 클릭
 		$('input:checkbox[name=AllChecked]').on("click",function(){
@@ -172,25 +171,20 @@
 		});//체크박스
 		
 		// 입고 버튼 클릭 시
-		$("#inScheduleBtn").on("click", function(){
-			let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
+		$("#inButton").on("click", function(){
+			let in_schedule_cd = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
 			$('input:checkbox[name=inChecked]').each(function(index){
 				if($(this).is(":checked")==true){
 					console.log("id값=in_schedule_cd : "+$(this).val());
-					inRegisterList.push($(this).val()); // 배열에 추가
-					
-					console.log("inRegisterList[] : "+ inRegisterList);
-// 					let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-// 					if(result){
-						window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
-// 						location.href="InRegister?inRegisterList="+inRegisterList
-						console.log(inRegisterList);
-// 					}
+					in_schedule_cd.push($(this).val()); // 배열에 추가
 				}
-							
 			});
-					
-					
+			
+			console.log("in_schedule_cd[] : "+ in_schedule_cd);
+			let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
+			if(result){
+				location.href="InRegisterPro?in_schedule_cd="+in_schedule_cd
+			}
 		}); //입고버튼
 			
 			
@@ -226,7 +220,7 @@
                     <div class="col-sm-4 ">
                         <div class="page-header float-left rounded-start ">
                             <div class="page-title ">
-                               <h1 class="m-1"><b>입고 처리</b></h1>   
+                               <h1 class="m-1"><b>입고 관리</b></h1>   
                             </div>
                         </div>
                     </div>
@@ -264,7 +258,6 @@
  	 	<div id = "selectCount"><small class="text-secondary"> 0 개 선택됨</small></div>
 
   	</c:if>
-<!-- 	<form action="InRegister" method="post" name="form" enctype="multipart/form-data" class="form-horizontal"> -->
 	<table class="table  vertical-align"  id="empList-table">
 		<thead>
 			<tr>
@@ -282,8 +275,8 @@
 		<tbody>
 		<c:forEach items="${inProList }" var="inlist" varStatus="status" >
 			<tr>
-				<td align="center"><input type="checkbox" name="inChecked" id="inChecked" value="${inlist.in_schedule_cd }/${inlist.product_name }/${inlist.in_date }"></td>
-				<td><a id="in_schedule_cd" href='javascript:void(0);' onclick="modify(this)">${inlist.in_schedule_cd }</a></td>
+				<td><input type="checkbox" name="inChecked" id="inChecked" class="form-check-input" value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
+				<td>${inlist.in_schedule_cd }</td>
 				<td>${inlist.cust_name }</td>
 				<td>${inlist.product_name }</td>
 				<td>${inlist.in_date }</td>
@@ -298,11 +291,38 @@
 	</table>
 	<div class="float-left">
 	<div id="modal-btn-div" class="float-right mt-4">
-		<input type="button" value="입고" class = "btn btn-sm btn-success m-2" id="inScheduleBtn">
+		<a href="#modal_container" rel="modal:open"><input type="button" value="입고" class = "btn btn-sm btn-success m-2" id="inSchedule"></a>
 	</div>
 	</div>
-<!-- 	</form> -->
-<!-- onclick="javascript:register();"  -->
+
+
+<!-- 입고 버튼 모달 DIV -->
+<div id="modal_container" class="modal">
+	<div class="col col-md-3"><label for="inDate" class=" form-control-label">일자</label></div>
+	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
+	<table>
+	<tr>
+		<th>입고예정번호</th>
+		<th>보낸곳명</th>
+		<th>품목명[규격]</th>
+		<th>납기일자</th>
+		<th>입고예정수량</th>
+		<th>입고수량</th>
+		<th>미입고수량</th>
+		<th>적요</th>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	</table>
+</div>
 
 
 

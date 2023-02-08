@@ -92,7 +92,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>입고 관리</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="InSchedule">입고 예정</a></li>
-                            <li><i class="fa fa-table"></i><a href="InScheduleInsert">입고 처리</a></li>
+                            <li><i class="fa fa-table"></i><a href="InProcessing">입고 처리</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">

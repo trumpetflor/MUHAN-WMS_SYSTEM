@@ -31,20 +31,6 @@
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
-	// 창고코드 클릭 시 수정 페이지 이동
-	function modify_1(item){
-		var code = $(item).text();
-// 		alert(code);
-		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
-	}
-	
-	// 창고명 클릭 시 수정 페이지 이동
-	function modify_2(){
-		var code = $("#begin").val();
-
-		alert(code);
-		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
-	}
 	
 </script>
 </head>
@@ -134,8 +120,8 @@
                                     	<c:otherwise>
 	                                    	<c:forEach var="warehouse" items="${whList }" varStatus="status">
 		                                    	<tr>
-		                                    		<td><a id="wh_cd" href='javascript:void(0);' onclick="modify_1(this)">${warehouse.wh_cd }</a></td>
-		                                    		<td><a id="wh_name" href='javascript:void(0);' onclick="modify_2()">${warehouse.wh_name }</a></td>
+		                                    		<td><a id="wh_cd" href='javascript:void(0);' onclick="window.open('WarehouseModifyForm?wh_cd=${warehouse.wh_cd }','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');">${warehouse.wh_cd }</a></td>
+		                                    		<td><a id="wh_name" href='javascript:void(0);' onclick="window.open(WarehouseModifyForm?wh_cd=${warehouse.wh_cd }','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');">${warehouse.wh_name }</a></td>
 		                                    		<td>
 		                                    		<input type="hidden" value="${status.begin }" id="begin">
 		                                    			<c:choose>
