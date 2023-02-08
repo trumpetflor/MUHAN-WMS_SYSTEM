@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.thisteam.muhansangsa.service.OutService;
 import com.thisteam.muhansangsa.service.ProductService;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
+import com.thisteam.muhansangsa.vo.Stock_viewVO;
 
 @Controller
 public class OutController {
@@ -120,6 +121,16 @@ public class OutController {
 		   }
 	
 	
+	}
+	
+	//품목검색 ajax요청 받는 서블릿주소
+	@GetMapping(value = "/findProduct_StockExist.ajax")
+	public String findProduct_stockExist(Model model) {
+		
+			List<Stock_viewVO> product = service.getproduct_stockExist();
+			model.addAttribute("product", product);
+		
+		return "out/productList_StockExist";
 	}
 }
 
