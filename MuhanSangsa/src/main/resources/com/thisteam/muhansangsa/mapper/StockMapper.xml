@@ -115,4 +115,39 @@
 				,REMARKS = ""
 			)
 	</insert>
+	
+	<!-- WMS 창고 관리 페이지 속 재고 리스트 조회 (창고별, 창고 구역별, 창고 구역 내 위치별) -->
+	<select id="selectWmsStockList" resultType="Stock_viewVO">
+		SELECT * 
+		FROM stock_view
+			<if test="!keyword.equals('')">
+			
+			<!-- 2. 검색타입(searchType) 에 따른 WHERE 대상 변경 -->
+			<!-- => 조건이 복수개이므로 choose 태그 사용 -->
+			<choose>
+				<when test="searchType.equals('STOCK_CD')">
+					WHERE STOCK_CD LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('PRODUCT_NAME')">
+					WHERE PRODUCT_NAME LIKE '%${keyword}%'
+				</when>
+				<otherwise>
+				</otherwise>
+			</choose>		
+			</if>
+			<!-- 창고 코드, 창고 구역 코드, 창고 구역 내 위치 코드에 따른 구분 -->
+			<if test="!wh_cd.equals('')">
+				WHERE wh_cd = #{wh_cd}
+				<if test="wh_area_cd neq 0">
+					AND wh_area_cd = #{wh_area_cd}
+					<if test="wh_loc_in_area_cd neq 0">
+						AND wh_loc_in_area_cd = #{wh_loc_in_area_cd}
+					</if>
+				</if>
+			</if>
+			
+			LIMIT #{startRow}, #{listLimit}
+	</select>
+	
+	
 </mapper>

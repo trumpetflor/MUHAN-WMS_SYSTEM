@@ -402,4 +402,78 @@ public class StockController {
 		
 		
 	}
+	
+	// ==================================== jakyoung =============================================
+	// WMS 창고 관리 페이지 속 재고 리스트
+	@GetMapping(value = "/Wms_Inventory_View")
+	public String wmsInventoryView(@RequestParam(defaultValue = "") String searchType,
+								@RequestParam(defaultValue = "") String keyword,
+								@RequestParam(defaultValue = "1") int pageNum,
+								@RequestParam(defaultValue = "") String wh_cd, // 창고 코드
+								@RequestParam(defaultValue = "0") int wh_area_cd, // 창고 구역 코드
+								@RequestParam(defaultValue = "0") int wh_loc_in_area_cd, // 창고 구역 내 위치 코드
+								Model model, HttpSession session){
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			return "fail_back";
+		}
+		
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+
+		//권한 조회 메서드
+		boolean isRightUser = service_emp.getPrivilege(sId,Privilege.WMS관리);
+		isRightUser = true;//TODO: 로그인되면 지우기
+		
+		if(isRightUser) {
+			
+			// 창고 코드 작은따옴표 떼기(임시)
+//				String whCd = wh_cd.replace("'", "");
+			
+			List<Stock_viewVO> stockList = service.getWmsStockList(searchType, keyword, startRow, listLimit, 
+																	wh_cd, wh_area_cd, wh_loc_in_area_cd);
+			
+			if(stockList != null && stockList.size() > 0) {
+				System.out.println("stockList: "+ stockList);
+				model.addAttribute("stockList", stockList);
+				if(!wh_cd.equals("")) {
+					model.addAttribute("wh_name", stockList.get(0).getWh_name());
+					if(wh_area_cd != 0) {
+						model.addAttribute("wh_area", stockList.get(0).getWh_area());
+						if(wh_loc_in_area_cd != 0) {
+							model.addAttribute("wh_loc_in_area", stockList.get(0).getWh_loc_in_area());
+						}
+					}
+				}
+				return "wms_wh/wms_stock_list";
+			} else {
+				return "wms_wh/wms_stock_list";
+			}
+				
+		} else { // 권한 없을 경우
+			model.addAttribute("msg", "권한이 없습니다.");
+			return "fail_back";
+		}
+				
+		
+	}
+
+	
+	
 }

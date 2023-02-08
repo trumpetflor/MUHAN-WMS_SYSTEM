@@ -66,6 +66,10 @@
 	 transition: 0.5s;
 	}
 	
+	.click:not(:disabled):not(.disabled) {
+    cursor: pointer;
+	}
+	
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
@@ -95,8 +99,8 @@
 // 				alert(client.business_no);
 				let strBn = '"' + client.business_no + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
 				let result = "<tr>"
-							+ "<td onclick='openClientDetail(" + strBn + ")'>" + client.business_no + "</td>"
-							+ "<td onclick='openClientDetail(" + strBn + ")'>" + client.cust_name + "</td>"
+							+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + client.business_no + "</td>"
+							+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + client.cust_name + "</td>"
 // 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.business_no + "</a></td>"
 // 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.cust_name + "</a></td>"
 							+ "<td>" + client.boss_name + "</td>"

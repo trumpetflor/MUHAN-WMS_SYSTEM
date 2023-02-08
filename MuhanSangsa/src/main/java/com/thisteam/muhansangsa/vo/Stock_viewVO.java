@@ -1,7 +1,7 @@
 package com.thisteam.muhansangsa.vo;
 
 public class Stock_viewVO {
-
+// =================================== 자경이가 수정중 ==============================================
 	//-- 재고번호, 품목명, 규격, 창고명, 구역명, 위치명, 재고수량; (WH_LOC_IN_AREA: 창고 구역 내 위치명 / WH_AREA: 창고 내부 구역명 /WH_NAME: 창고명 )
 //	STOCK_CD
 //	PRODUCT_CD

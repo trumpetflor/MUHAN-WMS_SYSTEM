@@ -48,22 +48,22 @@ public class WMSWhService {
 	}
 
 	// 창고 구역 수정
-	public int modifyWhArea(WhAreaVO whArea, String newWhArea) {
-		return areaMapper.updateWhArea(whArea, newWhArea);
+	public int modifyWhArea(WhAreaVO whArea) {
+		return areaMapper.updateWhArea(whArea);
 	}
 
 	// 창고 구역 내 위치 수정
-	public int modifyWhLocArea(WhLocAreaVO whLocArea, String newWhLocArea) {
-		return locMapper.updateWhLocArea(whLocArea, newWhLocArea);
+	public int modifyWhLocArea(WhLocAreaVO whLocArea) {
+		return locMapper.updateWhLocArea(whLocArea);
 	}
 
 	// 창고 구역 삭제
-	public int deleteWhArea(WhAreaVO whArea) {
-		return areaMapper.deleteWhArea(whArea);
+	public int deleteWhArea(int whAreaCd) {
+		return areaMapper.deleteWhArea(whAreaCd);
 	}
 
 	// 창고 구역 내 위치 삭제
-	public int deleteWhLocArea(WhLocAreaVO whLocArea) {
+	public int deleteWhLocArea(int whLocArea) {
 		return locMapper.deleteWhLocArea(whLocArea);
 	}
 	

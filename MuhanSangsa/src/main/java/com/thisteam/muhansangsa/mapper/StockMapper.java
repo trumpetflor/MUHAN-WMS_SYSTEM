@@ -51,6 +51,16 @@ public interface StockMapper {
 	List<StockHistoryVO> insertStockHistory(
 			@Param("stock") StockHistoryVO stockHistory);
 
+	// WMS 창고 관리 페이지 속 재고 리스트 조회 (창고별, 창고 구역별, 창고 구역 내 위치별)
+	List<Stock_viewVO> selectWmsStockList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit, 
+			@Param("wh_cd") String wh_cd, // 창고 코드
+			@Param("wh_area_cd") int wh_area_cd, // 창고 구역 코드
+			@Param("wh_loc_in_area_cd") int wh_loc_in_area_cd); // 창고 구역 내 위치 코드
+
 
 
 	

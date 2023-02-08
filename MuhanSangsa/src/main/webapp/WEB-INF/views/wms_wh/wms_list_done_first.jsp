@@ -90,11 +90,11 @@
 	}
 	
 	#right{
-/* 	 width: 800px; */
-/* 	 background-color: white; */
- 	 height: 1200px; 
-/* 	 margin-left: 30px;  */
-/* 	 position: relative; */
+	 width: 800px;
+	 background-color: white;
+	 height: 1200px;
+	 margin-left: 30px; 
+/* 	  position: relative; */
 	}
 	
 	#layoutSidenav {
@@ -120,14 +120,7 @@
     	list-style:none;
     	padding-left: 6px; 
     }
-    
-    .add_wh_area {
-    	display: none;
-    }
-	
-	.ti-plus, .ti-minus, .ti-pencil-alt {
-		cursor: pointer;
-	}
+	    
 	    
 </style>
 <script type="text/javascript">
@@ -148,10 +141,8 @@
 			if (aNextTwo.is(":visible")) {
 				aNextTwo.slideUp();
 				// 열렸을 때만 + 버튼 보이게 하기
-				aNextOne.css("display", "none");
 			} else {
 				aNextTwo.slideDown();
-				aNextOne.css("display", "block");
 			}
 
 			// submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
@@ -354,8 +345,8 @@
 				$("#right").append(result);
 					
 			})
-			.fail(function(result) {
-				$("#right").append(result);
+			.fail(function() {
+				$("#" + whArea.wh_cd).append("요청 실패..ㅠㅠ");
 			});
 		
 		})
@@ -374,7 +365,6 @@
 			
 		} else {
 			$(".w1 ul").slideDown();
-			
 		}
 	}
 	
@@ -403,8 +393,8 @@
 		let html = '<li><div id="wh_area_div">'
 					+ '<form action="RegistWhArea" method="post">'
 					+ '<input type="hidden" value=' + wh_cd + ' name="wh_cd">'
-					+ '&nbsp;&nbsp;&nbsp;<input type="text" name="wh_area" placeholder="등록할 창고 구역명" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
-					+ '<input type="submit" value="등록" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" name="remove" class=" mx-1 btn btn-sm btn-dark rounded-1">'
+					+ '&nbsp;&nbsp;&nbsp;<input type="text" name="wh_area" placeholder="등록할 창고 구역명" class="form-control-inline" required="required">'
+					+ '<input type="submit" value="등록"><input type="button" value="취소" name="remove">'
 					+ '</form>'
 					+ '</div></li>';
 		
@@ -422,8 +412,8 @@
 		let html = '<li><div id="wh_loc_area_div">'
 					+ '<form action="RegistWhLocArea" method="post">'
 					+ '<input type="hidden" value=' + wh_area_cd + ' name="wh_area_cd">'
-					+ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_loc_in_area" placeholder="창고 구역 내 위치명" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
-					+ '<input type="submit" value="등록" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" name="remove" class=" mx-1 btn btn-sm btn-dark rounded-1">'
+					+ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_loc_in_area" placeholder="등록할 창고 구역 내 위치명" class="form-control-inline" required="required">'
+					+ '<input type="submit" value="등록"><input type="button" value="취소" name="remove">'
 					+ '</form>'
 					+ '</div></li>';
 		
@@ -488,8 +478,8 @@
 		let html = '<li class="w1" id=' + wh_area_cd + '>'
 					+ '<form action="ModifyWhArea" method="post">'
 					+ '<input type="hidden" value=' + wh_area_cd + ' name="wh_area_cd">'
-					+ '&nbsp;&nbsp;<input type="text" name="wh_area" value="'+ wh_area + '" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
-					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whArea(' + wh_cd + ')">'
+					+ '&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_area" value="'+ wh_area + '" class="form-control-inline" required="required">'
+					+ '<input type="submit" value="수정"><input type="button" value="취소" onclick="whArea(' + wh_cd + ')">'
 					+ '</form>'
 					+ '</li>';
 
@@ -508,8 +498,8 @@
 		let html = '<li class="w2" id=' + wh_loc_in_area_cd + '>'
 					+ '<form action="ModifyWhLocArea" method="post">'
 					+ '<input type="hidden" value=' + wh_loc_in_area_cd + ' name="wh_loc_in_area_cd">'
-					+ '<input type="text" name="wh_loc_in_area" value="'+ wh_loc_in_area + '" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
-					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whLocArea(' + wh_area_cd + ', ' + wh_cd + ')">' 
+					+ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_loc_in_area" value="'+ wh_loc_in_area + '" class="form-control-inline" required="required">'
+					+ '<input type="submit" value="수정"><input type="button" value="취소" onclick="whLocArea(' + wh_area_cd + ', ' + wh_cd + ')">' 
 					+ '</form>'
 					+ '</li>';
 
@@ -537,8 +527,8 @@
 			$("#right").append(result);
 				
 		})
-		.fail(function(result) {
-			$("#right").append(result);
+		.fail(function() {
+			$("#" + whArea.wh_cd).append("요청 실패..ㅠㅠ");
 		});
 		
 	}	
@@ -582,7 +572,7 @@
 <!-- 						<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" > -->
 <!-- 					</form> -->
 <!-- 				</section> -->
-			    <ul style=" width: 400px;" id="wareHouse">
+			    <ul style=" width: 300px;" id="wareHouse">
 			    	<c:forEach var="wh" items="${whList }" varStatus="wh_idx"> <!-- 창고 반복 -->
 			        <li class="menu" style="" >
 			            <a href="javascript:whArea('${wh.wh_cd }')"><img src="./resources/images/right-arrow.png" width="10px" />&nbsp;<i>${wh.wh_name }</i></a>
@@ -608,8 +598,8 @@
 				</ul> <!-- 창고 -->
 			</div>
 			
-			<div id="right" class="content">
-				
+			<div id="right">
+<%-- 				<jsp:include page="../stock/stock_list.jsp"></jsp:include> --%>
 			</div>
 			
 		</div> <!-- content -->

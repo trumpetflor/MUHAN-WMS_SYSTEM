@@ -15,12 +15,10 @@ public interface WhAreaMapper {
 	int insertWhArea(WhAreaVO whArea);
 
 	// 창고 구역 수정
-	int updateWhArea(
-			@Param("whArea") WhAreaVO whArea, 
-			@Param("newWhArea") String newWhArea);
+	int updateWhArea(WhAreaVO whArea);
 
 	// 창고 구역 삭제
-	int deleteWhArea(WhAreaVO whArea);
+	int deleteWhArea(int wh_area_cd);
 
 
 	

@@ -1,5 +1,7 @@
 package com.thisteam.muhansangsa;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -33,7 +35,21 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "employees/emp_List";
+
+		// 아이피 주소
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		return "index";
+
 	}
 	
 }
