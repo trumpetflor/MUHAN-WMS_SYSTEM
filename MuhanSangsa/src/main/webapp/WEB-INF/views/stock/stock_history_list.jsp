@@ -129,7 +129,7 @@
 			<tr>
 				<th width="220px">작업일자</th><!-- 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
 				<th width="100px">작업구분</th>
-				<th width="300px">품목명</th>
+				<th width="450px">품목명</th>
 				<th width="150px">보내는 재고번호</th>
 				<th width="150px">받는 재고번호</th>
 				<th width="150px">수량</th>
@@ -159,7 +159,7 @@
 				<td><a href="Inventory_History_View?stock_cd=${stockHistory.source_stock_cd }">${stockHistory.source_stock_cd }</a></td>
 				<td><a href="Inventory_History_View?stock_cd=${stockHistory.target_stock_cd }">${stockHistory.target_stock_cd }</a></td>
 				<td>${stockHistory.qty }</td>
-				<td>${stockHistory.emp_num }</td>
+				<td>${stockHistory.emp_name }</td>
 				<td>${stockHistory.remarks }</td>
 			</tr>
 			</c:forEach>

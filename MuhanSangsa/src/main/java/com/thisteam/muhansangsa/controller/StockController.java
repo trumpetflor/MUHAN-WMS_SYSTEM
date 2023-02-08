@@ -50,10 +50,21 @@ public class StockController {
 	   public String stockModifyPro(Model model, HttpSession session, HttpServletResponse response,
 			   @ModelAttribute StockHistoryVO stockHistory, 
 			   @RequestParam("stock_cd") int stock_cd, 
-			   @RequestParam("qty") String changeQty,
-			   @RequestParam("TotalStockQty") String TotalQty
+			   @RequestParam("qty") int changeQty,
+			   @RequestParam("TotalStockQty") int TotalQty
 			) {
+		   System.out.println("stockHistory VO : " + stockHistory);
 		   
+		   for(int i = 0;  i < stockHistory.getStockHistoryList().size(); i++) {
+			   System.out.println("[vo] : " + stockHistory);
+			   System.out.println("리스트 : " + stockHistory.getStockHistoryList());
+			   System.out.println("리스트 get(i) : " + stockHistory.getStockHistoryList().get(i));
+		   }
+//		   System.out.println("리스트가 잘 넘어온다면 나오는 상품 코드 : " + stockHistory.getStockHistoryList().get(0).getProduct_cd());
+//		   System.out.println("리스트가 잘 넘어온다면 나오는 재고 코드 : " + stockHistory.getStockHistoryList().get(0).getStock_cd());
+//		   System.out.println("리스트가 잘 넘어온다면 나오는 0 : " + stockHistory.getStockHistoryList().get(0).getStock_control_type_cd());
+//		   System.out.println("리스트 get(0) : " + stockHistory.getStockHistoryList().get(0));
+//		   System.out.println("리스트 : " + stockHistory.getStockHistoryList());
 		   // 1. sId != null 일 경우에만 접근 가능
 		   String sId = (String)session.getAttribute("sId");
 //			if(session.getAttribute("sId") != null) {
@@ -74,8 +85,10 @@ public class StockController {
 		     stockHistory.setStock_control_type_cd(stock_control_type_cd);
 		   
 		   // 2. qty : "이동수량" & "조정수량"
-		   int TotalStockQty = Integer.parseInt(TotalQty); // 재고수량
-		   int stockQty = Integer.parseInt(changeQty); // 이동수량 & 조정수량
+//		   int TotalStockQty = Integer.parseInt(TotalQty); // 재고수량
+		   int TotalStockQty = TotalQty;
+//		   int stockQty = Integer.parseInt(changeQty); // 이동수량 & 조정수량
+		   int stockQty = changeQty;
 		   
 		   // jquery 성공 시 주석 처리
 		   int qty = (TotalStockQty - stockQty);

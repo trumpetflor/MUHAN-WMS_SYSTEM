@@ -3,19 +3,20 @@ package com.thisteam.muhansangsa.vo;
 import java.sql.Date;
 
 public class StockHistoryViewVO {
-
-//	Field                |Type         |Null
-//	---------------------+-------------+---
-//	STOCK_CD             |int          |NO 
-//	PRODUCT_CD           |int          |NO 
-//	PRODUCT_NAME         |varchar(100) |NO 
-//	STOCK_CONTROL_TYPE_CD|varchar(1)   |NO 
-//	SOURCE_STOCK_CD      |int          |NO 
-//	TARGET_STOCK_CD      |int          |NO 
-//	QTY                  |int          |NO 
-//	EMP_NUM              |varchar(10)  |NO 
-//	STOCK_DATE           |date         |NO 
-//	REMARKS              |varchar(2000)|YES
+	
+//	Field                |Type         |
+//	---------------------+-------------+
+//	STOCK_CD             |int          |
+//	PRODUCT_CD           |int          |
+//	PRODUCT_NAME         |varchar(100) |
+//	STOCK_CONTROL_TYPE_CD|varchar(1)   |
+//	SOURCE_STOCK_CD      |int          |
+//	TARGET_STOCK_CD      |int          |
+//	QTY                  |int          |
+//	EMP_NUM              |varchar(10)  |
+//	EMP_NAME             |varchar(100) |
+//	STOCK_DATE           |date         |
+//	REMARKS              |varchar(2000)|
 	
 	private int stock_cd; // 재고번호
 	private int product_cd; // 품목코드
@@ -25,6 +26,7 @@ public class StockHistoryViewVO {
 	private int target_stock_cd; // 받는 재고번호
 	private int qty; // 수량 (이동수량)
 	private String emp_num; // 작업자 번호
+	private String emp_name; // 작업자 이름
 	private Date stock_date; // 작업일자
 	private String remarks; // 적요
 	
@@ -76,6 +78,12 @@ public class StockHistoryViewVO {
 	public void setEmp_num(String emp_num) {
 		this.emp_num = emp_num;
 	}
+	public String getEmp_name() {
+		return emp_name;
+	}
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
+	}
 	public Date getStock_date() {
 		return stock_date;
 	}
@@ -90,14 +98,10 @@ public class StockHistoryViewVO {
 	}
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("StockHistoryViewVO [stock_cd=").append(stock_cd).append(", product_cd=").append(product_cd)
-				.append(", product_name=").append(product_name).append(", stock_control_type_cd=")
-				.append(stock_control_type_cd).append(", source_stock_cd=").append(source_stock_cd)
-				.append(", target_stock_cd=").append(target_stock_cd).append(", qty=").append(qty).append(", emp_num=")
-				.append(emp_num).append(", stock_date=").append(stock_date).append(", remarks=").append(remarks)
-				.append("]");
-		return builder.toString();
+		return "StockHistoryViewVO [stock_cd=" + stock_cd + ", product_cd=" + product_cd + ", product_name="
+				+ product_name + ", stock_control_type_cd=" + stock_control_type_cd + ", source_stock_cd="
+				+ source_stock_cd + ", target_stock_cd=" + target_stock_cd + ", qty=" + qty + ", emp_num=" + emp_num
+				+ ", emp_name=" + emp_name + ", stock_date=" + stock_date + ", remarks=" + remarks + "]";
 	}
 	
 }

@@ -279,8 +279,16 @@ $(function () {
 		}
 		// (3). 이동수량과 조정수량이 선택된 경우 합계수량을 표시한다
 		$(this).closest("tr").find('.sum_result').text(qty);
-
+		
+		alert($("select[name=stock_control_type_cd]").val());
+		$("#stock-table").closest("tbody").find("input[type=hidden]").val($("select[name=stock_control_type_cd] option:selected").val());
+// 		console.log($("#stock-table").closest("tbody").find("input[name=stockHistoryList[${ i.index}].stock_control_type_cd]").val($("select[name=stock_control_type_cd]").val()));
+// 		alert($("#stock-table").closest("tbody").find("input[name=stockHistoryList[${ i.index}].stock_control_type_cd]").val($("select[name=stock_control_type_cd]").val()));
+		alert($(this).closest("td").find("input[type=Number]").val());
+		$("#stock-table").closest("tbody").find("input[type=hidden]").next(2).val($(this).closest("td").find("input[type=Number]").val());
 	});
+	
+
 	
 	//-------------------------------------------------------- 23/02/07 추가
 	
@@ -301,6 +309,7 @@ function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area,ch
 		//
 		
 		$("#"+stock_cd+"_"+product_cd).closest("tbody").find("input[name=target_stock_cd]").val(parseInt(change_stock_cd));
+		$("#"+stock_cd+"_"+product_cd).closest("tr").find("input[name=stockHistoryList[${ i.index}].target_stock_cd]").val(parseInt(change_stock_cd));
 		console.log(change_stock_cd);
 	});
 	
@@ -336,6 +345,24 @@ function open_addLoc_modal(stock_cd,product_cd) {
 		
 	
 }
+	
+//--------------------23/02/08 추가---------------------------
+function stockModifyPro() {
+	
+	$.ajax({
+		type: "POST",
+		url: "StockModifyPro",
+		contentType : $('#stockTable').serialize(),
+		dataType: "json",
+		success : function(json) {
+			alert("성공");
+		}
+	})
+	
+	
+
+}
+//--------------------23/02/08 추가---------------------------
 </script>
 <body>
 
@@ -389,7 +416,7 @@ function open_addLoc_modal(stock_cd,product_cd) {
 <!-- 재고번호, 품목명 , 구역명(창고명), 선반위치, 재고수량, //
   조정수량, 이동재고번호, 이동위치, 이동수량, 합계수량 -->
 
-	<form action="StockModifyPro" method="post"> 
+	<form action="StockModifyPro" method="post" name="formName" id="stockTable"> 
 	<table class="table"  id="stock-table">
 		
 		<thead>
@@ -407,14 +434,23 @@ function open_addLoc_modal(stock_cd,product_cd) {
 			</tr> 
 		</thead>
 		<tbody>
-			<c:forEach items="${stockList }" var="stock" varStatus="status" >
+			<c:forEach items="${stockList }" var="stock" varStatus="i" >
 				<input type="hidden" name="stock_cd" value="${stock.stock_cd}" >
 				<input type="hidden" name="TotalStockQty" value="${stock.stock_qty }" >
 				<input type="hidden" name="product_cd" value="${stock.product_cd }" >
 				<input type="hidden" name="source_stock_cd" value="${stock.stock_cd}" >
 				<input type="hidden" name="target_stock_cd" value=0 >
 				
+			 	
+				<input type="hidden" name="stockHistoryList[${ i.index}].stock_cd" value="${stock.stock_cd}" >
+				<input type="hidden" name="stockHistoryList[${ i.index}].stock_control_type_cd" value=0 >
+				<input type="hidden" name="stockHistoryList[${ i.index}].product_cd" value="${stock.product_cd }" >
+				<input type="hidden" name="stockHistoryList[${ i.index}].source_stock_cd" value="${stock.stock_cd}" >
+				<input type="hidden" name="stockHistoryList[${ i.index}].target_stock_cd" value=0 >
+				<input type="hidden" name="stockHistoryList[${ i.index}].qty" value=0 >
+				
 				<tr class="Stocktr">
+					
 					<td>${stock.stock_cd}</td>
 					<td>${stock.product_name}</td>
 					<td>${stock.wh_name} - ${stock.wh_area }</td>
