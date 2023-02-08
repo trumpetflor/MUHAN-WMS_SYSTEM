@@ -1,25 +1,25 @@
 <style>
 
-		@font-face {
-		    font-family: 'NEXON Lv1 Gothic OTF' !important;
-		    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-		    font-weight: normal;
-		    font-style: normal;
-		}
+	@font-face {
+	    font-family: 'NEXON Lv1 Gothic OTF' !important;
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
 
-		*{
-			font-family: 'NEXON Lv1 Gothic OTF';
+	*{
+		font-family: 'NEXON Lv1 Gothic OTF';
+
+	}
 	
-		}
-		
-		a{
-		text-decoration: none;
-		}
-		
-		li{
-			font-family: 'NEXON Lv1 Gothic OTF' !important;
-		
-		}
+	a{
+	text-decoration: none;
+	}
+	
+	li{
+		font-family: 'NEXON Lv1 Gothic OTF' !important;
+	
+	}
 </style>
 		
  <!-- 로그아웃 확인 -->
@@ -98,8 +98,8 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>출고 관리</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="#">출고 예정</a></li>
-                            <li><i class="fa fa-table"></i><a href="#">출고 처리</a></li>
+                            <li><i class="fa fa-table"></i><a href="OutWaitingSelectList">출고 예정</a></li>
+                            <li><i class="fa fa-table"></i><a href="OutProcessingSeletList">출고 처리</a></li>
                         </ul>
                     </li>
 
@@ -131,8 +131,9 @@
         <!-- Header-->
         <header id="header" class="header">
             <div class="top-left">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="./"><img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" style="width: 54px; margin: -5;"  alt="Logo"></a>
+                <div class="navbar-header"> <!-- margin: -5; 로고 이상하면 넣어보기  -->
+                    <a class="navbar-brand" href="./">
+                    <img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" style="width: 54px;" alt="Logo"></a>
                     <a class="navbar-brand hidden" href="./"><img src="${pageContext.request.contextPath}/resources/images/logo_bg_white.png" alt="Logo"></a>
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
@@ -143,7 +144,10 @@
 
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="${pageContext.request.contextPath}/resources/images/admin.jpg" alt="User Avatar">
+<%--                        <img class="user-avatar rounded-circle" src="${pageContext.request.contextPath}/resources/images/login.png" alt="User Avatar"> --%>
+							<img id="photo" name="photo" 
+							src="<%=request.getScheme()+" ://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }" 
+							onerror="this.src='${pageContext.request.contextPath}/resources/images/login.png';" style="width: 40px;" alt="Logo">
                         </a>
 
                         <div class="user-menu dropdown-menu login" >

@@ -89,7 +89,7 @@
 	
 	.modal a.close-modal{
 	 display: none;
-	
+
 	}
 	#modal_container_stock{
 	  width:800PX;
@@ -150,6 +150,7 @@
 	 width: 200px;
 	}
 	
+
 	.search_div li:hover {
 	background-color: rgba(169, 168, 167, 0.5);
 	cursor: pointer;
@@ -169,7 +170,7 @@
 	#stock-table  input:disabled {
     background-color: rgba(169, 168, 167, 0.2) !important;
 	}
-	
+
 	/* ------------------------------------------------------------------------- */
 	/*사원검색 모달창*/
 	#emp_search_modalDiv{
@@ -303,6 +304,7 @@ $(function () {
 			
 			
 			
+
 	//위치검색 div내의 X버튼 클릭시
 	$(".close-loc-Btn").on("click",function(){
 		$(".search_div").css("display","none");
@@ -324,6 +326,7 @@ $(function () {
 	
 	
 });
+
 
 	
 //==============================================	
@@ -353,6 +356,7 @@ function openSearchArea() {
   document.getElementById("search_div").style.display = 'block';
   alert("openSearchArea");
 }
+
 
 
 
@@ -393,6 +397,7 @@ function openSearchArea() {
 <div class="content">
    <div class="animated fadeIn">
 	 
+
 	<table class="table" id="table_top">
 		<thead>
             <tr>
@@ -448,6 +453,7 @@ function openSearchArea() {
 	
 			</tbody>
 		
+
 	</table>
 	<input type="submit" value="등록" class = "btn btn-primary mx-4"  onclick="OutInsertForm"/>
 </div>
@@ -484,6 +490,7 @@ function openSearchArea() {
 		</div>
  </div><!-- end of DIV #modal_container -->
  
+
 <jsp:include page="../inc/footer.jsp"></jsp:include>
     
 <!-- Scripts -->

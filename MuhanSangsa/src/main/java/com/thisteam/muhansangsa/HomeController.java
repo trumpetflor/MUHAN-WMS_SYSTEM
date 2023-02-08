@@ -33,7 +33,7 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "wms_list";
+		return "employees/emp_List";
 	}
 	
 }

@@ -59,9 +59,9 @@ public class EmployeesService {
 	
 	
 	//수정
-	public int updateMypageMember(EmployeesVO emp) {
+	public int updateMypageMember(EmployeesVO employees) {
 		
-		return mapper.updateMypageMember(emp) ;
+		return mapper.updateMypageMember(employees) ;
 	}
 
 	//------------------사원 상세조회------------------------------------

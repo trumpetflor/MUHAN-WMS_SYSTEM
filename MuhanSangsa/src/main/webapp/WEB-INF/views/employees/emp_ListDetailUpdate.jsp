@@ -262,7 +262,9 @@
                                     <!--사진이미지 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지</label></div>
-                                        <div class="col-12 col-md-4"><input type="file" id="file-input" name="file-input" class="form-control-file"></div>
+                                        <div class="col-12 col-md-6"><input type="file" id="file-input" name="file-input" class="form-control-file">
+                                        <br><small>(기존파일 : ${employees.photo })</small>
+                                        </div>
                                     </div>
                                     <!--  -->
                                 </form>

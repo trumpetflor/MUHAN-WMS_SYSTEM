@@ -1,8 +1,8 @@
 package com.thisteam.muhansangsa.vo;
 
 import java.sql.Date;
-import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
 
 public class EmployeesVO {
 
@@ -24,7 +24,8 @@ public class EmployeesVO {
 	   private String work_cd; //재직코드
 	   private String priv_cd; //권한
 	   private String photo;
-	
+		// MultipartFile 타입 객체를 통한 파일 처리를 위해 MultipartFile 타입 변수 선언
+	   private MultipartFile file;
 
 	   public int getIdx() {
 		return idx;
@@ -138,6 +139,13 @@ public class EmployeesVO {
 			this.photo = photo;
 		}
 		
+		public MultipartFile getFile() {
+			return file;
+		}
+		public void setFile(MultipartFile file) {
+			this.file = file;
+		}
+		
 		@Override
 		public String toString() {
 			return "EmployeesVO [idx=" + idx + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", dept_cd="
@@ -145,8 +153,10 @@ public class EmployeesVO {
 					+ ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email=" + emp_email + ", emp_passwd="
 					+ emp_passwd + ", emp_comfirmPasswd=" + emp_comfirmPasswd + ", emp_post_No=" + emp_post_No
 					+ ", emp_addr=" + emp_addr + ", hire_date=" + hire_date + ", work_cd=" + work_cd + ", priv_cd="
-					+ priv_cd + ", photo=" + photo + "]";
+					+ priv_cd + ", photo=" + photo + ", file=" + file + "]";
 		}
+		
+		
 		
 		
 
