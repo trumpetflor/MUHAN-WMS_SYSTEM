@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>In Processing</title>
+	<title>입고 처리 | 입고 관리</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -180,40 +180,17 @@
 					inRegisterList.push($(this).val()); // 배열에 추가
 					
 					console.log("inRegisterList[] : "+ inRegisterList);
-					let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-					if(result){
-						location.href="InRegister?inRegisterList="+inRegisterList
-					}
+// 					let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
+// 					if(result){
+						window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
+// 						location.href="InRegister?inRegisterList="+inRegisterList
+						console.log(inRegisterList);
+// 					}
 				}
-					$.ajax({
-						type: "POST",
-						url: "InRegister",
-						data : {inRegisterList:'inRegisterList'},
-						success:
-							const form = document.getElementById('InRegisterForm');
-							form.submit();
-						});
 							
-					});
+			});
 					
 					
-					
-			
-			
-// 			$.ajax({
-// 				type: "GET",
-// 				url: "InRegister",
-// 				data: inRegisterList,
-// 				success: function(result){
-// 					window.open('InRegister?'+inRegisterList,'InRegister','width=1000, height=920,location=no,status=no,scrollbars=yes');
-// 				}
-// 			});
-// 			});
-// 			console.log("inRegisterList[] : "+ inRegisterList);
-// 			let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-// 			if(result){
-// 				location.href="InRegister?inRegisterList="+inRegisterList
-// 			}
 		}); //입고버튼
 			
 			
@@ -249,7 +226,7 @@
                     <div class="col-sm-4 ">
                         <div class="page-header float-left rounded-start ">
                             <div class="page-title ">
-                               <h1 class="m-1"><b>입고 관리</b></h1>   
+                               <h1 class="m-1"><b>입고 처리</b></h1>   
                             </div>
                         </div>
                     </div>
@@ -305,7 +282,7 @@
 		<tbody>
 		<c:forEach items="${inProList }" var="inlist" varStatus="status" >
 			<tr>
-				<td align="center"><input type="checkbox" name="inChecked" id="inChecked" class="form-check-input" value="${inlist.in_schedule_cd }/${inlist.product_name }/${inlist.in_date }"></td>
+				<td align="center"><input type="checkbox" name="inChecked" id="inChecked" value="${inlist.in_schedule_cd }/${inlist.product_name }/${inlist.in_date }"></td>
 				<td><a id="in_schedule_cd" href='javascript:void(0);' onclick="modify(this)">${inlist.in_schedule_cd }</a></td>
 				<td>${inlist.cust_name }</td>
 				<td>${inlist.product_name }</td>

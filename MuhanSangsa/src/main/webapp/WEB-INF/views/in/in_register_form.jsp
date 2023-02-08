@@ -31,7 +31,7 @@
 <%-- <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script> --%>
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
-
+	console.log(${resultList});
 </script>
 <style type="text/css">
 
@@ -60,20 +60,62 @@
 		flex: 100%;
 	    max-width: 100%;
 	}
+	
+	#todayDate {
+		width: 15%;
+	}
+	
+	.table thead th, td {
+    	text-align: center;
+    }
+    
+    input[type=text]{
+    	text-align: right;
+    }
+    
+    .form-control {
+    	display: inline-block; 
+	}
 </style>
+<script type="text/javascript">
+	// 현재 시간 설정
+	window.onload = function() {
+		today = new Date();
+		console.log("today.toISOString() >>>" + today.toISOString());
+		today = today.toISOString().slice(0, 10);
+		console.log("today >>>> " + today);
+		bir = document.getElementById("todayDate");
+		bir.value = today;
+	}
+	
+	// 입고지시수량 계산
+	$(function(){
+		var qty_result = 0;
+		$("#in_qty").on("focusout", function(){
+			qty_result = $("#in_qty"+${i.index }).val();
+			alert(qty_result);
+			$("#in_qty_result").text(qty_result);
+		});
+	});
+	
+</script>
 </head>
 <body>
-
+<br><br>
 
 
         <div class="content">
             <div class="animated fadeIn">
+            <h3>입고</h3>
+            <br>
                 <div class="row">
 
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">입고</strong>
+                                <strong class="card-title">
+                                일자 : <input type="date" class="form-control" id="todayDate">
+                                </strong>
                             </div>
                             <div class="card-body">
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
@@ -93,23 +135,34 @@
                                     		<tr><td colspan="6">데이터가 없습니다.</td></tr>
                                     	</c:when>
                                     	<c:otherwise>
-	                                    	<c:forEach var="inList" items="${resultList }" varStatus="status">
-		                                    	<tr>
+                                    		<c:set var = "in_schedule_qty_total" value = "0" />
+                                    		==================================입고수량 합계 만들기 =================================================== 
+	                                    	<c:forEach var="inList" items="${resultList }" varStatus="i">
+	                                    		<tr>
 		                                    		<td>${inList.in_schedule_cd }</td>
 		                                    		<td>${inList.product_name }</td>
 		                                    		<td>${inList.in_schedule_qty }</td>
-		                                    		<td><input type="text" id="in_qty" value="${inList.in_schedule_qty }"></td>
+		                                    		<td><input type="text" id="in_qty${i.index }" value="${inList.in_schedule_qty }"></td>
 		                                    		<td><input type="text" id="stock_cd" name="stock_cd"></td>
 		                                    		<td><input type="text" id="wh_loc_in_area" name="wh_loc_in_area"></td>
 		                                    	</tr>
+		                                    	<c:set var="in_qty_total" value=""/>
 	                                    	</c:forEach>
                                     	</c:otherwise>
                                     	</c:choose>
+												<tr>
+													<td colspan="2">합계</td>
+													<td><c:out value="${in_schedule_qty_total }" /></td>
+													<td id="in_qty_result"></td>
+													<td></td>
+													<td></td>
+												</tr>
                                     </tbody>
                                 </table>
 									<div>
 										<input type="button" value="저장" class="btn btn-outline-dark" onclick="location.href='InRegisterPro'">
 									</div>
+								</div>
                             </div>
                         </div>
                     </div>

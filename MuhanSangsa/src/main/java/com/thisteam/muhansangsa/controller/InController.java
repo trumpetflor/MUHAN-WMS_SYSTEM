@@ -1,6 +1,5 @@
 package com.thisteam.muhansangsa.controller;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thisteam.muhansangsa.service.InService;
 import com.thisteam.muhansangsa.vo.ClientVO;
@@ -45,9 +42,8 @@ public class InController {
 	}
 	
 	// 입고처리 폼(입고버튼)
-	@PostMapping(value = "/InRegister")
-//	@RequestMapping(value = "/InRegister", method = {RequestMethod.GET, RequestMethod.POST})
-	public String register(String[] inRegisterList, Model model, HttpServletResponse response) {
+	@GetMapping(value = "/InRegister")
+	public String register(String[] inRegisterList, Model model, HttpServletResponse response, RedirectAttributes rttr) {
 		System.out.println("inRegisterList : " + Arrays.toString(inRegisterList));
 		
 		ArrayList<String> in_schedule_cd = new ArrayList<String>();
@@ -70,27 +66,11 @@ public class InController {
 		
 		List<inRegisterVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
 		
-		System.out.println(resultList);
+		System.out.println("add 전 : " + resultList);
 		model.addAttribute("resultList", resultList);
 		
-		
-//		try {
-//			response.setContentType("text/html; charset=UTF-8");
-//			PrintWriter out = response.getWriter();
-//			out.println("<script>");
-//			out.println("window.open('InRegisterForm','InRegisterForm','width=1000, height=920,location=no,status=no,scrollbars=yes');");
-//			out.println("</script>");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		
 		return "in/in_register_form";
 		
-	}
-	
-	@GetMapping("/InRegisterForm")
-	public String registerForm() {
-		return "in/in_register_form";
 	}
 	
 	// 입고처리 저장 버튼
@@ -109,44 +89,6 @@ public class InController {
 	
 	
 	
-	
-//	@GetMapping(value = "/InWaiting")
-//	public void waiting(HttpServletResponse response) {
-//		try {
-//			response.setContentType("text/html; charset=UTF-8");
-//			PrintWriter out = response.getWriter();
-////			out.print("<jsp:include page='in_waiting_form.jsp'></jsp:include>");
-////			out.print("&lt;jsp:include page='in_waiting_form.jsp'&gt;&lt;/jsp:include&gt;");
-////			out.print("<%@include file='in_waiting_form.jsp'%>");
-//			out.print("&lt;%@include file='in_waiting_form.jsp'%&gt;");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-	
-//	@PostMapping(value = "/InWaiting")
-//	public void waiting(HttpServletResponse response) {
-//		try {
-//			response.setContentType("text/html; charset=UTF-8");
-//			PrintWriter out = response.getWriter();
-//			out.print("<jsp:include page='in_waiting_form.jsp'></jsp:include>");
-////			out.print("&lt;jsp:include page='in_waiting_form.jsp'&gt;&lt;/jsp:include&gt;");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-	
-//	@GetMapping(value = "/InWaiting")
-//	public String waiting() {
-//		return "<jsp:include page='in_waiting_form.jsp'></jsp:include>";
-//	}
-	
-//	@PostMapping(value = "/InWaiting")
-//	public String waiting(Locale locale) {
-//		logger.info("InWaiting", locale);
-//		
-//		return "in_waiting_form";
-//	}
 	
 	
 	// ======================== yeram ==============================
