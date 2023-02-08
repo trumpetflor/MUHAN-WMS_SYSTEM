@@ -30,6 +30,42 @@
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 <style>
+
+	@font-face {
+	    font-family: 'Pretendard-Regular';
+	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+	    font-weight: 400;
+	    font-style: normal;
+	}
+
+	
+	@font-face {
+	    font-family: 'NEXON Lv1 Gothic OTF';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+	
+	body {
+	 font-family: 'NEXON Lv1 Gothic OTF';
+	}
+		
+	#client_table{
+		 vertical-align: middle;
+	}
+	table{
+	 text-align: center;
+	}
+	
+	td {
+	height: 100px;
+	}
+		
+	.id_pht{
+	 width: 80px;
+	 transition: 0.5s;
+	}
+	
 	.grandchildren {
 		display: none;
 		position: absolute;
@@ -48,6 +84,11 @@
 		max-width: 85%;
 		flex: 100 100;
 	}
+	
+	.click:not(:disabled):not(.disabled) {
+    cursor: pointer;
+	}
+	
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
@@ -58,7 +99,7 @@
 		$isConfirmBn = false; // 거래처 코드 확인용 변수
 		
 		// 거래처 코드 중복 확인
-		$("#business_no").on("focusout", function(){
+		$("#business_no").on("change", function(){
 			let business_no = $("#business_no").val();
 			let regex = /[0-9]{10,30}/; // 10 ~ 30 자리의 숫자
 			
@@ -97,12 +138,12 @@
 			}
 		});
 		
-		
+				
 		// 종목 입력창 추가
 		$("#add").on("click", function(){
 			$("#jongmokArea").append(
 					'<input type="text" name="jongmok" placeholder="ex) 동물용 사료 및 조제식품 제조업" class="form-control" required="required">'
-					+'<small class="form-text text-muted text-right" name="remove">- 삭제</small>');
+					+'<small class="form-text text-muted text-right click" name="remove">- 삭제</small>');
 		});
 	
 	});
@@ -187,11 +228,17 @@
                                         <div class="col col-md-3"><label class=" form-control-label">거래처 구분<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
                                             <div class="form-check-inline form-check">
-                                                <label for="g_gubun" class="form-check-label ">
-                                                    <input type="radio" name="g_gubun" value="01" class="form-check-input" checked="checked">사업자 (국내)
-                                                    <input type="radio" name="g_gubun" value="02" class="form-check-input">사업자 (해외)
-                                                    <input type="radio" name="g_gubun" value="03" class="form-check-input">비사업자 (국내)
-                                                    <input type="radio" name="g_gubun" value="04" class="form-check-input">비사업자 (해외)
+                                                <label for="g_gubun_01" class="form-check-label ">
+                                                    <input type="radio" name="g_gubun" id="g_gubun_01" value="01" class="form-check-input" checked="checked">사업자 (국내)
+                                                </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <label for="g_gubun_02" class="form-check-label ">
+                                                    <input type="radio" name="g_gubun" id="g_gubun_02" value="02" class="form-check-input">사업자 (해외)
+                                                </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <label for="g_gubun_03" class="form-check-label ">
+                                                    <input type="radio" name="g_gubun" id="g_gubun_03" value="03" class="form-check-input">비사업자 (국내)
+                                                </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <label for="g_gubun_04" class="form-check-label ">
+                                                    <input type="radio" name="g_gubun" id="g_gubun_04" value="04" class="form-check-input">비사업자 (해외)
                                                 </label>
                                             </div>
                                           <small class="help-block form-text text-muted">미선택시 사업자(국내)로 구분</small>
@@ -236,7 +283,7 @@
                                         	<div id="jongmokArea">
                                         	<input type="text" id="jongmok" name="jongmok" placeholder="ex) 동물용 사료 및 조제식품 제조업" class="form-control" required="required">
                                         	</div>
-                                        	<small class="form-text text-muted text-right" id="add">+ 종목 추가</small>
+                                        	<small class="form-text text-muted text-right click" id="add">+ 종목 추가</small>
                                         </div>
                                     </div>
                                     <div class="row form-group">
@@ -248,7 +295,7 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email" class=" form-control-label">이메일</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="email" name="email" placeholder="Enter Email" class="form-control"><small class="help-block form-text">Please enter your email</small></div>
+                                        <div class="col-12 col-md-9"><input type="email" id="email" name="email" placeholder="ex) thisteam@muhan.com" class="form-control"><small class="help-block form-text text-muted">이메일을 입력하세요.</small></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="mobile_no" class=" form-control-label">모바일</label></div>
@@ -308,7 +355,7 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="man_email" class=" form-control-label">담당자 이메일</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="man_email" name="man_email" placeholder="Enter Email" class="form-control"><small class="help-block form-text">Please enter your email</small></div>
+                                        <div class="col-12 col-md-9"><input type="email" id="man_email" name="man_email" placeholder="ex) thisteam@muhan.com" class="form-control"><small class="help-block form-text text-muted">이메일을 입력하세요.</small></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="remarks" class=" form-control-label">적요(비고)</label></div>

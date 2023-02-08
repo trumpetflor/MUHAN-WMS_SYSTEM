@@ -416,7 +416,7 @@ public class StockController {
 		String sId;
 		if(session.getAttribute("sId") != null) {
 			sId = (String)session.getAttribute("sId");
-		}else {
+		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
 			return "fail_back";
 		}
@@ -437,20 +437,21 @@ public class StockController {
 		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
 		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
 
-			//권한 조회 메서드
-			boolean isRightUser = service_emp.getPrivilege(sId,Privilege.재고조회);
-			isRightUser = true;//TODO: 로그인되면 지우기
+		//권한 조회 메서드
+		boolean isRightUser = service_emp.getPrivilege(sId,Privilege.WMS관리);
+		isRightUser = true;//TODO: 로그인되면 지우기
+		
+		if(isRightUser) {
 			
-			if(isRightUser) {
-				
-				// 창고 코드 작은따옴표 떼기(임시)
+			// 창고 코드 작은따옴표 떼기(임시)
 //				String whCd = wh_cd.replace("'", "");
-				
-				List<Stock_viewVO> stockList = service.getWmsStockList(searchType, keyword, startRow, listLimit, 
-																		wh_cd, wh_area_cd, wh_loc_in_area_cd);
-				
-				model.addAttribute("stockList", stockList);
+			
+			List<Stock_viewVO> stockList = service.getWmsStockList(searchType, keyword, startRow, listLimit, 
+																	wh_cd, wh_area_cd, wh_loc_in_area_cd);
+			
+			if(stockList != null && stockList.size() > 0) {
 				System.out.println("stockList: "+ stockList);
+				model.addAttribute("stockList", stockList);
 				if(!wh_cd.equals("")) {
 					model.addAttribute("wh_name", stockList.get(0).getWh_name());
 					if(wh_area_cd != 0) {
@@ -461,11 +462,15 @@ public class StockController {
 					}
 				}
 				return "wms_wh/wms_stock_list";
-			}else {
-				model.addAttribute("msg", "잘못된 접근입니다. ");
-				return "fail_back";
-			
+			} else {
+				return "wms_wh/wms_stock_list";
 			}
+				
+		} else { // 권한 없을 경우
+			model.addAttribute("msg", "권한이 없습니다.");
+			return "fail_back";
+		}
+				
 		
 	}
 
