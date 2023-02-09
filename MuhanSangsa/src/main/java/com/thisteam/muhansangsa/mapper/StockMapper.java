@@ -18,7 +18,7 @@ public interface StockMapper {
 										@Param("startRow") int startRow, 
 										@Param("listLimit") int listLimit);
 
-	List<Stock_viewVO> selectProductInLoc(String product_cd);
+	List<Stock_viewVO> selectProductInLoc(int i);
 
 	List<WarehouseVO> selectWarehouseList();
 
@@ -27,12 +27,12 @@ public interface StockMapper {
 	List<Stock_viewVO> selectSelectedStock(@Param("stock_cd")int[] stock_cd);
 
 	//창고구역내 선반 조회(동일한 상품 없는 선반만)
-	List<Wms_wh_viewVO> selectWhAreaLocationList(@Param("product_cd") String product_cd,
+	List<Wms_wh_viewVO> selectWhAreaLocationList(@Param("product_cd") int i,
 												@Param("wh_area_cd") int wh_area_cd);
 	
 	
 	//새 재고번호 생성
-	int insertNewStock(@Param("product_cd") String product_cd,
+	int insertNewStock(@Param("product_cd") int i,
 						@Param("wh_loc_in_area_cd") int wh_loc_in_area_cd);
 
 	

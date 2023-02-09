@@ -179,8 +179,8 @@ public class OutController {
 		
 		System.out.println("넘어왔니 출고번호" + out_schedule_cd);
 		// 4. 출고 번호에 해당하는 정보 조회 (출고 수정을 위한 목록 조회)
-		List<out_modify_viewVO> outModifyList = service.getOutModifyList(out_schedule_cd);
-		model.addAttribute("outModifyList", outModifyList);
+//		List<out_modify_viewVO> outModifyList = service.getOutModifyList(out_schedule_cd);
+//		model.addAttribute("outModifyList", outModifyList);
 		
 		return "out/out_modifyForm";
 	}

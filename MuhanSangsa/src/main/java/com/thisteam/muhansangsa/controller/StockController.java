@@ -46,139 +46,14 @@ public class StockController {
 		
 	// =============================================== mijoo =====================================================
 	// 23/02/07 수정   
-//	// 재고 조정 페이지 비즈니스 로직
-//	   @PostMapping(value = "/StockModifyPro")
-//	   public String stockModifyPro(Model model, HttpSession session, HttpServletResponse response,
-//			   @ModelAttribute StockHistoryArrVO stockHistoryArr, 
-//			   @RequestParam("stock_cd") int stock_cd, 
-//			   @RequestParam("qty") int changeQty,
-//			   @RequestParam("TotalStockQty") int TotalQty
-//			) {
-//		   
-//		   System.out.println("배열로 넘어오는 StockHistoryArrVO : " + stockHistoryArr);
-//		   
-//		   for(int i = 0; i < stockHistoryArr.getStock_cd().length; i++) {
-//			   	 StockHistoryVO stockHistory = new StockHistoryVO();
-//			   	 
-//			   	 stockHistory.setProduct_cd(stockHistoryArr.getProduct_cd()[i]);
-//			   	 stockHistory.setSource_stock_cd(stockHistoryArr.getSource_stock_cd()[i]);
-//			   	 stockHistory.setStock_cd(stockHistoryArr.getStock_cd()[i]);
-//			   	 stockHistory.setStock_control_type_cd(stockHistoryArr.getStock_control_type_cd()[i]);
-//			   	 stockHistory.setEmp_num("");
-//			   	 stockHistory.setQty(stockHistoryArr.getQty()[i]);
-//			   	 stockHistory.setTarget_stock_cd(stockHistoryArr.getTarget_stock_cd()[i]);
-//			   	 stockHistory.setRemarks("");
-//		   
-//		  System.out.println("분리된 stockHistoryVO : " + stockHistory);
-//		   // 1. sId != null 일 경우에만 접근 가능
-//		   String sId = (String)session.getAttribute("sId");
-////			if(session.getAttribute("sId") != null) {
-////				sId = (String)session.getAttribute("sId");
-////			}else {
-////				model.addAttribute("msg", "로그인이 필요합니다");
-////				return "fail_back";
-////			}
-//			
-//		   // +++++++++++++++++ 권한작업 처리하기
-//			
-//		   // 2. stock_control_type_cd 변환 처리 
-//			 String stock_control_type_cd = "";
-//		      switch (stockHistory.getStock_control_type_cd()) {
-//		      case "adjust": stock_control_type_cd = "2"; break;
-//		      case "move": stock_control_type_cd = "3"; break;
-//		      }
-//		     stockHistory.setStock_control_type_cd(stock_control_type_cd);
-//		   
-//		   // 2. qty : "이동수량" & "조정수량"
-////		   int TotalStockQty = Integer.parseInt(TotalQty); // 재고수량
-//		   int TotalStockQty = TotalQty;
-////		   int stockQty = Integer.parseInt(changeQty); // 이동수량 & 조정수량
-//		   int stockQty = changeQty;
-//		   
-//		   // jquery 성공 시 주석 처리
-//		   int qty = (TotalStockQty - stockQty);
-//		   System.out.println("qty 계산 잘됐니" + qty);
-//		   System.out.println("합계 잘 넘어오니" + TotalStockQty);
-//		   System.out.println("정보 잘 넘어오니" + stockHistory);
-//		   System.out.println("조정 혹은 이동수량 잘 넘어 오니" + changeQty);
-//		   
-//		   // 3. sId를 통한 사원번호 조회 후 set데이터
-//		   String emp_num = service.getEmpNum(sId);
-//		   System.out.println("조회 잘되었니 emp_num = " + emp_num);
-//		   stockHistory.setEmp_num(emp_num);
-//		   
-//		   // 4. 조정수량 & 이동수량 입력으로 해당 재고수량 업데이트
-//		   if(stock_control_type_cd.equals("3")) {
-//			   System.out.println("이동 수량 페이지에 왔습니다");
-//			 // 이동수량 업데이트 
-//		     // ->  기존 재고 업데이트(=source_target_code) + 이동 재고 업데이트 (=target_stock_cd)
-//			   int sourceStockCd = stockHistory.getSource_stock_cd(); 
-//			   int targetStockCd = stockHistory.getTarget_stock_cd();
-//			   
-//			   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
-//			   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
-//			   
-//			   // 기존재고(-), 이동재고(+), 변경수량
-//			   // (1). 이동재고수량 + 변경수량
-//			   int updateTargetCount = service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
-//			   if(updateTargetCount > 0) {
-//				   System.out.println("타겟 수량 업데이트 성공!"); 
-//			   // (2). 기존재고수량 - 변경수량
-//				   int updateSourceCount = service.setStockQty(stock_cd, qty);
-//					   if(updateSourceCount > 0) {
-//			   // (3). 진행된 재고 이력 stock_history 테이블에 insert
-//						   System.out.println("기존 수량 업데이트 성공!");
-//						   int insertCount = service.setStockHistory(stockHistory);
-//			   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
-//						   if(insertCount > 0) {
-//							   return "redirect:Inventory_History_View?stock_cd=" + stockHistory.getStock_cd();
-//						   }
-//					   }
-//					   
-//			   } else {
-//				   model.addAttribute("msg", "이동수량 업데이트 실패!");
-//				   return "fail_back";
-//			   }
-//			   
-//			   
-//		   } else if (stock_control_type_cd.equals("2")) {
-//			 // 조정수량 업데이트 -> 기존 재고만 업데이트
-//			   System.out.println("조정 수량 페이지에 왔습니다");
-//			   
-//			   int updateCount = service.setStockQty(stock_cd, qty);
-//			   if(updateCount > 0) {
-//				   System.out.println("수량 업데이트 성공!"); 
-//				   // 6. 재고 이력 페이지를 위한 stockHistoryVO 타입 리스트 생성 
-//				   int insertCount = service.setStockHistory(stockHistory);
-//				   if(insertCount > 0) {
-//					  				   
-//					   return "redirect:Inventory_History_View?stock_cd=" + stockHistory.getStock_cd();
-//				   }
-//				   
-//			   } else {
-//				   model.addAttribute("msg", "이동수량 업데이트 실패!");
-//				   return "fail_back";
-//			   }
-//			   
-//		   } // 조정수량 업데이트
-//		   
-//		   } // for문
-//		   return "redirect:Inventory_History_View?stock_cd=" + stockHistoryArr.getStock_cd();
-//		   
-//	   }
 	// 재고 조정 페이지 비즈니스 로직
 	   @PostMapping(value = "/StockModifyPro")
 	   public String stockModifyPro(Model model, HttpSession session, HttpServletResponse response,
 			   @ModelAttribute StockHistoryArrVO stockHistoryArr, 
-			   @RequestParam("stock_cd") int[] stockCd, 
+			   @RequestParam("stock_cd") int[] stock_cd, 
 			   @RequestParam("qty") int[] changeQty,
 			   @RequestParam("TotalStockQty") int[] TotalQty
 			) {
-		   
-		   System.out.println("잘 넘어오니 재고 번호 : " + stockCd );
-		   System.out.println("잘 넘어오니 수량 : " + changeQty);
-		   System.out.println("잘 넘어오니 총수량 : " + TotalQty);
-		   
 		   
 		   System.out.println("배열로 넘어오는 StockHistoryArrVO : " + stockHistoryArr);
 		   
@@ -215,54 +90,172 @@ public class StockController {
 		     stockHistory.setStock_control_type_cd(stock_control_type_cd);
 		   
 		   // 2. qty : "이동수량" & "조정수량"
-		   int TotalStockQty = TotalQty[i]; // 현재(기존) 재고수량
-		   int stockQty = changeQty[i]; // qty : 변경할 수량
-		   // 새로운 수량 = 재고수량 - 변경할 수량 
+//		   int TotalStockQty = Integer.parseInt(TotalQty); // 재고수량
+		   int TotalStockQty = TotalQty[i];
+//		   int stockQty = Integer.parseInt(changeQty); // 이동수량 & 조정수량
+		   int stockQty = changeQty[i];
+		   
+		   // jquery 성공 시 주석 처리
 		   int qty = (TotalStockQty - stockQty);
-		   
-		   // stockCd 분리 작업
-		   int stock_cd =  stockCd[i];
-		   
 		   System.out.println("qty 계산 잘됐니" + qty);
 		   System.out.println("합계 잘 넘어오니" + TotalStockQty);
 		   System.out.println("정보 잘 넘어오니" + stockHistory);
-		   System.out.println("조정 혹은 이동수량 잘 넘어 오니" + stockQty);
+		   System.out.println("조정 혹은 이동수량 잘 넘어 오니" + changeQty[i]);
 		   
 		   // 3. sId를 통한 사원번호 조회 후 set데이터
 		   String emp_num = service.getEmpNum(sId);
 		   System.out.println("조회 잘되었니 emp_num = " + emp_num);
 		   stockHistory.setEmp_num(emp_num);
 		   
-			   // 4. 조정수량 & 이동수량 입력으로 해당 재고수량 업데이트
-			   if(stock_control_type_cd.equals("3")) {
-				   System.out.println("이동 수량 페이지에 왔습니다");
-				 // 이동수량 업데이트 
-			     // ->  기존 재고 업데이트(=source_target_code) + 이동 재고 업데이트 (=target_stock_cd)
-				   int sourceStockCd = stockHistory.getSource_stock_cd(); 
-				   int targetStockCd = stockHistory.getTarget_stock_cd();
+		   // 4. 조정수량 & 이동수량 입력으로 해당 재고수량 업데이트
+		   if(stock_control_type_cd.equals("3")) {
+			   System.out.println("이동 수량 페이지에 왔습니다");
+			 // 이동수량 업데이트 
+		     // ->  기존 재고 업데이트(=source_target_code) + 이동 재고 업데이트 (=target_stock_cd)
+			   int sourceStockCd = stockHistory.getSource_stock_cd(); 
+			   int targetStockCd = stockHistory.getTarget_stock_cd();
+			   
+			   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
+			   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
+			   
+			   // 기존재고(-), 이동재고(+), 변경수량
+			   // (1). 이동재고수량 + 변경수량
+			   int updateTargetCount = service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
+			   if(updateTargetCount > 0) {
+				   System.out.println("타겟 수량 업데이트 성공!"); 
+			   // (2). 기존재고수량 - 변경수량
+				   int updateSourceCount = service.setStockQty(stock_cd[i], qty);
+					   if(updateSourceCount > 0) {
+			   // (3). 진행된 재고 이력 stock_history 테이블에 insert
+						   System.out.println("기존 수량 업데이트 성공!");
+						   int insertCount = service.setStockHistory(stockHistory);
+			   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
+						   if(insertCount > 0) {
+							   System.out.println("이동 수량 업데이트 성공!");
+						   }
+					   }
+					   
+			   } else {
+				   model.addAttribute("msg", "이동수량 업데이트 실패!");
+				   return "fail_back";
+			   }
+			   
+			   
+		   } else if (stock_control_type_cd.equals("2")) {
+			 // 조정수량 업데이트 -> 기존 재고만 업데이트
+			   System.out.println("조정 수량 페이지에 왔습니다");
+			   
+			   int updateCount = service.setStockQty(stock_cd[i], qty);
+			   if(updateCount > 0) {
+				   // 6. 재고 이력 페이지를 위한 stockHistoryVO 타입 리스트 생성 
+				   int insertCount = service.setStockHistory(stockHistory);
+				   if(insertCount > 0) {
+					   System.out.println("수량 업데이트 성공!"); 
+				   }
 				   
-				   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
-				   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
-				   
-				   // 기존재고(-), 이동재고(+), 변경수량
-				   // (1). 이동재고수량 + 변경수량
-				   service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
-				   service.setStockQty(stock_cd, qty);
-				
-				   // (3). 진행된 재고 이력 stock_history 테이블에 insert
-				   service.setStockHistory(stockHistory);
-				   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
-				   
-			   } else if (stock_control_type_cd.equals("2")) {
-				 // 조정수량 업데이트 -> 기존 재고만 업데이트
-				 service.setStockQty(stock_cd, qty);
-				 service.setStockHistory(stockHistory);
-				   
-			   } // 조정수량 업데이트
+			   } else {
+				   model.addAttribute("msg", "이동수량 업데이트 실패!");
+				   return "fail_back";
+			   }
+			   
+		   } // 조정수량 업데이트
 		   
 		   } // for문
 		   return "redirect:Inventory_View";
+		   
 	   }
+	// 재고 조정 페이지 비즈니스 로직
+//	   @PostMapping(value = "/StockModifyPro")
+//	   public String stockModifyPro(Model model, HttpSession session, HttpServletResponse response,
+//			   @ModelAttribute StockHistoryArrVO stockHistoryArr, 
+//			   @RequestParam("stock_cd") int[] stockCd, 
+//			   @RequestParam("qty") int[] changeQty,
+//			   @RequestParam("TotalStockQty") int[] TotalQty
+//			) {
+//		   
+//		   System.out.println("배열로 넘어오는 StockHistoryArrVO : " + stockHistoryArr);
+//		   
+//		   for(int i = 0; i < stockHistoryArr.getStock_cd().length; i++) {
+//			   	 StockHistoryVO stockHistory = new StockHistoryVO();
+//			   	 
+//			   	 stockHistory.setProduct_cd(stockHistoryArr.getProduct_cd()[i]);
+//			   	 stockHistory.setSource_stock_cd(stockHistoryArr.getSource_stock_cd()[i]);
+//			   	 stockHistory.setStock_cd(stockHistoryArr.getStock_cd()[i]);
+//			   	 stockHistory.setStock_control_type_cd(stockHistoryArr.getStock_control_type_cd()[i]);
+//			   	 stockHistory.setEmp_num("");
+//			   	 stockHistory.setQty(stockHistoryArr.getQty()[i]);
+//			   	 stockHistory.setTarget_stock_cd(stockHistoryArr.getTarget_stock_cd()[i]);
+//			   	 stockHistory.setRemarks("");
+//		   
+//		  System.out.println("분리된 stockHistoryVO : " + stockHistory);
+//		   // 1. sId != null 일 경우에만 접근 가능
+//		   String sId = (String)session.getAttribute("sId");
+//			if(session.getAttribute("sId") != null) {
+//				sId = (String)session.getAttribute("sId");
+//			}else {
+//				model.addAttribute("msg", "로그인이 필요합니다");
+//				return "fail_back";
+//			}
+//			
+//		   // +++++++++++++++++ 권한작업 처리하기
+//			
+//		   // 2. stock_control_type_cd 변환 처리 
+//			 String stock_control_type_cd = "";
+//		      switch (stockHistory.getStock_control_type_cd()) {
+//		      case "adjust": stock_control_type_cd = "2"; break;
+//		      case "move": stock_control_type_cd = "3"; break;
+//		      }
+//		     stockHistory.setStock_control_type_cd(stock_control_type_cd);
+//		   
+//		   // 2. qty : "이동수량" & "조정수량"
+//		   int TotalStockQty = TotalQty[i]; // 현재(기존) 재고수량
+//		   int stockQty = changeQty[i]; // qty : 변경할 수량
+//		   // 새로운 수량 = 재고수량 - 변경할 수량 
+//		   int qty = (TotalStockQty - stockQty);
+//		   
+//		   // stockCd 분리 작업
+//		   int stock_cd =  stockCd[i];
+//		   
+//		   System.out.println("qty 계산 잘됐니" + qty);
+//		   System.out.println("합계 잘 넘어오니" + TotalStockQty);
+//		   System.out.println("정보 잘 넘어오니" + stockHistory);
+//		   System.out.println("조정 혹은 이동수량 잘 넘어 오니" + stockQty);
+//		   
+//		   // 3. sId를 통한 사원번호 조회 후 set데이터
+//		   String emp_num = service.getEmpNum(sId);
+//		   System.out.println("조회 잘되었니 emp_num = " + emp_num);
+//		   stockHistory.setEmp_num(emp_num);
+//		   
+//			   // 4. 조정수량 & 이동수량 입력으로 해당 재고수량 업데이트
+//			   if(stock_control_type_cd.equals("3")) {
+//				   System.out.println("이동 수량 페이지에 왔습니다");
+//				 // 이동수량 업데이트 
+//			     // ->  기존 재고 업데이트(=source_target_code) + 이동 재고 업데이트 (=target_stock_cd)
+//				   int sourceStockCd = stockHistory.getSource_stock_cd(); 
+//				   int targetStockCd = stockHistory.getTarget_stock_cd();
+//				   
+//				   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
+//				   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
+//				   
+//				   // 기존재고(-), 이동재고(+), 변경수량
+//				   // (1). 이동재고수량 + 변경수량
+//				   service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
+//				   service.setStockQty(stock_cd, qty);
+//				
+//				   // (3). 진행된 재고 이력 stock_history 테이블에 insert
+//				   service.setStockHistory(stockHistory);
+//				   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
+//				   
+//			   } else if (stock_control_type_cd.equals("2")) {
+//				 // 조정수량 업데이트 -> 기존 재고만 업데이트
+//				 service.setStockQty(stock_cd, qty);
+//				 service.setStockHistory(stockHistory);
+//				   
+//			   } // 조정수량 업데이트
+//		   
+//		   } // for문
+//		   return "redirect:Inventory_View";
+//	   }
 	   
 	   
 		// 23/02/07 수정 진행중

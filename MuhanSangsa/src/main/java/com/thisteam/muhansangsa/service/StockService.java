@@ -46,9 +46,9 @@ public class StockService {
 	}
 	
 	//��ǰ �˻�
-	public List<Stock_viewVO> getProductAtSameLoc(String product_cd) {
+	public List<Stock_viewVO> getProductAtSameLoc(int i) {
 		
-		return mapper.selectProductInLoc(product_cd);
+		return mapper.selectProductInLoc(i);
 	}
 	
 	
@@ -68,14 +68,14 @@ public class StockService {
 		return mapper.selectSelectedStock(stock_cd);
 	}
 
-	public List<Wms_wh_viewVO> getWhAreaLocationList(String product_cd, int wh_area_cd) {
+	public List<Wms_wh_viewVO> getWhAreaLocationList(int i, int wh_area_cd) {
 		// TODO Auto-generated method stub
-		return mapper.selectWhAreaLocationList(product_cd, wh_area_cd);
+		return mapper.selectWhAreaLocationList(i, wh_area_cd);
 	}
 
-	public int InsertNewStockCd(String product_cd, int wh_loc_in_area_cd) {
+	public int InsertNewStockCd(int i, int wh_loc_in_area_cd) {
 		// TODO Auto-generated method stub
-		return mapper.insertNewStock(product_cd,wh_loc_in_area_cd);
+		return mapper.insertNewStock(i,wh_loc_in_area_cd);
 	}
 
 	// WMS 창고 관리 페이지 속 재고 리스트 조회 (창고별, 창고 구역별, 창고 구역 내 위치별)
