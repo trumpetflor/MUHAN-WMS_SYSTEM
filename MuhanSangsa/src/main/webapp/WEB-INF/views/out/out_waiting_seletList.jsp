@@ -98,13 +98,6 @@ a:visited :active {
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
 
 <script type="text/javascript">
-
-	//검색 기능 추가
-	function fn_search() {
-		location.href = "./OutWaitingSelectList?keyword=" + $("#keyword").val() 
-				+ "&searchType=" + $("#searchType").val();
-	}
-	
 	
 	/* 종결, 취소 상태 변환 */
 	/* 매개변수로 출고예정코드, 진행상태(미완료/완료), 상태(탭이동-전체/진행중/완료)  */
@@ -132,10 +125,16 @@ a:visited :active {
 	
 	//출고 예정 목록 조회 페이지 조회용(JSON)
 	//매개변수 : status(-1:전체, 0:진행중 1:완료)로 데이터 전송 구분함!
+	var realstatus = -1; // tab이동 시 해당 tab에서 검색을 하기 위해 전역 변수 사용! 
+	
 	function load_list(status) {
+		if(status != 2){ 
+			realstatus= status;
+		}
+		//alert(realstatus);
 		$.ajax({
 			type: "GET",
-			url: "./OutWaitingSelectListJson?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() + "&status=" + status, 
+			url: "./OutWaitingSelectListJson?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() + "&status=" + realstatus, 
 			dataType: "json"
 		})
 		.done(function(resultList) { // 요청 성공 시
@@ -261,19 +260,18 @@ a:visited :active {
 	<div class="content">
 		<div class="animated fadeIn">
 			<section id="searchSection" class="m-0 d-flex justify-content-end">
-				<form action="OutWaitingSelectList">
+				<form action="javascript:void(0);">
 					<!-- 검색 타입 추가 -->
 					<select name="searchType" id="searchType"
 						class="rounded-1 btn-sm p-1">
 						<option value="out_schedule_cd"
 							<c:if test="${searchType eq 'out_schedule_cd'}">selected</c:if>>출고예정번호</option>
-					</select> <input type="text"
-						class="col-sm-5 bg-light border border-secondary rounded-1 px-1"
-						name="keyword" id="keyword" value="${keyword }"
-						onkeyup="if(window.event.keyCode==13){fn_search()}"> <input
-						type="button" value="검색"
-						class=" mx-1 btn btn-sm btn-dark rounded-1"
-						onclick="javascript:fn_search()">
+					</select> 
+					<input type="text" class="col-sm-5 bg-light border border-secondary rounded-1 px-1" 
+					name="keyword" id="keyword" value="${keyword }"
+						onkeyup="if(window.event.keyCode==13){load_list(2)}">
+					<input type="button" value="검색" class=" mx-1 btn btn-sm btn-dark rounded-1"
+						onclick="javascript:load_list(2)">
 				</form>
 			</section>
 			<!-- nav바 (tab)  -->
@@ -285,8 +283,8 @@ a:visited :active {
 					<div class="nav nav-tabs" id="nav-tab" role="tablist">
 						<a class="nav-item nav-link active" id="nav-home-tab"
 							data-toggle="tab" href="#" onclick="load_list(-1)" role="tab"
-							aria-controls="nav-home" aria-selected="true">전체</a> <a
-							class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
+							aria-controls="nav-home" aria-selected="true">전체</a> 
+						<a	class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
 							href="#" onclick="load_list(0)" role="tab"
 							aria-controls="nav-profile" aria-selected="false">진행중</a> <a
 							class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"

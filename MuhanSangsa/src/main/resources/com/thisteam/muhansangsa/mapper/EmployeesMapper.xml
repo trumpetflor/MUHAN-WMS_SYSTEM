@@ -130,6 +130,7 @@
 				,EMP_TEL = #{emp_tel}
 				,EMP_DTEL = #{emp_dtel}
 				,EMP_EMAIL = #{emp_email}
+				,EMP_ADDR = #{emp_addr}
 				,HIRE_DATE = #{hire_date}
 				,WORK_CD = #{work_cd}
 				<if test='photo != null and photo !="" '>

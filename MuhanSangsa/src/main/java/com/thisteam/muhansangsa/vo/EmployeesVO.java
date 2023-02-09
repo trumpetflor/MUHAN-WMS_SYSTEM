@@ -20,7 +20,7 @@ public class EmployeesVO {
 	   private String emp_comfirmPasswd; //변경된 비밀번호
 	   private String emp_post_No;  //우편번호
 	   private String emp_addr; 
-	   private String emp_emp_addrDetail; // 상세주소(DB x)
+	   private String emp_addrDetail; // 상세주소(DB x)
 	   private Date hire_date; //입사일
 	   private String work_cd; //재직코드
 	   private String priv_cd; //권한
@@ -115,11 +115,11 @@ public class EmployeesVO {
 		public void setEmp_addr(String emp_addr) {
 			this.emp_addr = emp_addr;
 		}
-		public String getEmp_emp_addrDetail() {
-			return emp_emp_addrDetail;
+		public String getEmp_addrDetail() {
+			return emp_addrDetail;
 		}
-		public void setEmp_emp_addrDetail(String emp_emp_addrDetail) {
-			this.emp_emp_addrDetail = emp_emp_addrDetail;
+		public void setEmp_addrDetail(String emp_emp_addrDetail) {
+			this.emp_addrDetail = emp_emp_addrDetail;
 		}
 		public Date getHire_date() {
 			return hire_date;
@@ -159,7 +159,7 @@ public class EmployeesVO {
 					+ dept_cd + ", dept_name=" + dept_name + ", grade_cd=" + grade_cd + ", grade_name=" + grade_name
 					+ ", emp_tel=" + emp_tel + ", emp_dtel=" + emp_dtel + ", emp_email=" + emp_email + ", emp_passwd="
 					+ emp_passwd + ", emp_comfirmPasswd=" + emp_comfirmPasswd + ", emp_post_No=" + emp_post_No
-					+ ", emp_addr=" + emp_addr + ", emp_emp_addrDetail=" + emp_emp_addrDetail + ", hire_date="
+					+ ", emp_addr=" + emp_addr + ", emp_emp_addrDetail=" + emp_addrDetail + ", hire_date="
 					+ hire_date + ", work_cd=" + work_cd + ", priv_cd=" + priv_cd + ", photo=" + photo + ", file="
 					+ file + "]";
 		}

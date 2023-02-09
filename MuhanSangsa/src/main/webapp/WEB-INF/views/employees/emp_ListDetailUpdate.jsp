@@ -208,17 +208,16 @@
 										</div>
 									</div>
 									<!-- 상세주소 -->
-									<div class="row form-group">
-										<div class="col col-md-3">
-											<label for="text-input" class=" form-control-label"></label>
-										</div>
-										<div class="col-12 col-md-8">
-											<input type="text" id="emp_addrDetail" name="emp_addrDetail"
-												value=""
-												class="form-control bg-gradient-light">
-												<small class="form-text text-muted">상세주소</small>
-										</div>
-									</div>
+<!-- 									<div class="row form-group"> -->
+<!-- 										<div class="col col-md-3"> -->
+<!-- 											<label for="text-input" class=" form-control-label"></label> -->
+<!-- 										</div> -->
+<!-- 										<div class="col-12 col-md-8"> -->
+<!-- 											<input type="text" id="emp_addrDetail" name="emp_addrDetail" -->
+<!-- 												class="form-control bg-gradient-light"> -->
+<!-- 												<small class="form-text text-muted">상세주소</small> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
                                    
 	                                 <!-- 입사일 -->
 	                                  <div class="row form-group">

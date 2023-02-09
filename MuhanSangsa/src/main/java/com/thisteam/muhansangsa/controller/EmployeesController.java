@@ -419,6 +419,11 @@ public class EmployeesController {
 					f.mkdirs();
 				}
 			}
+			System.out.println("employees.getEmp_addr()::"+employees.getEmp_addr());
+			System.out.println("employees.getEmp_addrDetail()::"+employees.getEmp_addrDetail());
+			
+			//주소  : 도로명 + 상세주소
+			employees.setEmp_addr(employees.getEmp_addr()+"/"+employees.getEmp_addrDetail());
 			
 			//수정
 			int updateCount  = service.updateDetailEmp(employees);
