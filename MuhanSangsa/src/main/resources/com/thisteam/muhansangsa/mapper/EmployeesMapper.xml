@@ -120,6 +120,7 @@
 	</update>
 
 	<!-- 상세페이지 수정(업데이트 작업) -->
+	<!-- 사진 수정을 하지 않을 경우 기존 등록된 사진이 삭제되므로, if 조건문을 사용하여 이를 방지  -->
 	<update id="updateDetail">
 		UPDATE	employees 
 			SET EMP_NUM = #{emp_num}
@@ -131,9 +132,11 @@
 				,EMP_EMAIL = #{emp_email}
 				,HIRE_DATE = #{hire_date}
 				,WORK_CD = #{work_cd}
-				,PHOTO = #{photo}
-			WHERE EMP_EMAIL = #{emp_email}
-	
+				<if test='photo != null and photo !="" '>
+					,PHOTO = #{photo}
+				</if>
+			WHERE 
+				EMP_EMAIL = #{emp_email}
 	</update>
 
 

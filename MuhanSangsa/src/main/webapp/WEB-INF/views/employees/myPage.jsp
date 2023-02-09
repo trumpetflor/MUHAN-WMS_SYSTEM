@@ -106,7 +106,8 @@
                                   		<div class=" col-12 col-md-4" id="imgWapper">
 											<img id="photo" alt="증명사진" style="width: 150px" name="photo"
 											src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }"	
-											onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';" width="150px" />
+<%-- 											onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';" width="150px" /> --%>
+											onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';" width="150px" />
 									</div>
 								  </div>
                                     <!-- 사원번호(코드) -->

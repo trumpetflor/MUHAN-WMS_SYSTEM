@@ -226,7 +226,8 @@ public class EmployeesController {
 	
 		} else { // 성공 시
 			session.setAttribute("sId", employees.getEmp_email());//세션 아이디 저장
-			System.out.println("sId");
+			session.setAttribute("sId2", employees.getEmp_name());//세션 emp_name같이 저장 (로그인 시 상단에 이름을 띄우기 위한 작업)
+//			System.out.println("sId");
 			return "redirect:/employees"; // 사원목록페이지(메인)으로 리다이렉트
 		}
 		
@@ -261,6 +262,7 @@ public class EmployeesController {
 			return "employees/myPage";
 		}
 	}
+	
 	
 	//마이페이지 업데이트(수정)
 	@PostMapping(value = "/MypageUpdate")
@@ -343,49 +345,97 @@ public class EmployeesController {
 	
 	
 	
-	//=============================== 인사관리 : 사원 상세페이지 (세원) =========================================
-	
+	//=============================== 인사관리 : 사원 상세페이지 (SEWON) =========================================
 	//사원 상세페이지 리스트
 	@GetMapping(value = "/empListDetail")
 	public String memberListDetail(
 			@RequestParam(defaultValue = "") String id,
-			Model model) {
-		EmployeesVO employees = service.getMypageInfo(id);
-		model.addAttribute("employees", employees);
+			@RequestParam(defaultValue = "") String msg,
+			Model model, HttpSession session) {
 		
-		return "employees/emp_ListDetail";
+		model.addAttribute("msg", msg);
+
+		// 세션 아이디 
+		if(id == null || id.equals("")) { //실패 시
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다");
+			return "fail_back";
+		}  else { //성공시
+			EmployeesVO employees = service.getMypageInfo(id);
+			model.addAttribute("employees", employees);
+			
+			return "employees/emp_ListDetail";
+		}
 	}	
 
-	//사원 상세정보 수정 (update)
+	
+	//사원 상세정보 수정 페이지(업데이트)
 	@GetMapping(value = "/empListDetailUpdate")
 	public String memberListDetailUpdate(
+			@RequestParam(defaultValue = "") String msg,
 			@RequestParam(defaultValue = "") String id,
 			Model model) {
+		
 		EmployeesVO employees = service.getMypageInfo(id);
 		model.addAttribute("employees", employees);
+		model.addAttribute("msg", msg);
 		
 		return "employees/emp_ListDetailUpdate";
 	}	
 	
 	@PostMapping(value = "/empListDetailUpdatePro")
 	public String memberListDetailUpdatePro(
+			@RequestParam(defaultValue = "") String msg,
 			@ModelAttribute EmployeesVO employees, 
-			Model model, 
-			HttpSession session){
+			@RequestParam(value ="file") MultipartFile file,
+			Model model, HttpSession session){
 		
-		String sId = (String)session.getAttribute("sId");
-
-		if(sId != null) {
+//		String sId = (String)session.getAttribute("sId");
+//
+//		if(sId != null) { // 세션아이디가 있을 경우 시작
+			
+			if(file.getSize() >0 ) { // 첨부파일을 수정할 경우 1이상 카운트 되기때문에 이렇게 조건문 줬음! 
+				//파일업로드 시작
+				String uploadDir = "/resources/upload/product/"; 
+				String saveDir = session.getServletContext().getRealPath(uploadDir);
+				//실제 업로드 경로 
+				System.out.println("실제 업로드 경로 : " + saveDir);
+				 
+				String photo = file.getOriginalFilename().toString(); // 실제 등록 이미지 파일명
+				employees.setPhoto(photo);
+					// 파일 생성
+				File f = new File(saveDir, photo); 
+				try {
+					file.transferTo(f);
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
+				// 파일 경로가 존재하지 않을 경우 파일 경로 생성
+				if(!f.exists()) {
+					f.mkdirs();
+				}
+			}
+			
 			//수정
 			int updateCount  = service.updateDetailEmp(employees);
-			return "redirect:employees/emp_ListDetailUpdate?id="+employees.getEmp_email();
 			
-		}else {
-			model.addAttribute("msg", "잘못된 접근입니다.");
-			return "fail_back";
-		}
-	
-	}
+			if(updateCount > 0) { // 수정 성공 시 (주의!! 성공일땐 msg=1, 실패일땐 msg=2)
+				return "redirect:/empListDetailUpdate?&id="+employees.getEmp_email()+ "&msg="+ "1"; 
+		
+			} else {
+				model.addAttribute("msg", "상세 정보 수정 실패");
+				return "fail_back";
+			}
+			
+//		} else { // 세션아이디가 없을 경우
+//			model.addAttribute("msg", "잘못된 접근입니다.");
+//			return "fail_back";
+//		}	
+	} // 수정 끝
 	
 	// ================================= hawon =================================
 	   //---------------------------------------------------------------------------------------------------------------------

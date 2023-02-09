@@ -116,7 +116,7 @@ p {
 										<div class=" col-12 col-md-4" id="imgWapper">
 											<img id="id_photo" alt="증명사진" style="width: 150px"
 												src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }"
-												onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';"
+												onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';"
 												width="150px" />
 										</div>
 									</div>
