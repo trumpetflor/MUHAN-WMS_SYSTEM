@@ -74,6 +74,44 @@
 	  left: 50%;
 	  overflow-y: scroll;
 	}
+
+	input[type=number]{
+		width: 75px;
+	}
+	
+/* *********************** CSS jakyoung 시작 *************************** */	
+
+	/* 출고 모달창 */
+	#out_naga_modal table tbody tr :hover{
+	cursor: pointer;
+	}
+	
+	#out_naga_modal::-webkit-scrollbar {
+    width: 2px;
+ 	}
+	
+	#out_naga_modal{
+	max-width: 800px !important;
+	height: 400px !important;
+	position: fixed;
+	top: 20%;
+	left: 35%;
+	overflow-y: scroll;
+	
+	}
+
+
+
+
+
+
+
+
+/* *********************** CSS jakyoung 끝 *************************** */	
+	
+	
+	
+	
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
 
@@ -90,36 +128,20 @@ $(function(){
 	//전체선택 버튼 클릭
 	$('input:checkbox[name=AllChecked]').on("click",function(){
 		if($(this).is(":checked") == true){
-			$("input[name=stockChecked]").prop("checked",true);
+			$("input[name=outScheduleChecked]").prop("checked",true);
 		}else{
-			$("input[name=stockChecked]").prop("checked",false);
+			$("input[name=outScheduleChecked]").prop("checked",false);
 		}
+		$("#selectCount > small").html($('input:checkbox[name=outScheduleChecked]:checked').length +" 개 선택됨");
+		let stock_cd = $(this).val();
 	});
 	
 	//체크박스 클릭
-	$(document).on("change","input[name=stockChecked]",function(){
-		$("#selectCount > small").html($('input:checkbox[name=stockChecked]:checked').length +" 개 선택됨");
+	$(document).on("change","input[name=outScheduleChecked]",function(){
+		$("#selectCount > small").html($('input:checkbox[name=outScheduleChecked]:checked').length +" 개 선택됨");
 		let stock_cd = $(this).val();
 		
 		
-	});
-	//하단 조정버튼 클릭시
-	$("#stockAdjustmentBtn").on("click",function(){
-		
-		let stock_cd = [];//배열 선언, 변수명 컨트롤러 파라미터명과 동일
-     	$('input:checkbox[name=stockChecked]').each(function (index) {
-     		
-     		if($(this).is(":checked")==true){
-     	    	console.log("id값=stock_cd :"+$(this).val());
-     	   		stock_cd.push($(this).val());//배열에 추가
-     	    }
-     	});
-		
-    	console.log("stock_cd[] : "+ stock_cd);
-    	let result = confirm("재고번호 "+$('input:checkbox[name=stockChecked]:checked').length+ " 개를 조정하시겠습니까? ");
-    	if(result){
-	    	location.href="StockAdjustment?stock_cd="+stock_cd
-    	}
 	});
 	
 	
@@ -139,11 +161,80 @@ $(function(){
 	//전체합 계산
 	$("#sum_result").html("<b>"+sum+"</b>");
 	
+	
+// ======================= jquery jakyoung 시작 ====================================
+	// 출고 처리 모달창 날짜 계산
+	let today = new Date().toISOString().substring(0, 10);
+// 	alert(today); 
+	$("#currentDate").val(today);
+
+	
+	
+	
+	
+// ======================= jquery jakyoung 끝 ====================================
+	
 });//$(function(){------------------------------------------------
 
 function productInfo(product_cd) {
 
 }
+
+// ======================= 스크립트 함수 jakyoung 시작 ====================================
+
+	// 모달에 모달을 더해서
+	$(document).on('hidden.bs.modal', function (event) {
+
+		if ($('.modal:visible').length) {
+
+			$('body').addClass('modal-open');
+
+		}
+
+	});
+	
+	// 출고 버튼 클릭 시 모달 창 open~~
+	function openOutModal() {
+		
+// 		alert("모달창 열리네요~ 출고가 들어오죠");
+		//모달창 열기
+		$('#out_naga_modal').modal('show'); 
+		
+		let checkedList = $('input:checkbox[name="outScheduleChecked"]').is(":checked");
+		
+		for()
+		
+		let out_list = '';
+		
+		let out_schedule_cd = $('input:checkbox[name="checkbox_name"]').is(":checked") == true
+		let product_name = 
+		let out_qty = 
+		let stock_cd = 
+		let wh_loc_in_area = 
+		
+		
+		out_list += '<tr>';
+				 += '<td>출고예정번호</td>';
+				 += '<td>품목명</td>';
+				 += '<td>출고 수량</td>';
+				 += '<td>출고할 재고번호</td>';
+				 += '<td>위치명</td>';
+		
+		
+		
+	</tr>
+		
+	
+	}
+	
+	
+	
+	
+	
+	
+
+// ======================= 스크립트 함수 jakyoung 끝 ====================================
+
 </script>
 <body>
 
@@ -180,27 +271,18 @@ function productInfo(product_cd) {
 <div class="content">
    <div class="animated fadeIn">
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
-  		<form action="Inventory_View ">
+  		<form action="OutProcessingSeletList ">
 				<!-- 검색 타입 추가 -->
 				<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
-					<option value="STOCK_CD" <c:if test="${param.searchType eq 'STOCK_CD'}">selected</c:if>>출고예정번호</option>
+					<option value="OUT_SCHEDULE_CD" <c:if test="${param.searchType eq 'OUT_SCHEDULE_CD'}">selected</c:if>>출고예정번호</option>
 					<option value="PRODUCT_NAME" <c:if test="${param.searchType eq 'PRODUCT_NAME'}">selected</c:if>>품목명</option>
-<%-- 					<option value="" <c:if test="${param.searchType eq ''}">selected</c:if>>창고명</option> --%>
+					<option value="CUST_NAME" <c:if test="${param.searchType eq 'CUST_NAME'}">selected</c:if>>거래처명</option>
 				</select>			
 				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
 				<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
 		</form>
 	   </section>
-			   <!-- nav바 (tab)  -->
-		<div class="default-tab" style="margin-bottom: 35px">
-			<nav>
-				<div class="nav nav-tabs" id="nav-tab" role="tablist">
-					<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">전체</a>
-					<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">진행중</a>
-					<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">완료</a>
-				</div>
-			</nav>
-		</div>
+			
 <!-- 창고 구역 내의 상세 위치에 등록되어 있는 재고 목록 표시 
 	 재고번호, 품목명, 규격, 창고명, 구역명, 위치명, 재고수량 표시 
 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 -->
@@ -209,46 +291,88 @@ function productInfo(product_cd) {
 	<table class="table"  id="">
 		<thead>
 			<tr>
-				<th><input type="checkbox" name="AllChecked"></th>
+				<th width="60px"><input type="checkbox" name="AllChecked" ></th>
 				<th>출고예정번호</th>
-				<th>유형</th>
-				<th>받는곳명(거래처명)</th>
-				<th>담당자명</th>
-				<th>품목명</th>
-				<th>납기일자</th>
-				<th>출고예정수량합계</th>
-				<th>종결여부</th>
-				<th>진행상태</th>
+				<th width="250px">받는곳명(거래처명)</th>
+				<th width="250px">품목명</th>
+				<th width="150px">납기일자</th>
+				<th width="110px">출고예정수량</th>
+				<th width="110px">미출고수량</th>
+				<th>출고지시수량</th>
+				<th width="200px">적요</th>
 			</tr> 
 		</thead>
 		<tbody>
-		<c:forEach items="${outList }" var="out" varStatus="status" >
+		<c:forEach items="${outTotalScheduleList }" var="total" varStatus="status" >
 			<tr>
-			<td align="center"><input type="checkbox" name="stockChecked" class="form-check-input" value="${stock.stock_cd }"></td>
-				<td><a href="Inventory_History_View?stock_cd=${stock.stock_cd }">${stock.stock_cd }</a></td>
-				<td> </td>
-				<td> </td>
-				<td> </td>
-				<td> </td>
-				<td> </td>
-				<td> </td>
-				<td> </td>
-				<td><a href="#">조회</a></td>
+			<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }"></td>
+				<td><a href="outScheduleModifyForm?">${total.out_schedule_cd }</a></td>
+				<td>${total.cust_name }</td>
+				<td>${total.product_name }</td>
+				<td>${total.out_date }</td>
+				<td>${total.out_schedule_qty }</td>
+				<td>${total.out_qty }</td>
+				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust" name="out_qty"></td>
+				<td>${total.remarks }</td>
 			</tr>
 			</c:forEach>
-			<tr>
-				<td colspan="9" align="right"><b>합계 :</b></td><td id="sum_result"></td>
-			<tr>
+
 		</tbody>
 	
 	</table>
 	<div class="float-left">
-		<input type="button" value="출고" class = "btn btn-sm btn-success m-2"	onclick="location.href='#'">
+		<input type="button" value="출고" class = "btn btn-sm btn-success m-2"	onclick="openOutModal()">
 	</div>
-	<div id="modal-btn-div" class="float-right">
-		 <input type="button" value="조정" class = "btn btn-primary btn-sm  " id="stockAdjustmentBtn">
-	</div>
+	
+	<div class="float-right">
+	<section id="pageList">
+		<!-- 
+		현재 페이지 번호(pageNum)가 1보다 클 경우에만 [이전] 링크 동작
+		=> 클릭 시 BoardList.bo 서블릿 주소 요청하면서 
+		   현재 페이지 번호(pageNum) - 1 값을 page 파라미터로 전달
+		-->
+		<c:choose>
+					<c:when test="${empty param.pageNum }">
+						<c:set var="pageNum" value="1" />
+					</c:when>
+					<c:otherwise>
+						<c:set var="pageNum" value="${param.pageNum }" />
+					</c:otherwise>
+				</c:choose>
+		<c:choose>
+			<c:when test="${pageNum > 1}">
+				<input type="button" value="이전" class = "btn btn-primary btn-sm  " onclick="location.href='OutProcessingSeletList?pageNum=${pageNum - 1}'">
+			</c:when>
+			<c:otherwise>
+				<input type="button" value="이전" class = "btn btn-primary btn-sm  ">
+			</c:otherwise>
+		</c:choose>
+			
+		<!-- 페이지 번호 목록은 시작 페이지(startPage)부터 끝 페이지(endPage) 까지 표시 -->
+		<c:forEach var="i" begin="${pageInfo.startPage }" end="${pageInfo.endPage }">
+			<!-- 단, 현재 페이지 번호는 링크 없이 표시 -->
+			<c:choose>
+				<c:when test="${pageNum eq i}">
+					${i }
+				</c:when>
+				<c:otherwise>
+					<a href="OutProcessingSeletList?pageNum=${i }">${i }</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
 
+		<!-- 현재 페이지 번호(pageNum)가 총 페이지 수보다 작을 때만 [다음] 링크 동작 -->
+		<c:choose>
+			<c:when test="${pageNum < pageInfo.maxPage}">
+				<input type="button" value="다음" class = "btn btn-primary btn-sm  " onclick="location.href='OutProcessingSeletList?pageNum=${pageNum + 1}'">
+			</c:when>
+			<c:otherwise>
+				<input type="button" value="다음" class = "btn btn-primary btn-sm  ">
+			</c:otherwise>
+		</c:choose>
+	</section>
+	</div>
+	
 </div>
 </div>
 <!-- 재고번호 클릭시 보이는 모달 영역 DIV  -->
@@ -258,14 +382,48 @@ function productInfo(product_cd) {
  		 <a href="#" rel="modal:close">Close</a>
  
 	</div><!-- end of DIV #modal_container -->
+	
+<!-- -------------------------- jakyoung 시작 ------------------------------------- -->
+<!-- 출고 버튼 클릭 시 모달 -->
+
+	<div id="out_naga_modal" class="modal">
+		<form action="">
+		
+			<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
+				<div class="p-2 bg-light text-black well rounded-2" >출고</div>
+				
+				<div class="row form-group">
+				<div class="form"><label for="out_date" class=" form-control-label">일자</label></div>
+				<div class="col-12 col-md-9"><input type="date" id="currentDate" class="form-control rounded-start" name="out_date" required="required"></div>
+				</div>
+					<table class="mt-3 table table-hover" id="out_table">
+						<thead>
+							<tr>
+								<th>출고예정번호</th>
+								<th>품목명</th>
+								<th>출고 수량</th>
+								<th>출고할 재고번호</th>
+								<th>위치명</th>
+							</tr>
+						</thead>
+						<tbody>
+						
+						
+						</tbody>
+		
+					</table>		
+				</div>
+	  		<button type="button" class="btn btn-dark ">출고</button>
+		
+		</form>
+	</div>
+
+<!-- 출고 모달 끝 -->
+<!-- -------------------------- jakyoung 끝 ------------------------------------- -->
+
+
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="../inc/footer.jsp"></jsp:include>
-    
-<!-- Scripts -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
-<!-- <script src="resources/assets/js/main.js"></script> -->
+
 </body>
 </html>
