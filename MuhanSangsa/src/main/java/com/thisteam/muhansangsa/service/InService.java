@@ -38,8 +38,13 @@ public class InService {
 		return mapper.selectInRegisterList(in_schedule_cd, product_name,in_date);
 	}
 	
-	// 입고예정코드 목록
-	public List<inProcessingVO> getSelectedInList(String in_schedule_cd) {
+	// 입고예정코드 품목 목록
+	public List<inProcessingVO> getSelectedProList(String in_schedule_cd) {
+		return mapper.selectSelectedProList(in_schedule_cd);
+	}
+	
+	// 입고예정 관련 목록
+	public List<InVO> getSelectedInList(String in_schedule_cd) {
 		return mapper.selectSelectedInList(in_schedule_cd);
 	}
 	
@@ -53,9 +58,12 @@ public class InService {
 		return mapper.selectStockList(searchType, keyword, startRow, listLimit);
 	}
 	
-	
-	
-	
+	// 창고선반 목록
+	public List<StockWhVO> getWhLocList(String searchType, String keyword, int startRow, int listLimit) {
+		return mapper.selectWhLocList(searchType, keyword, startRow, listLimit);
+	}
+
+
 	
 	
 	
@@ -78,6 +86,8 @@ public class InService {
 	public List<InVO> getInList() {
 		return mapper.getInList();
 	}
+
+
 
 
 	

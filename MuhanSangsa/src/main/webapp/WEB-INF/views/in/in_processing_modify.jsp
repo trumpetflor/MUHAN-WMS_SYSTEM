@@ -336,15 +336,24 @@ function open_addLoc_modal(stock_cd,product_cd) {
 		<thead>
             <tr>
 				<th>일 자</th>
-				<td><input type="date" class="form-control" name=" " value=" " required="required"></td>
-				<th>유형</th> <!-- 수정해서 사용하세요!! 기존꺼 복붙해둠!! -->
-				<td><div class="input-group mb-3"> 
-						  <input type="hidden" class="form-control" id="product_group_bottom_cd" name="product_group_bottom_cd"
-						  	value="${product.product_group_bottom_cd }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px">									
-						  <input type="text" class="form-control" id="product_group_bottom_name" name="product_group_bottom_name"
-						   value="${product.product_group_bottom_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" readonly="readonly" required="required">
-						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-						  onclick="window.open('Product/GroupBottomSelectList','GroupBottomSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색</button>
+				<td><input type="date" class="form-control" name=" " value="" required="required"></td>
+				<th>유형</th>
+				<td>
+					<div class="input-group mb-3">
+	          			<div class="col-12 col-md-9">
+	          				<div class="form-check-inline form-check">
+	                        <div class="radio">
+	                            <label for="radio1" class="form-check-label ">
+	                                <input type="radio" id="" name="in_type" required="required" value="1" checked="" class="form-check-input">1 : 발주서
+	                            </label>
+	                        </div>
+	                        <div class="radio">
+	                            <label for="radio2" class="form-check-label ">
+	                                <input type="radio" id="" name="in_type" required="required" value="2" class="form-check-input">2 : 구매
+	                            </label>
+				 			</div>
+				 			</div>
+				 	</div>		
 					</div>
 				 </td>
 			</tr>
@@ -394,28 +403,28 @@ function open_addLoc_modal(stock_cd,product_cd) {
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${modList }" var="inList" varStatus="status" >
+			<c:forEach items="${proList }" var="proList" varStatus="status" >
 				<tr>
 					<!-- 품목코드 -->
-					<td><input type="text" value="${inList.product_cd}" readonly="readonly"></td>
+					<td><input type="text" value="${proList.product_cd}" readonly="readonly"></td>
 					<!-- 품목명 -->
 					<td>
 						<div class="input-group">
 						 <input type="hidden" class="form-control" name="business_no" id="business_no"
-						  	value="${inList.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
+						  	value="${proList.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
 						 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
-						  	value="${inList.product_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
+						  	value="${proList.product_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
 						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
 						  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
 						  </button>
 						</div>
 					</td>
 					<!-- 수량 -->
-					<td><input type="text" value="${inList.in_qty}"></td>
+					<td><input type="text" value="${proList.in_qty}"></td>
 					<!-- 납기일자 -->
-					<td><input type="date" class="form-control" name=" " value="${inList.in_date } " required="required"></td>
+					<td><input type="date" class="form-control" name=" " value="${proList.in_date } " required="required"></td>
 					<!-- 적요 -->
-					<td><input type="text" value="${inList.remarks}"></td>
+					<td><input type="text" value="${proList.remarks}"></td>
 				</tr> 
 			</c:forEach>
 			</tbody>

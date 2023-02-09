@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>재고 조회</title>
+	<title>선반 조회</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -135,24 +135,22 @@
 	function load_list() {
 		$.ajax({
 			type: "GET",
-			url:"StockListJsonIn?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
+			url:"WhLocListJsonIn?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
 			dataType: "json"
 		})
-		.done(function(stockList) { // 요청 성공 시
+		.done(function(whLocList) { // 요청 성공 시
 			let result ="";
-			for(let stock of stockList) {
+			for(let whLoc of whLocList) {
 				result += "<tr>"
-							+ "<td id="+stock.stock_cd+">" + stock.stock_cd + "</td>"
-							+ "<td id="+stock.product_name+">" + stock.product_name + "</td>"
-							+ "<td id="+stock.wh_area+">" + stock.wh_area + "</td>"
-							+ "<td id="+stock.wh_loc_in_area+">" + stock.wh_loc_in_area + "</td>"
+							+ "<td id="+whLoc.wh_area+">" + whLoc.wh_area + "</td>"
+							+ "<td id="+whLoc.wh_loc_in_area+">" + whLoc.wh_loc_in_area + "</td>"
 							+ "</tr>";
 				
 			}
-			$("#stock_table > tbody").html(result);
+			$("#whLoc_table > tbody").html(result);
 		})
 		.fail(function() {
-			$("#stock_table").append("요청 실패!!");
+			$("#whLoc_table").append("요청 실패!!");
 		});
 	}
 
@@ -165,8 +163,6 @@
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
 
  					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
-						<option value="stock_cd">재고 번호</option>
-						<option value="product_name">품목명</option>
 						<option value="wh_area">구역명</option>
 						<option value="wh_loc_in_area">위치명</option>
 					</select>
@@ -175,11 +171,9 @@
 
 	   </section>
 
-	<table class="table table-hover"  id="stock_table">
+	<table class="table table-hover"  id="whLoc_table">
 		<thead>
 			<tr>
-				<th>재고 번호</th>
-				<th>품목명</th>
 				<th>구역명</th>
 				<th>위치명</th>
 			</tr>

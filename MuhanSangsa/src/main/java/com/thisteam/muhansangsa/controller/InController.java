@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -92,9 +91,14 @@ public class InController {
 	public String modify(@RequestParam("in_schedule_cd") String in_schedule_cd,
 			Model model) {
 		
-		List<inProcessingVO> modList = service.getSelectedInList(in_schedule_cd);
+		// 입고예정 리스트
+		List<InVO> inList = service.getSelectedInList(in_schedule_cd);
 		
-		model.addAttribute("modList", modList);
+		// 입고품목 리스트
+		List<inProcessingVO> proList = service.getSelectedProList(in_schedule_cd);
+		
+		model.addAttribute("inList", inList);
+		model.addAttribute("proList", proList);
 		
 		return "in/in_processing_modify";
 	}
@@ -123,7 +127,7 @@ public class InController {
 	// 재고 목록 조회
 	@ResponseBody
 	@GetMapping(value = "StockListJsonIn")
-	public void stocListJson_in(
+	public void stockListJson_in(
 			@RequestParam(defaultValue = "") String searchType,
 			@RequestParam(defaultValue = "") String keyword,
 			@RequestParam(defaultValue = "1") int pageNum,
@@ -161,6 +165,50 @@ public class InController {
 		
 	}
 	
+	// 선반 조회 페이지
+	@GetMapping(value = "/In/WhLocSelectList")
+	public String LocSelectList() {
+		return "in/whLocList_inPage";
+	}
+	
+	// 선반 목록 조회
+	@ResponseBody
+	@GetMapping(value = "WhLocListJsonIn")
+	public void whLocListJson_in(
+			@RequestParam(defaultValue = "") String searchType,
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "1") int pageNum,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+		
+		// 선반 목록 가져오기
+		List<StockWhVO> whLocList = service.getWhLocList(searchType, keyword, startRow, listLimit);
+		
+		// JSON 형식 변환
+		JSONArray jsonArray = new JSONArray();
+		
+		for(StockWhVO whLoc : whLocList) {
+			System.out.println(whLoc);
+			JSONObject jsonObject = new JSONObject(whLoc);
+			System.out.println(jsonObject.get("wh_area"));
+			
+			jsonArray.put(jsonObject);
+		}
+		
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	

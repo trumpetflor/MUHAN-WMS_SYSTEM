@@ -185,24 +185,44 @@ table {
 }
 </style>
 <script type="text/javascript">
-$(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function(){
-	console.log($(this).children("td").attr("id"));
-	console.log($(this).children("td").next().next().attr("id"));
-
-// 	$("#stock_cd").val($(this).children("td").next().attr("id"));
-// 	$("#wh_loc_in_area").val($(this).children("td").attr("id"));
+$(function() {
 	
-	$("#stock_cd${i.index }").val($(this).children("td").attr("id"));
-	$("#wh_loc_in_area${i.index }").val(
-			$(this).children("td").next().next().attr("id")+"_"+
-			$(this).children("td").next().next().next().attr("id")
-			);
+	stockSearch(index); // 게시물 목록 조회 함수 호출
 	
-	 $('#stock_search_modalDiv').modal('hide'); 
-	     $('#stock_search_modalDiv').hide();
-	     $('.jquery-modal').click();
-
 });
+// 재고 검색 모달
+function stockSearch(index){
+	$(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function(){
+		console.log($(this).children("td").attr("id"));
+		console.log($(this).children("td").next().next().attr("id"));
+	
+		$("#wh_loc_in_area"+index).val(
+				$(this).children("td").attr("id")+"_"+
+				$(this).children("td").next().attr("id")
+				);
+		
+		 $('#stock_search_modalDiv').modal('hide'); 
+		     $('#stock_search_modalDiv').hide();
+		     $('.jquery-modal').click();
+	
+	});
+}
+
+//창고선반 검색 모달
+function whLocSearch(index){
+	$(document).on("click","#whLoc_search_modalDiv #whLoc_table > tbody tr",function(){
+		console.log($(this).children("td").attr("id"));
+		console.log($(this).children("td").next().next().attr("id"));
+	
+	 	$("#wh_area"+index).val($(this).children("td").next().attr("id"));
+	 	$("#wh_loc_in_area"+index).val($(this).children("td").attr("id"));
+		
+		 $('#whLoc_search_modalDiv').modal('hide'); 
+		     $('#stock_search_modalDiv').hide();
+		     $('.jquery-modal').click();
+	
+	});
+}
 
 	// 현재 시간 설정
 	window.onload = function() {
@@ -214,33 +234,21 @@ $(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function
 		bir.value = today;
 	}
 	
-	$(function(){
-		// 입고지시수량 계산
-		$("input[type=number]").on("focusout", function(){
-			let sum = 0;
-			$("input[type=number]").each(function(){
-				sum += Number($(this).val()); 
-				document.getElementById('in_qty_result').innerText = sum;
-				
-				// 전체 합계 못넘게 하기!
-// 				if(sum > )
-			});
-		    
-		}); // 입고지시수량 계산
-		
-		// 재고번호 신규 생성
-		$("#stock_cd${i.index }").on("click", function(){
-			$.ajax({
-				type: "GET",
-				url: "NewStockCd",
-				success: function(result){
-					$("#stock_cd${i.index }").val(result);
-				}
-			});
+	// 재고번호 신규 생성
+	function newStockCd(index){
+		$.ajax({
+			type: "GET",
+			url: "NewStockCd",
+			success: function(result){
+				$("#stock_cd"+index).val(result);
+			}
 		});
 		
+	}
+	
+	function stockSearch(index){
 		// 재고검색버튼
-		$("#stock_searchBtn${i.index }").on("click", function(){
+		$("#stock_searchBtn"+index).on("click", function(){
 			$.ajax({
 				type: "GET",
 				url: "In/StockSelectList",
@@ -257,6 +265,51 @@ $(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function
 			$('#stock_search_modalDiv').modal('show');
 			
 		}); // 재고검색버튼
+	}
+	
+	// 선반검색버튼
+	function whLocSearch(index){
+		$("#whLoc_searchBtn"+index).on("click", function(){
+			$.ajax({
+				type: "GET",
+				url: "In/WhLocSelectList",
+				contentType: 'html',
+				success: function(data,status,xhr){
+					$('#whLoc_search_modalDiv').html(data);
+				},
+		        error: function(xhr,status,error) {
+		            console.log(error);
+		        }
+			});
+			
+			//모달창 열기
+			$('#whLoc_search_modalDiv').modal('show');
+			
+		}); // 선반검색버튼
+	}
+	
+	
+	
+	
+	
+	
+	$(function(){
+		// 입고지시수량 계산
+		$("input[type=number]").on("focusout", function(){
+			let sum = 0;
+			$("input[type=number]").each(function(){
+				sum += Number($(this).val()); 
+				document.getElementById('in_qty_result').innerText = sum;
+				
+				// 전체 합계 못넘게 하기!
+// 				if(sum > )
+			});
+		    
+		}); // 입고지시수량 계산
+		
+
+		
+
 		
 		
 		
@@ -265,9 +318,9 @@ $(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function
 	}); //jQuery
 	
 	// 재고번호 검색 모달창
-	function modal_open1(){
-		$('#modal_container_stock').modal();
-	}
+// 	function modal_open1(){
+// 		$('#modal_container_stock').modal();
+// 	}
 	
 </script>
 </head>
@@ -313,13 +366,14 @@ $(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function
 		                                    		<td>${inList.in_schedule_cd }</td>
 		                                    		<td>${inList.product_name }</td>
 		                                    		<td>${inList.in_schedule_qty }</td>
-		                                    		<td><input type="number" id="in_qty${i.index }" value="${inList.in_schedule_qty }"></td>
+		                                    		<td><input type="number" id="in_qty" value="${inList.in_schedule_qty }"></td>
 		                                    		<td><!-- 재고번호 검색 -->
 														<div class='d-flex'><!-- 수정 필요 -->
-													 	  <input type="text" class="form-control rounded-start" id="stock_cd${i.index }"> 
-<!-- 													 	  <input type="hidden" name="product_name" id="product_name" value=""> -->
+													 	  <input type="text" class="form-control rounded-start" id="stock_cd${i.index }" onclick="newStockCd(${i.index})"> 
+<%-- 													 	  <input type="hidden" name="end" id="end" value="${i.end }"> --%>
+													 	  <input type="hidden" name="index" id="index" value="${i.index }">
 								<!-- 							 <a href="#stock_search_modalDiv" rel="modal:open"> -->
-															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="stock_searchBtn${i.index }">
+															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="stock_searchBtn${i.index }" onclick="stockSearch(${i.index})">
 								<!-- 							 </a> -->
 														</div>
 		                                    		</td>
@@ -328,7 +382,7 @@ $(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function
 													 	  <input type="text" class="form-control rounded-start" id="wh_loc_in_area${i.index }"> 
 <!-- 													 	  <input type="hidden" name="product_name" id="product_name" value=""> -->
 <!-- 															 <a href="#stock_search_modalDiv" rel="modal:open"> -->
-															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="loc_searchBtn${i.index }">
+															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="whLoc_searchBtn${i.index }" onclick="whLocSearch(${i.index})">
 								<!-- 							 </a> -->
 														</div>
 		                                    		</td>
@@ -369,37 +423,13 @@ $(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function
 
 </div>
 
-
-
-<!-- <div id="modal_container_stock" class="modal"> -->
-<!-- 	<h4>재고번호 검색</h4> -->
-<!-- 	<br> -->
-<!-- 	<table class="table"> -->
-<!-- 		<tr> -->
-<!-- 			<th>재고번호</th> -->
-<!-- 			<th>품목명</th> -->
-<!-- 			<th>구역명</th> -->
-<!-- 			<th>위치명</th> -->
-<!-- 		</tr> -->
-<%-- 		<c:forEach var="stock" items="${stockList }" varStatus="status"> --%>
-<!-- 			<tr> -->
-<%-- 				<td>${stock.stock_cd }</td> --%>
-<%-- 				<td>${stock.product_name }</td> --%>
-<%-- 				<td>${stock.wh_area }</td> --%>
-<%-- 				<td>${stock.wh_loc_in_area }</td> --%>
-<!-- 			</tr> -->
-<%-- 		</c:forEach> --%>
-<!-- 	</table> -->
-<!-- </div> -->
-
-
-
 <!-- 선반위치 모달 DIV -->
-<div id="modal_container_wh" class="modal">
-	<div class="col col-md-3"><label for="inDate" class=" form-control-label">일자</label></div>
-	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
+<div id="whLoc_search_modalDiv" class="modal">
 
 </div>
+
+
+
 
 
 
