@@ -40,6 +40,11 @@ public class ClientService {
 		return mapper.updateClient(originBn, client);
 	}
 
+	// 거래처 목록 갯수 계산 (페이징 처리)
+	public int getClientListCount(String searchType, String keyword) {
+		return mapper.selectClientListCount(searchType, keyword);
+	}
+
 	
 
 }

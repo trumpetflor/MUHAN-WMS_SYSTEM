@@ -33,21 +33,21 @@
 			FROM client
 			<if test="!keyword.equals('')">
 			WHERE
-			<choose>
-				<when test="searchType.equals('business_no')">
-					business_no LIKE '%${keyword}%'
-				</when>
-				<when test="searchType.equals('cust_name')">
-					cust_name LIKE '%${keyword}%'
-				</when>
-				<when test="searchType.equals('boss_name')">
-					boss_name LIKE '%${keyword}%' 
-				</when>
-				<when test="searchType.equals('addr')">
-					addr LIKE '%${keyword}%'
-				</when>
-			</choose>		
-		</if>
+				<choose>
+					<when test="searchType.equals('business_no')">
+						business_no LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('cust_name')">
+						cust_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('boss_name')">
+						boss_name LIKE '%${keyword}%' 
+					</when>
+					<when test="searchType.equals('addr')">
+						addr LIKE '%${keyword}%'
+					</when>
+				</choose>		
+			</if>
 <!-- 		ORDER BY -->
 		LIMIT 
 			#{startRow}
@@ -90,6 +90,31 @@
 				, remarks = #{client.remarks}
 			WHERE business_no = #{client.business_no}
 	</update>
+	
+	<!-- 거래처 목록 갯수 계산 (페이징 처리) -->
+	<select id="selectClientListCount" resultType="int">
+		SELECT COUNT(*)
+			FROM client
+			<!-- 키워드 검색 있을 경우 -->
+			<if test="!keyword.equals('')">
+			WHERE
+				<choose>
+					<when test="searchType.equals('business_no')">
+						business_no LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('cust_name')">
+						cust_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('boss_name')">
+						boss_name LIKE '%${keyword}%' 
+					</when>
+					<when test="searchType.equals('addr')">
+						addr LIKE '%${keyword}%'
+					</when>
+				</choose>		
+			</if>
+	</select>
+	
 	
 	
 </mapper>
