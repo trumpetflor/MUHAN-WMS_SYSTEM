@@ -46,14 +46,139 @@ public class StockController {
 		
 	// =============================================== mijoo =====================================================
 	// 23/02/07 수정   
+//	// 재고 조정 페이지 비즈니스 로직
+//	   @PostMapping(value = "/StockModifyPro")
+//	   public String stockModifyPro(Model model, HttpSession session, HttpServletResponse response,
+//			   @ModelAttribute StockHistoryArrVO stockHistoryArr, 
+//			   @RequestParam("stock_cd") int stock_cd, 
+//			   @RequestParam("qty") int changeQty,
+//			   @RequestParam("TotalStockQty") int TotalQty
+//			) {
+//		   
+//		   System.out.println("배열로 넘어오는 StockHistoryArrVO : " + stockHistoryArr);
+//		   
+//		   for(int i = 0; i < stockHistoryArr.getStock_cd().length; i++) {
+//			   	 StockHistoryVO stockHistory = new StockHistoryVO();
+//			   	 
+//			   	 stockHistory.setProduct_cd(stockHistoryArr.getProduct_cd()[i]);
+//			   	 stockHistory.setSource_stock_cd(stockHistoryArr.getSource_stock_cd()[i]);
+//			   	 stockHistory.setStock_cd(stockHistoryArr.getStock_cd()[i]);
+//			   	 stockHistory.setStock_control_type_cd(stockHistoryArr.getStock_control_type_cd()[i]);
+//			   	 stockHistory.setEmp_num("");
+//			   	 stockHistory.setQty(stockHistoryArr.getQty()[i]);
+//			   	 stockHistory.setTarget_stock_cd(stockHistoryArr.getTarget_stock_cd()[i]);
+//			   	 stockHistory.setRemarks("");
+//		   
+//		  System.out.println("분리된 stockHistoryVO : " + stockHistory);
+//		   // 1. sId != null 일 경우에만 접근 가능
+//		   String sId = (String)session.getAttribute("sId");
+////			if(session.getAttribute("sId") != null) {
+////				sId = (String)session.getAttribute("sId");
+////			}else {
+////				model.addAttribute("msg", "로그인이 필요합니다");
+////				return "fail_back";
+////			}
+//			
+//		   // +++++++++++++++++ 권한작업 처리하기
+//			
+//		   // 2. stock_control_type_cd 변환 처리 
+//			 String stock_control_type_cd = "";
+//		      switch (stockHistory.getStock_control_type_cd()) {
+//		      case "adjust": stock_control_type_cd = "2"; break;
+//		      case "move": stock_control_type_cd = "3"; break;
+//		      }
+//		     stockHistory.setStock_control_type_cd(stock_control_type_cd);
+//		   
+//		   // 2. qty : "이동수량" & "조정수량"
+////		   int TotalStockQty = Integer.parseInt(TotalQty); // 재고수량
+//		   int TotalStockQty = TotalQty;
+////		   int stockQty = Integer.parseInt(changeQty); // 이동수량 & 조정수량
+//		   int stockQty = changeQty;
+//		   
+//		   // jquery 성공 시 주석 처리
+//		   int qty = (TotalStockQty - stockQty);
+//		   System.out.println("qty 계산 잘됐니" + qty);
+//		   System.out.println("합계 잘 넘어오니" + TotalStockQty);
+//		   System.out.println("정보 잘 넘어오니" + stockHistory);
+//		   System.out.println("조정 혹은 이동수량 잘 넘어 오니" + changeQty);
+//		   
+//		   // 3. sId를 통한 사원번호 조회 후 set데이터
+//		   String emp_num = service.getEmpNum(sId);
+//		   System.out.println("조회 잘되었니 emp_num = " + emp_num);
+//		   stockHistory.setEmp_num(emp_num);
+//		   
+//		   // 4. 조정수량 & 이동수량 입력으로 해당 재고수량 업데이트
+//		   if(stock_control_type_cd.equals("3")) {
+//			   System.out.println("이동 수량 페이지에 왔습니다");
+//			 // 이동수량 업데이트 
+//		     // ->  기존 재고 업데이트(=source_target_code) + 이동 재고 업데이트 (=target_stock_cd)
+//			   int sourceStockCd = stockHistory.getSource_stock_cd(); 
+//			   int targetStockCd = stockHistory.getTarget_stock_cd();
+//			   
+//			   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
+//			   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
+//			   
+//			   // 기존재고(-), 이동재고(+), 변경수량
+//			   // (1). 이동재고수량 + 변경수량
+//			   int updateTargetCount = service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
+//			   if(updateTargetCount > 0) {
+//				   System.out.println("타겟 수량 업데이트 성공!"); 
+//			   // (2). 기존재고수량 - 변경수량
+//				   int updateSourceCount = service.setStockQty(stock_cd, qty);
+//					   if(updateSourceCount > 0) {
+//			   // (3). 진행된 재고 이력 stock_history 테이블에 insert
+//						   System.out.println("기존 수량 업데이트 성공!");
+//						   int insertCount = service.setStockHistory(stockHistory);
+//			   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
+//						   if(insertCount > 0) {
+//							   return "redirect:Inventory_History_View?stock_cd=" + stockHistory.getStock_cd();
+//						   }
+//					   }
+//					   
+//			   } else {
+//				   model.addAttribute("msg", "이동수량 업데이트 실패!");
+//				   return "fail_back";
+//			   }
+//			   
+//			   
+//		   } else if (stock_control_type_cd.equals("2")) {
+//			 // 조정수량 업데이트 -> 기존 재고만 업데이트
+//			   System.out.println("조정 수량 페이지에 왔습니다");
+//			   
+//			   int updateCount = service.setStockQty(stock_cd, qty);
+//			   if(updateCount > 0) {
+//				   System.out.println("수량 업데이트 성공!"); 
+//				   // 6. 재고 이력 페이지를 위한 stockHistoryVO 타입 리스트 생성 
+//				   int insertCount = service.setStockHistory(stockHistory);
+//				   if(insertCount > 0) {
+//					  				   
+//					   return "redirect:Inventory_History_View?stock_cd=" + stockHistory.getStock_cd();
+//				   }
+//				   
+//			   } else {
+//				   model.addAttribute("msg", "이동수량 업데이트 실패!");
+//				   return "fail_back";
+//			   }
+//			   
+//		   } // 조정수량 업데이트
+//		   
+//		   } // for문
+//		   return "redirect:Inventory_History_View?stock_cd=" + stockHistoryArr.getStock_cd();
+//		   
+//	   }
 	// 재고 조정 페이지 비즈니스 로직
 	   @PostMapping(value = "/StockModifyPro")
 	   public String stockModifyPro(Model model, HttpSession session, HttpServletResponse response,
 			   @ModelAttribute StockHistoryArrVO stockHistoryArr, 
-			   @RequestParam("stock_cd") int stock_cd, 
-			   @RequestParam("qty") int changeQty,
-			   @RequestParam("TotalStockQty") int TotalQty
+			   @RequestParam("stock_cd") int[] stockCd, 
+			   @RequestParam("qty") int[] changeQty,
+			   @RequestParam("TotalStockQty") int[] TotalQty
 			) {
+		   
+		   System.out.println("잘 넘어오니 재고 번호 : " + stockCd );
+		   System.out.println("잘 넘어오니 수량 : " + changeQty);
+		   System.out.println("잘 넘어오니 총수량 : " + TotalQty);
+		   
 		   
 		   System.out.println("배열로 넘어오는 StockHistoryArrVO : " + stockHistoryArr);
 		   
@@ -72,12 +197,12 @@ public class StockController {
 		  System.out.println("분리된 stockHistoryVO : " + stockHistory);
 		   // 1. sId != null 일 경우에만 접근 가능
 		   String sId = (String)session.getAttribute("sId");
-//			if(session.getAttribute("sId") != null) {
-//				sId = (String)session.getAttribute("sId");
-//			}else {
-//				model.addAttribute("msg", "로그인이 필요합니다");
-//				return "fail_back";
-//			}
+			if(session.getAttribute("sId") != null) {
+				sId = (String)session.getAttribute("sId");
+			}else {
+				model.addAttribute("msg", "로그인이 필요합니다");
+				return "fail_back";
+			}
 			
 		   // +++++++++++++++++ 권한작업 처리하기
 			
@@ -90,81 +215,53 @@ public class StockController {
 		     stockHistory.setStock_control_type_cd(stock_control_type_cd);
 		   
 		   // 2. qty : "이동수량" & "조정수량"
-//		   int TotalStockQty = Integer.parseInt(TotalQty); // 재고수량
-		   int TotalStockQty = TotalQty;
-//		   int stockQty = Integer.parseInt(changeQty); // 이동수량 & 조정수량
-		   int stockQty = changeQty;
-		   
-		   // jquery 성공 시 주석 처리
+		   int TotalStockQty = TotalQty[i]; // 현재(기존) 재고수량
+		   int stockQty = changeQty[i]; // qty : 변경할 수량
+		   // 새로운 수량 = 재고수량 - 변경할 수량 
 		   int qty = (TotalStockQty - stockQty);
+		   
+		   // stockCd 분리 작업
+		   int stock_cd =  stockCd[i];
+		   
 		   System.out.println("qty 계산 잘됐니" + qty);
 		   System.out.println("합계 잘 넘어오니" + TotalStockQty);
 		   System.out.println("정보 잘 넘어오니" + stockHistory);
-		   System.out.println("조정 혹은 이동수량 잘 넘어 오니" + changeQty);
+		   System.out.println("조정 혹은 이동수량 잘 넘어 오니" + stockQty);
 		   
 		   // 3. sId를 통한 사원번호 조회 후 set데이터
 		   String emp_num = service.getEmpNum(sId);
 		   System.out.println("조회 잘되었니 emp_num = " + emp_num);
 		   stockHistory.setEmp_num(emp_num);
 		   
-		   // 4. 조정수량 & 이동수량 입력으로 해당 재고수량 업데이트
-		   if(stock_control_type_cd.equals("3")) {
-			   System.out.println("이동 수량 페이지에 왔습니다");
-			 // 이동수량 업데이트 
-		     // ->  기존 재고 업데이트(=source_target_code) + 이동 재고 업데이트 (=target_stock_cd)
-			   int sourceStockCd = stockHistory.getSource_stock_cd(); 
-			   int targetStockCd = stockHistory.getTarget_stock_cd();
-			   
-			   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
-			   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
-			   
-			   // 기존재고(-), 이동재고(+), 변경수량
-			   // (1). 이동재고수량 + 변경수량
-			   int updateTargetCount = service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
-			   if(updateTargetCount > 0) {
-				   System.out.println("타겟 수량 업데이트 성공!"); 
-			   // (2). 기존재고수량 - 변경수량
-				   int updateSourceCount = service.setStockQty(stock_cd, qty);
-					   if(updateSourceCount > 0) {
-			   // (3). 진행된 재고 이력 stock_history 테이블에 insert
-						   System.out.println("기존 수량 업데이트 성공!");
-						   int insertCount = service.setStockHistory(stockHistory);
-			   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
-						   if(insertCount > 0) {
-							   return "redirect:Inventory_History_View?stock_cd=" + stockHistory.getStock_cd();
-						   }
-					   }
-					   
-			   } else {
-				   model.addAttribute("msg", "이동수량 업데이트 실패!");
-				   return "fail_back";
-			   }
-			   
-			   
-		   } else if (stock_control_type_cd.equals("2")) {
-			 // 조정수량 업데이트 -> 기존 재고만 업데이트
-			   System.out.println("조정 수량 페이지에 왔습니다");
-			   
-			   int updateCount = service.setStockQty(stock_cd, qty);
-			   if(updateCount > 0) {
-				   System.out.println("수량 업데이트 성공!"); 
-				   // 6. 재고 이력 페이지를 위한 stockHistoryVO 타입 리스트 생성 
-				   int insertCount = service.setStockHistory(stockHistory);
-				   if(insertCount > 0) {
-					  				   
-					   return "redirect:Inventory_History_View?stock_cd=" + stockHistory.getStock_cd();
-				   }
+			   // 4. 조정수량 & 이동수량 입력으로 해당 재고수량 업데이트
+			   if(stock_control_type_cd.equals("3")) {
+				   System.out.println("이동 수량 페이지에 왔습니다");
+				 // 이동수량 업데이트 
+			     // ->  기존 재고 업데이트(=source_target_code) + 이동 재고 업데이트 (=target_stock_cd)
+				   int sourceStockCd = stockHistory.getSource_stock_cd(); 
+				   int targetStockCd = stockHistory.getTarget_stock_cd();
 				   
-			   } else {
-				   model.addAttribute("msg", "이동수량 업데이트 실패!");
-				   return "fail_back";
-			   }
-			   
-		   } // 조정수량 업데이트
+				   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
+				   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
+				   
+				   // 기존재고(-), 이동재고(+), 변경수량
+				   // (1). 이동재고수량 + 변경수량
+				   service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
+				   service.setStockQty(stock_cd, qty);
+				
+				   // (3). 진행된 재고 이력 stock_history 테이블에 insert
+				   service.setStockHistory(stockHistory);
+				   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
+				   
+			   } else if (stock_control_type_cd.equals("2")) {
+				 // 조정수량 업데이트 -> 기존 재고만 업데이트
+				 service.setStockQty(stock_cd, qty);
+				 service.setStockHistory(stockHistory);
+				   
+			   } // 조정수량 업데이트
 		   
 		   } // for문
-		   return "redirect:Inventory_History_View?stock_cd=" + stockHistoryArr.getStock_cd();
-		   
+		   return "redirect:Inventory_View";
 	   }
 	   
 	   
@@ -313,33 +410,33 @@ public class StockController {
 	
 	
 	
-//	@ResponseBody
-//	@GetMapping(value = "/StockAdjust_loc.ajax")
-//	public void ajax(Stock_viewVO vo, HttpServletResponse response){
-//		vo.getProduct_cd();
-//		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
-//		
-//		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
-//		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
-//		 
-//		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
-//		JSONArray arr = new JSONArray();
-//		for( Stock_viewVO stock : productLoc) {
-//			arr.put(new JSONObject(stock));
-//		}
-//		
-//		System.out.println("JSONArray : " + arr);
-//	
-//		try {
-//			response.setCharacterEncoding("UTF-8");
-//			response.getWriter().println(arr); // toString() 생략됨
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		
-//	}
+	@ResponseBody
+	@GetMapping(value = "/StockAdjust_loc.ajax")
+	public void ajax(Stock_viewVO vo, HttpServletResponse response){
+		vo.getProduct_cd();
+		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
+		
+		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
+		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
+		 
+		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
+		JSONArray arr = new JSONArray();
+		for( Stock_viewVO stock : productLoc) {
+			arr.put(new JSONObject(stock));
+		}
+		
+		System.out.println("JSONArray : " + arr);
+	
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(arr); // toString() 생략됨
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 	//새 위치 추가(새 재고번호 생성)
 	@GetMapping(value = "/Search_location.ajax")
@@ -408,81 +505,81 @@ public class StockController {
 	}
 	
 	//wh_cd 코드가 있는 창고 내 구역 값 가져오기
-//	@ResponseBody
-//	@GetMapping(value = "/searchWhAreaLocation.ajax")
-//	public void searchWhAreaLocation(HttpServletResponse response,Stock_viewVO stock){
-//		stock.getProduct_cd();
-//		stock.getWh_area_cd();
-////		System.out.println("stock.getProduct_cd():"+stock.getProduct_cd());
-////		System.out.println("stock.getWh_area_cd():"+stock.getWh_area_cd());
-//		
-//		//이미 선반에 있는 상품코드 제외하고 창고 구역 내 선반 찾기
-//		List<Wms_wh_viewVO> whAreaLocList = service.getWhAreaLocationList(stock.getProduct_cd(),stock.getWh_area_cd());
-//		
-//		//JSONArray데이터로 변환
-//		JSONArray whLoc = new JSONArray();
-//		for(Wms_wh_viewVO loc : whAreaLocList ) {
-//			whLoc.put(new JSONObject(loc));
-//		}
-//		
-//		System.out.println("JSONArray whArea: "+ whLoc);
-//		try {
-//			response.setCharacterEncoding("UTF-8");
-//			response.getWriter().println(whLoc); // toString() 생략됨
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
-//	@ResponseBody
-//	@PostMapping(value = "/addNewLocation_productPro")
-//	public void addNewLocation_product(HttpServletResponse response,  Stock_viewVO stock){
-//		
-//		System.out.println("넘어온값 : "+stock.getProduct_cd()+"/"+stock.getWh_loc_in_area_cd());
-//		//새 재고번호 생성
-//		int insertCount = service.InsertNewStockCd(stock.getProduct_cd(),stock.getWh_loc_in_area_cd());
-//		System.out.println("새 재고번호 생성insertCount: "+insertCount);
-//		
-//		try {
-//			response.setCharacterEncoding("UTF-8");
-//			response.getWriter().println(insertCount); // toString() 생략됨
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
+	@ResponseBody
+	@GetMapping(value = "/searchWhAreaLocation.ajax")
+	public void searchWhAreaLocation(HttpServletResponse response,Stock_viewVO stock){
+		stock.getProduct_cd();
+		stock.getWh_area_cd();
+//		System.out.println("stock.getProduct_cd():"+stock.getProduct_cd());
+//		System.out.println("stock.getWh_area_cd():"+stock.getWh_area_cd());
+		
+		//이미 선반에 있는 상품코드 제외하고 창고 구역 내 선반 찾기
+		List<Wms_wh_viewVO> whAreaLocList = service.getWhAreaLocationList(stock.getProduct_cd(),stock.getWh_area_cd());
+		
+		//JSONArray데이터로 변환
+		JSONArray whLoc = new JSONArray();
+		for(Wms_wh_viewVO loc : whAreaLocList ) {
+			whLoc.put(new JSONObject(loc));
+		}
+		
+		System.out.println("JSONArray whArea: "+ whLoc);
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(whLoc); // toString() 생략됨
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	@ResponseBody
+	@PostMapping(value = "/addNewLocation_productPro")
+	public void addNewLocation_product(HttpServletResponse response,  Stock_viewVO stock){
+		
+		System.out.println("넘어온값 : "+stock.getProduct_cd()+"/"+stock.getWh_loc_in_area_cd());
+		//새 재고번호 생성
+		int insertCount = service.InsertNewStockCd(stock.getProduct_cd(),stock.getWh_loc_in_area_cd());
+		System.out.println("새 재고번호 생성insertCount: "+insertCount);
+		
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(insertCount); // toString() 생략됨
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	//상품 정보와 재고 위치 가져오는 서블릿주소 - stock_list.jsp인데 아직 안함...!(productInfo 함수)
-//	@ResponseBody
-//	@GetMapping(value = "/getProduct_StockInfo.ajax")
-//	public void getProduct_StockInfo(Stock_viewVO vo, HttpServletResponse response){
-//		vo.getProduct_cd();
-//		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
-//		
-//		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
-//		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
-//		 
-//		 // 
-//		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
-//		JSONArray arr = new JSONArray();
-//		for( Stock_viewVO stock : productLoc) {
-//			arr.put(new JSONObject(stock));
-//		}
-//		
-//		System.out.println("JSONArray : " + arr);
-//	
-//		try {
-//			response.setCharacterEncoding("UTF-8");
-//			response.getWriter().println(arr); // toString() 생략됨
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		
-//	}
+	@ResponseBody
+	@GetMapping(value = "/getProduct_StockInfo.ajax")
+	public void getProduct_StockInfo(Stock_viewVO vo, HttpServletResponse response){
+		vo.getProduct_cd();
+		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
+		
+		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
+		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
+		 
+		 // 
+		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
+		JSONArray arr = new JSONArray();
+		for( Stock_viewVO stock : productLoc) {
+			arr.put(new JSONObject(stock));
+		}
+		
+		System.out.println("JSONArray : " + arr);
+	
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(arr); // toString() 생략됨
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 	// ==================================== jakyoung =============================================
 	// WMS 창고 관리 페이지 속 재고 리스트

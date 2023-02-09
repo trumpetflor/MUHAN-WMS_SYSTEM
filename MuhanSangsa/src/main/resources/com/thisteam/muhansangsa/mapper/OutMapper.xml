@@ -81,6 +81,61 @@
   
 	<!-- ========================================================================= -->
   
-  
+   <!-- ==========================================================================23/02/09 미주-->
+	
+   <!--  
+   		출고 관리 목록 조회 (출고번호에 해당하는 세부 항목 조회)
+   		1. VIEW 테이블 내에서 ORDER BY 정렬 완료
+   		2. 페이징 처리 완료
+    -->
+   <select id="selectOutTotalScheduleList" resultType="Out_scheduleListVO">
+   		SELECT *
+   			FROM out_schedule_total_view
+		<if test="!keyword.equals('')">
+   			WHERE
+  			<choose>
+				<when test="searchType.equals('OUT_SCHEDULE_CD')">
+					  OUT_SCHEDULE_CD LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('PRODUCT_NAME')">
+					  PRODUCT_NAME LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('CUST_NAME')">
+					  CUST_NAME LIKE '%${keyword}%'
+				</when>
+			</choose>
+		</if>
+			LIMIT 
+				#{startRow}, #{listLimit}
+   </select>
+   
+   <!-- 출고 관리 목록 페이징 처리 -->
+	<select id="selectOutTotalScheduleListCount" resultType="int">
+		SELECT COUNT(*)
+			FROM out_schedule_total_view 
+			<if test="!keyword.equals('')">
+   			WHERE
+  			<choose>
+				<when test="searchType.equals('OUT_SCHEDULE_CD')">
+					  OUT_SCHEDULE_CD LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('PRODUCT_NAME')">
+					  PRODUCT_NAME LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('CUST_NAME')">
+					  CUST_NAME LIKE '%${keyword}%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<!-- 출고 수정을 위한 목록 조회 -->
+	<select id="selectOutModifyList" resultType="out_modify_viewVO">
+		SELECT *
+			FROM OUT_MODIFY_VIEW
+			WHERE OUT_SCHEDULE_CD = #{out_schedule_cd}
+	</select>
+	
+   <!-- ==========================================================================23/02/09 미주-->	
   
 </mapper>
