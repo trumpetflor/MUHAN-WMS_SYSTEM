@@ -428,10 +428,6 @@ function open_addLoc_modal(stock_cd,product_cd) {
 
 	<div id="modal_container_stock" class="modal">
 	<div id="modal_container_content">
-	
-
-
-
 	</div>
 	 <div class="float-right">
 <!-- 		<a href="#" rel="modal:close"> -->
@@ -439,6 +435,33 @@ function open_addLoc_modal(stock_cd,product_cd) {
 <!-- 		</a> -->
 	</div>
 	</div><!-- end of DIV #modal_container -->
+	
+	
+<!-- 유형 모달 DIV -->
+<div id="modal_container_type" class="modal">
+	<div class="col col-md-3"><label for="inDate" class=" form-control-label">일자</label></div>
+	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
+
+</div>
+
+
+
+<!-- 거래처 모달 DIV -->
+<div id="modal_container_client" class="modal">
+	<div class="col col-md-3"><label for="inDate" class=" form-control-label">일자</label></div>
+	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
+
+</div>
+
+
+<!-- 담당자 모달 DIV -->
+<div id="modal_container_employee" class="modal">
+	<div class="col col-md-3"><label for="inDate" class=" form-control-label">일자</label></div>
+	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
+
+</div>	
+	
+
     
 <!-- Scripts -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->

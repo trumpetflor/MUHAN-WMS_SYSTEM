@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InVO;
+import com.thisteam.muhansangsa.vo.StockWhVO;
 import com.thisteam.muhansangsa.vo.inProcessingVO;
 import com.thisteam.muhansangsa.vo.inRegisterVO;
 
@@ -24,6 +25,20 @@ public interface InMapper {
 	
 	// 입고예정번호 목록
 	public List<inProcessingVO> selectSelectedInList(String in_schedule_cd);
+
+	// 재고번호 max 검색
+	public int selectMaxStockCd();
+
+	// 재고 목록
+	public List<StockWhVO> selectStockList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit
+			);
+	
+	
+	
 	
 	// ======================== yeram ==============================
 	
@@ -33,6 +48,8 @@ public interface InMapper {
 	List<EmployeesVO> getEmployeeList();
 
 	List<InVO> getInList();
+
+
 
 
 

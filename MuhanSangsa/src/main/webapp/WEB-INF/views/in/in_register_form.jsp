@@ -32,64 +32,60 @@
 <!-- 모달창 -->
 <!-- Remember to include jQuery :) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
-<script type="text/javascript">
-	console.log(${resultList});
-</script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.3.js"></script> -->
 <style type="text/css">
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
 
-	@font-face {
-	    font-family: 'Pretendard-Regular';
-	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-	    font-weight: 400;
-	    font-style: normal;
-	}
 
-	
-	@font-face {
-	    font-family: 'NEXON Lv1 Gothic OTF';
-	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-	    font-weight: normal;
-	    font-style: normal;
-	}
-	
-	body {
-	 font-family: 'NEXON Lv1 Gothic OTF';
-	 width: 100%;
-	 height: 100%;
-	}
-	
-	.col-lg-6 {
-		flex: 100%;
-	    max-width: 100%;
-	}
-	
-	#todayDate {
-		width: 15%;
-	}
-	
-	.table thead th, td {
-    	text-align: center;
-    	vertical-align: middle;
-    }
-    
-    .table td, .table th {
-    	padding: 0.75rem;
-    	vertical-align: middle;
-    }
-    
-    input[type=text], input[type=number], #in_qty_result{
-    	text-align: right;
-    }
-    
-    .form-control {
-    	display: inline-block; 
-	}
+@font-face {
+    font-family: 'NEXON Lv1 Gothic OTF';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+ font-family: 'NEXON Lv1 Gothic OTF';
+ width: 100%;
+ height: 100%;
+}
+
+.col-lg-6 {
+	flex: 100%;
+    max-width: 100%;
+}
+
+#todayDate {
+	width: 15%;
+}
+
+.table thead th, td {
+   	text-align: center;
+   	vertical-align: middle;
+   }
+   
+   .table td, .table th {
+   	padding: 0.75rem;
+   	vertical-align: middle;
+   	text-align: center;
+   }
+   
+   input[type=text], input[type=number], #in_qty_result{
+   	text-align: right;
+   }
+   
+   .form-control {
+   	display: inline-block; 
+}
 	
 /* 모달 */
 #modal_container{
@@ -119,9 +115,51 @@
   padding: 2px;
 }
 
+/*재고검색 모달창*/
+#stock_search_modalDiv{
+width: 500px;
+height: 600px;
+}
+
+#stock_search_modalDiv table tbody tr :hover{
+cursor: pointer;
+}
+#stock_search_modalDiv::-webkit-scrollbar {
+   width: 2px;
+ }
+
+#stock_search_modalDiv{
+width: 500px;
+height: 600px;
+ position: fixed;
+ top: 20%;
+  left: 40%;
+ overflow-y: scroll;
+
+}
+
 #modal_container > th {
 	height: 50px;
 }
+
+	.search_div{
+	    width: 400px;
+	    height: 350px;
+	    background-color: white;
+	    position: absolute;
+	    top: 35px;
+	    margin-left: 10px;
+	    overflow: scroll;
+	    display: none;
+	    z-index: 1;
+	    box-shadow: 1px 1px 20px 3px rgba(169, 168, 167, 0.2);
+	    border-color: rgba(169, 168, 167, 0.2);
+	}
+	
+	.search_div::-webkit-scrollbar {
+    width: 3px;
+  }
+
  a{
  text-decoration: none;
  color: 	#000080;
@@ -139,8 +177,33 @@
 .modal a.close-modal{
 	display: none;
 }
+th {
+    text-align: center!important;
+}
+table {
+    text-align: center!important;
+}
 </style>
 <script type="text/javascript">
+$(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function(){
+	console.log($(this).children("td").attr("id"));
+	console.log($(this).children("td").next().next().attr("id"));
+
+// 	$("#stock_cd").val($(this).children("td").next().attr("id"));
+// 	$("#wh_loc_in_area").val($(this).children("td").attr("id"));
+	
+	$("#stock_cd${i.index }").val($(this).children("td").attr("id"));
+	$("#wh_loc_in_area${i.index }").val(
+			$(this).children("td").next().next().attr("id")+"_"+
+			$(this).children("td").next().next().next().attr("id")
+			);
+	
+	 $('#stock_search_modalDiv').modal('hide'); 
+	     $('#stock_search_modalDiv').hide();
+	     $('.jquery-modal').click();
+
+});
+
 	// 현재 시간 설정
 	window.onload = function() {
 		today = new Date();
@@ -151,19 +214,60 @@
 		bir.value = today;
 	}
 	
-	// 입고지시수량 계산
 	$(function(){
+		// 입고지시수량 계산
 		$("input[type=number]").on("focusout", function(){
 			let sum = 0;
 			$("input[type=number]").each(function(){
 				sum += Number($(this).val()); 
 				document.getElementById('in_qty_result').innerText = sum;
 				
-				if(sum > )
+				// 전체 합계 못넘게 하기!
+// 				if(sum > )
 			});
 		    
+		}); // 입고지시수량 계산
+		
+		// 재고번호 신규 생성
+		$("#stock_cd${i.index }").on("click", function(){
+			$.ajax({
+				type: "GET",
+				url: "NewStockCd",
+				success: function(result){
+					$("#stock_cd${i.index }").val(result);
+				}
+			});
 		});
-	}); // 입고지시수량 계산
+		
+		// 재고검색버튼
+		$("#stock_searchBtn${i.index }").on("click", function(){
+			$.ajax({
+				type: "GET",
+				url: "In/StockSelectList",
+				contentType: 'html',
+				success: function(data,status,xhr){
+					$('#stock_search_modalDiv').html(data);
+				},
+		        error: function(xhr,status,error) {
+		            console.log(error);
+		        }
+			});
+			
+			//모달창 열기
+			$('#stock_search_modalDiv').modal('show');
+			
+		}); // 재고검색버튼
+		
+		
+		
+		
+		
+	}); //jQuery
+	
+	// 재고번호 검색 모달창
+	function modal_open1(){
+		$('#modal_container_stock').modal();
+	}
 	
 </script>
 </head>
@@ -210,32 +314,23 @@
 		                                    		<td>${inList.product_name }</td>
 		                                    		<td>${inList.in_schedule_qty }</td>
 		                                    		<td><input type="number" id="in_qty${i.index }" value="${inList.in_schedule_qty }"></td>
-		                                    		<td>
-<!-- 		                                    		<input type="text" id="stock_cd" name="stock_cd"> -->
-		                                    			<div>
-														<div class="input-group">
-														 <input type="hidden" class="form-control" name="business_no" id="business_no"
-														  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
-														 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
-														  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
-														  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-														  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
-														  </button>
-														</div>
+		                                    		<td><!-- 재고번호 검색 -->
+														<div class='d-flex'><!-- 수정 필요 -->
+													 	  <input type="text" class="form-control rounded-start" id="stock_cd${i.index }"> 
+<!-- 													 	  <input type="hidden" name="product_name" id="product_name" value=""> -->
+								<!-- 							 <a href="#stock_search_modalDiv" rel="modal:open"> -->
+															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="stock_searchBtn${i.index }">
+								<!-- 							 </a> -->
 														</div>
 		                                    		</td>
-		                                    		<td>
-<!-- 		                                    		<input type="text" id="wh_loc_in_area" name="wh_loc_in_area"> -->
-														<div> <!-- 수정필요 -->
-															<div class="input-group">
-															 <input type="hidden" class="form-control" name="business_no" id="business_no"
-															  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
-															 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
-															  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
-															  <a href="#modal_container" rel="modal:open"><button class="btn btn-outline-secondary " type="button" id="button-addon">검색
-															  </button></a>
-															</div>
-														</div> 
+		                                    		<td><!-- 선반명 검색 -->
+														<div class='d-flex'><!-- 수정 필요 -->
+													 	  <input type="text" class="form-control rounded-start" id="wh_loc_in_area${i.index }"> 
+<!-- 													 	  <input type="hidden" name="product_name" id="product_name" value=""> -->
+<!-- 															 <a href="#stock_search_modalDiv" rel="modal:open"> -->
+															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="loc_searchBtn${i.index }">
+								<!-- 							 </a> -->
+														</div>
 		                                    		</td>
 		                                    	</tr>
 		                                    	<c:set var="in_schedule_qty_total" value="${in_schedule_qty_total+inList.in_schedule_qty }"/>
@@ -259,9 +354,6 @@
                             </div>
                         </div>
                     </div>
-
-
-                </div>
             </div><!-- .animated -->
         </div><!-- .content -->
     <div class="clearfix"></div>
@@ -272,12 +364,48 @@
 <!-- Right Panel -->
 
 
-<!-- 입고 버튼 모달 DIV -->
-<div id="modal_container" class="modal">
+<!-- 재고번호 모달 DIV -->
+<div id="stock_search_modalDiv" class="modal">
+
+</div>
+
+
+
+<!-- <div id="modal_container_stock" class="modal"> -->
+<!-- 	<h4>재고번호 검색</h4> -->
+<!-- 	<br> -->
+<!-- 	<table class="table"> -->
+<!-- 		<tr> -->
+<!-- 			<th>재고번호</th> -->
+<!-- 			<th>품목명</th> -->
+<!-- 			<th>구역명</th> -->
+<!-- 			<th>위치명</th> -->
+<!-- 		</tr> -->
+<%-- 		<c:forEach var="stock" items="${stockList }" varStatus="status"> --%>
+<!-- 			<tr> -->
+<%-- 				<td>${stock.stock_cd }</td> --%>
+<%-- 				<td>${stock.product_name }</td> --%>
+<%-- 				<td>${stock.wh_area }</td> --%>
+<%-- 				<td>${stock.wh_loc_in_area }</td> --%>
+<!-- 			</tr> -->
+<%-- 		</c:forEach> --%>
+<!-- 	</table> -->
+<!-- </div> -->
+
+
+
+<!-- 선반위치 모달 DIV -->
+<div id="modal_container_wh" class="modal">
 	<div class="col col-md-3"><label for="inDate" class=" form-control-label">일자</label></div>
 	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
 
 </div>
+
+
+
+
+
+
 
 
 
