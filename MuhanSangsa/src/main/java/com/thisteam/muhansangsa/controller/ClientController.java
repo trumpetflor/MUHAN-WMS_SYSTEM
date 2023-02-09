@@ -47,7 +47,7 @@ public class ClientController {
 			sId = (String)session.getAttribute("sId");
 		}else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			return "redirect:Login"; // 어떻게 alert 후에 보내지?
 		}
 		
 		// 아이피 주소

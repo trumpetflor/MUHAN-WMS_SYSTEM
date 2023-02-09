@@ -99,6 +99,12 @@
 	overflow-y: scroll;
 	
 	}
+	
+	
+	#find_stock_modal {
+		max-width: 400px !important;
+		height: 200px !important;
+	}
 
 
 
@@ -196,37 +202,57 @@ function productInfo(product_cd) {
 	// 출고 버튼 클릭 시 모달 창 open~~
 	function openOutModal() {
 		
+// 		console.log('나와랏');
 // 		alert("모달창 열리네요~ 출고가 들어오죠");
 		//모달창 열기
 		$('#out_naga_modal').modal('show'); 
 		
-		let checkedList = $('input:checkbox[name="outScheduleChecked"]').is(":checked");
+		$("#out_table > tbody").empty();
 		
-		for()
+		let checkedList = [];
 		
-		let out_list = '';
+		$('input[name=outScheduleChecked]:checked').each(function() {
+			
+			let out_list = ''; // 출력문 비우기
+			
+			let tr_id = $(this).closest("tr").attr("id"); // 해당 <tr> id 값 저장
+			
+			console.log(tr_id);
+			
+			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
+			let product_name = $(this).val().split("/")[1]; // 품목명
+			let out_qty = $("#" + tr_id).find("input[name=out_qty]").val(); // 출고 지시수량
+			let stock_cd = $(this).val().split("/")[2]; // 재고 코드
+			let wh_loc_in_area = ''; // 위치명
+			
+			out_list += '<tr>';
+			out_list += '<td>' + out_schedule_cd + '</td>';
+			out_list += '<td>' + product_name + '</td>';
+			out_list += '<td>' + out_qty + '</td>';
+			out_list += '<td><button type="button" class="btn-sm btn-dark " onclick="findStockCd(' + stock_cd + ')">검색</button></td>';
+			out_list += '<td name="wh_loc_in_area">' + wh_loc_in_area + '</td>';
+			out_list += '</tr>';
+			
+			$("#out_table").append(out_list);
+			
 		
-		let out_schedule_cd = $('input:checkbox[name="checkbox_name"]').is(":checked") == true
-		let product_name = 
-		let out_qty = 
-		let stock_cd = 
-		let wh_loc_in_area = 
-		
-		
-		out_list += '<tr>';
-				 += '<td>출고예정번호</td>';
-				 += '<td>품목명</td>';
-				 += '<td>출고 수량</td>';
-				 += '<td>출고할 재고번호</td>';
-				 += '<td>위치명</td>';
-		
-		
-		
-	</tr>
+		});
 		
 	
 	}
 	
+// 	function findStockCd(stock_cd) {
+// 		alert(stock_cd);
+// 		//모달창 열기
+// 		$('#find_stock_modal').modal('show'); 
+		
+// 		if(confirm("닫?")){
+// 			$('#emp_search_modalDiv').modal('hide');
+// 			$('#out_naga_modal').modal('show');
+			
+// 		}
+		
+// 	}
 	
 	
 	
@@ -288,7 +314,7 @@ function productInfo(product_cd) {
 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 -->
 
 	<div id = "selectCount"><small class="text-secondary"> 0 개 선택됨</small></div>
-	<table class="table"  id="">
+	<table class="table"  id="outScheduleTable">
 		<thead>
 			<tr>
 				<th width="60px"><input type="checkbox" name="AllChecked" ></th>
@@ -304,8 +330,8 @@ function productInfo(product_cd) {
 		</thead>
 		<tbody>
 		<c:forEach items="${outTotalScheduleList }" var="total" varStatus="status" >
-			<tr>
-			<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }"></td>
+			<tr id="out_schedule_${status.index }">
+				<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }/${total.product_name }/${total.stock_cd }"></td>
 				<td><a href="outScheduleModifyForm?">${total.out_schedule_cd }</a></td>
 				<td>${total.cust_name }</td>
 				<td>${total.product_name }</td>
@@ -416,7 +442,10 @@ function productInfo(product_cd) {
 	  		<button type="button" class="btn btn-dark ">출고</button>
 		
 		</form>
+		
 	</div>
+	
+	<div id="find_stock_modal" class="modal tabindex='-1'">재고 코드</div>
 
 <!-- 출고 모달 끝 -->
 <!-- -------------------------- jakyoung 끝 ------------------------------------- -->
