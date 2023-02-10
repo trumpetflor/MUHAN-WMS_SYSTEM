@@ -185,142 +185,166 @@ table {
 }
 </style>
 <script type="text/javascript">
-$(function() {
-	
-	stockSearch(index); // 게시물 목록 조회 함수 호출
-	
-});
-// 재고 검색 모달
-function stockSearch(index){
-	$(document).on("click","#stock_search_modalDiv #stock_table > tbody tr",function(){
-		console.log($(this).children("td").attr("id"));
-		console.log($(this).children("td").next().next().attr("id"));
-	
-		$("#wh_loc_in_area"+index).val(
-				$(this).children("td").attr("id")+"_"+
-				$(this).children("td").next().attr("id")
-				);
+	// 재고 모달에서 값 가져오기
+// 	$(document).on("click", "#stock_search_modalDiv #stock_table > tbody tr", function(index, item){
+// 		var index = 
+// 		console.log("index : " + index);
+// 		console.log($(this).children("td").attr("id"));
+// 		console.log($(this).children("td").next().next().attr("id"));
 		
-		 $('#stock_search_modalDiv').modal('hide'); 
-		     $('#stock_search_modalDiv').hide();
-		     $('.jquery-modal').click();
-	
-	});
-}
-
-//창고선반 검색 모달
-function whLocSearch(index){
-	$(document).on("click","#whLoc_search_modalDiv #whLoc_table > tbody tr",function(){
-		console.log($(this).children("td").attr("id"));
-		console.log($(this).children("td").next().next().attr("id"));
-	
-	 	$("#wh_area"+index).val($(this).children("td").next().attr("id"));
-	 	$("#wh_loc_in_area"+index).val($(this).children("td").attr("id"));
+// 		let tr_index = $("#tr_index").val();
+// 		console.log("tr_index: "+tr_index);
+// 		$("input[name=stock_cd]").eq(tr_index).val($(this).children("td").attr("id"));
+// 		$("input[name=wh_loc_in_area]").eq(tr_index).val($(this).children("td").next().next().attr("id")+"_"+
+// 				$(this).children("td").next().next().next().attr("id"));
 		
-		 $('#whLoc_search_modalDiv').modal('hide'); 
-		     $('#stock_search_modalDiv').hide();
-		     $('.jquery-modal').click();
+// 		 $('#stock_search_modalDiv').modal('hide'); 
+// 		     $('#stock_search_modalDiv').hide();
+// 		     $('.jquery-modal').click();
 	
-	});
-}
+// 	});
+	
+	
+// 재고검색버튼
+$(document).on("click", ".stock_cd_btn", function(){
 
-	// 현재 시간 설정
-	window.onload = function() {
-		today = new Date();
-		console.log("today.toISOString() >>>" + today.toISOString());
-		today = today.toISOString().slice(0, 10);
-		console.log("today >>>> " + today);
-		bir = document.getElementById("todayDate");
-		bir.value = today;
-	}
+	let index = $(this).closest("tr").index();
+	console.log("index_tr: "+$(this).closest("tr").index());
 	
-	// 재고번호 신규 생성
-	function newStockCd(index){
 		$.ajax({
 			type: "GET",
-			url: "NewStockCd",
-			success: function(result){
-				$("#stock_cd"+index).val(result);
-			}
-		});
-		
-	}
+			url: "In/StockSelectList",
+			contentType: 'html',
+			success: function(data,status,xhr){
+				$('#stock_search_modalDiv').html(data);
+				$("#tr_index").val(index);
+			},
+	        error: function(xhr,status,error) {
+	            console.log(error);
+	        }
+
+		}); 
+
+	//모달창 열기
+	$('#stock_search_modalDiv').modal('show');
+
 	
-	function stockSearch(index){
-		// 재고검색버튼
-		$("#stock_searchBtn"+index).on("click", function(){
-			$.ajax({
-				type: "GET",
-				url: "In/StockSelectList",
-				contentType: 'html',
-				success: function(data,status,xhr){
-					$('#stock_search_modalDiv').html(data);
-				},
-		        error: function(xhr,status,error) {
-		            console.log(error);
-		        }
-			});
-			
-			//모달창 열기
-			$('#stock_search_modalDiv').modal('show');
-			
-		}); // 재고검색버튼
-	}
+});// 재고검색버튼
 	
-	// 선반검색버튼
-	function whLocSearch(index){
-		$("#whLoc_searchBtn"+index).on("click", function(){
-			$.ajax({
-				type: "GET",
-				url: "In/WhLocSelectList",
-				contentType: 'html',
-				success: function(data,status,xhr){
-					$('#whLoc_search_modalDiv').html(data);
-				},
-		        error: function(xhr,status,error) {
-		            console.log(error);
-		        }
-			});
-			
-			//모달창 열기
-			$('#whLoc_search_modalDiv').modal('show');
-			
-		}); // 선반검색버튼
-	}
+// 재고 모달에서 값 가져오기
+$(document).on("click", "#stock_search_modalDiv #stock_table > tbody tr", function(){
+	let tr_index = $("#tr_index").val();
+	console.log("tr_index: "+tr_index);
+
+	$("input[name=stock_cd]").eq(tr_index).val($(this).children("td").attr("id"));
+	$("input[name=wh_loc_in_area]").eq(tr_index).val($(this).children("td").next().next().attr("id")+"_"+
+			$(this).children("td").next().next().next().attr("id"));
+	
+	 $('#stock_search_modalDiv').modal('hide'); 
+	     $('#stock_search_modalDiv').hide();
+	     $('.jquery-modal').click();
+
+});
+
+// 선반검색버튼
+$(document).on("click", ".whLoc_cd_btn", function(){
+	
+	let index = $(this).closest("tr").index();
+	console.log("index_tr: "+$(this).closest("tr").index());
+	
+	$.ajax({
+		type: "GET",
+		url: "In/WhLocSelectList",
+		contentType: 'html',
+		success: function(data,status,xhr){
+			$('#whLoc_search_modalDiv').html(data);
+			$("#tr_index").val(index);
+		},
+        error: function(xhr,status,error) {
+            console.log(error);
+        }
+	});
+	
+	//모달창 열기
+	$('#whLoc_search_modalDiv').modal('show');
+	
+}); // 선반검색버튼
+	
+// 창고선반 모달에서 값 가져오기
+$(document).on("click","#whLoc_search_modalDiv #whLoc_table > tbody tr",function(){
+	let tr_index = $("#tr_index").val();
+	console.log("tr_index: "+tr_index);
+	
+	$("input[name=wh_loc_in_area]").eq(tr_index).val($(this).children("td").attr("id")+"_"+$(this).children("td").next().attr("id"));
+//  	$("#wh_area"+index).val($(this).children("td").next().attr("id"));
+//  	$("#wh_loc_in_area"+index).val($(this).children("td").attr("id"));
+	
+	 $('#whLoc_search_modalDiv').modal('hide'); 
+	     $('#stock_search_modalDiv').hide();
+	     $('.jquery-modal').click();
+
+});
+
+// 현재 시간 설정
+window.onload = function() {
+	today = new Date();
+	console.log("today.toISOString() >>>" + today.toISOString());
+	today = today.toISOString().slice(0, 10);
+	console.log("today >>>> " + today);
+	bir = document.getElementById("todayDate");
+	bir.value = today;
+}
+
+// 재고번호 신규 생성
+function newStockCd(index){
+	$.ajax({
+		type: "GET",
+		url: "NewStockCd",
+		success: function(result){
+			$("#stock_cd"+index).val(result);
+		}
+	});
+	
+}
+	
+	
+
+
+// 저장 버튼
+function modify(end){
+	let modArr = new Array();
+	$("")
+	
+}
 	
 	
 	
 	
 	
-	
-	$(function(){
-		// 입고지시수량 계산
-		$("input[type=number]").on("focusout", function(){
-			let sum = 0;
-			$("input[type=number]").each(function(){
-				sum += Number($(this).val()); 
-				document.getElementById('in_qty_result').innerText = sum;
+$(function(){
+	// 입고지시수량 계산
+	$("input[type=number]").on("focusout", function(){
+		let sum = 0;
+		$("input[type=number]").each(function(){
+			sum += Number($(this).val()); 
+			document.getElementById('in_qty_result').innerText = sum;
 				
 				// 전체 합계 못넘게 하기!
 // 				if(sum > )
-			});
-		    
-		}); // 입고지시수량 계산
-		
-
-		
-
-		
-		
-		
-		
-		
-	}); //jQuery
+		});
+	    
+	}); // 입고지시수량 계산
 	
-	// 재고번호 검색 모달창
-// 	function modal_open1(){
-// 		$('#modal_container_stock').modal();
-// 	}
+
+	
+
+	
+	
+	
+	
+	
+}); //jQuery
+	
 	
 </script>
 </head>
@@ -342,6 +366,7 @@ function whLocSearch(index){
                                 </strong>
                             </div>
                             <div class="card-body">
+                                <form action="InRegisterPro" method="post">
                                 <table id="reg_table bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -369,22 +394,23 @@ function whLocSearch(index){
 		                                    		<td><input type="number" id="in_qty" value="${inList.in_schedule_qty }"></td>
 		                                    		<td><!-- 재고번호 검색 -->
 														<div class='d-flex'><!-- 수정 필요 -->
-													 	  <input type="text" class="form-control rounded-start" id="stock_cd${i.index }" onclick="newStockCd(${i.index})"> 
+													 	  <input type="text" class="form-control rounded-start" id="stock_cd${i.index }"name="stock_cd" onclick="newStockCd(${i.index})"> 
 <%-- 													 	  <input type="hidden" name="end" id="end" value="${i.end }"> --%>
 													 	  <input type="hidden" name="index" id="index" value="${i.index }">
 								<!-- 							 <a href="#stock_search_modalDiv" rel="modal:open"> -->
-															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="stock_searchBtn${i.index }" onclick="stockSearch(${i.index})">
+															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2 stock_cd_btn" id="stock_searchBtn${i.index }" >
 								<!-- 							 </a> -->
 														</div>
 		                                    		</td>
 		                                    		<td><!-- 선반명 검색 -->
 														<div class='d-flex'><!-- 수정 필요 -->
-													 	  <input type="text" class="form-control rounded-start" id="wh_loc_in_area${i.index }"> 
+													 	  <input type="text" class="form-control rounded-start" name="wh_loc_in_area" id="wh_loc_in_area${i.index }"> 
 <!-- 													 	  <input type="hidden" name="product_name" id="product_name" value=""> -->
 <!-- 															 <a href="#stock_search_modalDiv" rel="modal:open"> -->
-															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="whLoc_searchBtn${i.index }" onclick="whLocSearch(${i.index})">
+															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2 whLoc_cd_btn" id="whLoc_searchBtn${i.index }">
 								<!-- 							 </a> -->
 														</div>
+														<c:set var="end" value="${i.end }" />
 		                                    		</td>
 		                                    	</tr>
 		                                    	<c:set var="in_schedule_qty_total" value="${in_schedule_qty_total+inList.in_schedule_qty }"/>
@@ -402,8 +428,9 @@ function whLocSearch(index){
                                     </tbody>
                                 </table>
 									<div>
-										<input type="button" value="저장" class="btn btn-outline-dark" onclick="location.href='InRegisterPro'">
+										<input type="button" value="저장" class="btn btn-outline-dark" onclick="modify(${end})">
 									</div>
+                                </form>
 								</div>
                             </div>
                         </div>

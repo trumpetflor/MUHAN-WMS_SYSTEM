@@ -124,7 +124,7 @@
 	// 입고예정코드 클릭 시 수정 페이지 이동
 	function modify(item){
 		var code=$(item).text();
-		window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+		window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=760, height=900, top= 40,left=540,location=no,status=no,scrollbars=yes');
 
 	} // 수정페이지
 	
@@ -312,64 +312,6 @@
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
 <!-- <script src="resources/assets/js/main.js"></script> -->
-
-<script type="text/javascript">
-// function inSchedule(){
-// 	alert("왜안떠");
-
-// }
-
-// 입고 대기
-
-// function inWaiting() {
-// 	pageContext.forward("in_waiting_form.jsp");
-// 	$("#content_tab").load("in_waiting_form.jsp");
-// 	$.ajax({
-// 		type: "GET",
-// 		url: "InWaiting",
-// 		dataType: "script",
-// 		success: function(result) {
-// 			alert(result);
-// 			$("#content_tab").empty();
-// // 			document.getElementById("#content_tab").innerHTML = result;
-// 			$("#content_tab").html(result);
-// 		}
-
-// 	});
-
-// $.ajax({
-// 	url : "in_waiting_form.jsp",
-// 	dataType : "html",
-// 	type : "post",
-// 	success : function(result){
-// 		$("#content_tab").empty();
-// 		$("#content_tab").html(result);	
-// 	}
-// });
-
-
-// }
-
-
-
-// function inCompleted(){}
-
-// $(function(){
-// 	$('.tabmenu'.click(function(){
-// 		var activeTab = $(this).attr('data-tab');
-// 		$('li').css('background-color', 'white');
-// 		$(this).css('background-color', 'green');
-// 		$.ajax({
-// 			type : 'GET',
-// 			url : activeTab + ".jsp",
-// 			dataType: "jsp",
-// 			success : function(data){
-// 				$('#tabcontent').html(data);
-// 			}
-// 		})
-// 		})
-// })
-</script>
 
 </body>
 </html>

@@ -178,6 +178,7 @@
 	<table class="table table-hover"  id="stock_table">
 		<thead>
 			<tr>
+			<input type='hidden' id='tr_index'>
 				<th>재고 번호</th>
 				<th>품목명</th>
 				<th>구역명</th>

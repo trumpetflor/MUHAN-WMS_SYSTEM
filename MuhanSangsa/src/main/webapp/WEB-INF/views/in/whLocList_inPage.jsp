@@ -174,6 +174,7 @@
 	<table class="table table-hover"  id="whLoc_table">
 		<thead>
 			<tr>
+			<input type='hidden' id='tr_index'>
 				<th>구역명</th>
 				<th>위치명</th>
 			</tr>

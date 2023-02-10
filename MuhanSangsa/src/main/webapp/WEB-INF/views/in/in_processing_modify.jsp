@@ -308,10 +308,20 @@ function open_addLoc_modal(stock_cd,product_cd) {
 	});//$.ajax({
 	
 }
+	
+//거래처 팝업 결과값 등록
+function fn_selectClient(business_no,cust_name) {
+	$("#business_no").val(business_no);
+	$("#cust_name").val(cust_name);
+	
+}
 </script>
 <body>
-<br>
- <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
+
+<!-- left bar -->
+<jsp:include page="../inc/left.jsp"></jsp:include>
+
+<div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
         <div class=" breadcrumbs m-0">
             <div class="breadcrumbs-inner rounded-start p-2 " >
                 <div class="row m-0 ">
@@ -334,22 +344,23 @@ function open_addLoc_modal(stock_cd,product_cd) {
 	 
 	<table class="table" id=" ">
 		<thead>
+            <c:forEach var="inList" items="${inList }">
             <tr>
 				<th>일 자</th>
-				<td><input type="date" class="form-control" name=" " value="" required="required"></td>
+				<td><input type="date" class="form-control" value="${inList.in_date }" required="required"></td>
 				<th>유형</th>
-				<td>
+				<td colspan="2">
 					<div class="input-group mb-3">
 	          			<div class="col-12 col-md-9">
 	          				<div class="form-check-inline form-check">
 	                        <div class="radio">
 	                            <label for="radio1" class="form-check-label ">
-	                                <input type="radio" id="" name="in_type" required="required" value="1" checked="" class="form-check-input">1 : 발주서
+	                                <input type="radio" id="" name="in_type" required="required" value="1" checked="checked" class="form-check-input">발주서
 	                            </label>
 	                        </div>
 	                        <div class="radio">
 	                            <label for="radio2" class="form-check-label ">
-	                                <input type="radio" id="" name="in_type" required="required" value="2" class="form-check-input">2 : 구매
+	                                <input type="radio" id="" name="in_type" required="required" value="2" class="form-check-input">구매
 	                            </label>
 				 			</div>
 				 			</div>
@@ -357,15 +368,16 @@ function open_addLoc_modal(stock_cd,product_cd) {
 					</div>
 				 </td>
 			</tr>
+			
 			<tr><!-- 구매거래처(거래처 테이블에서 검색하여 선택)  -->
 				<th>거래처</th>
 				<td>
 					<div> 
 						<div class="input-group">
 						 <input type="hidden" class="form-control" name="business_no" id="business_no"
-						  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
+						  	value="" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
 						 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
-						  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
+						  	value="${inList.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
 						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
 						  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
 						  </button>
@@ -373,7 +385,7 @@ function open_addLoc_modal(stock_cd,product_cd) {
 					</div> 
 				</td>
 				<th>납기 일자</th>
-				<td><input type="date" class="form-control" name=" " value=" " required="required"></td>
+				<td colspan="2"><input type="date" class="form-control" value="${inList.in_date }" required="required"></td>
 			</tr>
 			<tr>
 				<th>담당자</th>
@@ -381,9 +393,9 @@ function open_addLoc_modal(stock_cd,product_cd) {
 					<div> <!-- 수정필요 -->
 						<div class="input-group">
 						 <input type="hidden" class="form-control" name="business_no" id="business_no"
-						  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
+						  	value="" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
 						 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
-						  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
+						  	value="${inList.emp_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
 						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
 						  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
 						  </button>
@@ -391,8 +403,9 @@ function open_addLoc_modal(stock_cd,product_cd) {
 					</div> 
 				</td>
 				<th>비고</th>
-				<td><input type="text" class="form-control" value=" " name=" "></td>
+				<td colspan="2"><input type="text" class="form-control" value="${inList.remarks }" name=" "></td>
 			</tr>
+			</c:forEach>
 			<tr><td class="space" colspan="10" /></tr>
 			<tr>
 				<th>품목코드</th><!-- 	 품목코드 클릭 시 재고 이력 표시 화면(창) 띄우기 --> 
@@ -406,7 +419,7 @@ function open_addLoc_modal(stock_cd,product_cd) {
 			<c:forEach items="${proList }" var="proList" varStatus="status" >
 				<tr>
 					<!-- 품목코드 -->
-					<td><input type="text" value="${proList.product_cd}" readonly="readonly"></td>
+					<td><input type="text" class="form-control" value="${proList.product_cd}" readonly="readonly"></td>
 					<!-- 품목명 -->
 					<td>
 						<div class="input-group">
@@ -420,11 +433,11 @@ function open_addLoc_modal(stock_cd,product_cd) {
 						</div>
 					</td>
 					<!-- 수량 -->
-					<td><input type="text" value="${proList.in_qty}"></td>
+					<td><input type="text" class="form-control" value="${proList.in_qty}"></td>
 					<!-- 납기일자 -->
-					<td><input type="date" class="form-control" name=" " value="${proList.in_date } " required="required"></td>
+					<td><input type="date" class="form-control" value="${proList.in_date }" required="required"></td>
 					<!-- 적요 -->
-					<td><input type="text" value="${proList.remarks}"></td>
+					<td><input type="text" class="form-control" value="${proList.remarks}"></td>
 				</tr> 
 			</c:forEach>
 			</tbody>
@@ -469,9 +482,11 @@ function open_addLoc_modal(stock_cd,product_cd) {
 	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
 
 </div>	
-	
 
-    
+<!-- footer -->
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<jsp:include page="../inc/footer.jsp"></jsp:include>
+
 <!-- Scripts -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
