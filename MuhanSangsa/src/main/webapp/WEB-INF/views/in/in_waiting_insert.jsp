@@ -61,7 +61,8 @@
 	}
 	
 	#table_top th {
-		height: 100px;
+		height: 100px !important;
+		 
 		vertical-align: middle;
 	}
 	#table_top td {
@@ -143,9 +144,11 @@
 	
 	 width: 150px;
 	 border-left: 1px;
+	 text-align: center;
 	}
 	td{
 	 width: 200px;
+	 text-align: left;
 	}
 	
 	.search_div li:hover {
@@ -169,19 +172,37 @@
 	
 	/* ------------------------------------------------------------------------- */
 	/*사원검색 모달창*/
+/* 	#emp_search_modalDiv{ */
+/* 	width: 500px; */
+/* 	height: 600px; */
+/* 	} */
+	
+/* 	#emp_search_modalDiv table tbody tr :hover{ */
+/* 	cursor: pointer; */
+/* 	} */
+/* 	#emp_search_modalDiv::-webkit-scrollbar { */
+/*     width: 2px; */
+/*   } */
+	
+	#client_search_modalDiv{
+	width: 500px;
+	height: 600px;
+	 position: fixed;
+	 top: 20%;
+	  left: 40%;
+	 overflow-y: scroll;
+	
+	}
 	#emp_search_modalDiv{
 	width: 500px;
 	height: 600px;
-	}
+	 position: fixed;
+	 top: 20%;
+	  left: 40%;
+	 overflow-y: scroll;
 	
-	#emp_search_modalDiv table tbody tr :hover{
-	cursor: pointer;
 	}
-	#emp_search_modalDiv::-webkit-scrollbar {
-    width: 2px;
-  }
-	
-	#client_search_modalDiv{
+	#product_search_modalDiv{
 	width: 500px;
 	height: 600px;
 	 position: fixed;
@@ -206,6 +227,7 @@ z-index: 0;
 
 <script type="text/javascript">
 // 합계 계산하는 calculateSum() 함수
+var index = 0;
 function calculateSum() {
 var sum = 0;
 var inputElements = document.getElementsByClassName("input-field");
@@ -226,6 +248,7 @@ inputField.addEventListener("input", calculateSum);
 
 // 테이블 행 추가하는 함수()
 function addRow() {
+	index ++;
     var table = document.getElementById("table_bottom");
     var tbody = table.getElementsByTagName("tbody")[0];
     var row = tbody.insertRow(-1);
@@ -237,24 +260,30 @@ function addRow() {
     var cell6 = row.insertCell(5);
     
     cell1.innerHTML = '<button onclick="deleteRow(this)" class = "btn btn-primary mx-4">제삭</button>';
-    cell2.innerHTML = "";
-    cell3.innerHTML = "";
-    cell4.innerHTML = "<input type='text' class='input-field' onchange='calculateSum()'>";
-    cell5.innerHTML = "<input type='date' id='hireDate1' name='hire_date' class='form-control'>";
-    cell6.innerHTML = "<input type='text'>";
+    cell2.innerHTML = "<div class='d-flex' id='testing'>"
+    				+ '<input type="text" class="form-control rounded-start" id="product_cd'+index+'" name="product_cd" readonly="readonly" placeholder=" 검색하세요.">' 
+	  				+ '<input type="button" value="검색" class="btn btn-sm btn-dark p-2" onclick="productBtn('+index+')">'
+					+ '</div>';
+    cell3.innerHTML = '<input type="text" class="form-control rounded-start" id="product_name'+index+'" name="product_name" readonly="readonly" placeholder=" 자동입력">';
+    cell4.innerHTML = "<input type='number' class='input-field' name='in_schedule_qty' onchange='calculateSum()'>";
+    cell5.innerHTML = "<input type='date' id='hireDate1' name='in_date_detail' class='form-control'>";
+    cell6.innerHTML = "<input type='text' id='remarks' name='remarks'>";
+    
+//     console.log(index);
   }
 // 테이블 행 삭제하는 함수()
   function deleteRow(btn) {
     var tbody = btn.parentNode.parentNode.parentNode;
     if (tbody.tagName === "TBODY") {
       tbody.removeChild(btn.parentNode.parentNode);
+      index --;
+//       console.log(index);
     }
   }
 // 테이블 행 추가 삭제 함수() 끝 --------------------------------
 
+// 거래처 모달창 검색 후 텍스트 칸에 자동 입력되는 함수
 $(document).on("click","#client_search_modalDiv #client_table > tbody tr",function(){
-		console.log($(this).children("td").attr("id"));
-		console.log($(this).children("td").next().attr("id"));
 	
 		$("#cust_name").val($(this).children("td").next().attr("id"));
 		$("#business_no").val($(this).children("td").attr("id"));
@@ -262,60 +291,67 @@ $(document).on("click","#client_search_modalDiv #client_table > tbody tr",functi
 		
 		
 		 $('#client_search_modalDiv').modal('hide'); 
-		     $('#client_search_modalDiv').hide();
-		     $('.jquery-modal').click();
+		 $('#client_search_modalDiv').hide();
+		 $('#cust_name').focus();
+		 $('.jquery-modal').click();
 	
 	});
-$(function () {
-	$("#search_emp").on("keyup",function(){
 	
-		let keyword = $(this).val();
+//담당자 모달창 검색 후 텍스트 칸에 자동 입력되는 함수
+$(document).on("click","#emp_search_modalDiv #emp_table > tbody tr",function(){
+	
+		$("#emp_name").val($(this).children("td").next().attr("id"));
+		$("#emp_num").val($(this).children("td").attr("id"));
 		
-		var regex_pattern = /([^가-힣\x20])/i;
-		console.log("keyword: "+ keyword);
-		console.log("regex_pattern.exec(keyword): "+ !regex_pattern.test(cust_name));
 		
 		
-		if(!regex_pattern.test(keyword)){//자음+모음으로 글자가 완성됐을때만 실행
-			$("#emp_search_modalDiv table tbody").empty();
+		 $('#emp_search_modalDiv').modal('hide'); 
+		 $('#emp_search_modalDiv').hide();
+		 $('.jquery-modal').click();
+	
+	});
+//품목코드 및 품목명 모달창 검색 후 텍스트 칸에 자동 입력되는 함수
+$(document).on("click","#product_search_modalDiv #pro_table > tbody tr",function(){
+		console.log("버튼 클릭시 값이 나오나 : " + $(this).children("input").attr("id"));
+		$("#product_name"+ index).val($(this).children("td").next().attr("id"));
+		$("#product_cd" + index).val($(this).children("td").attr("id"));
 		
-				$.ajax({
-					
-			        type: "get",
-			        url: "Search_emp.ajax",
-			        data: {
-			        	"keyword":keyword
-			        },
-			        contentType: 'application/json;charset=UTF-8',
-			        success: function(data,status,xhr) {
-	// 		        	alert(JSON.stringify(JSON.parse(data)));
-							if(JSON.stringify(JSON.parse(data)) == "[]"){
-								let msg = "<tr><td colspan='4'>검색된 결과가 없습니다.</td></tr>"
-							
-								$("#emp_search_modalDiv table tbody").prepend(msg);
-							}
-				     		 for(let emp of JSON.parse(data)){
-								let result = "<tr id="+emp.emp_num+" onclick=\'selectedEmp(\""+ emp.emp_num+"\",\""+emp.emp_name+"\")'>"
-												+"<td>"+ emp.emp_num +"</td>"
-												+"<td>"+ emp.emp_name +"</td>"
-												+"<td>"+ emp.dept_name +"</td>"
-												+"<td>"+ emp.grade_name +"</td>"
-											+"</tr>"
-				     		 
-	// 			     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
-	// 			     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
-				     		 	
-						     		$("#emp_search_modalDiv table tbody").prepend(result);
-				     		 }
-			     	 
-			        },
-			        error: function(xhr,status,error) {
-			            console.log(error);
-			        }
-				
-				});//$.ajax({
-		}
-	});//$("#search_emp")
+		
+		
+		 $('#product_search_modalDiv').modal('hide'); 
+		 $('#product_search_modalDiv').hide();
+		 $('.jquery-modal').click();
+	
+	});
+	
+	// 품목 검색 버튼 클릭 시 모달창 활성화
+	function productBtn(indexNum) {
+		
+// 		$(this).closest("tr").index();
+// 		$(this).children('input').attr('id');
+// 		console.log($(this).closest("tr").index());
+		$.ajax({
+	        type: "get",
+	        url: "inProSearchAjax?business_no=" + $("#business_no").val()+ "&num="+ indexNum,
+	        contentType: 'html',
+	        success: function(data,status,xhr) {
+	        	$('#product_search_modalDiv').html(data);
+	    
+	        	
+	        },
+	        error: function(xhr,status,error) {
+	            console.log(error);
+	        }
+	        
+		});
+		
+	
+	//모달창 열기
+	 $('#product_search_modalDiv').modal('show');
+	
+	}
+$(function () {
+			
 	
 			
 			$("#cust_searchBtn").on("click",function(){
@@ -323,7 +359,7 @@ $(function () {
 					$.ajax({
 						
 				        type: "get",
-				        url: "Product/ClientSelectList_Out",
+				        url: "inClientSearchAjax",
 				        contentType: 'html',
 				        success: function(data,status,xhr) {
 				        	$('#client_search_modalDiv').html(data);
@@ -339,54 +375,76 @@ $(function () {
 				
 				//모달창 열기
 				 $('#client_search_modalDiv').modal('show'); 
-// 			     $('#client_search_modalDiv').show();
-// 			     $('.jquery-modal').click();
+				});
+			
+			$("#emp_searchBtn").on("click",function(){
+				
+					$.ajax({
+						
+				        type: "get",
+				        url: "inEmpSearchAjax",
+				        contentType: 'html',
+				        success: function(data,status,xhr) {
+				        	$('#emp_search_modalDiv').html(data);
+				    
+				        	
+				        },
+				        error: function(xhr,status,error) {
+				            console.log(error);
+				        }
+				        
+					});
+					
+				
+				//모달창 열기
+				 $('#emp_search_modalDiv').modal('show'); 
+				});
+			
+			$("#product_searchBtn").on("click",function(){
+				$(this).closest("tr").index();
+				console.log($(this).closest("tr").index());
+				$.ajax({
+			        type: "get",
+			        url: "inProSearchAjax?business_no=" + $("#business_no").val(),
+			        contentType: 'html',
+			        success: function(data,status,xhr) {
+			        	$('#product_search_modalDiv').html(data);
+			    
+			        	
+			        },
+			        error: function(xhr,status,error) {
+			            console.log(error);
+			        }
+			        
+				});
+				
+			
+			//모달창 열기
+			 $('#product_search_modalDiv').modal('show'); 
 			});
 			
 			
-			
-			
-	//위치검색 div내의 X버튼 클릭시
-	$(".close-loc-Btn").on("click",function(){
-		$(".search_div").css("display","none");
-	});
-	
-	//새 위치 추가 버튼 클릭시
-	$("a[href='modal_container_stock']").on("click",function(){
-		
-		
-	});
-	
-	$(".search_div ul li").on("click",function(){
-		alert();
-	});
-	
-	
-	//합계수량 sum_result: 조정수량 + 이동수량 jquery로 만들기
-	
-	
+// 			$("#registerBtn").click(function() {
+// 				var JSONdata = $("#registerForm").serializeArray();
+// // 				console.log($("#registerForm").serialize());
+				
+// 				$.ajax({
+// 					type: "POST",
+// 					url: "inWaitingRegistPro",
+// 					dataType: "text",
+// 					contentType: "application/json",
+// 					data : JSON.stringify(JSONdata),
+// 					success: function(result) {
+// 						alert(result);
+// 					},
+// 					fail: function() {
+// 						alert("요청 실패");
+// 					}
+// 				});
+// 			});
 });
 	
-//==============================================	
-	//사원검색에서 사원번호 클릭 시
-	function selectedEmp(emp_num, emp_name){
-	
-	$("#emp_num").val(emp_name);
-	$("#emp_name").val(emp_name);
-	
-	
-		//모달창 닫기
-		 $('#emp_search_modalDiv').modal('hide'); 
-	     $('#emp_search_modalDiv').hide();
-	     $('.jquery-modal').click();
-	}
-	
-	
-	function fn_selectClient(business_no,cust_name) {
-		alert();
-	}
-	
-//==============================================	
+
 	
 	
 	
@@ -416,7 +474,6 @@ function openSearchArea() {
                                 <ol class="breadcrumb text-right ">
                                     <li><a href="#">입고 예정</a></li>
                                     <li><a href="#">입고 관리</a></li>
-
                                 </ol>
                             </div>
                         </div>
@@ -430,45 +487,47 @@ function openSearchArea() {
 
 <div class="content">
    <div class="animated fadeIn">
-
+<!-- 	<form action="inWaitingRegistPro" method="post" id="registerForm"> -->
+	<form action="inWaitingRegistPro" method="post">
+	<input type="hidden" id="in_complete" name="in_complete" value="0">
 	<table class="table" id="table_top">
+	
 		<thead>
             <tr>
 				<th>일 자</th>
-				<td><input type="date" class="form-control" name=" " value=" " required="required"></td>
-				<th>유형</th> <!-- 수정해서 사용하세요!! 기존꺼 복붙해둠!! -->
+				<td><input type="date" class="form-control" name="hire_date" required="required"></td>
+				<th>유형</th> 
 				<td align="left">
-					<div class="m-1"><input type="radio" value="1" name="in_type" class="form-check-input" id="Purchase_Order"> 발주서</div>
-					<div class="m-1"><input type="radio" value="2" name="in_type" class="form-check-input" id="release"> 구매</div>
+					<div class="m-1"><input type="radio" value="1" name="in_type_cd" class="form-check-input" id="Purchase_Order"> 발주서</div>
+					<div class="m-1"><input type="radio" value="2" name="in_type_cd" class="form-check-input" id="release"> 구매</div>
 				 </td>
 			</tr>
-			<tr><!-- 구매거래처(거래처 테이블에서 검색하여 선택)  -->
+			<tr>
 				<th>거래처</th>
 					<td>	
 						<div class='d-flex'>
-					 	  <input type="text" class="form-control rounded-start" id="cust_name" readonly="readonly" placeholder=" 검색하세요."> 
-					 	  <input type="hidden" name="business_no" id="business_no" value="">
-<!-- 							 <a href="#client_search_modalDiv" rel="modal:open"> -->
-							 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="cust_searchBtn">
-<!-- 							 </a> -->
+					 	  <input type="text" class="form-control rounded-start" id="cust_name" name="cust_name" readonly="readonly" placeholder=" 검색하세요."> 
+					 	  <input type="hidden" name="business_no" id="business_no">
+						  <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="cust_searchBtn">
 						</div>
 					</td>
 				<th>납기 일자</th>
-				<td><input type="date" class="form-control" name=" " value=" " required="required"></td>
+				<td><input type="date" class="form-control" name="in_date" required="required"></td>
+				
 			</tr>
 			<tr>
 				<th>담당자</th>
-				<td>	
-					<div class='d-flex'>
-				 	  <input type="text" class="form-control rounded-start" id="emp_name" readonly="readonly" placeholder=" 검색하세요."> 
-				 	  <input type="hidden" name="emp_num" id="emp_num" value="">
-						 <a href="#emp_search_modalDiv" rel="modal:open"><input type="button" value="검색" class="btn btn-sm btn-dark p-2"></a>
-					</div>
-				</td>
+					<td>	
+						<div class='d-flex'>
+					 	  <input type="text" class="form-control rounded-start" id="emp_name" name="emp_name" readonly="readonly" placeholder=" 검색하세요."> 
+					 	  <input type="hidden" name="emp_num" id="emp_num">
+						  <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="emp_searchBtn">
+						</div>
+					</td>
 			</tr>
 			</table>
 			
-			<button onclick="addRow()" class = "btn btn-primary mx-4">추가</button>
+			<input type="button" onclick="addRow()" value="추가" class = "btn btn-primary mx-4">
 			<!-- 품목 추가  -->
 			<table class="table" id="table_bottom">
 			<thead>
@@ -485,12 +544,21 @@ function openSearchArea() {
 			<tbody>
 			<tr>
 				<td><button onclick="deleteRow(this)" class = "btn btn-primary mx-4">제삭</button></td>
-				<td></td>
-				<td></td>
-				<td><input type="text" class="input-field" onchange="calculateSum()"></td>
-				<td><input type="date" id="hireDate1" name="hire_date" class="form-control"></td>
-				<td><input type="text"></td>
-			</tr>		
+				<td>
+					<div class='d-flex' id="testing">
+				 	  <input type="text" class="form-control rounded-start" id="product_cd0" name="product_cd" readonly="readonly" placeholder=" 검색하세요."> 
+					  <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="product_searchBtn">
+					</div>
+				</td>
+				<td>
+					<div class="d-flex">
+						<input type="text" class="form-control rounded-start" id="product_name0" name="product_name" readonly="readonly" placeholder=" 자동입력">
+					</div>
+				</td>
+				<td><input type="number" class="input-field" name="in_schedule_qty" onchange="calculateSum()"></td>
+				<td><input type="date" id="hireDate1" name="in_date_detail" class="form-control"></td>
+				<td><input type="text" id="remarks" name="remarks"></td>
+			</tr>
 			</tbody>
 			<tfoot>
 			<tr>
@@ -504,7 +572,9 @@ function openSearchArea() {
 			</tfoot>
 
 	</table>
-	<input type="submit" value="등록" class = "btn btn-primary mx-4"  onclick="#"/>
+	<input type="submit" value="등록" class = "btn btn-primary mx-4"/>
+	</form>
+<!-- 	<input type="submit" value="등록" class = "btn btn-primary mx-4" id="registerBtn"/> -->
 </div>
 </div>
 <!-- 거래처 검색 DIV -->
@@ -514,30 +584,12 @@ function openSearchArea() {
 <!-- 담당자 검색 모달 영역 DIV -->
 <!-- Modal HTML embedded directly into document -->
 <div id="emp_search_modalDiv" class="modal">
-	<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
-		<div class="p-2 bg-light text-black well rounded-2" >&#128270;사원 검색</div>
-
-	<div class="input-group m-3">
-	  <input type="search" class="form-control rounded-start" placeholder="Search" aria-label="Search" aria-describedby="search-addon" id="search_emp"/>
-	  <button type="button" class="btn btn-dark">search</button>
-		</div>
-			<table class="mt-3 table table-hover">
-			<thead>
-				<tr>
-					<th>사번</th>
-					<th>이름</th>
-					<th>부서</th>
-					<th>직급</th>
-				</tr>
-			</thead>
-			<tbody>
-
-
-			</tbody>
-
-			</table>		
-		</div>
- </div><!-- end of DIV #modal_container -->
+	
+</div>
+<!-- 품목 검색 모달 영역 DIV -->
+<div id="product_search_modalDiv" class="modal">
+	
+</div><!-- end of DIV #modal_container -->
 
 <jsp:include page="../inc/footer.jsp"></jsp:include>
 

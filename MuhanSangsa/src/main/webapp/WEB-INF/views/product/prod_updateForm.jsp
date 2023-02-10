@@ -211,8 +211,11 @@
 			
 			</div>
 	</div>	
-
-	<input type="button" value="수정" class = "btn btn-primary mx-4" onclick="javascript:confirm_modify()"/>
+	<!-- 수정, 닫기 버튼  -->
+	<div style="text-align: center">
+		<input type="button" value="수정" class = "btn btn-primary mx-2" onclick="javascript:confirm_modify()"/>
+		<input type="button" value="닫기" class = "btn btn-primary mx-2"  onclick="top.window.close()">
+	</div>
 </form>
 
         </div><!-- .animated -->

@@ -33,12 +33,15 @@ public interface OutMapper {
 			@Param("startRow") int startRow, 
 			@Param("listLimit") int listLimit, 
 			@Param("status") int status);
-      
-      
-      
 
-)
-
+	
+	//출고 예정 목록 중 '종결,취소' 로 상태를 변환하기 위한 JSON 작업
+	int outWaitingChangeStatusJson(
+			@Param("out_schedule_cd") String out_schedule_cd, 
+			@Param("out_complete") String out_complete);
+      
+      
+      
 
 
 	// =================================================================================================
