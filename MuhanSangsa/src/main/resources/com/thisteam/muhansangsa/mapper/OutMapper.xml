@@ -129,12 +129,36 @@
 		</if>
 	</select>
 	
-	<!-- 출고 수정을 위한 목록 조회 -->
-	<select id="selectOutModifyList" resultType="out_modify_viewVO">
+	
+	<!-- (1). 출고 수정 정보 상단에 해당하는 정보 조회 (고정된 값) -->
+	<select id="selectOutModifyFixedList" resultType="Out_schedule_total_viewVO">
+		SELECT * 
+			FROM OUT_SCHEDULE_TOTAL_VIEW
+			WHERE OUT_SCHEDULE_CD = #{out_schedule_cd}
+			GROUP BY #{out_schedule_cd}
+	</select>
+	
+	<!-- (2). 출고 수정 정보 하단에 해당하는 정보 조회 (수정 가능한 값) -->
+	<select id="selectOutModifyList" resultType="Out_schedule_total_viewVO">
 		SELECT *
-			FROM OUT_MODIFY_VIEW
+			FROM OUT_SCHEDULE_TOTAL_VIEW
 			WHERE OUT_SCHEDULE_CD = #{out_schedule_cd}
 	</select>
+	<!-- 출고 처리 항목 수정 내용 비즈니스 로직 실행 -->
+	<update id="updateOutScheduleModifyPro">
+		UPDATE OUT_SCHEDULE_TOTAL_VIEW
+			SET  
+				OUT_SCHEDULE_QTY = #{total.out_schedule_qty}
+			   ,OUT_QTY = #{total.out_qty}
+			   ,REMARKS = #{total.remarks}
+			   ,OUT_DATE = #{total.out_date}
+			WHERE 
+				OUT_SCHEDULE_CD = #{total.out_schedule_cd}
+			AND 
+				CUST_NAME = #{total.cust_name}
+			AND 
+				PRODUCT_NAME = #{total.product_name}
+	</update>
 	
    <!-- ==========================================================================23/02/09 미주-->	
   

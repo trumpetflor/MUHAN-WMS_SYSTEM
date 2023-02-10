@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
-import com.thisteam.muhansangsa.vo.out_modify_viewVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 
@@ -54,8 +53,16 @@ public interface OutMapper {
 			@Param("searchType") String searchType, 
 			@Param("keyword") String keyword);
 
-	// 출고 수정을 위한 목록 조회
-	List<out_modify_viewVO> selectOutModifyList(String out_schedule_cd);
+	// (1). 출고 수정 정보 상단에 해당하는 정보 조회 (고정된 값)
+	List<Out_schedule_total_viewVO> selectOutModifyFixedList(String out_schedule_cd);
+	
+	// (2). 출고 수정 정보 하단에 해당하는 정보 조회 (수정 가능한 값)
+	List<Out_schedule_total_viewVO> selectOutModifyList(String out_schedule_cd);
+
+	// 출고 처리 항목 수정 내용 비즈니스 로직 실행
+	void updateOutScheduleModifyPro(
+			@Param("total") Out_schedule_total_viewVO total);
+
 	
       
 	//==========================================================================23/02/09 미주  

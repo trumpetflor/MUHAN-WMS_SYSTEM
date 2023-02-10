@@ -9,7 +9,6 @@ import com.thisteam.muhansangsa.mapper.OutMapper;
 
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
-import com.thisteam.muhansangsa.vo.out_modify_viewVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 
@@ -69,11 +68,21 @@ public class OutService {
 		return mapper.selectOutTotalScheduleListCount(searchType, keyword);
 	}
 
-	// 출고 수정을 위한 목록 조회
-	public List<out_modify_viewVO> getOutModifyList(String out_schedule_cd) {
-		return mapper.selectOutModifyList(out_schedule_cd);
+
+	// (1). 출고 수정 정보 상단에 해당하는 정보 조회 (고정된 값)
+	public List<Out_schedule_total_viewVO> getOutModifyFixedList(String out_schedule_cd) {
+		return mapper.selectOutModifyFixedList(out_schedule_cd);
 	}
 	
+	// (2). 출고 수정 정보 하단에 해당하는 정보 조회 (수정 가능한 값)
+	public List<Out_schedule_total_viewVO> getOutModifyList(String out_schedule_cd) {
+		return mapper.selectOutModifyList(out_schedule_cd);
+	}
+
+	// 출고 처리 항목 수정 내용 비즈니스 로직 실행
+	public void setOutScheduleModifyPro(Out_schedule_total_viewVO total) {
+		mapper.updateOutScheduleModifyPro(total);
+	}
 	
 	
 	

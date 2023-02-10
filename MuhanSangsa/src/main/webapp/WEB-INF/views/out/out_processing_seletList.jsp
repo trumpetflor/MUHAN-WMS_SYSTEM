@@ -205,7 +205,7 @@ function productInfo(product_cd) {
 		<c:forEach items="${outTotalScheduleList }" var="total" varStatus="status" >
 			<tr>
 			<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }"></td>
-				<td><a onclick="window.open('outScheduleModifyForm?out_schedule_cd=${total.out_schedule_cd }','outScheduleModifyForm','width=760, height=900, top= 40,left=540, location=no,status=no,scrollbars=yes')">${total.out_schedule_cd }</a></td>
+				<td><a onclick="window.open('outScheduleModifyForm?out_schedule_cd=${total.out_schedule_cd }','outScheduleModifyForm','width=1009, height=900, top= 40,left=450, location=no,status=no,scrollbars=yes')">${total.out_schedule_cd }</a></td>
 				<td>${total.cust_name }</td>
 				<td>${total.product_name }</td>
 				<td>${total.out_date }</td>

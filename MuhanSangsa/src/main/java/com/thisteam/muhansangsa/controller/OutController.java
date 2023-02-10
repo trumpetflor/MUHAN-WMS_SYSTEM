@@ -1,6 +1,7 @@
 package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -14,21 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.muhansangsa.service.OutService;
-import com.thisteam.muhansangsa.service.ProductService;
-
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
-import com.thisteam.muhansangsa.vo.Stock_viewVO;
-import com.thisteam.muhansangsa.vo.out_modify_viewVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
-import com.thisteam.muhansangsa.vo.Out_scheduleVO;
+import com.thisteam.muhansangsa.vo.Out_schedule_total_Arr_viewVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 import com.thisteam.muhansangsa.vo.PageInfo;
-import com.thisteam.muhansangsa.vo.ProductVO;
-import com.thisteam.muhansangsa.vo.Product_group_bottomVO;
+import com.thisteam.muhansangsa.vo.Stock_viewVO;
 
 
 @Controller
@@ -179,12 +177,62 @@ public class OutController {
 		
 		System.out.println("넘어왔니 출고번호" + out_schedule_cd);
 		// 4. 출고 번호에 해당하는 정보 조회 (출고 수정을 위한 목록 조회)
-//		List<out_modify_viewVO> outModifyList = service.getOutModifyList(out_schedule_cd);
-//		model.addAttribute("outModifyList", outModifyList);
+		
+			// (1). 출고 정보 상단에 해당하는 정보 조회
+			List<Out_schedule_total_viewVO> outModifyFixedList = service.getOutModifyFixedList(out_schedule_cd);
+			model.addAttribute("outModifyFixedList", outModifyFixedList);
+			
+			// (2). 출고 정보 하단 = 수정에 해당하는 목록 조회
+			List<Out_schedule_total_viewVO> outModifyList = service.getOutModifyList(out_schedule_cd);
+			model.addAttribute("outModifyList", outModifyList);
 		
 		return "out/out_modifyForm";
 	}
 	
+	
+	// 출고 처리 항목 수정 내용 비즈니스 로직 실행
+	@GetMapping(value = "/outScheduleModifyPro")
+	public void outScheduleModifyPro(
+			@ModelAttribute Out_schedule_total_Arr_viewVO totalArr, 
+			Model model, HttpServletResponse response ) {
+		System.out.println("잘 분리된 total " + totalArr);
+		System.out.println("비즈니스 로직으로 이동 성공했지롱!");
+
+		for(int i = 0; i < totalArr.getOut_schedule_cd().length; i++) {
+			
+			// 1. 수정항목 arrVO 에서 VO로 데이터 분류하여 넣는 작업 
+			Out_schedule_total_viewVO total = new Out_schedule_total_viewVO();
+
+			total.setOut_schedule_cd(totalArr.getOut_schedule_cd()[i]);
+			total.setCust_name(totalArr.getCust_name()[i]);
+			total.setProduct_name(totalArr.getProduct_name()[i]);
+			total.setOut_schedule_qty(totalArr.getOut_schedule_qty()[i]);
+			total.setOut_qty(totalArr.getOut_qty()[i]);
+			total.setOut_date(totalArr.getOut_date()[i]);
+			total.setRemarks(totalArr.getRemarks()[i]);
+			
+			System.out.println("잘 분리된 total " + total);
+			
+			// 2. 출고 처리 항목 수정 비즈니스 로직
+			service.setOutScheduleModifyPro(total);
+			
+		}
+		
+		System.out.println("성공했지롱!");
+		
+		
+		try {
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("window.close();");
+			out.println("self.close();");
+			out.println("</script>");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	//-------------------------------------------------------------- 23/02/09 (미주)
 

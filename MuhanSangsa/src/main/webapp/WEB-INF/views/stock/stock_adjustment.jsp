@@ -309,7 +309,6 @@ function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area,ch
 		//
 		
 		$("#"+stock_cd+"_"+product_cd).closest("tbody").find("input[name=target_stock_cd]").val(parseInt(change_stock_cd));
-		$("#"+stock_cd+"_"+product_cd).closest("tbody").find("input[type=hidden]").val(parseInt(change_stock_cd));
 		console.log(change_stock_cd);
 	});
 	
