@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InVO;
+import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.inProcessingVO;
 import com.thisteam.muhansangsa.vo.inRegisterVO;
 
@@ -24,12 +25,14 @@ public interface InMapper {
 	
 	// ======================== yeram ==============================
 	
-	
-	List<ClientVO> getClientList();
+	// ======================== sangwoo ============================
+	List<ClientVO> getClientList(@Param("keyword") String keyword, @Param("searchType") String searchType);
 
-	List<EmployeesVO> getEmployeeList();
+	List<EmployeesVO> getEmployeeList(@Param("keyword") String keyword, @Param("searchType") String searchType);
 
 	List<InVO> getInList();
+
+	List<ProductVO> getProductList(String businese_no_ajax);
 
 
 

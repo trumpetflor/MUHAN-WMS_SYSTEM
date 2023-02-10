@@ -29,16 +29,50 @@
 	
 	<!-- ======================== yeram ============================== -->
 	
+	<!-- ======================== sangwoo ============================ -->
 	<select id="getClientList" resultType="ClientVO">
 		SELECT business_no,cust_name
 			FROM client
-  </select>
+			<if test="!keyword.equals('')">
+			WHERE
+				<choose>
+					<when test="searchType.equals('cust_name')">
+						cust_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('business_no')">
+						business_no LIKE '%${keyword}%'
+					</when>
+				</choose>
+		</if>
+			ORDER BY
+				cust_name
+			
+  	</select>
 	
 	<select id="getEmployeeList" resultType="EmployeesVO">
-		SELECT e.emp_num, e.emp_name, e.dept_cd, d.dept_name
+		SELECT e.emp_num, e.emp_name
 			FROM employees e
 			JOIN department d
 			ON e.dept_cd = d.dept_cd
+			<if test="!keyword.equals('')">
+			WHERE
+				<choose>
+					<when test="searchType.equals('emp_name')">
+						emp_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('emp_num')">
+						emp_num LIKE '%${keyword}%'
+					</when>
+<!-- 					<when test="searchType.equals('dept_cd')"> -->
+<!-- 						dept_cd LIKE '%${keyword}%' -->
+<!-- 					</when> -->
+<!-- 					<when test="searchType.equals('dept_name')"> -->
+<!-- 						dept_name LIKE '%${keyword}%' -->
+<!-- 					</when> -->
+				</choose>
+		</if>
+			ORDER BY
+				emp_name
 	</select>
 	
 	<select id="getInList" resultType="InVO">
@@ -55,4 +89,12 @@
 			JOIN product pd
 			ON ipp.product_cd = pd.product_cd
 	</select>
+	
+	<select id="getProductList" resultType="com.thisteam.muhansangsa.vo.ProductVO">
+		SELECT product_cd, product_name
+			FROM product
+			WHERE business_no = #{businese_no_ajax}
+	</select>
+	
+	<!-- ======================== sangwoo ============================ -->
 </mapper>

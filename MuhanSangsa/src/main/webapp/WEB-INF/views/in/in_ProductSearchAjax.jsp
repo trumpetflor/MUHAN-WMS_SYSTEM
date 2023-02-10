@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>거래처 조회</title>
+	<title>품목 조회</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -116,30 +116,36 @@
 </style>
 <script type="text/javascript">
 	$(function() {
-		
+		var business_no = ${business_no};
 		load_list(); // 게시물 목록 조회 함수 호출
-		
+		console.log("in_productAjax에서 찍어보는중 : " + ${num});
 	});
 	// 거래처 목록 조회 함수
 	function load_list() {
 		$.ajax({
 			type: "GET",
-			url:"inClientSearch?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
+			url:"inProductSearch?business_no=" + ${business_no} + "&num=" + ${num}, 
 			dataType: "json"
 		})
-		.done(function(clientList) { // 요청 성공 시
+		.done(function(proList) { // 요청 성공 시
 			let result ="";
-			for(let client of clientList) {
+			var indexNum = ${num};
+			console.log("리스트 요청 성공 시 : " + indexNum);
+			for(let pro of proList) {
 				result += "<tr>"
-							+ "<td id="+client.business_no+">" + client.business_no + "</td>"
-							+ "<td id="+client.cust_name+">" + client.cust_name + "</td>"
-							+ "</tr>";
+							+ "<td id="+pro.product_cd +">" + pro.product_cd + "</td>"
+							+ "<td id="+pro.product_name +">" + pro.product_name + "</td>"
+// 							+ "<td id="+emp.dept_cd+">" + emp.dept_cd + "</td>"
+// 							+ "<td id="+emp.dept_name+">" + emp.dept_name + "</td>"
+							+ "</tr>"
+							+ "<input type='hidden' name='indexNum' id='"+indexNum+"'>";
+					$("#idnname").val(pro.prodcut_cd);		
 				
 			}
-			$("#client_table > tbody").html(result);
+			$("#pro_table > tbody").html(result);
 		})
 		.fail(function() {
-			$("#client_table").append("요청 실패!!");
+			$("#pro_table").append("요청 실패!!");
 		});
 	}
 </script>
@@ -150,19 +156,19 @@
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
 
  					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
-						<option value="business_no">거래처 코드</option>
-						<option value="cust_name">거래처명</option>
+						<option value="product_cd">품목 코드</option>
+						<option value="product_name">품목명</option>
 					</select>
-			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" > 
-			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();">
+<!-- 			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" >  -->
+<!-- 			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();"> -->
 
 	   </section>
 
-	<table class="table table-hover"  id="client_table">
+	<table class="table table-hover"  id="pro_table">
 		<thead>
 			<tr>
-				<th>거래처 코드</th>
-				<th>거래처명</th>
+				<th>품목 코드</th>
+				<th>품목명</th>
 			</tr>
 		</thead>
 		<tbody>
