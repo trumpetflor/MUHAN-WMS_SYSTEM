@@ -49,6 +49,7 @@ public class HomeController {
 			e.printStackTrace();
 		}
 		
+
 		// 세션 아이디 없으면 로그인 페이지, 있으면 메인(index.jsp)
 		String sId = "";
 		if(session.getAttribute("sId") != null) {
@@ -57,6 +58,7 @@ public class HomeController {
 		} else {
 			return "redirect:Login";
 		}
+
 
 	}
 	

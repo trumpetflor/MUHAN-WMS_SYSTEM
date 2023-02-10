@@ -5,24 +5,27 @@ import java.sql.Date;
 public class Out_schedule_total_viewVO {
 
 //  출고 처리 목록 (세부 항목 표시)
+
 //	Field           |Type         
 //	----------------+-------------
 //	OUT_SCHEDULE_CD |varchar(20)  
 //	OUT_CD_1        |varchar(8)   
 //	OUT_CD_2        |varchar(2)   
 //	CUST_NAME       |varchar(100) 
+//	EMP_NAME        |varchar(100) 
 //	PRODUCT_NAME    |varchar(100) 
 //	OUT_DATE        |date         
 //	OUT_SCHEDULE_QTY|int          
 //	OUT_QTY         |int          
 //	PRODUCT_CD      |int          
 //	STOCK_CD        |int          
-//	REMARKS         |varchar(2000)
+//	REMARKS         |varchar(2000)	
 
 	private String out_schedule_cd; //출고 예정 코드 "20230209-01" 
 	private String out_cd_1; // 출고 예정 코드 분리 1 "20230209"
 	private String out_cd_2; // 출고 예정 코드 분리 2 "01"
 	private String cust_name;
+	private String emp_name;
 	private String product_name;
 	private Date out_date;  
 	private int out_schedule_qty;
@@ -36,6 +39,12 @@ public class Out_schedule_total_viewVO {
 	}
 	public void setOut_schedule_cd(String out_schedule_cd) {
 		this.out_schedule_cd = out_schedule_cd;
+	}
+	public String getEmp_name() {
+		return emp_name;
+	}
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
 	}
 	public String getOut_cd_1() {
 		return out_cd_1;
@@ -97,13 +106,14 @@ public class Out_schedule_total_viewVO {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Out_schedule_total_viewVO [out_schedule_cd=" + out_schedule_cd + ", out_cd_1=" + out_cd_1
-				+ ", out_cd_2=" + out_cd_2 + ", cust_name=" + cust_name + ", product_name=" + product_name
-				+ ", out_date=" + out_date + ", out_schedule_qty=" + out_schedule_qty + ", out_qty=" + out_qty
-				+ ", product_cd=" + product_cd + ", stock_cd=" + stock_cd + ", remarks=" + remarks + "]";
+				+ ", out_cd_2=" + out_cd_2 + ", cust_name=" + cust_name + ", emp_name=" + emp_name + ", product_name="
+				+ product_name + ", out_date=" + out_date + ", out_schedule_qty=" + out_schedule_qty + ", out_qty="
+				+ out_qty + ", product_cd=" + product_cd + ", stock_cd=" + stock_cd + ", remarks=" + remarks + "]";
+
 	}
 	
 }

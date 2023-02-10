@@ -80,6 +80,7 @@
 		width: 75px;
 	}
 	
+
 /* *********************** CSS jakyoung 시작 *************************** */	
 
 	/* 출고 모달창 */
@@ -386,15 +387,15 @@ function productInfo(product_cd) {
 		</thead>
 		<tbody>
 		<c:forEach items="${outTotalScheduleList }" var="total" varStatus="status" >
-			<tr id="out_schedule_${status.index }">
-				<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }/${total.product_name }/${total.stock_cd }"></td>
-				<td><a href="outScheduleModifyForm?">${total.out_schedule_cd }</a></td>
+			<tr>
+			<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }"></td>
+				<td><a onclick="window.open('outScheduleModifyForm?out_schedule_cd=${total.out_schedule_cd }','outScheduleModifyForm','width=1009, height=900, top= 40,left=450, location=no,status=no,scrollbars=yes')">${total.out_schedule_cd }</a></td>
 				<td>${total.cust_name }</td>
 				<td>${total.product_name }</td>
 				<td>${total.out_date }</td>
 				<td>${total.out_schedule_qty }</td>
 				<td>${total.out_qty }</td>
-				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust" name="out_qty"></td>
+				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust"></td>
 				<td>${total.remarks }</td>
 			</tr>
 			</c:forEach>
@@ -403,7 +404,7 @@ function productInfo(product_cd) {
 	
 	</table>
 	<div class="float-left">
-		<input type="button" value="출고" class = "btn btn-sm btn-success m-2"	onclick="openOutModal()">
+		<input type="button" value="출고" class = "btn btn-sm btn-success m-2"	onclick="location.href='#'">
 	</div>
 	
 	<div class="float-right">

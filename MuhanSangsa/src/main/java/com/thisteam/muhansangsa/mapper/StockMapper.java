@@ -18,7 +18,9 @@ public interface StockMapper {
 										@Param("startRow") int startRow, 
 										@Param("listLimit") int listLimit);
 
+
 	List<Stock_viewVO> selectProductInLoc(int product_cd);
+
 
 	List<WarehouseVO> selectWarehouseList();
 

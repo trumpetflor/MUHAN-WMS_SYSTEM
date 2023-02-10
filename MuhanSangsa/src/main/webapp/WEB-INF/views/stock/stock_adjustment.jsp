@@ -161,7 +161,6 @@ $(function () {
 		//id="재고번호_상품번호" 로 넘어옴
 		let stock_cd = $(this).closest('td').attr('id').split("_")[0];
 		let product_cd = $(this).closest('td').attr('id').split("_")[1];
-	
 		
 
 		$(".search_div").css("display","none");
@@ -278,12 +277,12 @@ $(function () {
 		// (3). 이동수량과 조정수량이 선택된 경우 합계수량을 표시한다
 		$(this).closest("tr").find('.sum_result').text(qty);
 		
-		alert($("select[name=stock_control_type_cd]").val());
-		$("#stock-table").closest("tbody").find("input[type=hidden]").val($("select[name=stock_control_type_cd] option:selected").val());
+// 		alert($("select[name=stock_control_type_cd]").val());
+// 		$("#stock-table").closest("tbody").find("input[type=hidden]").val($("select[name=stock_control_type_cd] option:selected").val());
 // 		console.log($("#stock-table").closest("tbody").find("input[name=stockHistoryList[${ i.index}].stock_control_type_cd]").val($("select[name=stock_control_type_cd]").val()));
 // 		alert($("#stock-table").closest("tbody").find("input[name=stockHistoryList[${ i.index}].stock_control_type_cd]").val($("select[name=stock_control_type_cd]").val()));
-		alert($(this).closest("td").find("input[type=Number]").val());
-		$("#stock-table").closest("tbody").find("input[type=hidden]").next(2).val($(this).closest("td").find("input[type=Number]").val());
+// 		alert($(this).closest("td").find("input[type=Number]").val());
+// 		$("#stock-table").closest("tbody").find("input[type=hidden]").next(2).val($(this).closest("td").find("input[type=Number]").val());
 	});
 	
 
@@ -307,7 +306,6 @@ function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area,ch
 		//
 		
 		$("#"+stock_cd+"_"+product_cd).closest("tbody").find("input[name=target_stock_cd]").val(parseInt(change_stock_cd));
-		$("#"+stock_cd+"_"+product_cd).closest("tr").find("input[name=stockHistoryList[${ i.index}].target_stock_cd]").val(parseInt(change_stock_cd));
 		console.log(change_stock_cd);
 	});
 	
@@ -345,21 +343,7 @@ function open_addLoc_modal(stock_cd,product_cd) {
 }
 	
 //--------------------23/02/08 추가---------------------------
-function stockModifyPro() {
-	
-	$.ajax({
-		type: "POST",
-		url: "StockModifyPro",
-		contentType : $('#stockTable').serialize(),
-		dataType: "json",
-		success : function(json) {
-			alert("성공");
-		}
-	})
-	
-	
 
-}
 //--------------------23/02/08 추가---------------------------
 </script>
 <body>

@@ -23,6 +23,11 @@
 		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://db.itwillbs.dev:3306/class5_220823_team2_c"></property>
 		<property name="username" value="class5_220823_team2"></property>
 		<property name="password" value="1234"></property>
+		<!-- 발표 시 해제해야 할 주석 -->
+<!-- 		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://itwillbs-rds-class5-team2.cwyqfeylunq5.ap-northeast-2.rds.amazonaws.com/class5_220823_team2_c"></property> -->
+<!-- 		<property name="username" value="root"></property> -->
+<!-- 		<property name="password" value="class50823"></property> -->
+		<!-- 발표 시 해제해야 할 주석 -->
 	</bean>	
 	
 	<!-- 2. HikariCP 의 DataSource 객체(HikariDataSource) 생성을 위해 HikariConfig 객체 전달 -->

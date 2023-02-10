@@ -24,8 +24,6 @@ public class StockHistoryVO {
 	private String emp_num; // 작업자
 	private Date stock_date; // 작업일자
 	private String remarks; // 적요
-	// 다중 데이터 처리 작업을 위한 컬럼 추가 (23/02/08)
-	private List<StockHistoryVO> stockHistoryList;
 	
 	public int getStock_cd() {
 		return stock_cd;
@@ -81,19 +79,12 @@ public class StockHistoryVO {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
-	public List<StockHistoryVO> getStockHistoryList() {
-		return stockHistoryList;
-	}
-	public void setStockHistoryList(List<StockHistoryVO> stockHistoryList) {
-		this.stockHistoryList = stockHistoryList;
-	}
 	@Override
 	public String toString() {
 		return "StockHistoryVO [stock_cd=" + stock_cd + ", stock_control_type_cd=" + stock_control_type_cd
 				+ ", product_cd=" + product_cd + ", source_stock_cd=" + source_stock_cd + ", target_stock_cd="
 				+ target_stock_cd + ", qty=" + qty + ", emp_num=" + emp_num + ", stock_date=" + stock_date
-				+ ", remarks=" + remarks + ", stockHistoryList=" + stockHistoryList + "]";
+				+ ", remarks=" + remarks + "]";
 	}
 	
 }

@@ -31,10 +31,35 @@
 	
 	.col-lg-6{
 		margin: auto;
-		max-width: 60%;
+		max-width: 50%;
 		flex: 100 100;
 	}
 	
+	/*        23/02/10 수정 사항     */
+	@font-face {
+	    font-family: 'NEXON Lv1 Gothic OTF';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+	
+	* {
+		font-family: 'NEXON Lv1 Gothic OTF';
+	}
+	.col-md-3 {
+	padding-left: 3em;
+	}
+	input[name=emp_name],[name=emp_tel],[name=emp_dtel],[name=emp_email],[name=emp_post_No]{
+		width: 300px;
+	}
+	input[name=emp_addr],[type=date], select[name=work_cd] {
+		width: 450px;
+	}
+	select[name=dept_cd],[name=grade_cd]{
+		width: 300px;
+	}
+	
+	/*        23/02/10 수정 사항     */
 	</style>
 </head>
 <body>
@@ -85,12 +110,12 @@
 <!--                                     </div> -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="name" class=" form-control-label">사원명</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="name" name="emp_name" placeholder="사원명을 입력하세요" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="name" name="emp_name" placeholder="사원명을 입력하세요" class="form-control" required="required"></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="department" class=" form-control-label">부서코드</label></div>
                                         <div class="col-12 col-md-9">
-                                            <select name="dept_cd" id="department" class="form-control">
+                                            <select name="dept_cd" id="department" class="form-control" required="required">
                                                 <option value="0">부서명을 선택하세요</option>
                                                 <option value="01">인사팀</option>
                                                 <option value="02">개발팀</option>
@@ -102,7 +127,7 @@
                                      <div class="row form-group">
                                         <div class="col col-md-3"><label for="position" class=" form-control-label">직급코드</label></div>
                                         <div class="col-12 col-md-9">
-                                            <select name="grade_cd" id="position" class="form-control">
+                                            <select name="grade_cd" id="position" class="form-control" required="required">
                                                 <option value="0">직급을 선택하세요</option>
                                                 <option value="1">사원</option>
                                                 <option value="2">대리</option>
@@ -113,7 +138,7 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="mobile" class=" form-control-label">연락처(개인)</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="mobile" name="emp_tel" placeholder="ex) 010-1234-5678" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="mobile" name="emp_tel" required="required" placeholder="ex) 010-1234-5678" class="form-control"></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="dTel" class=" form-control-label">연락처(사무실)</label></div>
@@ -121,7 +146,7 @@
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email" class=" form-control-label">Email</label></div>
-                                        <div class="col-12 col-md-9"><input type="email" id="email" name="emp_email" placeholder="이메일을 입력하세요" class="form-control" >
+                                        <div class="col-12 col-md-9"><input type="email" id="email" name="emp_email" required="required" placeholder="이메일을 입력하세요" class="form-control" >
                                         <small class="help-block form-text">사원의 이메일은 무한상사 관리시스템 아이디로 사용됩니다</small></div>
                                     </div>
                                     <!-- 주소 -->
@@ -135,20 +160,20 @@
                                     </div>
                                      <div class="row form-group">
                                         <div class="col col-md-3"><label for="address2" class=" form-control-label">상세주소</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="address2" name="emp_Addr" placeholder="상세주소를 입력하세요" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="address2" name="emp_addr" placeholder="상세주소를 입력하세요" class="form-control"></div>
                                     </div>
 	                                 <!-- 주소 -->
 	                                 <!-- 입사일 -->
 	                                  <div class="row form-group">
                                         <div class="col col-md-3"><label for="hireDate" class=" form-control-label">입사일</label></div>
-                                        <div class="col-12 col-md-9"><input type="date" id="hireDate" name="hire_date" class="form-control"></div>
+                                        <div class="col-12 col-md-9"><input type="date" id="hireDate" required="required" name="hire_date" class="form-control"></div>
                                      </div>
                                      <!-- 입사일 -->
 	                                 <!-- 재직여부 -->
 	                                  <div class="row form-group">
                                         <div class="col col-md-3"><label for="workCd" class=" form-control-label">재직여부</label></div>
                                         <div class="col-12 col-md-9">
-                                            <select name="work_cd" id="workCd" class="form-control">
+                                            <select name="work_cd" id="workCd" class="form-control" required="required">
                                                 <option value="0">재직여부를 선택하세요</option>
                                                 <option value="1">재직</option>
                                                 <option value="2">휴직</option>
@@ -161,30 +186,32 @@
                                      <div class="row form-group">
                                         <div class="col col-md-3"><label class=" form-control-label">권한설정</label></div>
                                         <div class="col col-md-9">
-                                            <div class="form-check-inline form-check">
+                                            <div class="form-check-inline form-check" >
                                                 <label for="level1" class="form-check-label ">
-                                                    <input type="checkbox" id="level1" name="priv_cd" value="10000000" class="form-check-input">기본등록&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level1" name="priv_cd" value="10000000" class="form-check-input">기본등록&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level2" class="form-check-label ">
-                                                    <input type="checkbox" id="level2" name="priv_cd" value="1000000" class="form-check-input" >사원조회&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level2" name="priv_cd" value="1000000" class="form-check-input" >사원조회&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level2" class="form-check-label ">
-                                                    <input type="checkbox" id="level3" name="priv_cd" value="100000" class="form-check-input" >사원관리&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level3" name="priv_cd" value="100000" class="form-check-input" >사원관리&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level3" class="form-check-label ">
-                                                    <input type="checkbox" id="level4" name="priv_cd" value="10000" class="form-check-input">재고조회&nbsp;&nbsp;
+                                                  	<input type="checkbox" id="level4" name="priv_cd" value="10000" class="form-check-input">재고조회&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
+                                              </div>
+                                               <div class="form-check-inline form-check">
                                                 <label for="level4" class="form-check-label ">
-                                                    <input type="checkbox" id="level5" name="priv_cd" value="1000" class="form-check-input">재고관리&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level5" name="priv_cd" value="1000" class="form-check-input">재고관리&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level5" class="form-check-label ">
-                                                    <input type="checkbox" id="level6" name="priv_cd" value="100" class="form-check-input">거래처등록&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level6" name="priv_cd" value="100" class="form-check-input">거래처등록&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level6" class="form-check-label ">
-                                                    <input type="checkbox" id="level7" name="priv_cd" value="10" class="form-check-input">창고등록&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level7" name="priv_cd" value="10" class="form-check-input">창고등록&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                                 <label for="level7" class="form-check-label ">
-                                                    <input type="checkbox" id="level8" name="priv_cd" value="1" class="form-check-input">WMS관리&nbsp;&nbsp;
+                                                    <input type="checkbox" id="level8" name="priv_cd" value="1" class="form-check-input">WMS관리&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                             </div>
                                         </div>
@@ -222,11 +249,11 @@
 
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-<script src="assets/js/main.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
+<!-- <script src="assets/js/main.js"></script> -->
 <%-- 카카오 주소 API 적용하기 --%>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
