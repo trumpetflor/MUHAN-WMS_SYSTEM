@@ -7,6 +7,8 @@ import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
 
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
+import com.thisteam.muhansangsa.vo.Out_scheduleVO;
+import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 
 public interface OutMapper {
 
@@ -14,8 +16,7 @@ public interface OutMapper {
 	List<Emp_viewVO> selectEmp(String keyword);
 
 	
-	List<Stock_viewVO> selectProductStockExist();
-
+	List<Stock_viewVO> selectProductStockExist(@Param("keyword") String keyword);
 	// =================================================================================================
 
 
@@ -33,11 +34,20 @@ public interface OutMapper {
 			@Param("startRow") int startRow, 
 			@Param("listLimit") int listLimit, 
 			@Param("status") int status);
+
+
+	int insertRegisterOutSchedule(@Param("out_schedule") Out_scheduleVO out_schedule);
+
+
+	int insertRegisterOutScheduleProduct(@Param("osp") Out_schedule_per_productVO osp);
+
+
+	String getMaxOut_schedule_codeIndex(@Param("today")int today);
       
       
       
 
-)
+
 
 
 

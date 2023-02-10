@@ -120,7 +120,13 @@
  text-decoration: none;
  color: 	#000080;
 }
+#searchType{
+height: 25px;
+}
 
+#find_client_div  .d-flex{
+vertical-align: middle;
+}
 
 </style>
 <script type="text/javascript">
@@ -159,20 +165,23 @@
 </script>
 <body>
 
-<div class="content">
-   <div class="animated fadeIn">
-	<section id="searchSection" class="m-0 d-flex justify-content-end">
 
- 					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
-						<option value="business_no">거래처 코드</option>
-						<option value="cust_name">거래처명</option>
-						<option value="boss_name">대표자명</option>
-					</select>
-			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" > 
-			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();">
+   <div class=" m-3 border border-light border-top-0 rounded-2 border border-1">
+			<div class="p-2 bg-light text-black well rounded-2" id="find_client_div">&#128270;거래처 검색</div>
+<div class="d-flex">
+			<select name="searchType" id="searchType" class="rounded-1 btn-sm p-0 mt-4">
+				<option value="business_no">거래처 코드</option>
+				<option value="cust_name">거래처명</option>
+				<option value="boss_name">대표자명</option>
+			</select>
+			<div class="input-group m-3">
+				<input type="search" class="form-control rounded-start"
+					placeholder="Search" aria-label="Search"
+					aria-describedby="search-addon" id="keyword" name="keyword" onkeyup="if(window.event.keyCode==13){load_list()}"/>
+				<button type="button" class="btn btn-dark" onclick="javascirpt:load_list();" >search</button>
+</div>
 
-	   </section>
-
+</div>
 	<table class="table table-hover"  id="client_table">
 		<thead>
 			<tr>
@@ -185,10 +194,9 @@
             <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
         </tbody>
 	</table>
+</div>
 
 
-</div>
-</div>
 
 
 </body>

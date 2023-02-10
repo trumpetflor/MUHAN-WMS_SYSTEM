@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.adapter.DefaultAdvisorAdapterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +39,8 @@ import com.thisteam.muhansangsa.vo.Wms_wh_viewVO;
 
 @Controller
 public class StockController {
-
+	//log4j
+	private static final Logger logger = LoggerFactory.getLogger(StockController.class);
 	@Autowired
 	private StockService service;
 	
@@ -309,10 +313,10 @@ public class StockController {
 	
 	@ResponseBody
 	@GetMapping(value = "/StockAdjust_loc.ajax")
-	public void ajax(Stock_viewVO vo, HttpServletResponse response){
+	public void ajax(Stock_viewVO vo, HttpServletResponse response, @RequestParam(defaultValue = "") String keyword){
 		vo.getProduct_cd();
 		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
-		
+		System.out.println("keyword : "+ keyword);
 		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
 		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
 		 
