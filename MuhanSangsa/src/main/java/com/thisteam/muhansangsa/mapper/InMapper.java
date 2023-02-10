@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InVO;
+import com.thisteam.muhansangsa.vo.StockWhVO;
 import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.inProcessingVO;
 import com.thisteam.muhansangsa.vo.inRegisterVO;
@@ -23,6 +24,37 @@ public interface InMapper {
 			@Param("product_name")ArrayList<String> product_name,
 			@Param("in_date")ArrayList<String> in_date);
 	
+	// 입고예정 품목 목록
+	public List<inProcessingVO> selectSelectedProList(String in_schedule_cd);
+	
+	// 입고예정 품목 목록
+	public List<InVO> selectSelectedInList(String in_schedule_cd);
+
+	// 재고번호 max 검색
+	public int selectMaxStockCd();
+
+	// 재고 목록
+	public List<StockWhVO> selectStockList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit
+			);
+	
+	// 창고선반 목록
+	public List<StockWhVO> selectWhLocList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit
+			);
+	
+	
+
+	
+	
+	
+	
 	// ======================== yeram ==============================
 	
 	// ======================== sangwoo ============================
@@ -33,6 +65,10 @@ public interface InMapper {
 	List<InVO> getInList();
 
 	List<ProductVO> getProductList(String businese_no_ajax);
+
+
+
+
 
 
 

@@ -11,6 +11,7 @@ import com.thisteam.muhansangsa.mapper.InMapper;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InVO;
+import com.thisteam.muhansangsa.vo.StockWhVO;
 import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.inProcessingVO;
 import com.thisteam.muhansangsa.vo.inRegisterVO;
@@ -37,6 +38,32 @@ public class InService {
 		return mapper.selectInRegisterList(in_schedule_cd, product_name,in_date);
 	}
 	
+	// 입고예정코드 품목 목록
+	public List<inProcessingVO> getSelectedProList(String in_schedule_cd) {
+		return mapper.selectSelectedProList(in_schedule_cd);
+	}
+	
+	// 입고예정 관련 목록
+	public List<InVO> getSelectedInList(String in_schedule_cd) {
+		return mapper.selectSelectedInList(in_schedule_cd);
+	}
+	
+	// 재고번호 max 검색
+	public int getMaxStockCd() {
+		return mapper.selectMaxStockCd();
+	}
+	
+	// 재고 목록
+	public List<StockWhVO> getStockList(String searchType, String keyword, int startRow, int listLimit) {
+		return mapper.selectStockList(searchType, keyword, startRow, listLimit);
+	}
+	
+	// 창고선반 목록
+	public List<StockWhVO> getWhLocList(String searchType, String keyword, int startRow, int listLimit) {
+		return mapper.selectWhLocList(searchType, keyword, startRow, listLimit);
+	}
+
+
 	
 	
 	
@@ -65,7 +92,11 @@ public class InService {
 
 
 
+
+
+
 	// ======================== sangwoo ============================
+
 
 
 

@@ -27,6 +27,79 @@
 			</foreach>
 	</select>
 	
+	<!-- 입고예정 품목 목록 -->
+	<select id="selectSelectedProList" resultType="inProcessingVO">
+		SELECT *
+			FROM IN_PROCESSING_VIEW
+			WHERE IN_SCHEDULE_CD = #{in_schedule_cd}
+	</select>
+	
+	<!-- 입고예정 목록 -->
+	<select id="selectSelectedInList" resultType="InVO">
+		SELECT a.in_schedule_cd, a.in_type_cd, a.business_no, a.emp_num, b.emp_name, a.in_date, a.remarks, a.in_complete
+			FROM in_schedule a
+			JOIN employees b
+			WHERE a.emp_num = b.emp_num
+			AND a.in_schedule_cd = #{in_schedule_cd}
+	</select>
+	
+	<!-- 재고번호 max 검색 -->
+	<select id="selectMaxStockCd" resultType="integer">
+		SELECT MAX(STOCK_CD)
+			FROM STOCK
+	</select>
+	
+	<!-- 재고 목록 -->
+	<select id="selectStockList" resultType="StockWhVO">
+		SELECT stock_cd, product_name, wh_area, wh_loc_in_area
+			FROM stock_wh_view
+			<if test="!keyword.equals('')">
+			WHERE
+			<choose>
+				<when test="searchType.equals('stock_cd')">
+					stock_cd LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('product_name')">
+					product_name LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('wh_area')">
+					wh_area LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('wh_loc_in_area')">
+					wh_loc_in_area LIKE '%${keyword}%'
+				</when>
+			</choose>		
+		</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>
+	
+	<!-- 창고선반 목록 -->
+	<select id="selectWhLocList" resultType="StockWhVO">
+		SELECT wh_area, wh_loc_in_area
+			FROM stock_wh_view
+			<if test="!keyword.equals('')">
+			WHERE
+			<choose>
+				<when test="searchType.equals('wh_area')">
+					wh_area LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('wh_loc_in_area')">
+					wh_loc_in_area LIKE '%${keyword}%'
+				</when>
+			</choose>		
+		</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>
+	
+	
+	
+	
 	<!-- ======================== yeram ============================== -->
 	
 	<!-- ======================== sangwoo ============================ -->
