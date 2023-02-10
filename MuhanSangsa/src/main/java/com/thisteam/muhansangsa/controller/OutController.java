@@ -428,10 +428,10 @@ public class OutController {
  	//========================= HAWON 끝 ======================================= 
   
 	// ================================== JAKYOUNG ============================================
-	@GetMapping(value = "/OutProcessing")
-	public String outProcess() {
-		
-	}
+//	@GetMapping(value = "/OutProcessing")
+//	public String outProcess() {
+//		
+//	}
 	
 	
 	
