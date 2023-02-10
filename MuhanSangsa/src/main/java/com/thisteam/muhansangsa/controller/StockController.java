@@ -168,99 +168,6 @@ public class StockController {
 		   return "redirect:Inventory_View";
 		   
 	   }
-	// 재고 조정 페이지 비즈니스 로직
-//	   @PostMapping(value = "/StockModifyPro")
-//	   public String stockModifyPro(Model model, HttpSession session, HttpServletResponse response,
-//			   @ModelAttribute StockHistoryArrVO stockHistoryArr, 
-//			   @RequestParam("stock_cd") int[] stockCd, 
-//			   @RequestParam("qty") int[] changeQty,
-//			   @RequestParam("TotalStockQty") int[] TotalQty
-//			) {
-//		   
-//		   System.out.println("배열로 넘어오는 StockHistoryArrVO : " + stockHistoryArr);
-//		   
-//		   for(int i = 0; i < stockHistoryArr.getStock_cd().length; i++) {
-//			   	 StockHistoryVO stockHistory = new StockHistoryVO();
-//			   	 
-//			   	 stockHistory.setProduct_cd(stockHistoryArr.getProduct_cd()[i]);
-//			   	 stockHistory.setSource_stock_cd(stockHistoryArr.getSource_stock_cd()[i]);
-//			   	 stockHistory.setStock_cd(stockHistoryArr.getStock_cd()[i]);
-//			   	 stockHistory.setStock_control_type_cd(stockHistoryArr.getStock_control_type_cd()[i]);
-//			   	 stockHistory.setEmp_num("");
-//			   	 stockHistory.setQty(stockHistoryArr.getQty()[i]);
-//			   	 stockHistory.setTarget_stock_cd(stockHistoryArr.getTarget_stock_cd()[i]);
-//			   	 stockHistory.setRemarks("");
-//		   
-//		  System.out.println("분리된 stockHistoryVO : " + stockHistory);
-//		   // 1. sId != null 일 경우에만 접근 가능
-//		   String sId = (String)session.getAttribute("sId");
-//			if(session.getAttribute("sId") != null) {
-//				sId = (String)session.getAttribute("sId");
-//			}else {
-//				model.addAttribute("msg", "로그인이 필요합니다");
-//				return "fail_back";
-//			}
-//			
-//		   // +++++++++++++++++ 권한작업 처리하기
-//			
-//		   // 2. stock_control_type_cd 변환 처리 
-//			 String stock_control_type_cd = "";
-//		      switch (stockHistory.getStock_control_type_cd()) {
-//		      case "adjust": stock_control_type_cd = "2"; break;
-//		      case "move": stock_control_type_cd = "3"; break;
-//		      }
-//		     stockHistory.setStock_control_type_cd(stock_control_type_cd);
-//		   
-//		   // 2. qty : "이동수량" & "조정수량"
-//		   int TotalStockQty = TotalQty[i]; // 현재(기존) 재고수량
-//		   int stockQty = changeQty[i]; // qty : 변경할 수량
-//		   // 새로운 수량 = 재고수량 - 변경할 수량 
-//		   int qty = (TotalStockQty - stockQty);
-//		   
-//		   // stockCd 분리 작업
-//		   int stock_cd =  stockCd[i];
-//		   
-//		   System.out.println("qty 계산 잘됐니" + qty);
-//		   System.out.println("합계 잘 넘어오니" + TotalStockQty);
-//		   System.out.println("정보 잘 넘어오니" + stockHistory);
-//		   System.out.println("조정 혹은 이동수량 잘 넘어 오니" + stockQty);
-//		   
-//		   // 3. sId를 통한 사원번호 조회 후 set데이터
-//		   String emp_num = service.getEmpNum(sId);
-//		   System.out.println("조회 잘되었니 emp_num = " + emp_num);
-//		   stockHistory.setEmp_num(emp_num);
-//		   
-//			   // 4. 조정수량 & 이동수량 입력으로 해당 재고수량 업데이트
-//			   if(stock_control_type_cd.equals("3")) {
-//				   System.out.println("이동 수량 페이지에 왔습니다");
-//				 // 이동수량 업데이트 
-//			     // ->  기존 재고 업데이트(=source_target_code) + 이동 재고 업데이트 (=target_stock_cd)
-//				   int sourceStockCd = stockHistory.getSource_stock_cd(); 
-//				   int targetStockCd = stockHistory.getTarget_stock_cd();
-//				   
-//				   System.out.println("sourceStockCd 잘 넘어오니" + sourceStockCd);
-//				   System.out.println("targetStockCd 잘 넘어오니" + targetStockCd);
-//				   
-//				   // 기존재고(-), 이동재고(+), 변경수량
-//				   // (1). 이동재고수량 + 변경수량
-//				   service.setTargetStockQty(sourceStockCd, targetStockCd, stockQty);
-//				   service.setStockQty(stock_cd, qty);
-//				
-//				   // (3). 진행된 재고 이력 stock_history 테이블에 insert
-//				   service.setStockHistory(stockHistory);
-//				   // (4). 재고 이력 확인 페이지로 이동 (새로 생긴 재고이력 확인 가능)		   
-//				   
-//			   } else if (stock_control_type_cd.equals("2")) {
-//				 // 조정수량 업데이트 -> 기존 재고만 업데이트
-//				 service.setStockQty(stock_cd, qty);
-//				 service.setStockHistory(stockHistory);
-//				   
-//			   } // 조정수량 업데이트
-//		   
-//		   } // for문
-//		   return "redirect:Inventory_View";
-//	   }
-	   
 	   
 		// 23/02/07 수정 진행중
 		// 재고 이력 페이지
@@ -651,6 +558,55 @@ public class StockController {
 		
 	}
 
+	// 출고 처리 재고리스트 팝업
+	@GetMapping(value = "/Out_Inventory_View")
+	public String outInventoryView(@RequestParam(defaultValue = "") String searchType,
+								@RequestParam(defaultValue = "") String keyword,
+								@RequestParam(defaultValue = "1") int pageNum,
+								@RequestParam int index,
+								Model model, HttpSession session){
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		}else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			return "fail_back";
+		}
+		
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+
+			//권한 조회 메서드
+			boolean isRightUser = service_emp.getPrivilege(sId,Privilege.WMS관리);
+			isRightUser = true;//TODO: 로그인되면 지우기
+			
+			if(isRightUser) {
+				List<Stock_viewVO> stockList = service.getStockList(searchType, keyword, startRow, listLimit);
+				model.addAttribute("stockList", stockList);
+				System.out.println("stockList: "+ stockList);
+				model.addAttribute("index", index);
+				return "out/out_stock_list";
+			}else {
+				model.addAttribute("msg", "잘못된 접근입니다. ");
+				return "fail_back";
+			
+			}
+		
+	}
+	
 	
 	
 }
