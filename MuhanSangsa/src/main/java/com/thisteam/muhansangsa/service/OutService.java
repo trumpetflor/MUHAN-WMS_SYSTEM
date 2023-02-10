@@ -58,22 +58,18 @@ public class OutService {
 	return mapper.selectEmp(keyword);
 }
 
-//재고리스트에 있는 상품 검색
-public List<Stock_viewVO> getproduct_stockExist(String keyword) {
-	// TODO Auto-generated method stub
-	return mapper.selectProductStockExist(keyword);
-}
-
-//신규 출고예정 insert작업
-public int registerOutSchedule( Out_scheduleVO out_schedule) {
-	return mapper.insertRegisterOutSchedule(out_schedule);
-	
 	//재고리스트에 있는 상품 검색
-	public List<Stock_viewVO> getproduct_stockExist() {
+	public List<Stock_viewVO> getproduct_stockExist(String keyword) {
 		// TODO Auto-generated method stub
-		return mapper.selectProductStockExist();
+		return mapper.selectProductStockExist(keyword);
 	}
-
+	
+	//신규 출고예정 insert작업
+	public int registerOutSchedule( Out_scheduleVO out_schedule) {
+		return mapper.insertRegisterOutSchedule(out_schedule);
+		
+	}
+	
 
 
 
