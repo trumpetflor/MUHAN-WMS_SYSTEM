@@ -135,9 +135,9 @@
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 <%--                        <img class="user-avatar rounded-circle" src="${pageContext.request.contextPath}/resources/images/login.png" alt="User Avatar"> --%>
-							<img id="photo" name="photo" 
-							src="<%=request.getScheme()+" ://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }" 
-							onerror="this.src='${pageContext.request.contextPath}/resources/images/login.png';" style="width: 40px;" alt="Logo">
+							<img id="photo" name="photo" class="user-avatar rounded-circle"
+							src="${pageContext.request.contextPath}/resources/upload/${employees.photo }"
+							onerror="this.src='${pageContext.request.contextPath}/resources/images/login.png';" style="width: 40px; height:40px" alt="Logo">
                         </a>
 
                         <div class="user-menu dropdown-menu login" >

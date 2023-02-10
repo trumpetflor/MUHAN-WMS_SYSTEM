@@ -104,9 +104,9 @@
                                  <div class="row form-group">   
                                  	<div class="col col-md-3"><label class=" form-control-label" style="margin-top: 80px;">사진 이미지</label></div>
                                   		<div class=" col-12 col-md-4" id="imgWapper">
-											<img id="photo" alt="증명사진" style="width: 150px" name="photo"
-											src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }"	
-											onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';" width="150px" />
+											<img id="photo" alt="증명사진" style="width:170px;height: 200px;" name="photo"
+											src="${pageContext.request.contextPath}/resources/upload/${employees.photo }"	
+											onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';" width="150px" />
 									</div>
 								  </div>
                                     <!-- 사원번호(코드) -->

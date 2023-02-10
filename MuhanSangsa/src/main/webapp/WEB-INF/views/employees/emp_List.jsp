@@ -563,6 +563,7 @@ a:visited :active {
 				</tbody>
 
 			</table>
+
 	<div class="float-right">
 		<input type="button" value="신규등록" class = "btn btn-sm btn-success m-2" >
 		<input type="button" value="일괄변경" class = "btn btn-sm btn-success m-2" id="changeCollective">

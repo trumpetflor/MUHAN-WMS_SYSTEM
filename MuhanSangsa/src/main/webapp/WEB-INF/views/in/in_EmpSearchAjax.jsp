@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>인사 조회</title>
+	<title>담당자 조회</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -33,14 +33,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 </head>
 <style type="text/css">
-
 	@font-face {
 	    font-family: 'Pretendard-Regular';
 	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
 	    font-weight: 400;
 	    font-style: normal;
 	}
-
 	
 	@font-face {
 	    font-family: 'NEXON Lv1 Gothic OTF';
@@ -71,11 +69,6 @@
 	 transition: 0.5s;
 	}
 	
-
-
-
-
-
 /* 모달 */
 #modal_container{
   position: absolute;
@@ -120,45 +113,36 @@
  text-decoration: none;
  color: 	#000080;
 }
-
-
 </style>
 <script type="text/javascript">
-
 	$(function() {
 		
 		load_list(); // 게시물 목록 조회 함수 호출
 		
 	});
-
 	// 거래처 목록 조회 함수
 	function load_list() {
 		$.ajax({
 			type: "GET",
-			url: "../ClientListJson?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
+			url:"inEmpSearch?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
 			dataType: "json"
 		})
-		.done(function(clientList) { // 요청 성공 시
+		.done(function(empList) { // 요청 성공 시
 			let result ="";
-			for(let client of clientList) {
+			for(let emp of empList) {
 				result += "<tr>"
-							+ "<td onclick='fn_selectClient(\"" + client.business_no + "\",\""+client.cust_name+ "\")'>" + client.business_no + "</td>"
-							+ "<td onclick='fn_selectClient(\"" + client.business_no + "\",\""+client.cust_name+ "\")'>" + client.cust_name + "</td>"
-							+ "<td onclick='fn_selectClient(\"" + client.business_no + "\",\""+client.cust_name+ "\")'>" + client.boss_name + "</td>"
+							+ "<td id="+emp.emp_num+">" + emp.emp_num + "</td>"
+							+ "<td id="+emp.emp_name+">" + emp.emp_name + "</td>"
+// 							+ "<td id="+emp.dept_cd+">" + emp.dept_cd + "</td>"
+// 							+ "<td id="+emp.dept_name+">" + emp.dept_name + "</td>"
 							+ "</tr>";
 				
 			}
-			$("#client_table > tbody").html(result);
+			$("#emp_table > tbody").html(result);
 		})
 		.fail(function() {
-			$("#client_table").append("요청 실패!!");
+			$("#emp_table").append("요청 실패!!");
 		});
-	}
-
-	function fn_selectClient(business_no,cust_name) {
-		opener.fn_selectClient(business_no,cust_name);
-		window.close();
-		
 	}
 </script>
 <body>
@@ -167,22 +151,20 @@
    <div class="animated fadeIn">
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
 
- 					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
-						<option value="business_no">거래처 코드</option>
-						<option value="cust_name">거래처명</option>
-						<option value="boss_name">대표자명</option>
-					</select>	
+ 					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
+						<option value="emp_num">담당자 코드</option>
+						<option value="emp_name">담당자명</option>
+					</select>
 			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" > 
 			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();">
 
 	   </section>
 
-	<table class="table table-hover"  id="client_table">
+	<table class="table table-hover"  id="emp_table">
 		<thead>
 			<tr>
-				<th>거래처 코드</th>
-				<th>거래처명</th>
-				<th>대표자명</th>
+				<th>담당자 코드</th>
+				<th>담당자명</th>
 			</tr>
 		</thead>
 		<tbody>

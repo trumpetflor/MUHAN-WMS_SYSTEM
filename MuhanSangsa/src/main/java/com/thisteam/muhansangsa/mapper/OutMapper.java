@@ -17,6 +17,15 @@ public interface OutMapper {
 
 	
 	List<Stock_viewVO> selectProductStockExist(@Param("keyword") String keyword);
+  
+  
+  int insertRegisterOutSchedule(@Param("out_schedule") Out_scheduleVO out_schedule);
+
+
+	int insertRegisterOutScheduleProduct(@Param("osp") Out_schedule_per_productVO osp);
+
+
+	String getMaxOut_schedule_codeIndex(@Param("today")int today);
 	// =================================================================================================
 
 
@@ -36,20 +45,14 @@ public interface OutMapper {
 			@Param("status") int status);
 
 
-	int insertRegisterOutSchedule(@Param("out_schedule") Out_scheduleVO out_schedule);
+	//출고 예정 목록 중 '종결,취소' 로 상태를 변환하기 위한 JSON 작업
+	int outWaitingChangeStatusJson(
+			@Param("out_schedule_cd") String out_schedule_cd, 
+			@Param("out_complete") String out_complete);
 
-
-	int insertRegisterOutScheduleProduct(@Param("osp") Out_schedule_per_productVO osp);
-
-
-	String getMaxOut_schedule_codeIndex(@Param("today")int today);
       
       
       
-
-
-
-
 
 	// =================================================================================================
 

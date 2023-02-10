@@ -124,38 +124,12 @@
 	// 입고예정코드 클릭 시 수정 페이지 이동
 	function modify(item){
 		var code=$(item).text();
-		window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+		window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=760, height=900, top= 40,left=540,location=no,status=no,scrollbars=yes');
 
 	} // 수정페이지
 	
-	// register form action
-// 	function register(){
-// 		let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
-// 		$('input:checkbox[name=inChecked]').each(function(index){
-// 			if($(this).is(":checked")==true){
-// 				console.log("id값=in_schedule_cd : "+$(this).val());
-// 				inRegisterList.push($(this).val()); // 배열에 추가
-				
-// // 				console.log("inRegisterList[] : "+ inRegisterList);
-// // 				let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-// // 				if(result){
-// // 					location.href="InRegister?inRegisterList="+inRegisterList
-// 					inRegisterList.submit();
-// // 				}
-// 			}
-// 		});
-	
-// 	} // register()
-	
 	
 	$(function(){
-		// 입고버튼 클릭... 팝업창 버전
-// 		$("#inScheduleBtn").on("click", function(){
-// 			window.open('InRegisterForm','InRegisterForm', 'width=1000, height=920,location=no,status=no,scrollbars=yes');
-// 		});
-		
-	
-		
 		//전체선택 버튼 클릭
 		$('input:checkbox[name=AllChecked]').on("click",function(){
 			if($(this).is(":checked") == true){
@@ -180,12 +154,8 @@
 					inRegisterList.push($(this).val()); // 배열에 추가
 					
 					console.log("inRegisterList[] : "+ inRegisterList);
-// 					let result = confirm("코드" +$('input:checkbox[name=inChecked]:checked'));
-// 					if(result){
 						window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
-// 						location.href="InRegister?inRegisterList="+inRegisterList
 						console.log(inRegisterList);
-// 					}
 				}
 							
 			});
@@ -342,64 +312,6 @@
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
 <!-- <script src="resources/assets/js/main.js"></script> -->
-
-<script type="text/javascript">
-// function inSchedule(){
-// 	alert("왜안떠");
-
-// }
-
-// 입고 대기
-
-// function inWaiting() {
-// 	pageContext.forward("in_waiting_form.jsp");
-// 	$("#content_tab").load("in_waiting_form.jsp");
-// 	$.ajax({
-// 		type: "GET",
-// 		url: "InWaiting",
-// 		dataType: "script",
-// 		success: function(result) {
-// 			alert(result);
-// 			$("#content_tab").empty();
-// // 			document.getElementById("#content_tab").innerHTML = result;
-// 			$("#content_tab").html(result);
-// 		}
-
-// 	});
-
-// $.ajax({
-// 	url : "in_waiting_form.jsp",
-// 	dataType : "html",
-// 	type : "post",
-// 	success : function(result){
-// 		$("#content_tab").empty();
-// 		$("#content_tab").html(result);	
-// 	}
-// });
-
-
-// }
-
-
-
-// function inCompleted(){}
-
-// $(function(){
-// 	$('.tabmenu'.click(function(){
-// 		var activeTab = $(this).attr('data-tab');
-// 		$('li').css('background-color', 'white');
-// 		$(this).css('background-color', 'green');
-// 		$.ajax({
-// 			type : 'GET',
-// 			url : activeTab + ".jsp",
-// 			dataType: "jsp",
-// 			success : function(data){
-// 				$('#tabcontent').html(data);
-// 			}
-// 		})
-// 		})
-// })
-</script>
 
 </body>
 </html>

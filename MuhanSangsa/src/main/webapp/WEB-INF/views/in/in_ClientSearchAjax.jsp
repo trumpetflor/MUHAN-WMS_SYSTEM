@@ -124,7 +124,7 @@
 	function load_list() {
 		$.ajax({
 			type: "GET",
-			url:"ClientListJsonOut?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
+			url:"inClientSearch?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
 			dataType: "json"
 		})
 		.done(function(clientList) { // 요청 성공 시
@@ -133,7 +133,6 @@
 				result += "<tr>"
 							+ "<td id="+client.business_no+">" + client.business_no + "</td>"
 							+ "<td id="+client.cust_name+">" + client.cust_name + "</td>"
-							+ "<td >" + client.boss_name + "</td>"
 							+ "</tr>";
 				
 			}
@@ -153,7 +152,6 @@
  					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
 						<option value="business_no">거래처 코드</option>
 						<option value="cust_name">거래처명</option>
-						<option value="boss_name">대표자명</option>
 					</select>
 			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" > 
 			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();">
@@ -165,7 +163,6 @@
 			<tr>
 				<th>거래처 코드</th>
 				<th>거래처명</th>
-				<th>대표자명</th>
 			</tr>
 		</thead>
 		<tbody>
