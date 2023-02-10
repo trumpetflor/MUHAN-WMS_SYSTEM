@@ -113,13 +113,13 @@
                             <div class="card-body card-block">
                                 <form action="empListDetailUpdatePro" id="empListDetailUpdatePro" method="post" enctype="multipart/form-data" class="form-horizontal">
                                  <!-- 사진 이미지 -->
-                                 <div class="row form-group">   
+                                  <div class="row form-group">   
                                  	<div class="col col-md-3"><label class=" form-control-label" style="margin-top: 80px;">사진 이미지</label></div>
                                   		<div class=" col-12 col-md-4" id="imgWapper">
 											<img id="photo" alt="증명사진" style="width: 150px" name="photo"
-											src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }"	
+											src="${pageContext.request.contextPath}/resources/upload/${employees.photo }"	
 											onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';" width="150px" />
-										</div>
+									</div>
 								  </div>
                                     <!-- 사원번호(코드) -->
                                     <div class="row form-group">
@@ -273,9 +273,9 @@
                                     <!-- 권한 -->                                    
                                     <!--사진이미지 -->
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지</label></div>
-                                        <div class="col-12 col-md-6"><input type="file" id="file" name="file" class="form-control-file">
-                                       		<br><small>(기존파일 : ${employees.photo })</small>
+                                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지*</label></div>
+                                        <div class="col-12 col-md-4"><input type="file" id="file" name="file"  class="form-control-file">
+                                        	<br><small>(기존파일 : ${employees.photo })</small>
                                         </div>
                                     </div>
                                     <!--  -->

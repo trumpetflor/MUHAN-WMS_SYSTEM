@@ -456,7 +456,7 @@
 <%-- 				<td>${status.index}</td> --%>
 				<td><input type="checkbox" name="empChecked" id="empChecked" class="form-check-input" value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
 			</c:if>
-				<td><img class="id_pht" alt="${emp.emp_name } 의 사진" src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/ㅇ.img"
+				<td><img class="id_pht" alt="${emp.emp_name } 의 사진" src="${pageContext.request.contextPath}/resources/upload/${emp.photo }" id="photo" name="photo"
 				onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';" width="150px" ></td>
 				<td>${emp.emp_num }</td>
 				<td>${emp.emp_name }</td>

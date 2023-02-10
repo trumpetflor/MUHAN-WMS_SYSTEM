@@ -214,11 +214,11 @@ a:hover {
 			<c:forEach var="productList" items="${productList }">
 			<tr>
 				<td>
-				    <a id="updateBtn" href='javascript:void(0);' onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm','width=800, height=920,location=no,status=no,scrollbars=yes');">
+				    <a id="updateBtn" href='javascript:void(0);' onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm','width=800, top= 20,left=600, height=920,location=no,status=no,scrollbars=yes');">
 				    ${productList.product_cd}</a>
 				</td>
 				<td>
-				    <a id="updateBtn" href='javascript:void(0);' onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm','width=800, height=920,location=no,status=no,scrollbars=yes');">
+				    <a id="updateBtn" href='javascript:void(0);' onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm','width=800, top= 20,left=600, height=920,location=no,status=no,scrollbars=yes');">
 				    ${productList.product_name}</a>
 				</td>
 				<td>${productList.product_group_bottom_name}</td>
@@ -245,7 +245,7 @@ a:hover {
 				        </c:when>
 				    </c:choose>
 				</td>
-				<td><img class="id_pht" src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/product/${productList.product_image }"
+				<td><img class="id_pht" src="${pageContext.request.contextPath}/resources/upload/product/${productList.product_image }"
 					onerror="this.src='${pageContext.request.contextPath}/resources/images/prod_img.png';" style="width: 80px;height: 80px"></td>
 <!-- 				<td> -->
 <!-- 					<input type="button" value="상세정보" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn" -->
@@ -257,10 +257,11 @@ a:hover {
 	
 	</table>
 	<div class="float-left">
-		<input type="button" value="신규 품목 등록" class = "btn btn-sm btn-success m-2" onclick="location.href='ProdInsertForm'">
+		<input type="button" value="신규 품목 등록" class = "btn btn-sm btn-success m-2" 
+			onclick="window.open('ProdInsertForm','ProdInsertForm','width=770, height=920,top= 40,left=600,location=no,status=no,scrollbars=yes');">
 	</div>
 
-	<!-- 페이징 처리  -->
+	<!-- ================= 페이징 처리 =================   -->
  <div class="float-right">
  
    <section id="pageList">
@@ -310,7 +311,7 @@ a:hover {
       </c:choose>
    </section>
    </div>
-
+	<!-- ================= 페이징 처리 끝=================   -->
 
 </div>
 </div>

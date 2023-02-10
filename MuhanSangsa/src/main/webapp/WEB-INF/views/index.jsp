@@ -238,7 +238,7 @@ a:hover {
 
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<div class="card-body" onclick="location.href='#'" style=" cursor: pointer;">
+					<div class="card-body" onclick="location.href='./ProdSelectList'" style=" cursor: pointer;">
 						<div class="stat-widget-five">
 							<div class="stat-icon dib flat-color-4">
 								<i class="pe-7s-shopbag"></i>
@@ -256,7 +256,7 @@ a:hover {
 			
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<div class="card-body" onclick="location.href='#'" style=" cursor: pointer;">
+					<div class="card-body" onclick="location.href='./WarehouseList'" style=" cursor: pointer;">
 						<div class="stat-widget-five">
 							<div class="stat-icon dib flat-color-1">
 								<i class="pe-7s-culture"></i>
@@ -274,7 +274,7 @@ a:hover {
 
 <div class="col-lg-3 col-md-6">
 				<div class="card">
-					<div class="card-body" onclick="location.href='#'" style=" cursor: pointer;">
+					<div class="card-body" onclick="location.href='./WmsWarehouse'" style=" cursor: pointer;">
 						<div class="stat-widget-five">
 							<div class="stat-icon dib flat-color-2">
 								<i class="pe-7s-box1"></i>
@@ -292,7 +292,7 @@ a:hover {
 
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<div class="card-body" onclick="location.href='#'" style=" cursor: pointer;">
+					<div class="card-body" onclick="location.href='./InSchedule '" style=" cursor: pointer;">
 						<div class="stat-widget-five">
 							<div class="stat-icon dib flat-color-3">
 								<i class="pe-7s-clock"></i>
@@ -310,7 +310,7 @@ a:hover {
 
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<div class="card-body" onclick="location.href='#'" style=" cursor: pointer;">
+					<div class="card-body" onclick="location.href='./InProcessing'" style=" cursor: pointer;">
 						<div class="stat-widget-five">
 							<div class="stat-icon dib flat-color-4">
 								<i class="pe-7s-check"></i>
@@ -328,7 +328,7 @@ a:hover {
 
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<div class="card-body" onclick="location.href='#'" style=" cursor: pointer;">
+					<div class="card-body" onclick="location.href='./OutWaitingSelectList'" style=" cursor: pointer;">
 						<div class="stat-widget-five">
 							<div class="stat-icon dib flat-color-1">
 								<i class="pe-7s-alarm"></i>
@@ -346,7 +346,7 @@ a:hover {
 				
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<div class="card-body" onclick="location.href='#'" style=" cursor: pointer;">
+					<div class="card-body" onclick="location.href='./OutProcessingSeletList'" style=" cursor: pointer;">
 						<div class="stat-widget-five">
 							<div class="stat-icon dib flat-color-2">
 								<i class="pe-7s-wristwatch"></i>
@@ -364,7 +364,7 @@ a:hover {
 
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<div class="card-body" onclick="location.href='#'" style=" cursor: pointer;">
+					<div class="card-body" onclick="location.href='./Inventory_View'" style=" cursor: pointer;">
 						<div class="stat-widget-five">
 							<div class="stat-icon dib flat-color-3">
 								<i class="pe-7s-search"></i>
