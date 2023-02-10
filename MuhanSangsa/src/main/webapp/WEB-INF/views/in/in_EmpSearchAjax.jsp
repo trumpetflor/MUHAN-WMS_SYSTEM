@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>거래처 조회</title>
+	<title>담당자 조회</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -124,22 +124,24 @@
 	function load_list() {
 		$.ajax({
 			type: "GET",
-			url:"inClientSearch?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
+			url:"inEmpSearch?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
 			dataType: "json"
 		})
-		.done(function(clientList) { // 요청 성공 시
+		.done(function(empList) { // 요청 성공 시
 			let result ="";
-			for(let client of clientList) {
+			for(let emp of empList) {
 				result += "<tr>"
-							+ "<td id="+client.business_no+">" + client.business_no + "</td>"
-							+ "<td id="+client.cust_name+">" + client.cust_name + "</td>"
+							+ "<td id="+emp.emp_num+">" + emp.emp_num + "</td>"
+							+ "<td id="+emp.emp_name+">" + emp.emp_name + "</td>"
+// 							+ "<td id="+emp.dept_cd+">" + emp.dept_cd + "</td>"
+// 							+ "<td id="+emp.dept_name+">" + emp.dept_name + "</td>"
 							+ "</tr>";
 				
 			}
-			$("#client_table > tbody").html(result);
+			$("#emp_table > tbody").html(result);
 		})
 		.fail(function() {
-			$("#client_table").append("요청 실패!!");
+			$("#emp_table").append("요청 실패!!");
 		});
 	}
 </script>
@@ -150,19 +152,19 @@
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
 
  					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
-						<option value="business_no">거래처 코드</option>
-						<option value="cust_name">거래처명</option>
+						<option value="emp_num">담당자 코드</option>
+						<option value="emp_name">담당자명</option>
 					</select>
 			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" > 
 			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();">
 
 	   </section>
 
-	<table class="table table-hover"  id="client_table">
+	<table class="table table-hover"  id="emp_table">
 		<thead>
 			<tr>
-				<th>거래처 코드</th>
-				<th>거래처명</th>
+				<th>담당자 코드</th>
+				<th>담당자명</th>
 			</tr>
 		</thead>
 		<tbody>

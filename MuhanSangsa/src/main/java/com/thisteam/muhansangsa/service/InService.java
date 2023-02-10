@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.muhansangsa.mapper.InMapper;
-
-import com.thisteam.muhansangsa.vo.inProcessingVO;
-import com.thisteam.muhansangsa.vo.inRegisterVO;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InVO;
+import com.thisteam.muhansangsa.vo.ProductVO;
+import com.thisteam.muhansangsa.vo.inProcessingVO;
+import com.thisteam.muhansangsa.vo.inRegisterVO;
 
 
 
@@ -46,23 +46,26 @@ public class InService {
 	
 	
 	
+	// ======================== sangwoo ============================
 	
-	
-	public List<ClientVO> getClientList() {
-		return mapper.getClientList();
+	public List<ClientVO> getClientList(String keyword, String searchType) {
+		return mapper.getClientList(keyword, searchType);
 	}
 
-	public List<EmployeesVO> getEmployeeList() {
-		return mapper.getEmployeeList();
+	public List<EmployeesVO> getEmployeeList(String keyword, String searchType) {
+		return mapper.getEmployeeList(keyword, searchType);
 	}
 
 	public List<InVO> getInList() {
 		return mapper.getInList();
 	}
+	public List<ProductVO> getProductList(String business_no) {
+		return mapper.getProductList(business_no);
+	}
 
 
 
-
+	// ======================== sangwoo ============================
 
 
 
