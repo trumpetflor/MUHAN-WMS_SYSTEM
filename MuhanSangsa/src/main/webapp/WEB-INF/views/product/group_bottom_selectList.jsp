@@ -177,7 +177,7 @@
 
 	   </section>
 
-	<table class="table" id="Group_bottom_table">
+	<table class="table table-hover" id="Group_bottom_table">
 		<thead>
 			<tr>
 				<th>품목 그룹 코드</th>
@@ -188,14 +188,14 @@
             <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
         </tbody>
 	</table>
-	<!-- 그룹 신규 등록  -->
+	<!-- 그룹 신규 등록 모달 여는 버튼 -->
 	<input type="button" value="신규등록" class = "btn btn-primary mx-4"  onclick="javascript:modal_open()"/>	
 
 </div>
 </div>
 
 
-
+<!-- 그룹 신규 등록 모달창 -->
 <div id="modal_container" class="modal">
 	<form action="ProdGroupBottomNameInsertPro" method="post" >
 		<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 

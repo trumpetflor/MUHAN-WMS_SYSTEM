@@ -456,7 +456,8 @@
 <%-- 				<td>${status.index}</td> --%>
 				<td><input type="checkbox" name="empChecked" id="empChecked" class="form-check-input" value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
 			</c:if>
-				<td><img class="id_pht" alt="${emp.emp_name } 의 사진" src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/ㅇ.img""></td>
+				<td><img class="id_pht" alt="${emp.emp_name } 의 사진" src="${pageContext.request.contextPath}/resources/upload/${emp.photo }" id="photo" name="photo"
+				onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';" width="150px" ></td>
 				<td>${emp.emp_num }</td>
 				<td>${emp.emp_name }</td>
 				<td onclick="dept_modal('${emp.dept_cd}','${emp.dept_name }');">
@@ -466,10 +467,14 @@
 				<td><a href="#">${emp.emp_email }</a></td>
 				<c:if test="${priv eq 1 }">
 					<th><!-- 관리 권한 부여 시 조회 가능 -->
+					
+					<!-- 상세조회 버튼  -->
 					<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"
-                 	 onclick="window.open('empListDetail?id=${emp.emp_email}','MemberDetailForm','width=770, height=920,location=no,status=no,scrollbars=yes');"> 
-						<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn"
-                   onclick="window.open('empListDetailUpdate?id=${emp.emp_email}','MemberDetailModify','width=770, height=920,location=no,status=no,scrollbars=yes');">
+                 	 onclick="window.open('empListDetail?id=${emp.emp_email}','MemberDetailForm','width=770, height=920,top= 40,left=600,location=no,status=no,scrollbars=yes');"> 
+					
+					<!-- 수정버튼 -->
+					<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn"
+                   onclick="window.open('empListDetailUpdate?id=${emp.emp_email}','MemberDetailModify','width=770, height=920,top= 40,left=600,location=no,status=no,scrollbars=yes');">
 		 			</th>
 				</c:if>
 			</tr>

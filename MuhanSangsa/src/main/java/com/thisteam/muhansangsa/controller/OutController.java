@@ -67,6 +67,8 @@ public class OutController {
 				HttpSession session,
 				HttpServletResponse response) {
 		
+		System.out.println("=======================" + keyword);
+		
 		// 페이징 처리를 위한 변수 선언
 		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
 		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
@@ -91,6 +93,28 @@ public class OutController {
 		}	
 		
 	}
+	
+	//출고 예정 목록 중 '종결,취소' 로 상태를 변환하기 위한 JSON 작업 
+	@ResponseBody
+	@GetMapping(value = "/OutWaitingChangeStautsJson")
+	public	void outWaitingChangeStautsJson(
+			@RequestParam(defaultValue = "") String out_schedule_cd,
+			@RequestParam(defaultValue = "") String out_complete,
+			@RequestParam(defaultValue = "-1") int status,
+			HttpSession session,
+			HttpServletResponse response) {
+
+		int result =service.outWaitingChangeStautsJson(out_schedule_cd, out_complete);
+	
+
+	try {
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().print(result);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}	
+	
+}
 	
 	
 	
