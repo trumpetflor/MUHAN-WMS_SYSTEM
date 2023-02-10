@@ -182,12 +182,9 @@ $(function () {
 	        success: function(data,status,xhr) {
 	        	$("#"+product_cd + "  .search_div ul").empty();
 	        
-				//JSON데이터 이상함 ! 나중에 물어볼것
-// 	               JSON.parse(JSON.stringify(data));
-// 		     	   alert(JSON.parse(JSON.stringify(data)));
+
 		     	   
 		     	   let parsingData = JSON.parse(data);
-// 		     	  alert(parsingData);
 // 		     	  alert(JSON.stringify(parsingData));
 					
 		     	   JSON.stringify(parsingData)

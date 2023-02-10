@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>인사 조회</title>
+	<title>선반 조회</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -79,7 +79,7 @@
 /* 모달 */
 #modal_container{
   position: absolute;
-  width: 70%;
+  width: 90%;
   height: 50%;
   position: fixed;
   top:50%;
@@ -120,13 +120,7 @@
  text-decoration: none;
  color: 	#000080;
 }
-#searchType{
-height: 25px;
-}
 
-#find_client_div  .d-flex{
-vertical-align: middle;
-}
 
 </style>
 <script type="text/javascript">
@@ -137,27 +131,26 @@ vertical-align: middle;
 		
 	});
 
-	// 거래처 목록 조회 함수
+	// 재고 목록 조회 함수
 	function load_list() {
 		$.ajax({
 			type: "GET",
-			url:"ClientListJsonOut?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
+			url:"WhLocListJsonIn?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
 			dataType: "json"
 		})
-		.done(function(clientList) { // 요청 성공 시
+		.done(function(whLocList) { // 요청 성공 시
 			let result ="";
-			for(let client of clientList) {
+			for(let whLoc of whLocList) {
 				result += "<tr>"
-							+ "<td id="+client.business_no+">" + client.business_no + "</td>"
-							+ "<td id="+client.cust_name+">" + client.cust_name + "</td>"
-							+ "<td >" + client.boss_name + "</td>"
+							+ "<td id="+whLoc.wh_area+">" + whLoc.wh_area + "</td>"
+							+ "<td id="+whLoc.wh_loc_in_area+">" + whLoc.wh_loc_in_area + "</td>"
 							+ "</tr>";
 				
 			}
-			$("#client_table > tbody").html(result);
+			$("#whLoc_table > tbody").html(result);
 		})
 		.fail(function() {
-			$("#client_table").append("요청 실패!!");
+			$("#whLoc_table").append("요청 실패!!");
 		});
 	}
 
@@ -165,38 +158,35 @@ vertical-align: middle;
 </script>
 <body>
 
+<div class="content">
+   <div class="animated fadeIn">
+	<section id="searchSection" class="m-0 d-flex justify-content-end">
 
-   <div class=" m-3 border border-light border-top-0 rounded-2 border border-1">
-			<div class="p-2 bg-light text-black well rounded-2" id="find_client_div">&#128270;거래처 검색</div>
-<div class="d-flex">
-			<select name="searchType" id="searchType" class="rounded-1 btn-sm p-0 mt-4">
-				<option value="business_no">거래처 코드</option>
-				<option value="cust_name">거래처명</option>
-				<option value="boss_name">대표자명</option>
-			</select>
-			<div class="input-group m-3">
-				<input type="search" class="form-control rounded-start"
-					placeholder="Search" aria-label="Search"
-					aria-describedby="search-addon" id="keyword" name="keyword" onkeyup="if(window.event.keyCode==13){load_list()}"/>
-				<button type="button" class="btn btn-dark" onclick="javascirpt:load_list();" >search</button>
-</div>
+ 					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
+						<option value="wh_area">구역명</option>
+						<option value="wh_loc_in_area">위치명</option>
+					</select>
+			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" > 
+			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();">
 
-</div>
-	<table class="table table-hover"  id="client_table">
+	   </section>
+
+	<table class="table table-hover"  id="whLoc_table">
 		<thead>
 			<tr>
-				<th>거래처 코드</th>
-				<th>거래처명</th>
-				<th>대표자명</th>
+			<input type='hidden' id='tr_index'>
+				<th>구역명</th>
+				<th>위치명</th>
 			</tr>
 		</thead>
 		<tbody>
             <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
         </tbody>
 	</table>
+
+
 </div>
-
-
+</div>
 
 
 </body>

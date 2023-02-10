@@ -38,6 +38,7 @@ public class Out_scheduleListVO { //출고예정 테이블
 	private String business_no; //거래처 코드
 	private String cust_name; //거래처명
 	private String emp_num; // 담당자(사원번호)
+	private String emp_name; // 담당자(사원번호)
 	private String remarks; //적요
 	//----하단은 (OUT_SCHEDULE_PER_PRODUCT) 테이블에서 조회 -------
 	private int product_cd; //품목코드 (OUT_SCHEDULE_PER_PRODUCT)
@@ -71,6 +72,12 @@ public class Out_scheduleListVO { //출고예정 테이블
 	}
 	public void setEmp_num(String emp_num) {
 		this.emp_num = emp_num;
+	}
+	public String getEmp_name() {
+		return emp_name;
+	}
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
 	}
 	public String getRemarks() {
 		return remarks;
@@ -124,11 +131,13 @@ public class Out_scheduleListVO { //출고예정 테이블
 	@Override
 	public String toString() {
 		return "Out_scheduleListVO [out_schedule_cd=" + out_schedule_cd + ", business_no=" + business_no
-				+ ", cust_name=" + cust_name + ", emp_num=" + emp_num + ", remarks=" + remarks + ", product_cd="
-				+ product_cd + ", product_name=" + product_name + ", out_schedule_qty=" + out_schedule_qty
-				+ ", out_qty=" + out_qty + ", out_date=" + out_date + ", stock_cd=" + stock_cd + ", out_complete="
-				+ out_complete + "]";
+				+ ", cust_name=" + cust_name + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", remarks="
+				+ remarks + ", product_cd=" + product_cd + ", product_name=" + product_name + ", out_schedule_qty="
+				+ out_schedule_qty + ", out_qty=" + out_qty + ", out_date=" + out_date + ", stock_cd=" + stock_cd
+				+ ", out_complete=" + out_complete + "]";
 	}
+	
+	
 	
 }
 

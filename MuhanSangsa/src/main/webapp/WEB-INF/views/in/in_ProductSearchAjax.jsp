@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>인사 조회</title>
+	<title>품목 조회</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -33,14 +33,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 </head>
 <style type="text/css">
-
 	@font-face {
 	    font-family: 'Pretendard-Regular';
 	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
 	    font-weight: 400;
 	    font-style: normal;
 	}
-
 	
 	@font-face {
 	    font-family: 'NEXON Lv1 Gothic OTF';
@@ -71,11 +69,6 @@
 	 transition: 0.5s;
 	}
 	
-
-
-
-
-
 /* 모달 */
 #modal_container{
   position: absolute;
@@ -120,83 +113,72 @@
  text-decoration: none;
  color: 	#000080;
 }
-#searchType{
-height: 25px;
-}
-
-#find_client_div  .d-flex{
-vertical-align: middle;
-}
-
 </style>
 <script type="text/javascript">
-
 	$(function() {
-		
+		var business_no = ${business_no};
 		load_list(); // 게시물 목록 조회 함수 호출
-		
+		console.log("in_productAjax에서 찍어보는중 : " + ${num});
 	});
-
 	// 거래처 목록 조회 함수
 	function load_list() {
 		$.ajax({
 			type: "GET",
-			url:"ClientListJsonOut?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
+			url:"inProductSearch?business_no=" + ${business_no} + "&num=" + ${num}, 
 			dataType: "json"
 		})
-		.done(function(clientList) { // 요청 성공 시
+		.done(function(proList) { // 요청 성공 시
 			let result ="";
-			for(let client of clientList) {
+			var indexNum = ${num};
+			console.log("리스트 요청 성공 시 : " + indexNum);
+			for(let pro of proList) {
 				result += "<tr>"
-							+ "<td id="+client.business_no+">" + client.business_no + "</td>"
-							+ "<td id="+client.cust_name+">" + client.cust_name + "</td>"
-							+ "<td >" + client.boss_name + "</td>"
-							+ "</tr>";
+							+ "<td id="+pro.product_cd +">" + pro.product_cd + "</td>"
+							+ "<td id="+pro.product_name +">" + pro.product_name + "</td>"
+// 							+ "<td id="+emp.dept_cd+">" + emp.dept_cd + "</td>"
+// 							+ "<td id="+emp.dept_name+">" + emp.dept_name + "</td>"
+							+ "</tr>"
+							+ "<input type='hidden' name='indexNum' id='"+indexNum+"'>";
+					$("#idnname").val(pro.prodcut_cd);		
 				
 			}
-			$("#client_table > tbody").html(result);
+			$("#pro_table > tbody").html(result);
 		})
 		.fail(function() {
-			$("#client_table").append("요청 실패!!");
+			$("#pro_table").append("요청 실패!!");
 		});
 	}
-
-
 </script>
 <body>
 
+<div class="content">
+   <div class="animated fadeIn">
+	<section id="searchSection" class="m-0 d-flex justify-content-end">
 
-   <div class=" m-3 border border-light border-top-0 rounded-2 border border-1">
-			<div class="p-2 bg-light text-black well rounded-2" id="find_client_div">&#128270;거래처 검색</div>
-<div class="d-flex">
-			<select name="searchType" id="searchType" class="rounded-1 btn-sm p-0 mt-4">
-				<option value="business_no">거래처 코드</option>
-				<option value="cust_name">거래처명</option>
-				<option value="boss_name">대표자명</option>
-			</select>
-			<div class="input-group m-3">
-				<input type="search" class="form-control rounded-start"
-					placeholder="Search" aria-label="Search"
-					aria-describedby="search-addon" id="keyword" name="keyword" onkeyup="if(window.event.keyCode==13){load_list()}"/>
-				<button type="button" class="btn btn-dark" onclick="javascirpt:load_list();" >search</button>
-</div>
+ 					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
+						<option value="product_cd">품목 코드</option>
+						<option value="product_name">품목명</option>
+					</select>
+<!-- 			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" >  -->
+<!-- 			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();"> -->
 
-</div>
-	<table class="table table-hover"  id="client_table">
+	   </section>
+
+	<table class="table table-hover"  id="pro_table">
 		<thead>
 			<tr>
-				<th>거래처 코드</th>
-				<th>거래처명</th>
-				<th>대표자명</th>
+				<th>품목 코드</th>
+				<th>품목명</th>
 			</tr>
 		</thead>
 		<tbody>
             <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
         </tbody>
 	</table>
+
+
 </div>
-
-
+</div>
 
 
 </body>

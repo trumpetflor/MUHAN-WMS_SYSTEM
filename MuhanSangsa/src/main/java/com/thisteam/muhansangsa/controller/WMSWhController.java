@@ -52,7 +52,8 @@ public class WMSWhController {
 			sId = (String)session.getAttribute("sId");
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소
@@ -229,7 +230,8 @@ public class WMSWhController {
 			sId = (String)session.getAttribute("sId");
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소
@@ -303,7 +305,8 @@ public class WMSWhController {
 			sId = (String)session.getAttribute("sId");
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소
@@ -375,7 +378,8 @@ public class WMSWhController {
 			sId = (String)session.getAttribute("sId");
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소
@@ -447,7 +451,8 @@ public class WMSWhController {
 			sId = (String)session.getAttribute("sId");
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소

@@ -11,6 +11,8 @@ import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
+import com.thisteam.muhansangsa.vo.Out_scheduleVO;
+import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 
 @Service
 public class OutService {
@@ -27,6 +29,15 @@ public class OutService {
 	}
 
 
+	//출고 예정 목록 중 '종결,취소' 로 상태를 변환하기 위한 JSON 작업
+	public int outWaitingChangeStautsJson(String out_schedule_cd, String out_complete) {
+//		System.out.println("out_schedule_cd::::::::::::::::::"+out_schedule_cd);
+//		System.out.println("out_complete::::::::::::::::::"+out_complete);
+		
+		return mapper.outWaitingChangeStatusJson(out_schedule_cd,out_complete);
+	}
+	
+
 	//=====================================================================================================
   
   
@@ -40,10 +51,22 @@ public class OutService {
   
   
 	//==============================================hawon ================================================
+
+	
 	public List<Emp_viewVO> searchEmp(String keyword) {
-		// TODO Auto-generated method stub
-		return mapper.selectEmp(keyword);
-	}
+	// TODO Auto-generated method stub
+	return mapper.selectEmp(keyword);
+}
+
+//재고리스트에 있는 상품 검색
+public List<Stock_viewVO> getproduct_stockExist(String keyword) {
+	// TODO Auto-generated method stub
+	return mapper.selectProductStockExist(keyword);
+}
+
+//신규 출고예정 insert작업
+public int registerOutSchedule( Out_scheduleVO out_schedule) {
+	return mapper.insertRegisterOutSchedule(out_schedule);
 	
 	//재고리스트에 있는 상품 검색
 	public List<Stock_viewVO> getproduct_stockExist() {
@@ -83,12 +106,43 @@ public class OutService {
 	public void setOutScheduleModifyPro(Out_schedule_total_viewVO total) {
 		mapper.updateOutScheduleModifyPro(total);
 	}
+
+
+
+
+
+//==========================================================================23/02/09 미주
+
+
+
+
+
+
+
+
+// 신규 출고예정품목 insert작업 
+public int registerOutScheduleProduct(Out_schedule_per_productVO ospList) {
+	return mapper.insertRegisterOutScheduleProduct(ospList);
+	
+}
+
+//출고예정코드 생성
+public String createOut_schedule_cd(int today) {
+	String index = mapper.getMaxOut_schedule_codeIndex(today);
+	//생성된 코드
+	String createdCode = today+"-"+index;
+	
+	return createdCode;
+}
+
+
+
 	
 	
 	
 	
 	
-	//==========================================================================23/02/09 미주
+	
 
 
 

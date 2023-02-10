@@ -30,7 +30,8 @@
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-</head>
+<!-- JQUERY-UI -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <style type="text/css">
 	
 	@font-face {
@@ -78,6 +79,60 @@
 	input[type=number]{
 		width: 75px;
 	}
+	
+
+/* *********************** CSS jakyoung 시작 *************************** */	
+
+	/* 출고 모달창 */
+	#out_naga_modal table tbody tr :hover{
+	cursor: pointer;
+	}
+	
+	#out_naga_modal::-webkit-scrollbar {
+    width: 2px;
+ 	}
+	
+	#out_naga_modal{
+	max-width: 750px !important;
+	height: 500px !important;
+	position: absolute;
+	top: 20%;
+	left: 35%;
+	overflow-y: scroll;
+	
+	}
+	
+	/* 재고 검색 모달창 */
+	#out_naga_modal table tbody tr :hover{
+	cursor: pointer;
+	}
+	
+	#out_naga_modal::-webkit-scrollbar {
+    width: 2px;
+ 	}
+	
+	#find_stock_modal {
+		max-width: 200px !important;
+		height: 100px !important;
+		position: relative;
+		top: 20%;
+		left: 35%;
+		overflow-y: scroll;
+	}
+	
+	.select_stock_cd {
+		display: none;
+	}
+
+
+
+
+
+
+
+/* *********************** CSS jakyoung 끝 *************************** */	
+	
+	
 	
 	
 </style>
@@ -129,12 +184,141 @@ $(function(){
 	//전체합 계산
 	$("#sum_result").html("<b>"+sum+"</b>");
 	
+	
+// ======================= jquery jakyoung 시작 ====================================
+	// 출고 처리 모달창 날짜 계산
+	let today = new Date().toISOString().substring(0, 10);
+// 	alert(today); 
+	$("#currentDate").val(today);
+
+	
+	
+	
+	
+	
+// ======================= jquery jakyoung 끝 ====================================
+	
 });//$(function(){------------------------------------------------
 
 function productInfo(product_cd) {
 
 }
+
+// ======================= 스크립트 함수 jakyoung 시작 ====================================
+
+	// 모달에 모달을 더해서
+// 	$(document).on('hidden.bs.modal', function (event) {
+// 		if ($('.modal:visible').length) {
+// 			$('body').addClass('modal-open');
+// 		}
+// 	});
+	
+// 	$(document).on('show.bs.modal', function (event) { 
+// 		// 모달창 드래그 기능
+//         $(this).find($('.modal-dialog')).draggable({ handle: ".modal-header" });
+// 	});
+	
+	// 재고 입력 창에 포커스 들어오면 div 열기
+	$(document).on("focus", "input[name=stock_cd]", function() {
+		const div_id = "#select_" + $(this).val();
+		let stock_cd = $(this).val();
+		console.log("div 아이디 : " + div_id + "재고 코드 : " + stock_cd);
+		
+		$("#select_" + stock_cd).css("display", "block");
+		
+		$(this).on("keyup", function() {
+			
+		});
+		
+		
+	});
+
+	// 재고 입력창에 포커스 빠지면 div 닫기
+	$(document).on("focusout", "input[name=stock_cd]", function() {
+		
+		let stock_cd = $(this).val();
+		console.log(stock_cd);
+		
+		$("#select_" + stock_cd).css("display", "none");
+		
+	});
+	
+	
+	// 출고 버튼 클릭 시 모달 창 open~~
+	function openOutModal() {
+		
+// 		console.log('나와랏');
+// 		alert("모달창 열리네요~ 출고가 들어오죠");
+		//모달창 열기
+		$('#out_naga_modal').modal('show');
+		$('#out_naga_modal').show();
+		
+		$("#out_table > tbody").empty();
+		
+		let checkedList = [];
+		
+		$('input[name=outScheduleChecked]:checked').each(function() {
+			
+			let out_list = ''; // 출력문 비우기
+			
+			let tr_id = $(this).closest("tr").attr("id"); // 해당 <tr> id 값 저장
+			
+			console.log(tr_id);
+			
+			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
+			let product_name = $(this).val().split("/")[1]; // 품목명
+			let out_qty = $("#" + tr_id).find("input[name=out_qty]").val(); // 출고 지시수량
+			let stock_cd = $(this).val().split("/")[2]; // 재고 코드
+			let wh_loc_in_area = ''; // 위치명
+			
+			out_list += '<tr>';
+			out_list += '<td>' + out_schedule_cd + '</td>';
+			out_list += '<td>' + product_name + '</td>';
+			out_list += '<td>' + out_qty + '</td>';
+			out_list += '<td><input type="text" name="stock_cd" value="' + stock_cd + '" class=" bg-light border border-secondary rounded-1 px-1 adjust">';
+			out_list += '<button type="button" class="btn-sm btn-dark " onclick="findWhLocArea(' + stock_cd + ')">검색</button>';
+			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
+			out_list += '<td name="wh_loc_in_area">' + wh_loc_in_area + '</td>';
+			out_list += '</tr>';
+			
+			$("#out_table").append(out_list);
+			
+		});
+		
+	
+	}
+	
+	function findWhLocArea(stock_cd) {
+		console.log(stock_cd);
+		
+		$.ajax({
+			
+			
+		})
+		.done({
+
+		
+		})
+		.fail({
+		
+		
+		
+		});
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+
+// ======================= 스크립트 함수 jakyoung 끝 ====================================
+
 </script>
+</head>
 <body>
 
 <jsp:include page="../inc/left.jsp"></jsp:include>
@@ -187,7 +371,7 @@ function productInfo(product_cd) {
 	 재고번호 클릭 시 재고 이력 표시 화면(창) 띄우기 -->
 
 	<div id = "selectCount"><small class="text-secondary"> 0 개 선택됨</small></div>
-	<table class="table"  id="">
+	<table class="table"  id="outScheduleTable">
 		<thead>
 			<tr>
 				<th width="60px"><input type="checkbox" name="AllChecked" ></th>
@@ -281,6 +465,50 @@ function productInfo(product_cd) {
  		 <a href="#" rel="modal:close">Close</a>
  
 	</div><!-- end of DIV #modal_container -->
+	
+<!-- -------------------------- jakyoung 시작 ------------------------------------- -->
+<!-- 출고 버튼 클릭 시 모달 -->
+
+	<div id="out_naga_modal" class="modal" data-backdrop="static">
+		<form action="">
+		
+			<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
+				<div class="p-2 bg-light text-black well rounded-2" >출고</div>
+				
+				<div class="row form-group">
+				<div class="form"><label for="out_date" class=" form-control-label">일자</label></div>
+				<div class="col-12 col-md-9"><input type="date" id="currentDate" class="form-control rounded-start" name="out_date" required="required"></div>
+				</div>
+					<table class="mt-3 table table-hover" id="out_table">
+						<thead>
+							<tr>
+								<th>출고예정번호</th>
+								<th>품목명</th>
+								<th>출고 수량</th>
+								<th>출고할 재고번호</th>
+								<th>위치명</th>
+							</tr>
+						</thead>
+						<tbody>
+						
+						
+						</tbody>
+		
+					</table>		
+				</div>
+	  		<button type="button" class="btn btn-dark ">출고</button>
+		
+		</form>
+		
+	</div>
+<!-- 출고 모달 끝 -->
+<!-- 재고 코드 검색 모달 -->	
+<!-- 	<div id="find_stock_modal" class="modal" tabindex="-1">재고 코드</div> -->
+<!-- 재고 번호 검색 모달 끝 -->	
+
+<!-- -------------------------- jakyoung 끝 ------------------------------------- -->
+
+
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="../inc/footer.jsp"></jsp:include>
 

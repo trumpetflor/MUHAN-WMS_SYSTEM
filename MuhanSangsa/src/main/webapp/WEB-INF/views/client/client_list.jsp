@@ -77,45 +77,119 @@
 
 	//AJAX 를 활용한 게시물 목록 표시에 사용될 페이지 번호값 미리 저장
 	let pageNum = 1;
+// 	let pageList = '';
 	
 	$(function() {
 		
 		let searchType = $("#searchType").val(); // 검색 타입
 		let keyword = $("#keyword").val(); // 검색어
 		
-		load_list(searchType, keyword); // 게시물 목록 조회 함수 호출
+		load_list(pageNum, searchType, keyword); // 게시물 목록 조회 함수 호출 (pageNum 까지 파라미터로)
 		
 	});
 	
-	// 게시물 목록 조회 함수
-	function load_list(searchType, keyword) {
+	// 게시물 목록 조회 함수 (ajax)
+	function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페이지, 검색 타입, 검색어
 		$.ajax({
 			type: "GET",
 			url: "ClientListJson?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword,
 			dataType: "json"
 		})
-		.done(function(clientList) { // 요청 성공 시
-			for(let client of clientList) {
-// 				alert(client.business_no);
-				let strBn = '"' + client.business_no + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
+		.done(function(jsonArray) { // 요청 성공 시
+			
+			$("#client_table > tbody").empty(); // 리스트 출력 테이블 구역 비우기
+			$("#pageArea").empty(); // 페이지 번호 구역 비우기
+			$('html'). scrollTop(0); // 스크롤 맨 위로 보내기
+			pageList = ''; // 페이지 번호 출력 코드 변수 선언 (블록 외부에서 사용하기 위해서!)
+			
+			// <<<<< 향상된 for문 버전, for문 버전 둘 중에 하나만 사용!! >>>>>>>
+			
+			// ============================== 향상된 for문 사용 =========================================
+// 			let index = 0; // 향상된 for 문 인덱스 용 변수
+// 			for(let json of jsonArray) {
+// 				// index 가 jsonArray 크기 - 1 보다 작을 경우
+// 				// jsonArray 에 저장된 맨 마지막 객체(PageInfo) 이전까지(ClientVO 객체에만) 접근
+// 				if(index < jsonArray.length - 1) { 
+// // 					alert(client.business_no);
+// 					let strBn = '"' + json.business_no + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
+// 					let result = "<tr>"
+// 								+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + json.business_no + "</td>"
+// 								+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + json.cust_name + "</td>"
+// // 								+ "<td><a href='ClientDetail?business_no=" + json.business_no + "'>" + client.business_no + "</a></td>"
+// // 								+ "<td><a href='ClientDetail?business_no=" + json.business_no + "'>" + client.cust_name + "</a></td>"
+// 								+ "<td>" + json.boss_name + "</td>"
+// 								+ "<td>" + json.tel + "</td>"
+// 								+ "<td>" + json.mobile_no + "</td>"
+// 								+ "<td>" + json.addr + "</td>"
+// 								+ "<td>" + json.remarks + "</td>"
+// 								+ "</tr>";
+// 					$("#client_table").append(result);
+					
+// 				} else { // index 가 jsonArray 크기 - 1 과 같을 경우 (jsonArray 에 저장된 마지막 객체 = PageInfo 객체)
+// 					let valSt = "'" + searchType + "'";
+// 					let valKey = "'" + keyword + "'";
+					
+// 					for(let i = json.startPage; i <= json.endPage; i++) {
+// 						if(i == pageNum) {
+// 							pageList += '<a class="active" href="javascript:(0)">' + i +'</a>';
+// 						} else {
+// 							pageList += '<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ')">' + i + '</a>';
+// 						}
+// 					}
+// 				}
+				
+// 				index++; // 인덱스 번호 1 증가시키기
+// 			} // 향상된 for문 끝
+			
+// // 			alert(pageList);
+			
+// 			$("#pageArea").append(pageList); // 페이지 번호 표출 div(id="pageArea") 에 페이지 숫자 목록(pageList) 넣기
+			
+			// =================================================================================================
+				
+			// ================================= for문 사용 ====================================================
+			
+			// jsonList(json 배열) ClientVO 객체 목록만 돌도록 설정 (맨 마지막 PageInfo 객체 접근 X)
+			for(let index = 0; index < jsonArray.length - 1; index++) { 
+				// 자바 스크립트 함수 파라미터 용 변수 선언 (숫자를 문자열로 보내기 위함)
+				let strBn = '"' + jsonArray[index].business_no + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
+				// 뿌릴 내용
+				// 받아온jsonArray변수명[인덱스명].접근할컬럼변수명 => 각 VO 객체의 변수에 접근)
 				let result = "<tr>"
-							+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + client.business_no + "</td>"
-							+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + client.cust_name + "</td>"
-// 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.business_no + "</a></td>"
-// 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + client.cust_name + "</a></td>"
-							+ "<td>" + client.boss_name + "</td>"
-							+ "<td>" + client.tel + "</td>"
-							+ "<td>" + client.mobile_no + "</td>"
-							+ "<td>" + client.addr + "</td>"
-							+ "<td>" + client.remarks + "</td>"
+							+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + jsonArray[index].business_no + "</td>"
+							+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + jsonArray[index].cust_name + "</td>"
+// 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + jsonArray[index].business_no + "</a></td>"
+// 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + jsonArray[index].cust_name + "</a></td>"
+							+ "<td>" + jsonArray[index].boss_name + "</td>"
+							+ "<td>" + jsonArray[index].tel + "</td>"
+							+ "<td>" + jsonArray[index].mobile_no + "</td>"
+							+ "<td>" + jsonArray[index].addr + "</td>"
+							+ "<td>" + jsonArray[index].remarks + "</td>"
 							+ "</tr>";
-				$("#client_table").append(result);
+				$("#client_table").append(result); // 뿌릴 내용 테이블 영역에 넣기
 			}
+			
+			// 자바 스크립트 함수 파라미터 용 변수 선언(문자열)
+			let valSt = "'" + searchType + "'";
+			let valKey = "'" + keyword + "'";
+			
+			// PageInfo 객체 접근 (jsonArray 의 맨 마지막 인덱스) 해서 startPage 와 endPage 얻어오기 -> 차례대로 숫자 목록 저장
+			for(let i = jsonArray[jsonArray.length - 1].startPage; i <= jsonArray[jsonArray.length - 1].endPage; i++) {
+				if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
+					pageList += '<a class="active" href="javascript:(0)">' + i +'</a>'; 
+				} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
+					pageList += '<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ')">' + i + '</a>';
+				}
+			}
+// 			alert(pageList);
+			
+			$("#pageArea").append(pageList); // 페이지 번호 표출 div(id="pageArea") 에 페이지 숫자 목록(pageList) 넣기
+			
 		})
 		.fail(function() {
 			$("#client_table").append("요청 실패..ㅠㅠ");
-		});
-	}
+		}); // ajax 끝
+	} // load_list 함수 끝
 	
 	// 거래처 세부 정보 창 - 아아ㅏ아가가각가가각!!!1!!!!!! 파라미터 왜 이따구로 넘어와ㅠㅠㅠ 
 	// => 해겨류ㅠㅠㅠㅠㅠㅠ!!!!! - by. 킹갓제너럴영진
@@ -191,7 +265,16 @@
                                         <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
                                     </tbody>
                                 </table>
-						<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1 float-right" onclick="location.href='ClientInsertForm'">거래처 등록</button>
+            	<!-- 페이징처리 -->
+				<div class="row" id="pageList">
+					<div class="col-lg-12">
+						<div class="product_pagenation" id="pageArea">
+						</div>
+					</div>
+				</div>
+            	<c:if test="${priv eq '1' }">
+					<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1 float-right" onclick="location.href='ClientInsertForm'">거래처 등록</button>
+            	</c:if>
             </div><!-- .animated -->
         </div><!-- .content -->
 

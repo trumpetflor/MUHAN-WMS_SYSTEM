@@ -20,11 +20,50 @@
 	<select id="selectProductStockExist" resultType="Stock_viewVO">
 		SELECT PRODUCT_CD,PRODUCT_NAME
 		FROM STOCK_VIEW 
-		WHERE STOCK_QTY !=0;
-		
+		WHERE STOCK_QTY !=0
+		<if test='keyword !=""'>
+		AND  PRODUCT_NAME LIKE '%${keyword}%'
+		</if>
+		group by PRODUCT_CD
 	</select>
-  
-  
+
+	<select id="getMaxOut_schedule_codeIndex" resultType="String">
+	<!-- 출고예정번호 생성을 위해 index 구하기 -->
+		  	SELECT COUNT(OUT_SCHEDULE_CD)+1 -- 최댓값에 1 더하기
+	  		FROM OUT_SCHEDULE 
+	  		WHERE OUT_SCHEDULE_CD LIKE "${today}%";
+	</select>
+
+
+  	<!-- 신규 출고 등록  -->
+  	<insert id="insertRegisterOutSchedule">
+  		<!-- 출고예정번호 생성을 위한 준비작업 -->
+	  	INSERT  INTO OUT_SCHEDULE
+	  		 VALUES (
+						#{out_schedule.out_schedule_cd}	-- OUT_SCHEDULE_CD
+						,#{out_schedule.business_no}			-- BUSINESS_NO 
+						,#{out_schedule.emp_num}			-- EMP_NUM  
+						,#{out_schedule.out_date}			-- OUT_DATE 
+						,#{out_schedule.remarks}			-- REMARKS 
+						,"0"			-- OUT_COMPLETE
+					)
+  	</insert>
+  	<!-- 신규 출고 품목 등록  -->
+  	<insert id="insertRegisterOutScheduleProduct">
+
+	  		  	INSERT INTO OUT_SCHEDULE_PER_PRODUCT
+	  		 VALUES (
+						#{osp.out_schedule_cd}	
+						,#{osp.product_cd}		
+						,#{osp.out_schedule_qty}		
+						,0			
+						,date_format(#{osp.out_date},"%Y-%m-%d")		
+						,#{osp.remarks}	
+						,#{osp.stock_cd}	
+						,#{osp.out_complete}	
+					)
+
+  	</insert>
   
 	<!-- ========================================================================= -->
 
@@ -41,34 +80,38 @@
 			a.business_no,
 			d.cust_name,
 			a.emp_num,
-			b.out_date,
+			e.emp_name,
+			a.out_date,
 			a.remarks,
-			b.out_complete,
-			b.product_cd,
-			c.product_name,
-			b.out_schedule_qty,
-			b.out_qty,
-			b.remarks,
-			b.stock_cd
+			(
+				SELECT concat(MAX(C.PRODUCT_NAME),' 외 ',count(*),'건')  FROM out_schedule_per_product b ,	product c
+				WHERE b.product_cd = c.product_cd
+				AND b.out_schedule_cd = a.out_schedule_cd
+			) product_name,
+			a.out_complete,
+			(
+				SELECT sum(b.out_schedule_qty) FROM out_schedule_per_product b 
+				WHERE b.out_schedule_cd = a.out_schedule_cd
+			) out_schedule_qty,
+			(
+				SELECT sum(b.out_qty) FROM out_schedule_per_product b
+				WHERE b.out_schedule_cd = a.out_schedule_cd
+			) out_qty,
+			a.remarks
 		FROM
-			out_schedule a, 
-			out_schedule_per_product b,
-			product c,
-			client d
+			out_schedule a,
+			client d,
+			employees e 
 		WHERE
-			a.out_schedule_cd = b.out_schedule_cd
-			AND b.product_cd = c.product_cd
-			AND a.business_no = d.business_no
+			a.business_no = d.business_no
+			AND a.EMP_NUM = e.EMP_NUM 
 			<if test="status gte 0">
-				AND b.out_complete = #{status}
+				AND a.out_complete = #{status}
 			</if>
 			<if test="!keyword.equals('')">
 			<choose>
 				<when test="searchType.equals('out_schedule_cd')">
 					AND a.out_schedule_cd LIKE '%${keyword}%'
-				</when>
-				<when test="searchType.equals('product_name')">
-					AND c.product_name LIKE '%${keyword}%'
 				</when>
 			</choose>
 			</if>
@@ -77,7 +120,21 @@
 	</select>
   
   
-  
+  	<!-- 출고 예정 목록 중 '종결,취소' 로 상태를 변환하기 위한 JSON 작업  -->
+  	<update id="outWaitingChangeStatusJson">
+	  	UPDATE out_schedule
+		  	SET
+			<choose>
+				<when test='out_complete eq "0"'>
+					out_complete='1'
+				</when>
+				<when test='out_complete eq "1"'>
+					out_complete='0'
+				</when>
+			</choose>
+		  	WHERE 
+		  		out_schedule_cd = #{out_schedule_cd};
+  	</update>
   
 	<!-- ========================================================================= -->
   

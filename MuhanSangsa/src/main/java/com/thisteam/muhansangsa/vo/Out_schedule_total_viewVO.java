@@ -20,7 +20,7 @@ public class Out_schedule_total_viewVO {
 //	PRODUCT_CD      |int          
 //	STOCK_CD        |int          
 //	REMARKS         |varchar(2000)	
-	
+
 	private String out_schedule_cd; //출고 예정 코드 "20230209-01" 
 	private String out_cd_1; // 출고 예정 코드 분리 1 "20230209"
 	private String out_cd_2; // 출고 예정 코드 분리 2 "01"
@@ -106,12 +106,14 @@ public class Out_schedule_total_viewVO {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
+
 	@Override
 	public String toString() {
 		return "Out_schedule_total_viewVO [out_schedule_cd=" + out_schedule_cd + ", out_cd_1=" + out_cd_1
 				+ ", out_cd_2=" + out_cd_2 + ", cust_name=" + cust_name + ", emp_name=" + emp_name + ", product_name="
 				+ product_name + ", out_date=" + out_date + ", out_schedule_qty=" + out_schedule_qty + ", out_qty="
 				+ out_qty + ", product_cd=" + product_cd + ", stock_cd=" + stock_cd + ", remarks=" + remarks + "]";
+
 	}
 	
 }

@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
+import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.ProductService;
 import com.thisteam.muhansangsa.vo.PageInfo;
+import com.thisteam.muhansangsa.vo.Privilege;
 import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.Product_group_bottomVO;
 
@@ -34,12 +36,23 @@ public class ProductController {
 	@Autowired	
 	private ProductService service ;
 	
+	@Autowired
+	private EmployeesService empService;
+	
 	//========================= 품목 등록 시작 =======================================
 	@GetMapping(value = "/ProdInsertForm")
 		public	String prodInsertForm(
 				@RequestParam(defaultValue = "") String msg,
-				Model model) {
+				Model model, HttpSession session) {
 		model.addAttribute("msg", msg);
+		
+		String sId = (String)session.getAttribute("sId");
+
+		//sId가 null일 경우 접근 차단!
+		if(session.getAttribute("sId") == null) {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
 		
 		// 접속 ip 확인 코드
 		InetAddress local;
@@ -50,6 +63,11 @@ public class ProductController {
 			model.addAttribute("ip", ip);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
+		}
+		
+		if(sId != null) {
+			// 권한 조회 메서드
+			boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
 		}
 		
 		return "product/prod_insertForm";

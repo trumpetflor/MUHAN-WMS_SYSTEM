@@ -3,6 +3,13 @@ package com.thisteam.muhansangsa.vo;
 import java.sql.Date;
 import java.util.List;
 
+/*
+CREATE VIEW in_register_view
+AS SELECT a.in_schedule_cd, b.product_name, b.in_schedule_qty, b.in_qty, b.stock_cd, c.wh_loc_in_area
+FROM in_schedule a, in_schedule_per_product b, stock c
+WHERE a.in_schedule_cd = b.in_schedule_cd AND b.stock_cd = c.stock_cd;
+ */
+
 public class inRegisterVO {
 	private String in_schedule_cd; //입고예정번호
 	private String product_name; //품목명

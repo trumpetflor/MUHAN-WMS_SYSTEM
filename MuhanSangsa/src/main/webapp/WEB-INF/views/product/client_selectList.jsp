@@ -177,7 +177,7 @@
 
 	   </section>
 
-	<table class="table"  id="client_table">
+	<table class="table table-hover"  id="client_table">
 		<thead>
 			<tr>
 				<th>거래처 코드</th>

@@ -46,11 +46,24 @@
 		if(result){
 			const form = document.getElementById('empListDetailUpdatePro');
 				form.submit();
-				alert("수정이 완료되었습니다");
 		}
 	
 	}
 
+	$(function() {
+		
+		//등록 성공 시 alert창
+		var msg = '${msg}'; //컨트롤러에서 액션이후 msg값이 있을 경우 해당 msg alert창 실행하기 위한 용도
+		
+		if(msg==1){
+			alert('수정이 완료되었습니다.');
+			 opener.location.reload();
+
+		}
+		
+	});
+	
+	
 
 </script>
 <body>
@@ -100,12 +113,12 @@
                             <div class="card-body card-block">
                                 <form action="empListDetailUpdatePro" id="empListDetailUpdatePro" method="post" enctype="multipart/form-data" class="form-horizontal">
                                  <!-- 사진 이미지 -->
-                                 <div class="row form-group">   
+                                  <div class="row form-group">   
                                  	<div class="col col-md-3"><label class=" form-control-label" style="margin-top: 80px;">사진 이미지</label></div>
                                   		<div class=" col-12 col-md-4" id="imgWapper">
-											<img id="id_photo" alt="증명사진" style="width: 150px"
-											src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${employees.photo }"	
-											onerror="this.src='${pageContext.request.contextPath}/resources/images/id_photo01.jpg';" width="150px" />
+											<img id="photo" alt="증명사진" style="width: 150px" name="photo"
+											src="${pageContext.request.contextPath}/resources/upload/${employees.photo }"	
+											onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';" width="150px" />
 									</div>
 								  </div>
                                     <!-- 사원번호(코드) -->
@@ -195,17 +208,16 @@
 										</div>
 									</div>
 									<!-- 상세주소 -->
-									<div class="row form-group">
-										<div class="col col-md-3">
-											<label for="text-input" class=" form-control-label"></label>
-										</div>
-										<div class="col-12 col-md-8">
-											<input type="text" id="addr2" name="emp_addr"
-												value=""
-												class="form-control bg-gradient-light">
-												<small class="form-text text-muted">상세주소</small>
-										</div>
-									</div>
+<!-- 									<div class="row form-group"> -->
+<!-- 										<div class="col col-md-3"> -->
+<!-- 											<label for="text-input" class=" form-control-label"></label> -->
+<!-- 										</div> -->
+<!-- 										<div class="col-12 col-md-8"> -->
+<!-- 											<input type="text" id="emp_addrDetail" name="emp_addrDetail" -->
+<!-- 												class="form-control bg-gradient-light"> -->
+<!-- 												<small class="form-text text-muted">상세주소</small> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
                                    
 	                                 <!-- 입사일 -->
 	                                  <div class="row form-group">
@@ -261,9 +273,9 @@
                                     <!-- 권한 -->                                    
                                     <!--사진이미지 -->
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지</label></div>
-                                        <div class="col-12 col-md-6"><input type="file" id="file-input" name="file-input" class="form-control-file">
-                                        <br><small>(기존파일 : ${employees.photo })</small>
+                                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지*</label></div>
+                                        <div class="col-12 col-md-4"><input type="file" id="file" name="file"  class="form-control-file">
+                                        	<br><small>(기존파일 : ${employees.photo })</small>
                                         </div>
                                     </div>
                                     <!--  -->
@@ -271,6 +283,7 @@
                             </div>
                         </div>
                         <div align="center">
+                        <!--수정, 확인 버튼 -->
 							<input class="btn btn-outline-dark" type="button" value="수정" onclick="javascript:confirm_modify()">&nbsp;&nbsp;
 							<input class="btn btn-outline-dark" type="button" value="확인" onclick="top.window.close()">&nbsp;&nbsp;
 						</div>

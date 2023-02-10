@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,16 +27,15 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
+	public String home(Locale locale, Model model, HttpSession session) {
+//		logger.info("Welcome home! The client locale is {}.", locale);
+//		
+//		Date date = new Date();
+//		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+//		
+//		String formattedDate = dateFormat.format(date);
+//		
+//		model.addAttribute("serverTime", formattedDate );
 
 		// 아이피 주소
 		InetAddress local;
@@ -48,7 +49,16 @@ public class HomeController {
 			e.printStackTrace();
 		}
 		
-		return "employees/login";
+
+		// 세션 아이디 없으면 로그인 페이지, 있으면 메인(index.jsp)
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+			return "index";
+		} else {
+			return "redirect:Login";
+		}
+
 
 	}
 	

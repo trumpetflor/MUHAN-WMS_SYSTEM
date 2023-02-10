@@ -25,6 +25,7 @@
 <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
+/* ---------------------------- 로그인 쿠키 (시작)---------------------------- */
 	$(function(){
 		// 저장된 쿠키값을 가져와서 ID 칸에 넣어준다. 없으면 공백으로 들어감.
 	    var cId = getCookie("cId");
@@ -88,6 +89,7 @@
 		}
 		return unescape(cookieValue);
 	}
+	/* ---------------------------- 로그인 쿠키 (끝)---------------------------- */
 
 </script>
 <style>
