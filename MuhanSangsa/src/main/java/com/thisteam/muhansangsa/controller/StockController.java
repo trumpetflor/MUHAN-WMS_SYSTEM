@@ -307,33 +307,33 @@ public class StockController {
 	
 	
 	
-	@ResponseBody
-	@GetMapping(value = "/StockAdjust_loc.ajax")
-	public void ajax(Stock_viewVO vo, HttpServletResponse response){
-		vo.getProduct_cd();
-		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
-		
-		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
-		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
-		 
-		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
-		JSONArray arr = new JSONArray();
-		for( Stock_viewVO stock : productLoc) {
-			arr.put(new JSONObject(stock));
-		}
-		
-		System.out.println("JSONArray : " + arr);
-	
-		try {
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().println(arr); // toString() 생략됨
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	}
+//	@ResponseBody
+//	@GetMapping(value = "/StockAdjust_loc.ajax")
+//	public void ajax(Stock_viewVO vo, HttpServletResponse response){
+//		vo.getProduct_cd();
+//		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
+//		
+//		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
+//		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
+//		 
+//		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
+//		JSONArray arr = new JSONArray();
+//		for( Stock_viewVO stock : productLoc) {
+//			arr.put(new JSONObject(stock));
+//		}
+//		
+//		System.out.println("JSONArray : " + arr);
+//	
+//		try {
+//			response.setCharacterEncoding("UTF-8");
+//			response.getWriter().println(arr); // toString() 생략됨
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		
+//	}
 	
 	//새 위치 추가(새 재고번호 생성)
 	@GetMapping(value = "/Search_location.ajax")
@@ -402,82 +402,82 @@ public class StockController {
 	}
 	
 	//wh_cd 코드가 있는 창고 내 구역 값 가져오기
-	@ResponseBody
-	@GetMapping(value = "/searchWhAreaLocation.ajax")
-	public void searchWhAreaLocation(HttpServletResponse response,Stock_viewVO stock){
-		stock.getProduct_cd();
-		stock.getWh_area_cd();
-//		System.out.println("stock.getProduct_cd():"+stock.getProduct_cd());
-//		System.out.println("stock.getWh_area_cd():"+stock.getWh_area_cd());
-		
-		//이미 선반에 있는 상품코드 제외하고 창고 구역 내 선반 찾기
-		List<Wms_wh_viewVO> whAreaLocList = service.getWhAreaLocationList(stock.getProduct_cd(),stock.getWh_area_cd());
-		
-		//JSONArray데이터로 변환
-		JSONArray whLoc = new JSONArray();
-		for(Wms_wh_viewVO loc : whAreaLocList ) {
-			whLoc.put(new JSONObject(loc));
-		}
-		
-		System.out.println("JSONArray whArea: "+ whLoc);
-		try {
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().println(whLoc); // toString() 생략됨
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	@ResponseBody
-	@PostMapping(value = "/addNewLocation_productPro")
-	public void addNewLocation_product(HttpServletResponse response,  Stock_viewVO stock){
-		
-		System.out.println("넘어온값 : "+stock.getProduct_cd()+"/"+stock.getWh_loc_in_area_cd());
-		//새 재고번호 생성
-		int insertCount = service.InsertNewStockCd(stock.getProduct_cd(),stock.getWh_loc_in_area_cd());
-		System.out.println("새 재고번호 생성insertCount: "+insertCount);
-		
-		try {
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().println(insertCount); // toString() 생략됨
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+//	@ResponseBody
+//	@GetMapping(value = "/searchWhAreaLocation.ajax")
+//	public void searchWhAreaLocation(HttpServletResponse response,Stock_viewVO stock){
+//		stock.getProduct_cd();
+//		stock.getWh_area_cd();
+////		System.out.println("stock.getProduct_cd():"+stock.getProduct_cd());
+////		System.out.println("stock.getWh_area_cd():"+stock.getWh_area_cd());
+//		
+//		//이미 선반에 있는 상품코드 제외하고 창고 구역 내 선반 찾기
+//		List<Wms_wh_viewVO> whAreaLocList = service.getWhAreaLocationList(stock.getProduct_cd(),stock.getWh_area_cd());
+//		
+//		//JSONArray데이터로 변환
+//		JSONArray whLoc = new JSONArray();
+//		for(Wms_wh_viewVO loc : whAreaLocList ) {
+//			whLoc.put(new JSONObject(loc));
+//		}
+//		
+//		System.out.println("JSONArray whArea: "+ whLoc);
+//		try {
+//			response.setCharacterEncoding("UTF-8");
+//			response.getWriter().println(whLoc); // toString() 생략됨
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
+//	@ResponseBody
+//	@PostMapping(value = "/addNewLocation_productPro")
+//	public void addNewLocation_product(HttpServletResponse response,  Stock_viewVO stock){
+//		
+//		System.out.println("넘어온값 : "+stock.getProduct_cd()+"/"+stock.getWh_loc_in_area_cd());
+//		//새 재고번호 생성
+//		int insertCount = service.InsertNewStockCd(stock.getProduct_cd(),stock.getWh_loc_in_area_cd());
+//		System.out.println("새 재고번호 생성insertCount: "+insertCount);
+//		
+//		try {
+//			response.setCharacterEncoding("UTF-8");
+//			response.getWriter().println(insertCount); // toString() 생략됨
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	
 	//상품 정보와 재고 위치 가져오는 서블릿주소 - stock_list.jsp인데 아직 안함...!(productInfo 함수)
-	@ResponseBody
-	@GetMapping(value = "/getProduct_StockInfo.ajax")
-	public void getProduct_StockInfo(Stock_viewVO vo, HttpServletResponse response){
-		vo.getProduct_cd();
-		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
-		
-		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
-		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
-		 
-		 // 
-		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
-		JSONArray arr = new JSONArray();
-		for( Stock_viewVO stock : productLoc) {
-			arr.put(new JSONObject(stock));
-		}
-		
-		System.out.println("JSONArray : " + arr);
-	
-		try {
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().println(arr); // toString() 생략됨
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	}
-	
+//	@ResponseBody
+//	@GetMapping(value = "/getProduct_StockInfo.ajax")
+//	public void getProduct_StockInfo(Stock_viewVO vo, HttpServletResponse response){
+//		vo.getProduct_cd();
+//		System.out.println("vo.getProduct_cd(): "+ 	vo.getProduct_cd());
+//		
+//		//상품번호(product_cd) 받아와서 재고 테이블에서 검색하는 작업
+//		 List<Stock_viewVO> productLoc = service.getProductAtSameLoc(vo.getProduct_cd());
+//		 
+//		 // 
+//		//Restful한 방식으로 클라이언트로 전송하기 위해 JSON데이터로 변환
+//		JSONArray arr = new JSONArray();
+//		for( Stock_viewVO stock : productLoc) {
+//			arr.put(new JSONObject(stock));
+//		}
+//		
+//		System.out.println("JSONArray : " + arr);
+//	
+//		try {
+//			response.setCharacterEncoding("UTF-8");
+//			response.getWriter().println(arr); // toString() 생략됨
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		
+//	}
+//	
 	// ==================================== jakyoung =============================================
 	// WMS 창고 관리 페이지 속 재고 리스트
 	@GetMapping(value = "/Wms_Inventory_View")
@@ -488,16 +488,17 @@ public class StockController {
 								@RequestParam(defaultValue = "0") int wh_area_cd, // 창고 구역 코드
 								@RequestParam(defaultValue = "0") int wh_loc_in_area_cd, // 창고 구역 내 위치 코드
 								Model model, HttpSession session){
-		String sId;
+		String sId = "";
 		if(session.getAttribute("sId") != null) {
 			sId = (String)session.getAttribute("sId");
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
-		InetAddress local;
-		String ip;
+		InetAddress local = null;
+		String ip = "";
 		try {
 			local = InetAddress.getLocalHost();
 			ip = local.getHostAddress();
