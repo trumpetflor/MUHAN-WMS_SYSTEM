@@ -236,10 +236,8 @@
 			
 			</div>
 	</div>	
-	<div style="text-align: center">
-		<input type="submit" value="등록" class = "btn btn-primary mx-2"  onclick="javascript:confirm_insert()"/>
-		<input type="button" value="닫기" class = "btn btn-primary mx-2"  onclick="top.window.close()">
-	</div>
+
+	<input type="submit" value="등록" class = "btn btn-primary mx-4"  onclick="javascript:confirm_insert()"/>
 </form>
 
 

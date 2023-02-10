@@ -26,6 +26,15 @@ public class OutService {
 	}
 
 
+	//출고 예정 목록 중 '종결,취소' 로 상태를 변환하기 위한 JSON 작업
+	public int outWaitingChangeStautsJson(String out_schedule_cd, String out_complete) {
+//		System.out.println("out_schedule_cd::::::::::::::::::"+out_schedule_cd);
+//		System.out.println("out_complete::::::::::::::::::"+out_complete);
+		
+		return mapper.outWaitingChangeStatusJson(out_schedule_cd,out_complete);
+	}
+	
+
 	//=====================================================================================================
   
   
@@ -49,8 +58,6 @@ public class OutService {
 		// TODO Auto-generated method stub
 		return mapper.selectProductStockExist();
 	}
-	
-	
 	
 	//=====================================================================================================
 

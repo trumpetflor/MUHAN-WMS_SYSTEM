@@ -27,18 +27,125 @@
 			</foreach>
 	</select>
 	
+	<!-- 입고예정 품목 목록 -->
+	<select id="selectSelectedProList" resultType="inProcessingVO">
+		SELECT *
+			FROM IN_PROCESSING_VIEW
+			WHERE IN_SCHEDULE_CD = #{in_schedule_cd}
+	</select>
+	
+	<!-- 입고예정 목록 -->
+	<select id="selectSelectedInList" resultType="InVO">
+		SELECT a.in_schedule_cd, a.in_type_cd, a.business_no, a.emp_num, b.emp_name, a.in_date, a.remarks, a.in_complete
+			FROM in_schedule a
+			JOIN employees b
+			WHERE a.emp_num = b.emp_num
+			AND a.in_schedule_cd = #{in_schedule_cd}
+	</select>
+	
+	<!-- 재고번호 max 검색 -->
+	<select id="selectMaxStockCd" resultType="integer">
+		SELECT MAX(STOCK_CD)
+			FROM STOCK
+	</select>
+	
+	<!-- 재고 목록 -->
+	<select id="selectStockList" resultType="StockWhVO">
+		SELECT stock_cd, product_name, wh_area, wh_loc_in_area
+			FROM stock_wh_view
+			<if test="!keyword.equals('')">
+			WHERE
+			<choose>
+				<when test="searchType.equals('stock_cd')">
+					stock_cd LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('product_name')">
+					product_name LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('wh_area')">
+					wh_area LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('wh_loc_in_area')">
+					wh_loc_in_area LIKE '%${keyword}%'
+				</when>
+			</choose>		
+		</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>
+	
+	<!-- 창고선반 목록 -->
+	<select id="selectWhLocList" resultType="StockWhVO">
+		SELECT wh_area, wh_loc_in_area
+			FROM stock_wh_view
+			<if test="!keyword.equals('')">
+			WHERE
+			<choose>
+				<when test="searchType.equals('wh_area')">
+					wh_area LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('wh_loc_in_area')">
+					wh_loc_in_area LIKE '%${keyword}%'
+				</when>
+			</choose>		
+		</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>
+	
+	
+	
+	
 	<!-- ======================== yeram ============================== -->
 	
+	<!-- ======================== sangwoo ============================ -->
 	<select id="getClientList" resultType="ClientVO">
 		SELECT business_no,cust_name
 			FROM client
-  </select>
+			<if test="!keyword.equals('')">
+			WHERE
+				<choose>
+					<when test="searchType.equals('cust_name')">
+						cust_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('business_no')">
+						business_no LIKE '%${keyword}%'
+					</when>
+				</choose>
+		</if>
+			ORDER BY
+				cust_name
+			
+  	</select>
 	
 	<select id="getEmployeeList" resultType="EmployeesVO">
-		SELECT e.emp_num, e.emp_name, e.dept_cd, d.dept_name
+		SELECT e.emp_num, e.emp_name
 			FROM employees e
 			JOIN department d
 			ON e.dept_cd = d.dept_cd
+			<if test="!keyword.equals('')">
+			WHERE
+				<choose>
+					<when test="searchType.equals('emp_name')">
+						emp_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('emp_num')">
+						emp_num LIKE '%${keyword}%'
+					</when>
+<!-- 					<when test="searchType.equals('dept_cd')"> -->
+<!-- 						dept_cd LIKE '%${keyword}%' -->
+<!-- 					</when> -->
+<!-- 					<when test="searchType.equals('dept_name')"> -->
+<!-- 						dept_name LIKE '%${keyword}%' -->
+<!-- 					</when> -->
+				</choose>
+		</if>
+			ORDER BY
+				emp_name
 	</select>
 	
 	<select id="getInList" resultType="InVO">
@@ -55,4 +162,12 @@
 			JOIN product pd
 			ON ipp.product_cd = pd.product_cd
 	</select>
+	
+	<select id="getProductList" resultType="com.thisteam.muhansangsa.vo.ProductVO">
+		SELECT product_cd, product_name
+			FROM product
+			WHERE business_no = #{businese_no_ajax}
+	</select>
+	
+	<!-- ======================== sangwoo ============================ -->
 </mapper>
