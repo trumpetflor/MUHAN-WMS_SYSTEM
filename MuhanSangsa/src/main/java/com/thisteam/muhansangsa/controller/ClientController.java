@@ -45,9 +45,10 @@ public class ClientController {
 		String sId = "";
 		if(session.getAttribute("sId") != null) {
 			sId = (String)session.getAttribute("sId");
-		}else {
+		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "redirect:Login"; // 어떻게 alert 후에 보내지?
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소
@@ -177,9 +178,10 @@ public class ClientController {
 		String sId = "";
 		if(session.getAttribute("sId") != null) {
 			sId = (String)session.getAttribute("sId");
-		}else {
+		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소
@@ -215,7 +217,6 @@ public class ClientController {
 		
 		} else { // 세션 아이디 없을 경우
 			model.addAttribute("msg", "잘못된 접근입니다.");
-			
 			return "fail_back";
 		}
 		
@@ -281,17 +282,16 @@ public class ClientController {
 		String sId;
 		if(session.getAttribute("sId") != null) {
 			sId = (String)session.getAttribute("sId");
-		}else {
+		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소
-		InetAddress local;
-		String ip;
 		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
+			InetAddress local = InetAddress.getLocalHost();
+			String ip = local.getHostAddress();
 			model.addAttribute("ip", ip);
 			
 		} catch (UnknownHostException e) {
@@ -351,9 +351,10 @@ public class ClientController {
 				return "fail_back";
 			}
 		
-		} else { // 세션 아이디 없을 경우
-			model.addAttribute("msg", "잘못된 접근입니다.");
-			return "fail_back";
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 	}
@@ -372,9 +373,10 @@ public class ClientController {
 		String sId;
 		if(session.getAttribute("sId") != null) {
 			sId = (String)session.getAttribute("sId");
-		}else {
+		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
 		// 아이피 주소

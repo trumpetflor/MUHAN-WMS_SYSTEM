@@ -30,7 +30,8 @@
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-</head>
+<!-- JQUERY-UI -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <style type="text/css">
 	
 	@font-face {
@@ -91,21 +92,36 @@
  	}
 	
 	#out_naga_modal{
-	max-width: 800px !important;
-	height: 400px !important;
-	position: fixed;
+	max-width: 750px !important;
+	height: 500px !important;
+	position: absolute;
 	top: 20%;
 	left: 35%;
 	overflow-y: scroll;
 	
 	}
 	
+	/* 재고 검색 모달창 */
+	#out_naga_modal table tbody tr :hover{
+	cursor: pointer;
+	}
+	
+	#out_naga_modal::-webkit-scrollbar {
+    width: 2px;
+ 	}
 	
 	#find_stock_modal {
-		max-width: 400px !important;
-		height: 200px !important;
+		max-width: 200px !important;
+		height: 100px !important;
+		position: relative;
+		top: 20%;
+		left: 35%;
+		overflow-y: scroll;
 	}
-
+	
+	.select_stock_cd {
+		display: none;
+	}
 
 
 
@@ -178,6 +194,7 @@ $(function(){
 	
 	
 	
+	
 // ======================= jquery jakyoung 끝 ====================================
 	
 });//$(function(){------------------------------------------------
@@ -189,15 +206,42 @@ function productInfo(product_cd) {
 // ======================= 스크립트 함수 jakyoung 시작 ====================================
 
 	// 모달에 모달을 더해서
-	$(document).on('hidden.bs.modal', function (event) {
-
-		if ($('.modal:visible').length) {
-
-			$('body').addClass('modal-open');
-
-		}
-
+// 	$(document).on('hidden.bs.modal', function (event) {
+// 		if ($('.modal:visible').length) {
+// 			$('body').addClass('modal-open');
+// 		}
+// 	});
+	
+// 	$(document).on('show.bs.modal', function (event) { 
+// 		// 모달창 드래그 기능
+//         $(this).find($('.modal-dialog')).draggable({ handle: ".modal-header" });
+// 	});
+	
+	// 재고 입력 창에 포커스 들어오면 div 열기
+	$(document).on("focus", "input[name=stock_cd]", function() {
+		const div_id = "#select_" + $(this).val();
+		let stock_cd = $(this).val();
+		console.log("div 아이디 : " + div_id + "재고 코드 : " + stock_cd);
+		
+		$("#select_" + stock_cd).css("display", "block");
+		
+		$(this).on("keyup", function() {
+			
+		});
+		
+		
 	});
+
+	// 재고 입력창에 포커스 빠지면 div 닫기
+	$(document).on("focusout", "input[name=stock_cd]", function() {
+		
+		let stock_cd = $(this).val();
+		console.log(stock_cd);
+		
+		$("#select_" + stock_cd).css("display", "none");
+		
+	});
+	
 	
 	// 출고 버튼 클릭 시 모달 창 open~~
 	function openOutModal() {
@@ -205,7 +249,8 @@ function productInfo(product_cd) {
 // 		console.log('나와랏');
 // 		alert("모달창 열리네요~ 출고가 들어오죠");
 		//모달창 열기
-		$('#out_naga_modal').modal('show'); 
+		$('#out_naga_modal').modal('show');
+		$('#out_naga_modal').show();
 		
 		$("#out_table > tbody").empty();
 		
@@ -229,30 +274,40 @@ function productInfo(product_cd) {
 			out_list += '<td>' + out_schedule_cd + '</td>';
 			out_list += '<td>' + product_name + '</td>';
 			out_list += '<td>' + out_qty + '</td>';
-			out_list += '<td><button type="button" class="btn-sm btn-dark " onclick="findStockCd(' + stock_cd + ')">검색</button></td>';
+			out_list += '<td><input type="text" name="stock_cd" value="' + stock_cd + '" class=" bg-light border border-secondary rounded-1 px-1 adjust">';
+			out_list += '<button type="button" class="btn-sm btn-dark " onclick="findWhLocArea(' + stock_cd + ')">검색</button>';
+			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
 			out_list += '<td name="wh_loc_in_area">' + wh_loc_in_area + '</td>';
 			out_list += '</tr>';
 			
 			$("#out_table").append(out_list);
 			
-		
 		});
 		
 	
 	}
 	
-// 	function findStockCd(stock_cd) {
-// 		alert(stock_cd);
-// 		//모달창 열기
-// 		$('#find_stock_modal').modal('show'); 
+	function findWhLocArea(stock_cd) {
+		console.log(stock_cd);
 		
-// 		if(confirm("닫?")){
-// 			$('#emp_search_modalDiv').modal('hide');
-// 			$('#out_naga_modal').modal('show');
+		$.ajax({
 			
-// 		}
+			
+		})
+		.done({
+
 		
-// 	}
+		})
+		.fail({
+		
+		
+		
+		});
+		
+		
+		
+		
+	}
 	
 	
 	
@@ -262,6 +317,7 @@ function productInfo(product_cd) {
 // ======================= 스크립트 함수 jakyoung 끝 ====================================
 
 </script>
+</head>
 <body>
 
 <jsp:include page="../inc/left.jsp"></jsp:include>
@@ -412,7 +468,7 @@ function productInfo(product_cd) {
 <!-- -------------------------- jakyoung 시작 ------------------------------------- -->
 <!-- 출고 버튼 클릭 시 모달 -->
 
-	<div id="out_naga_modal" class="modal">
+	<div id="out_naga_modal" class="modal" data-backdrop="static">
 		<form action="">
 		
 			<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
@@ -444,10 +500,11 @@ function productInfo(product_cd) {
 		</form>
 		
 	</div>
-	
-	<div id="find_stock_modal" class="modal tabindex='-1'">재고 코드</div>
-
 <!-- 출고 모달 끝 -->
+<!-- 재고 코드 검색 모달 -->	
+<!-- 	<div id="find_stock_modal" class="modal" tabindex="-1">재고 코드</div> -->
+<!-- 재고 번호 검색 모달 끝 -->	
+
 <!-- -------------------------- jakyoung 끝 ------------------------------------- -->
 
 
