@@ -150,8 +150,18 @@ public class EmployeesService {
 
 
 
-
-
+	   //대량의 사원 일괄 부서변경 또는 재직상태변경
+		public int updateEmpesInfo(List<Emp_viewVO> empList, String updateObj, String work_type, String dept_name) {
+			
+			return mapper.updateEmpesInfo(empList,updateObj,work_type,dept_name);
+			
+		}
+		//페이징처리를 위해 개수조회
+		public int getEmpListCount(String searchType, String keyword) {
+			// TODO Auto-generated method stub
+			return mapper.selectEmpListCount(searchType,keyword);
+		}
+		   
 
 
 

@@ -20,11 +20,50 @@
 	<select id="selectProductStockExist" resultType="Stock_viewVO">
 		SELECT PRODUCT_CD,PRODUCT_NAME
 		FROM STOCK_VIEW 
-		WHERE STOCK_QTY !=0;
-		
+		WHERE STOCK_QTY !=0
+		<if test='keyword !=""'>
+		AND  PRODUCT_NAME LIKE '%${keyword}%'
+		</if>
+		group by PRODUCT_CD
 	</select>
-  
-  
+
+	<select id="getMaxOut_schedule_codeIndex" resultType="String">
+	<!-- 출고예정번호 생성을 위해 index 구하기 -->
+		  	SELECT COUNT(OUT_SCHEDULE_CD)+1 -- 최댓값에 1 더하기
+	  		FROM OUT_SCHEDULE 
+	  		WHERE OUT_SCHEDULE_CD LIKE "${today}%";
+	</select>
+
+
+  	<!-- 신규 출고 등록  -->
+  	<insert id="insertRegisterOutSchedule">
+  		<!-- 출고예정번호 생성을 위한 준비작업 -->
+	  	INSERT  INTO OUT_SCHEDULE
+	  		 VALUES (
+						#{out_schedule.out_schedule_cd}	-- OUT_SCHEDULE_CD
+						,#{out_schedule.business_no}			-- BUSINESS_NO 
+						,#{out_schedule.emp_num}			-- EMP_NUM  
+						,#{out_schedule.out_date}			-- OUT_DATE 
+						,#{out_schedule.remarks}			-- REMARKS 
+						,"0"			-- OUT_COMPLETE
+					)
+  	</insert>
+  	<!-- 신규 출고 품목 등록  -->
+  	<insert id="insertRegisterOutScheduleProduct">
+
+	  		  	INSERT INTO OUT_SCHEDULE_PER_PRODUCT
+	  		 VALUES (
+						#{osp.out_schedule_cd}	
+						,#{osp.product_cd}		
+						,#{osp.out_schedule_qty}		
+						,0			
+						,date_format(#{osp.out_date},"%Y-%m-%d")		
+						,#{osp.remarks}	
+						,#{osp.stock_cd}	
+						,#{osp.out_complete}	
+					)
+
+  	</insert>
   
 	<!-- ========================================================================= -->
 

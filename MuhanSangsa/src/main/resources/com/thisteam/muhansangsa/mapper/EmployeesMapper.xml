@@ -216,7 +216,7 @@
    <select id="selectDeptInfo_count" resultType="HashMap">
       SELECT GRADE_NAME,count(GRADE_NAME) as count
       FROM emp_view e, department d
-      WHERE e.DEPT_Name =d.DEPT_Name and  d.DEPT_CD = #{dept_cd} group by GRADE_NAME
+      WHERE e.DEPT_Name =d.DEPT_Name and  d.DEPT_CD = #{dept_cd} group by GRADE_NAME order by GRADE_cd desc 
    </select>
    
    <select id="selectDeptMember" resultType="Emp_viewVO">
@@ -237,6 +237,45 @@
       FROM works
    </select>
    
+   <!-- 다수의 사원 부서정보 또는 재직상태 변경  -->
+   <update id="updateEmpesInfo">
+  	 UPDATE  employees 
+         SET 
+         <if test='updateObj eq "work"'>
+         work_cd = (SELECT work_type from works where WORK_TYPE = #{work_type})
+         </if>
+         <if test='updateObj eq "dept"'>
+         DEPT_CD  = (SELECT DEPT_CD from department where DEPT_NAME = #{dept_name})
+         </if>
+         WHERE EMP_NUM IN 
+         <foreach collection="empList" item="emp" open="(" close=")" separator=",">
+         	#{emp.emp_num}
+         </foreach>
+   </update>
+   
+   <select id="selectEmpListCount" resultType="int">
+   		SELECT COUNT(*)
+			FROM  emp_view -- 이후 작업 분기 일어남
+			<if test="!keyword.equals('')">
+				<!-- 2. 검색타입(searchType) 에 따른 WHERE 대상 변경 -->
+				<!-- => 조건이 복수개이므로 choose 태그 사용 -->
+				<choose>
+		            <when test="searchType.equals('emp_name')">
+		               WHERE EMP_NAME LIKE '%${keyword}%'
+		            </when>
+		            <when test="searchType.equals('emp_num')">
+		               WHERE EMP_NUM LIKE '%${keyword}%'
+		            </when>
+		            <when test="searchType.equals('emp_email')">
+		               WHERE EMP_EMAIL LIKE '%${keyword}%'
+		            </when>
+		            <when test="searchType.equals('dep_name')">
+		               WHERE DEPT_NAME LIKE '%${keyword}%'
+		            </when>
+				</choose>		
+			</if>
+   
+   </select>
    <!-- ===================================== 사원 조회 끝===================================== -->
    <!-- ===================================================================================================== -->
 

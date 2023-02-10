@@ -15,6 +15,9 @@
 	a{
 	text-decoration: none;
 	}
+	a:visited{
+	text-decoration: none;
+	}
 	
 	li{
 		font-family: 'NEXON Lv1 Gothic OTF' !important;
@@ -74,15 +77,7 @@
                         </ul>
                     </li>
                     
-                    <li class="menu-title">구매 관리</li><!-- /.menu-title -->
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>구매</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="">구매 조회</a></li>
-                            <li><i class="fa fa-table"></i><a href="">구매 입력</a></li>
-                            <li><i class="fa fa-table"></i><a href="">구매 현황</a></li>
-                        </ul>
-                    </li>
+   
                     
                     <li class="menu-title">WMS</li><!-- /.menu-title -->
                     <li>
@@ -102,16 +97,11 @@
                             <li><i class="fa fa-table"></i><a href="OutProcessingSeletList">출고 처리</a></li>
                         </ul>
                     </li>
-
-
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>재고 관리</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-fort-awesome"></i><a href="Inventory_View">재고 조회</a></li>
-                            <li><i class="menu-icon ti-themify-logo"></i><a href="#">재고 입력</a></li>
-                            <li><i class="menu-icon ti-themify-logo"></i><a href="#">재고 이동</a></li>
-                        </ul>
+					<li>
+                        <a href="Inventory_View"><i class="menu-icon ti-email"></i>재고 조회</a>
                     </li>
+
+          
                     <li>
  
 

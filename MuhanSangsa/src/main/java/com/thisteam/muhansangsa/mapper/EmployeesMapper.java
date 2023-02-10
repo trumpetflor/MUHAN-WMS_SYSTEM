@@ -69,8 +69,21 @@ public interface EmployeesMapper {
 
 	   List<WorksVO> selectWorkList();
 
+		int updateEmpesInfo(@Param("empList") List<Emp_viewVO> empList,
+							@Param("updateObj")	String updateObj, 
+							@Param("work_type") String work_type, 
+							@Param("dept_name") String dept_name);
+		
+		
+		
+		//페이징처리를 위해서 개수조회
+		int selectEmpListCount(@Param("searchType")String searchType, @Param("keyword") String keyword);
+		
+		
+		
 	   //-------------------------------------------사원조회/상세정보조회 끝------------------------------------------------
 	   //---------------------------------------------------------------------------------------------------------------------
+
 
 
 

@@ -64,7 +64,7 @@
 
 <div>
 	<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
-		<div class="p-2 bg-light text-black well rounded-2" >&#128505;부서정보 : ${dept_name } </div>
+		<div class="p-2  text-white well rounded-2" style="background-color: 	#000000	" >◼ 부서정보 : ${dept_name } </div>
 		<div class="mx-3 py-3" id="selected_empList">
 		<div class= "border border-1 rounded-2 p-3">
 		<div>구성</div>	<hr>
@@ -90,7 +90,7 @@
 			<td>${emp.emp_name}</td>
 			<td>${emp.emp_num} </td>
 			<td>${emp.grade_name}</td>
-			<td>&#128222;${emp.emp_dtel} </td>
+			<td align="left">&#128383; ${emp.emp_dtel} </td>
 			</tr><tr>
 		</c:forEach>
 	

@@ -10,6 +10,8 @@ import com.thisteam.muhansangsa.mapper.OutMapper;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
+import com.thisteam.muhansangsa.vo.Out_scheduleVO;
+import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 
 @Service
 public class OutService {
@@ -48,16 +50,41 @@ public class OutService {
   
   
 	//==============================================hawon ================================================
-	public List<Emp_viewVO> searchEmp(String keyword) {
-		// TODO Auto-generated method stub
-		return mapper.selectEmp(keyword);
-	}
+
 	
-	//재고리스트에 있는 상품 검색
-	public List<Stock_viewVO> getproduct_stockExist() {
-		// TODO Auto-generated method stub
-		return mapper.selectProductStockExist();
-	}
+	public List<Emp_viewVO> searchEmp(String keyword) {
+	// TODO Auto-generated method stub
+	return mapper.selectEmp(keyword);
+}
+
+//재고리스트에 있는 상품 검색
+public List<Stock_viewVO> getproduct_stockExist(String keyword) {
+	// TODO Auto-generated method stub
+	return mapper.selectProductStockExist(keyword);
+}
+
+//신규 출고예정 insert작업
+public int registerOutSchedule( Out_scheduleVO out_schedule) {
+	return mapper.insertRegisterOutSchedule(out_schedule);
+	
+}
+
+// 신규 출고예정품목 insert작업 
+public int registerOutScheduleProduct(Out_schedule_per_productVO ospList) {
+	return mapper.insertRegisterOutScheduleProduct(ospList);
+	
+}
+
+//출고예정코드 생성
+public String createOut_schedule_cd(int today) {
+	String index = mapper.getMaxOut_schedule_codeIndex(today);
+	//생성된 코드
+	String createdCode = today+"-"+index;
+	
+	return createdCode;
+}
+
+
 	
 	//=====================================================================================================
 
