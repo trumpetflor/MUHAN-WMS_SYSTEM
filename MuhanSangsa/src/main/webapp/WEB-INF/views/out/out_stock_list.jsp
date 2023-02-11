@@ -86,7 +86,8 @@
 function selectStockCd(index, stock_cd, wh_loc_in_area) {
 	console.log(index + ", " + stock_cd + ", " + wh_loc_in_area);
 	
-	$("#outList" + index + " .stock_cd", opener.document).text(stock_cd);
+	let tdHtml = '<a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a>';
+	$("#outList" + index + " .stock_cd", opener.document).html(tdHtml);
 	$("#outList" + index + " .wh_loc_in_area", opener.document).text(wh_loc_in_area);
 	
 	window.close();
@@ -113,6 +114,7 @@ $(function(){
    <div class="animated fadeIn">
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
   		<form action="Out_Inventory_View ">
+  				<input type="hidden" name="index" value="${index }">
 				<!-- 검색 타입 추가 -->
 				<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
 					<option value="STOCK_CD" <c:if test="${param.searchType eq 'STOCK_CD'}">selected</c:if>>재고번호</option>

@@ -168,6 +168,24 @@
 	
 	<!-- ===========================23/02/07 추가======================= -->
 
+	<!-- ========================= jakyoung 시작 ============================ -->
+	
+	<update id="updateOutStockQty">
+		<selectKey resultType="int" order="BEFORE" keyProperty="stock_qty">
+			SELECT STOCK_QTY 
+				FROM STOCK 
+				WHERE STOCK_CD = #{ospp.stock_cd}
+		</selectKey>
+		UPDATE 
+			stock
+			SET 
+				stock_qty = #{stock_qty} - #{ospp.out_qty}
+			WHERE
+				stock_cd = #{ospp.stock_cd}
+	</update>
+	
+	
+	<!-- ========================= jakyoung 끝 ============================ -->
 	
 	
 </mapper>

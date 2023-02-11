@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.muhansangsa.mapper.StockMapper;
+import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
@@ -93,10 +94,17 @@ public class StockService {
 		return mapper.updateTargetStockQty(sourceStockCd, targetStockCd, stockQty);
 
 	}
+
 	
 	// --------------------------------------------------------23/02/07 추가
 	
-	
+	// -------------------------------------------------------- jakyoung 시작
+	// 출고로 인한 재고 수량 변경
+	public int outStockQty(Out_schedule_per_productVO ospp) {
+		System.out.println("StockService : " + ospp);
+		return mapper.updateOutStockQty(ospp);
+	}
+	// -------------------------------------------------------- jakyoung 끝
 
 
 	

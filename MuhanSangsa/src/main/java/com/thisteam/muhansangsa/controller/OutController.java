@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,10 +23,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.thisteam.muhansangsa.service.OutService;
+import com.thisteam.muhansangsa.service.StockService;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleVO;
@@ -33,6 +39,7 @@ import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_Arr_viewVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 import com.thisteam.muhansangsa.vo.PageInfo;
+import com.thisteam.muhansangsa.vo.StockVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
 
 
@@ -42,7 +49,10 @@ public class OutController {
 	private static final Logger logger = LoggerFactory.getLogger(OutController.class);
 	@Autowired	
 	private OutService service ;
-	
+	// 다들... 서비스를 사용하신다면... 메서드에서 객체 생성하지 마시고... 
+	// 반드시 어노테이션으로 주입하세요... - 만신창이 올림
+	@Autowired 
+	private StockService stockSvc;
 
 	
 	
@@ -428,10 +438,57 @@ public class OutController {
  	//========================= HAWON 끝 ======================================= 
   
 	// ================================== JAKYOUNG ============================================
-//	@GetMapping(value = "/OutProcessing")
-//	public String outProcess() {
-//		
-//	}
+	@ResponseBody
+	@PostMapping(value = "/OutProcessing")
+	public void outProcess(
+			@RequestBody String osppArr,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		System.out.println("출고 처리 osppArr : " + osppArr);
+		
+		// com.google.gson.Gson 객체를 활용하여 JSON 데이터 파싱할 경우
+		Gson gson = new Gson();
+		
+		// JSON 데이터(배열 내부에 객체가 저장되어 있는 JSON 문자열)을 파싱하여 저장할
+		// 자바의 객체로 변환하기 위해 Gson 객체의 fromJson() 메서드 활용
+		// => gson.fromJson(JSON 데이터, 파싱할클래스명.class);
+		// => 단, List 등의 복합 객체일 경우 별도의 클래스를 통해 타입을 지정해야함
+		//    ex) new TypeToken<List<BoardVO>>(){}.getType()
+		List<Out_schedule_per_productVO> osppLIst = 
+				gson.fromJson(osppArr, new TypeToken<List<Out_schedule_per_productVO>>(){}.getType());
+		
+		System.out.println(osppLIst);
+		
+//		StockService stockSvc = new StockService(); // ㅎ............... 널포인터.. 내 4시간 돌려내...
+
+		for(Out_schedule_per_productVO ospp : osppLIst) {
+			System.out.println("StockController : " + ospp);
+			int stockUpdateCount = stockSvc.outStockQty(ospp); // stock 테이블 재고 수량 수정
+			System.out.println(stockUpdateCount);
+			
+			// out_schedule_total_viewVO 객체 생성 (다 때려넣은 거 뽑아놓기)
+			Out_schedule_total_viewVO 
+			
+			if(stockUpdateCount > 0) { // 재고 히스토리 추가
+				int sHinsertCount = stockSvc.addOutHistory(ospp);
+			}
+				int osppUpdateCount = service.modifyOutQty(ospp); // out_schedule_per_product 테이블 출고 수량 수정
+				
+				if(osppUpdateCount > 0) {
+					System.out.println(osppUpdateCount);
+				}
+				try {
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().print("true"); // toString() 생략됨
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
+		
+	}
 	
 	
 	

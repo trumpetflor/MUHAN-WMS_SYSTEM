@@ -131,6 +131,13 @@ public String createOut_schedule_cd(int today) {
 	return createdCode;
 }
 
+//-------------------------------------------------------- jakyoung 시작
+// 출고 처리 완료된 출고 수량 수정
+public int modifyOutQty(Out_schedule_per_productVO ospp) {
+	return mapper.updateOutQty(ospp);
+}
+
+//-------------------------------------------------------- jakyoung 끝
 
 
 	

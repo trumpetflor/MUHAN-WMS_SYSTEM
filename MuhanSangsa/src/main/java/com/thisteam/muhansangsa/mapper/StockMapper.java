@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
@@ -72,6 +73,12 @@ public interface StockMapper {
 
 	// --------------------------------------------------------23/02/07 추가
 
+	// -------------------------------------------------------- jakyoung 시작
+	// 출고 처리에 의한 재고 수량 수정
+	int updateOutStockQty(@Param("ospp") Out_schedule_per_productVO ospp);
+
+	
+	// -------------------------------------------------------- jakyoung 끝
 	
 	
 }

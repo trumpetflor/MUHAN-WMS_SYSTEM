@@ -219,4 +219,31 @@
 	
    <!-- ==========================================================================23/02/09 미주-->	
   
+ 	<!-- ========================= jakyoung 시작 ============================ -->
+ 	<update id="updateOutQty">
+<!--  		<selectKey resultType="int" order="BEFORE" keyProperty="out_schedule_qty"> -->
+<!-- 			SELECT OUT_SCHEDULE_QTY -->
+<!-- 				FROM out_schedule_per_product  -->
+<!-- 				WHERE  -->
+<!-- 					OUT_SCHEDULE_CD = #{out_schedule_cd} -->
+<!-- 					AND STOCK_CD = #{stock_cd} -->
+<!-- 		</selectKey> -->
+ 		UPDATE out_schedule_per_product
+ 			SET 
+ 				OUT_QTY = (OUT_QTY + #{out_qty})
+<!--  				<if test="#{out_schecule_qty} == (OUT_QTY + #{out_qty})"> -->
+<!--  					, OUT_COMPLETE = '1' -->
+<!--  				</if> -->
+ 			WHERE
+ 				OUT_SCHEDULE_CD = #{out_schedule_cd}
+				AND STOCK_CD = #{stock_cd}
+ 	</update>
+ 	
+  
+ 	<!-- ========================= jakyoung 끝 ============================ -->
+
+
+
+
+  
 </mapper>

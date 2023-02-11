@@ -203,25 +203,46 @@ $(function(){
        	let tr_id = $(this).closest("tr").attr("id");
 // 		alert(tr_id);
         if ($(this).is(':checked')) {
-        	$("#" + tr_id).find("input[type=number][name=out_qty]").prop("readonly", false);
+        	$("#" + tr_id).find("input[type=number][name=input_out_qty]").prop("readonly", false);
         } else {
-        	$("#" + tr_id).find("input[type=number][name=out_qty]").prop("readonly", true);
+        	$("#" + tr_id).find("input[type=number][name=input_out_qty]").prop("readonly", true);
         }
     });
 	
 	$("#naga").on("click", function() {
 		
-		let stockArr = new Array(); // StockVO 배열 선언
-		let ostArr = new Array(); // Out_schedule_total_viewVO
+		let osppArr = new Array(); // Out_schedule_total_viewVO
 		
-		$("#out_table").each(index, item) {
-			let stock = new Object();
-			let out_scheudul = new Object();
+		$("#out_table > tbody > tr").each(function(index, item) {
+			let ospp = new Object();
 			
+			ospp.out_date = $("#currentDate").val();
+			ospp.out_schedule_cd = $("#outList" + index + " td:eq(0)").text(); // 출고 예정 코드
+			ospp.out_qty = $("#outList" + index + " td:eq(2)").text(); // 출고 지시 수량
+			ospp.stock_cd = $("#outList" + index + " td:eq(3)").text(); // 재고 코드
 			
+			console.log(index + ", " + ospp);
 			
-		}
+			osppArr.push(ospp);
+		});
 		
+		console.log(osppArr);
+		
+		$.ajax({
+			type : "POST",
+			url : "OutProcessing",
+			dataType: "text", // 응답 데이터 타입
+			contentType: "application/json", // 요청 시 전송 데이터 타입
+			data: JSON.stringify(osppArr)
+		})
+		.done(function(result) {
+			alert("출고 처리가 완료되었습니다.");
+			location.href = "OutProcessingSeletList";
+		})
+		.fail(function(result) {
+			alert("일시적인 오류로 인해 출고 처리가 완료되지 않았습니다.")
+			location.reload();
+		});
 		
 	});
 	
@@ -301,9 +322,11 @@ function productInfo(product_cd) {
 			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
 			let product_name = $(this).val().split("/")[1]; // 품목명
 			let out_qty = $(this).val().split("/")[2]; // 미출고수량
-			let input_out_qty = $("#" + tr_id).find("input[name=out_qty]").val(); // 출고 지시수량
+			let input_out_qty = $("#" + tr_id).find("input[name=input_out_qty]").val(); // 출고 지시수량
 			let stock_cd = $(this).val().split("/")[3]; // 재고 코드
 			let wh_loc_in_area = ''; // 위치명
+			
+// 			alert(input_out_qty);
 			
 			inputQtySum += input_out_qty;
 			result = out_qty - input_out_qty;
@@ -316,15 +339,15 @@ function productInfo(product_cd) {
 				$('#out_naga_modal').modal('show');
 				$('#out_naga_modal').show();
 			} else {
-				alert("출고 불가능한 수량입니다.");
+				alert("출고 불가능한 수량이 포함되어 있습니다.");
 				return;
 			}
 			
 			out_list += '<tr id="outList' + index + '">';
 			out_list += '<td>' + out_schedule_cd + '</td>';
 			out_list += '<td>' + product_name + '</td>';
-			out_list += '<td>' + out_qty + '</td>';
-			out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a>';
+			out_list += '<td>' + input_out_qty + '</td>';
+			out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
 // 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
 // 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
 			out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
@@ -430,7 +453,7 @@ function productInfo(product_cd) {
 				<td>${total.out_date }</td>
 				<td>${total.out_schedule_qty }</td>
 				<td>${total.out_qty }</td>
-				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust" name="out_qty" value="${total.out_qty }" min="1" max="${total.out_qty }" readonly="readonly"></td>
+				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust" name="input_out_qty" value="${total.out_qty }" min="1" max="${total.out_qty }" readonly="readonly"></td>
 				<td>${total.remarks }</td>
 			</tr>
 			</c:forEach>
@@ -505,7 +528,7 @@ function productInfo(product_cd) {
 <!-- 출고 버튼 클릭 시 모달 -->
 
 	<div id="out_naga_modal" class="modal" data-backdrop="static">
-		<form action="">
+		<form class="">
 		
 			<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
 				<div class="p-2 bg-light text-black well rounded-2" >출고</div>
@@ -533,7 +556,7 @@ function productInfo(product_cd) {
 <!-- 				<div> -->
 <!-- 					<b>합계 :</b><span id="input_qty_sum"></span> --> <!-- 문자열로 나옴 -->
 <!-- 				</div> -->
-	  		<button type="button" class="btn btn-dark" id="naga" >출고</button>
+	  		<button type="button" class="btn btn-dark" id="naga" >출고 처리</button>
 		
 		</form>
 		
