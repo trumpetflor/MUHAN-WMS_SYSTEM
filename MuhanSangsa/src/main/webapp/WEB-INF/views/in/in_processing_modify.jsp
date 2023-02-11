@@ -153,167 +153,176 @@
 
 
 <script type="text/javascript">
-function openStockModal() {
-	alert();
-	
+//합계 계산하는 calculateSum() 함수
+var index = 0;
+function calculateSum() {
+var sum = 0;
+var inputElements = document.getElementsByClassName("input-field");
+for (var i = 0; i < inputElements.length; i++) {
+	if (!isNaN(inputElements[i].value) && inputElements[i].value.length != 0) {
+    sum += parseFloat(inputElements[i].value);
+	}
+}
+document.getElementById("sum").innerHTML = "Sum: " + sum;
 }
 
-$(function () {
-	$(".loc_search").on("click",function(){
-		
-	
-		//id="재고번호_상품번호" 로 넘어옴
-		let stock_cd = $(this).closest('td').attr('id').split("_")[0];
-		let product_cd = $(this).closest('td').attr('id').split("_")[1];
-		
+var inputFields = document.querySelectorAll(".input-field");
+inputFields.forEach(function(inputField) {
+inputField.addEventListener("input", calculateSum);
+});
 
-		$(".search_div").css("display","none");
+// 합계 계산 하는 함수() 끝-----------------------------------
+
+
+// 거래처 모달창 검색 후 텍스트 칸에 자동 입력되는 함수
+$(document).on("click","#client_search_modalDiv #client_table > tbody tr",function(){
+	
+		$("#business_no").val($(this).children("td").attr("id"));
 		
-		//div버튼 보이기
-		 $(this).next().show();
 		
-		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").empty();
+		 $('#client_search_modalDiv').modal('hide'); 
+		 $('#client_search_modalDiv').hide();
+		 $('#cust_name').focus();
+		 $('.jquery-modal').click();
+	
+	});
+	
+//담당자 모달창 검색 후 텍스트 칸에 자동 입력되는 함수
+$(document).on("click","#emp_search_modalDiv #emp_table > tbody tr",function(){
+	
+		$("#emp_name").val($(this).children("td").attr("id"));
+		$("#emp_num").val($(this).children("td").next().attr("id"));
 		
+		
+		
+		 $('#emp_search_modalDiv').modal('hide'); 
+		 $('#emp_search_modalDiv').hide();
+		 $('.jquery-modal').click();
+	
+	});
+//품목코드 및 품목명 모달창 검색 후 텍스트 칸에 자동 입력되는 함수
+$(document).on("click","#product_search_modalDiv #pro_table > tbody tr",function(){
+		console.log("버튼 클릭시 값이 나오나 : " + $(this).children("input").attr("id"));
+		$("#product_name"+ index).val($(this).children("td").next().attr("id"));
+		$("#product_cd" + index).val($(this).children("td").attr("id"));
+		
+		
+		
+		 $('#product_search_modalDiv').modal('hide'); 
+		 $('#product_search_modalDiv').hide();
+		 $('.jquery-modal').click();
+	
+	});
+	
+	// 품목 검색 버튼 클릭 시 모달창 활성화
+	function productBtn(indexNum) {
+		
+// 		$(this).closest("tr").index();
+// 		$(this).children('input').attr('id');
+// 		console.log($(this).closest("tr").index());
 		$.ajax({
-			
 	        type: "get",
-	        url: "StockAdjust_loc.ajax",
-	        data: {
-	        	"product_cd":product_cd
-	        },
-	         
-	        contentType: 'application/json;charset=UTF-8',
+	        url: "inProSearchAjax?business_no=" + $("#business_no").val()+ "&num="+ indexNum,
+	        contentType: 'html',
 	        success: function(data,status,xhr) {
-	        	$("#"+product_cd + "  .search_div ul").empty();
-	        
-				//JSON데이터 이상함 ! 나중에 물어볼것
-// 	               JSON.parse(JSON.stringify(data));
-// 		     	   alert(JSON.parse(JSON.stringify(data)));
-		     	   
-		     	   let parsingData = JSON.parse(data);
-// 		     	  alert(parsingData);
-// 		     	  alert(JSON.stringify(parsingData));
-					
-		     	   JSON.stringify(parsingData)
-		     		 for(let prod of parsingData){
-		     			 
-		     		  let inner_stock_cd_product_cd = "\'"+stock_cd+"','"+product_cd+"'," //재고번호
-		     		  let inner_var2 = "\'"+prod.wh_loc_in_area_cd+"\',";//위치코드
-		     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\'";
-		     		 
-		     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
-		     			                + prod.product_name+" (재고:"+prod.stock_qty + ")" +"</li>"
-		     		 	
-				     		$("#"+stock_cd+"_"+product_cd + "  .search_div ul").prepend(result);
-		     		 }
-	     	 
+	        	$('#product_search_modalDiv').html(data);
+	    
+	        	
 	        },
 	        error: function(xhr,status,error) {
 	            console.log(error);
 	        }
+	        
+		});
 		
-		});//$.ajax({
-		
-	});
 	
-	//위치검색 div내의 X버튼 클릭시
-	$(".close-loc-Btn").on("click",function(){
-		$(".search_div").css("display","none");
-	});
+	//모달창 열기
+	 $('#product_search_modalDiv').modal('show');
 	
-	//새 위치 추가 버튼 클릭시
-	$("a[href='modal_container_stock']").on("click",function(){
-		
-		
-	});
-	
-	$(".search_div ul li").on("click",function(){
-		alert();
-	});
-	
-	
-	//셀렉트박스 '조정' 선택시에만 조정항목 able처리
-	$("select").on("change", function(){
-		
-		if($(this).val() == "adjust"){
-			console.log("select option:selected : 조정선택됨");
+	}
+$(function () {
 			
-			//조정수량 input able처리
-			$(this).closest("td").next().children("input").prop("disabled", false);
-			//위치선택 input disable처리
-			$(this).closest("td").next().next().children("input").prop("disabled", true);
-			$(this).closest("td").next().next().children("input").val("");
-			//이동수량 input disable처리
-			$(this).closest("td").next().next().next().children("input").prop("disabled", true);
-			$(this).closest("td").next().next().next().children("input").val("");
-		}else{
-			//조정수량 input disabled처리
-			$(this).closest("td").next().children("input").prop("disabled", true);
-			$(this).closest("td").next().children("input").val("");
-			//위치선택 input able처리
-			$(this).closest("td").next().next().children("input").prop("disabled", false);
-			//이동수량 input able처리
-			$(this).closest("td").next().next().next().children("input").prop("disabled", false);
-		}
-		
-	});
 	
-	//합계수량 sum_result: 조정수량 + 이동수량 jquery로 만들기
-	
-	
+			
+			$("#cust_searchBtn").on("click",function(){
+				
+					$.ajax({
+						
+				        type: "get",
+				        url: "inClientSearchAjax",
+				        contentType: 'html',
+				        success: function(data,status,xhr) {
+				        	$('#client_search_modalDiv').html(data);
+				    
+				        	
+				        },
+				        error: function(xhr,status,error) {
+				            console.log(error);
+				        }
+				        
+					});
+					
+				
+				//모달창 열기
+				 $('#client_search_modalDiv').modal('show'); 
+				});
+			
+			$("#emp_searchBtn").on("click",function(){
+				
+					$.ajax({
+						
+				        type: "get",
+				        url: "inEmpSearchAjax",
+				        contentType: 'html',
+				        success: function(data,status,xhr) {
+				        	$('#emp_search_modalDiv').html(data);
+				    
+				        	
+				        },
+				        error: function(xhr,status,error) {
+				            console.log(error);
+				        }
+				        
+					});
+					
+				
+				//모달창 열기
+				 $('#emp_search_modalDiv').modal('show'); 
+				});
+			
+			$("#product_searchBtn").on("click",function(){
+				$(this).closest("tr").index();
+				console.log($(this).closest("tr").index());
+				$.ajax({
+			        type: "get",
+			        url: "inProSearchAjax?business_no=" + $("#business_no").val(),
+			        contentType: 'html',
+			        success: function(data,status,xhr) {
+			        	$('#product_search_modalDiv').html(data);
+			    
+			        	
+			        },
+			        error: function(xhr,status,error) {
+			            console.log(error);
+			        }
+			        
+				});
+				
+			
+			//모달창 열기
+			 $('#product_search_modalDiv').modal('show'); 
+			});
+			
+			
 });
+	
 
+	
+	
+	
 function openSearchArea() {
   document.getElementById("search_div").style.display = 'block';
- alert("openSearchArea");
-}
-
-//
-function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area) {
-	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd+"/"+wh_loc_in_area );
-	//https://hianna.tistory.com/718
-	$(function(){
-		$("#"+stock_cd+"_"+product_cd).children("input").val(stock_cd+"["+wh_loc_in_area+"]");
-		$("#"+stock_cd+"_"+product_cd).children("input").attr("value2",wh_loc_in_area_cd);
-		$("#"+stock_cd+"_"+product_cd).children(".search_div").css("display","none");
-	});
-	
-}
-
-//새위치 추가 버튼 클릭시 실행되는 함수
-function open_addLoc_modal(stock_cd,product_cd) {
-
-	console.log("stock_cd: "+ stock_cd);
-	console.log("product_cd: "+ product_cd);
-	
-	$.ajax({
-		
-        type: "get",
-        url: "Search_location.ajax",
-        data: {
-        	"product_cd":product_cd,
-        	"stock_cd":stock_cd
-        },
-        contentType: 'html',
-        success: function(data,status,xhr) {
-//         	alert(data);
-        
-			$("#modal_container_content").html(data);
-     	 
-        },
-        error: function(xhr,status,error) {
-            console.log(error);
-        }
-	
-	});//$.ajax({
-	
-}
-	
-//거래처 팝업 결과값 등록
-function fn_selectClient(business_no,cust_name) {
-	$("#business_no").val(business_no);
-	$("#cust_name").val(cust_name);
-	
+  alert("openSearchArea");
 }
 </script>
 <body>
@@ -342,10 +351,12 @@ function fn_selectClient(business_no,cust_name) {
 <div class="content">
    <div class="animated fadeIn">
 	 
-	<table class="table" id=" ">
+	<form action="InProcessingModifyPro" method="post" enctype="multipart/form-data">
+	<table class="table" id="table_top">
 		<thead>
             <c:forEach var="inList" items="${inList }">
             <tr>
+            	<input type="hidden" name="in_schedule_cd" value="${inList.in_schedule_cd }">
 				<th>일 자</th>
 				<td><input type="date" class="form-control" value="${inList.in_date }" required="required"></td>
 				<th>유형</th>
@@ -355,12 +366,12 @@ function fn_selectClient(business_no,cust_name) {
 	          				<div class="form-check-inline form-check">
 	                        <div class="radio">
 	                            <label for="radio1" class="form-check-label ">
-	                                <input type="radio" id="" name="in_type" required="required" value="1" checked="checked" class="form-check-input">발주서
+	                                <input type="radio" id="" name="in_type_cd" required="required" value="1" checked="checked" class="form-check-input">발주서
 	                            </label>
 	                        </div>
 	                        <div class="radio">
 	                            <label for="radio2" class="form-check-label ">
-	                                <input type="radio" id="" name="in_type" required="required" value="2" class="form-check-input">구매
+	                                <input type="radio" id="" name="in_type_cd" required="required" value="2" class="form-check-input">구매
 	                            </label>
 				 			</div>
 				 			</div>
@@ -374,13 +385,10 @@ function fn_selectClient(business_no,cust_name) {
 				<td>
 					<div> 
 						<div class="input-group">
-						 <input type="hidden" class="form-control" name="business_no" id="business_no"
-						  	value="" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
-						 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
+						
+						<input type="text" class="form-control" name="business_no" id="business_no" readonly="readonly"
 						  	value="${inList.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
-						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-						  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
-						  </button>
+						<input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="cust_searchBtn">
 						</div>
 					</div> 
 				</td>
@@ -390,20 +398,17 @@ function fn_selectClient(business_no,cust_name) {
 			<tr>
 				<th>담당자</th>
 				<td>
-					<div> <!-- 수정필요 -->
+					<div>
 						<div class="input-group">
-						 <input type="hidden" class="form-control" name="business_no" id="business_no"
-						  	value="" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
-						 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
+						<input type="text" class="form-control" name="emp_name" id="emp_name" readonly="readonly"
 						  	value="${inList.emp_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
-						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-						  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
-						  </button>
+						<input type="hidden" name="emp_num" value="${inList.emp_num }">
+						<input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="emp_searchBtn">
 						</div>
 					</div> 
 				</td>
 				<th>비고</th>
-				<td colspan="2"><input type="text" class="form-control" value="${inList.remarks }" name=" "></td>
+				<td colspan="2"><input type="text" class="form-control" value="${inList.remarks }" name="remarks2"></td>
 			</tr>
 			</c:forEach>
 			<tr><td class="space" colspan="10" /></tr>
@@ -416,34 +421,33 @@ function fn_selectClient(business_no,cust_name) {
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${proList }" var="proList" varStatus="status" >
+			<c:forEach items="${proList }" var="proList" varStatus="i" >
 				<tr>
 					<!-- 품목코드 -->
-					<td><input type="text" class="form-control" value="${proList.product_cd}" readonly="readonly"></td>
-					<!-- 품목명 -->
 					<td>
 						<div class="input-group">
-						 <input type="hidden" class="form-control" name="business_no" id="business_no"
-						  	value="${proList.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
-						 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
-						  	value="${proList.product_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
-						  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-						  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
-						  </button>
+						 <input type="hidden" class="form-control" name="cust_name" id="cust_name"
+						  	value="${proList.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
+						 <input type="text" class="form-control" id="product_cd${i.index }" name="product_cd" readonly="readonly"
+						  	value="${proList.product_cd }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
+						 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="product_searchBtn${i.index }">
 						</div>
 					</td>
+					<!-- 품목명 -->
+					<td><input type="text" class="form-control" id="product_name${i.index }" name="product_name" value="${proList.product_name}" readonly="readonly"></td>
 					<!-- 수량 -->
-					<td><input type="text" class="form-control" value="${proList.in_qty}"></td>
+					<td><input type="text" class="form-control" name="in_schedule_qty" value="${proList.in_qty}"></td>
 					<!-- 납기일자 -->
-					<td><input type="date" class="form-control" value="${proList.in_date }" required="required"></td>
+					<td><input type="date" class="form-control" name="in_date" value="${proList.in_date }" required="required"></td>
 					<!-- 적요 -->
-					<td><input type="text" class="form-control" value="${proList.remarks}"></td>
+					<td><input type="text" class="form-control" name="remarks" value="${proList.remarks}"></td>
 				</tr> 
 			</c:forEach>
-			</tbody>
+		</tbody>
 	
 	</table>
-	<input type="submit" value="등록" class = "btn btn-primary mx-4"  onclick="OutInsertForm"/>
+	<input type="submit" value="등록" class = "btn btn-primary mx-4"  onclick="InProcessingModifyPro"/>
+	</form>
 </div>
 </div>
 <!-- 재고번호 클릭시 보이는 모달 영역 DIV  -->
@@ -482,6 +486,21 @@ function fn_selectClient(business_no,cust_name) {
 	<div class="col-12 col-md-9"><input type="date" id="in_date" name="in_date" class="form-control"></div>
 
 </div>	
+
+<!-- 거래처 검색 DIV -->
+<div id="client_search_modalDiv" class="modal">
+
+</div>
+<!-- 담당자 검색 모달 영역 DIV -->
+<!-- Modal HTML embedded directly into document -->
+<div id="emp_search_modalDiv" class="modal">
+	
+</div>
+<!-- 품목 검색 모달 영역 DIV -->
+<div id="product_search_modalDiv" class="modal">
+	
+</div><!-- end of DIV #modal_container -->
+
 
 <!-- footer -->
 <br><br><br><br><br><br><br><br><br><br><br><br>

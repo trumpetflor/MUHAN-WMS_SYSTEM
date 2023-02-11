@@ -308,18 +308,6 @@ function newStockCd(index){
 }
 	
 	
-
-
-// 저장 버튼
-function modify(end){
-	let modArr = new Array();
-	$("")
-	
-}
-	
-	
-	
-	
 	
 $(function(){
 	// 입고지시수량 계산
@@ -334,13 +322,6 @@ $(function(){
 		});
 	    
 	}); // 입고지시수량 계산
-	
-
-	
-
-	
-	
-	
 	
 	
 }); //jQuery
@@ -362,11 +343,11 @@ $(function(){
                         <div class="card">
                             <div class="card-header">
                                 <strong class="card-title">
-                                일자 : <input type="date" class="form-control" id="todayDate">
+                                일자 : <input type="date" class="form-control" id="todayDate" name="out_date">
                                 </strong>
                             </div>
                             <div class="card-body">
-                                <form action="InRegisterPro" method="post">
+                                <form action="InRegisterPro" method="post" enctype="multipart/form-data">
                                 <table id="reg_table bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -388,13 +369,15 @@ $(function(){
                                     		<c:set var = "in_qty_total" value = "0" />
 	                                    	<c:forEach var="inList" items="${resultList }" varStatus="i">
 	                                    		<tr>
-		                                    		<td>${inList.in_schedule_cd }</td>
-		                                    		<td>${inList.product_name }</td>
-		                                    		<td>${inList.in_schedule_qty }</td>
-		                                    		<td><input type="number" id="in_qty" value="${inList.in_schedule_qty }"></td>
+	                                    			<input type="hidden" name="product_cd" value="${inList.product_cd}">
+	                                    			<input type="hidden" name="in_date" value="${inList.in_date}">
+		                                    		<td><input type="text" class="form-control rounded-start" name="in_schedule_cd" value="${inList.in_schedule_cd }" readonly="readonly"></td>
+		                                    		<td><input type="text" class="form-control rounded-start" name="product_name" value="${inList.product_name }" readonly="readonly"></td>
+		                                    		<td><input type="text" class="form-control rounded-start" name="in_schedule_qty" value="${inList.in_schedule_qty }" readonly="readonly"></td>
+		                                    		<td><input type="text" class="form-control rounded-start" name="in_qty" id="in_qty" value="${inList.in_schedule_qty }"></td>
 		                                    		<td><!-- 재고번호 검색 -->
 														<div class='d-flex'><!-- 수정 필요 -->
-													 	  <input type="text" class="form-control rounded-start" id="stock_cd${i.index }"name="stock_cd" onclick="newStockCd(${i.index})"> 
+													 	  <input type="text" class="form-control rounded-start" id="stock_cd${i.index }" name="stock_cd" value="${inList.stock_cd }" onclick="newStockCd(${i.index})" readonly="readonly"> 
 <%-- 													 	  <input type="hidden" name="end" id="end" value="${i.end }"> --%>
 													 	  <input type="hidden" name="index" id="index" value="${i.index }">
 								<!-- 							 <a href="#stock_search_modalDiv" rel="modal:open"> -->
@@ -404,7 +387,7 @@ $(function(){
 		                                    		</td>
 		                                    		<td><!-- 선반명 검색 -->
 														<div class='d-flex'><!-- 수정 필요 -->
-													 	  <input type="text" class="form-control rounded-start" name="wh_loc_in_area" id="wh_loc_in_area${i.index }"> 
+													 	  <input type="text" class="form-control rounded-start" name="wh_loc_in_area" id="wh_loc_in_area${i.index }" value="${inList.wh_loc_in_area }"> 
 <!-- 													 	  <input type="hidden" name="product_name" id="product_name" value=""> -->
 <!-- 															 <a href="#stock_search_modalDiv" rel="modal:open"> -->
 															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2 whLoc_cd_btn" id="whLoc_searchBtn${i.index }">
@@ -428,7 +411,7 @@ $(function(){
                                     </tbody>
                                 </table>
 									<div>
-										<input type="button" value="저장" class="btn btn-outline-dark" onclick="modify(${end})">
+										<input type="submit" value="저장" class="btn btn-outline-dark">
 									</div>
                                 </form>
 								</div>

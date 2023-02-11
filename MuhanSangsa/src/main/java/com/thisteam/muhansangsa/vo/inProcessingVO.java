@@ -4,9 +4,9 @@ import java.sql.Date;
 
 /*
 CREATE VIEW in_processing_view
-AS SELECT a.in_schedule_cd, d.business_no, d.cust_name, c.product_cd, c.product_name, b.in_date, b.in_schedule_qty, b.in_qty, (b.in_schedule_qty - b.in_qty) as no_in_qty, b.remarks 
+AS SELECT a.in_schedule_cd, d.business_no, d.cust_name, c.product_cd, c.product_name, b.in_date, b.in_schedule_qty, b.in_qty, (b.in_schedule_qty - b.in_qty) as no_in_qty, b.remarks, b.in_complete 
 FROM in_schedule a, in_schedule_per_product b, product c, client d
-WHERE a.in_schedule_cd = b.in_schedule_cd AND b.product_cd = c.product_cd AND b.business_no = d.business_no;
+WHERE a.in_schedule_cd = b.in_schedule_cd AND b.product_cd = c.product_cd AND c.business_no = d.business_no;
  */
 
 
@@ -21,6 +21,7 @@ public class inProcessingVO {
 	private int in_schedule_qty; // 입고예정수량
 	private int in_qty; // 입고수량 = 입고대기수량
 	private int no_in_qty; // 미입고수량 = 입고예정수량 - 입고수량
+	private int[] no_in_qtyArr; // 미입고수량 = 입고예정수량 - 입고수량
 	private String remarks; // 적요
 	
 	public String getIn_schedule_cd() {
@@ -82,6 +83,12 @@ public class inProcessingVO {
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public int[] getNo_in_qtyArr() {
+		return no_in_qtyArr;
+	}
+	public void setNo_in_qtyArr(int[] no_in_qty, int[] no_in_qtyArr) {
+		this.no_in_qtyArr = no_in_qtyArr;
 	}
 	@Override
 	public String toString() {
