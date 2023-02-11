@@ -252,7 +252,7 @@
          	#{emp.emp_num}
          </foreach>
    </update>
-   
+   <!-- 페이징처리를 위한 작업 -->
    <select id="selectEmpListCount" resultType="int">
    		SELECT COUNT(*)
 			FROM  emp_view -- 이후 작업 분기 일어남

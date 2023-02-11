@@ -497,6 +497,7 @@ public class EmployeesController {
 			model.addAttribute("pageInfo", pageInfo);
 			model.addAttribute("deptArr", deptArr);
 			model.addAttribute("workArr", workArr);
+		
 			System.out.println("workArr : " + workArr);
 			System.out.println("deptArr : " + deptArr);
 			System.out.println("sId   : " + sId);
