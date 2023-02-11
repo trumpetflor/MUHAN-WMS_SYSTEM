@@ -239,6 +239,31 @@
 				AND STOCK_CD = #{stock_cd}
  	</update>
  	
+	<select id="selectOutScheduleTotal" resultType="Out_schedule_total_viewVO">
+		SELECT *
+			FROM
+				out_schedule_total_view
+			WHERE
+				out_schedule_cd = #{out_schedule_cd}
+				AND stock_cd = #{stock_cd}
+	</select>
+  
+  	<select id="selectOutSchedule" resultType="Out_scheduleVO">
+  		SELECT * 
+  			FROM 
+  				out_schedule
+  			WHERE 
+  				out_schedule_cd = #{out_schedule_cd}
+  	</select>
+  	
+  	<update id="updateOutComplete">
+  		UPDATE out_schedule_per_product
+  			SET
+  				out_complete = '1'
+  			WHERE
+  				out_schedule_cd = #{out_schedule_cd}
+				AND stock_cd = #{stock_cd}
+  	</update>
   
  	<!-- ========================= jakyoung 끝 ============================ -->
 

@@ -39,6 +39,8 @@ import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_Arr_viewVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 import com.thisteam.muhansangsa.vo.PageInfo;
+import com.thisteam.muhansangsa.vo.StockHistoryVO;
+import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.StockVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
 
@@ -466,26 +468,51 @@ public class OutController {
 
 		for(Out_schedule_per_productVO ospp : osppLIst) {
 			System.out.println("StockController : " + ospp);
+			
 			int stockUpdateCount = stockSvc.outStockQty(ospp); // stock 테이블 재고 수량 수정
 			System.out.println(stockUpdateCount);
 			
+			int osppUpdateCount = service.modifyOutQty(ospp); // out_schedule_per_product 테이블 출고 수량 수정
+			
+			if(osppUpdateCount > 0) {
+				System.out.println("출고 수량 조정 완료");
+			}
+			
 			// out_schedule_total_viewVO 객체 생성 (다 때려넣은 거 뽑아놓기)
-			Out_schedule_total_viewVO 
+			Out_schedule_total_viewVO outTotalView = service.getOutScheduleTotal(ospp);
+			Out_scheduleVO outSchedule = service.getEmpNum(outTotalView.getOut_schedule_cd());
+			
+			if(outTotalView.getOut_schedule_qty() == outTotalView.getOut_qty()) {
+				int updateCount = service.changeOutComplete(ospp);
+			}
 			
 			if(stockUpdateCount > 0) { // 재고 히스토리 추가
-				int sHinsertCount = stockSvc.addOutHistory(ospp);
-			}
-				int osppUpdateCount = service.modifyOutQty(ospp); // out_schedule_per_product 테이블 출고 수량 수정
+				StockHistoryVO stockHistory = new StockHistoryVO();
 				
-				if(osppUpdateCount > 0) {
-					System.out.println(osppUpdateCount);
+				stockHistory.setStock_cd(outTotalView.getStock_cd());
+				stockHistory.setStock_control_type_cd("1"); // 출고
+				stockHistory.setProduct_cd(ospp.getProduct_cd());
+				stockHistory.setSource_stock_cd(0);
+				stockHistory.setTarget_stock_cd(0);
+				stockHistory.setQty(ospp.getOut_qty());
+				stockHistory.setEmp_num(outSchedule.getEmp_num());
+				stockHistory.setRemarks(outTotalView.getRemarks());
+				
+				int sHinsertCount = stockSvc.addOutHistory(stockHistory);
+				
+				if(sHinsertCount > 0) {
+					System.out.println("재고 이력 추가 완료");
+					try {
+						response.setCharacterEncoding("UTF-8");
+						response.getWriter().print("true"); // toString() 생략됨
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-				try {
-					response.setCharacterEncoding("UTF-8");
-					response.getWriter().print("true"); // toString() 생략됨
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				
+			}
+			
+			
 		}
 		
 	}

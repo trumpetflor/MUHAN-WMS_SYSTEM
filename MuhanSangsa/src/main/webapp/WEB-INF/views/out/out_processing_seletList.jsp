@@ -216,7 +216,7 @@ $(function(){
 		$("#out_table > tbody > tr").each(function(index, item) {
 			let ospp = new Object();
 			
-			ospp.out_date = $("#currentDate").val();
+// 			ospp.out_date = $("#currentDate").val(); // 출고 일자 (왜 필요하지)
 			ospp.out_schedule_cd = $("#outList" + index + " td:eq(0)").text(); // 출고 예정 코드
 			ospp.out_qty = $("#outList" + index + " td:eq(2)").text(); // 출고 지시 수량
 			ospp.stock_cd = $("#outList" + index + " td:eq(3)").text(); // 재고 코드

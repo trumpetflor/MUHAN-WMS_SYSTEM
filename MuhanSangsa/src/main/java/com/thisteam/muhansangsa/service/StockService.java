@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.thisteam.muhansangsa.mapper.StockMapper;
 import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
+import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
@@ -104,7 +105,16 @@ public class StockService {
 		System.out.println("StockService : " + ospp);
 		return mapper.updateOutStockQty(ospp);
 	}
+
+	// 출고 처리에 따른 재고 이력
+	public int addOutHistory(StockHistoryVO stockHistory) {
+		return mapper.insertStockHistory(stockHistory);
+	}
+	
+	// 
+	
 	// -------------------------------------------------------- jakyoung 끝
+
 
 
 	
