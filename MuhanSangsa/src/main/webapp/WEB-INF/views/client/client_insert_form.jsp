@@ -104,7 +104,7 @@
 			let regex = /[0-9]{10,30}/; // 10 ~ 30 자리의 숫자
 			
 			if(!regex.exec(business_no)) {
-				alert(business_no + " 는 유효하지 않은 코드입니다.");
+				alert(business_no + " 은(는) 유효하지 않은 코드입니다.");
 // 				$("#business_no").focus();
 				$isConfirmBn = false;
 			} else {
@@ -185,7 +185,7 @@
                     <div class="col-sm-4 ">
                         <div class="page-header float-left rounded-start ">
                             <div class="page-title ">
-                               <h1 class="m-1"><b>거래처 조회</b></h1>   
+                               <h1 class="m-1"><b>거래처 등록</b></h1>   
                             </div>
                         </div>
                     </div>
@@ -194,7 +194,7 @@
                             <div class="page-title ">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="#">기본 등록</a></li>
-                                    <li><a href="ClientList">거래처 등록</a></li>
+                                    <li><a href="ClientList">거래처</a></li>
                                     <li class="active">거래처 등록</li>
                                 </ol>
                             </div>

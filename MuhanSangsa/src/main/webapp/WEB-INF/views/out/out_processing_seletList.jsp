@@ -321,7 +321,7 @@ function productInfo(product_cd) {
 			
 			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
 			let product_name = $(this).val().split("/")[1]; // 품목명
-			let out_qty = $(this).val().split("/")[2]; // 미출고수량
+			let not_out_qty = $(this).val().split("/")[2]; // 미출고수량
 			let input_out_qty = $("#" + tr_id).find("input[name=input_out_qty]").val(); // 출고 지시수량
 			let stock_cd = $(this).val().split("/")[3]; // 재고 코드
 			let wh_loc_in_area = ''; // 위치명
@@ -329,10 +329,10 @@ function productInfo(product_cd) {
 // 			alert(input_out_qty);
 			
 			inputQtySum += input_out_qty;
-			result = out_qty - input_out_qty;
-			console.log(result);
+			result = not_out_qty - input_out_qty;
+			console.log(not_out_qty + " - " + input_out_qty + " = " + result);
 			
-			if(result >= 0 && input_out_qty > 1) {
+			if(result >= 0 && input_out_qty >= 1) { // 출고 지시 수량이 미출고 수량보다 작거나 같고, 1보다 크거나 같을 때
 // 				console.log('나와랏');
 //		 		alert("모달창 열리네요~ 출고가 들어오죠");
 				//모달창 열기
@@ -446,14 +446,14 @@ function productInfo(product_cd) {
 		<tbody>
 		<c:forEach items="${outTotalScheduleList }" var="total" varStatus="status" >
 			<tr id="out_schedule_${status.index }">
-				<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }/${total.product_name }/${total.out_qty }/${total.stock_cd }"></td>
+				<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }/${total.product_name }/${total.out_schedule_qty - total.out_qty }/${total.stock_cd }"></td>
 				<td><a onclick="window.open('outScheduleModifyForm?out_schedule_cd=${total.out_schedule_cd }','outScheduleModifyForm','width=1009, height=900, top= 40,left=450, location=no,status=no,scrollbars=yes')">${total.out_schedule_cd }</a></td>
 				<td>${total.cust_name }</td>
 				<td>${total.product_name }</td>
 				<td>${total.out_date }</td>
 				<td>${total.out_schedule_qty }</td>
-				<td>${total.out_qty }</td>
-				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust" name="input_out_qty" value="${total.out_qty }" min="1" max="${total.out_qty }" readonly="readonly"></td>
+				<td>${total.out_schedule_qty - total.out_qty }</td>
+				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust" name="input_out_qty" min="1" max="${total.out_schedule_qty - total.out_qty }" readonly="readonly"></td>
 				<td>${total.remarks }</td>
 			</tr>
 			</c:forEach>

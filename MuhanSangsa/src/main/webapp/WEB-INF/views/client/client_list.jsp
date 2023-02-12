@@ -58,7 +58,7 @@
 	}
 	
 	td {
-	height: 100px;
+	height: 40px;
 	}
 		
 	.id_pht{
@@ -100,7 +100,7 @@
 			$("#client_table > tbody").empty(); // 리스트 출력 테이블 구역 비우기
 			$("#pageArea").empty(); // 페이지 번호 구역 비우기
 			$('html'). scrollTop(0); // 스크롤 맨 위로 보내기
-			pageList = ''; // 페이지 번호 출력 코드 변수 선언 (블록 외부에서 사용하기 위해서!)
+			let pageList = ''; // 페이지 번호 출력 코드 변수 선언 (블록 외부에서 사용하기 위해서!)
 			
 			// <<<<< 향상된 for문 버전, for문 버전 둘 중에 하나만 사용!! >>>>>>>
 			
@@ -174,13 +174,26 @@
 			let valKey = "'" + keyword + "'";
 			
 			// PageInfo 객체 접근 (jsonArray 의 맨 마지막 인덱스) 해서 startPage 와 endPage 얻어오기 -> 차례대로 숫자 목록 저장
+			if(pageNum > 1) {
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valSt + ', ' + valKey + ')">이전</a>';
+			} else {
+				pageList += '&nbsp;&nbsp;<a href="javascript:(0)">이전</a>';
+			}
+			
 			for(let i = jsonArray[jsonArray.length - 1].startPage; i <= jsonArray[jsonArray.length - 1].endPage; i++) {
 				if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
-					pageList += '<a class="active" href="javascript:(0)">' + i +'</a>'; 
+					pageList += '&nbsp;&nbsp;<a class="active" href="javascript:(0)">' + i +'</a>'; 
 				} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
-					pageList += '<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ')">' + i + '</a>';
+					pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ')">' + i + '</a>';
 				}
 			}
+			
+			if(pageNum < jsonArray[jsonArray.length - 1].endPage) {
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valSt + ', ' + valKey + ')">다음</a>';
+			} else {
+				pageList += '&nbsp;&nbsp;<a href="javascript:(0)">다음</a>';
+			}
+
 // 			alert(pageList);
 			
 			$("#pageArea").append(pageList); // 페이지 번호 표출 div(id="pageArea") 에 페이지 숫자 목록(pageList) 넣기
@@ -196,7 +209,7 @@
 	function openClientDetail(business_no) {
 // 		let business_no = strBn.replace("N", "");
 // 		alert(business_no);
-		window.open("ClientDetail?business_no=" + business_no, "_blank", "width=650, height=800, top=100, left=1000");
+		window.open("ClientDetail?business_no=" + business_no, "_blank", "width=880, height=700, top=50, left=1000");
 		
 	}
 	
@@ -223,7 +236,7 @@
                             <div class="page-title ">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="#">기본 등록</a></li>
-                                    <li><a href="ClientList">거래처 등록</a></li>
+                                    <li><a href="ClientList">거래처</a></li>
                                     <li class="active">거래처 조회</li>
                                 </ol>
                             </div>
@@ -272,6 +285,7 @@
 						</div>
 					</div>
 				</div>
+<%-- 				<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1 float-right" onclick="location.href='downloadClientListExcel?pageNum='${param.pageNum}">거래처 목록 다운</button> --%>
             	<c:if test="${priv eq '1' }">
 					<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1 float-right" onclick="location.href='ClientInsertForm'">거래처 등록</button>
             	</c:if>
