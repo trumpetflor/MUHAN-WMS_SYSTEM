@@ -162,6 +162,7 @@
 				</when>
 			</choose>
 		</if>
+			ORDER BY OUT_CD_1 ASC, OUT_CD_2 ASC
 			LIMIT 
 				#{startRow}, #{listLimit}
    </select>

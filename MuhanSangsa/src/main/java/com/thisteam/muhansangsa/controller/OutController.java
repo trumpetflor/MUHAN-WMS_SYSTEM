@@ -44,7 +44,7 @@ public class OutController {
 	//log4j
 	private static final Logger logger = LoggerFactory.getLogger(OutController.class);
 	@Autowired	
-	private OutService service ;
+	private OutService service;
 
 	@Autowired	
 	private EmployeesService empService;
@@ -162,91 +162,122 @@ public class OutController {
 				@RequestParam(defaultValue = "") String searchType,
 				@RequestParam(defaultValue = "") String keyword,
 				@RequestParam(defaultValue = "1") int pageNum,
-				Model model) {
+				Model model, HttpSession session) {
 		
-		// 1. 권한 처리
 		
-		// 2. sId 처리
-		
-		// 3. 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
-		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		// 1. sId 처리
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; 
 		}
 		
-		// 4. 페이징 처리
-			int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
-			int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
-		
-			// (1). 한 페이지에서 표시할 페이지 목록(번호) 갯수 계산
-			int listCount = service.getOutTotalScheduleListCount(searchType, keyword);
-			System.out.println("총 게시물 수 : " + listCount);
-			// (2). 한 페이지에서 표시할 페이지 목록 갯수 설정
-			int pageListLimit = 10;
-			// (3). 전체 페이지 목록 수 계산
-			int maxPage = listCount / listLimit 
-							+ (listCount % listLimit == 0 ? 0 : 1); 
-			// (4). 시작 페이지 번호 계산
-			int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
-			// 5. 끝 페이지 번호 계산
-			int endPage = startPage + pageListLimit - 1;
-			// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
-			//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
-			if(endPage > maxPage) {
-				endPage = maxPage;
+		// 2. 권한 처리
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
+		if (isRightUser) {
+			// 3. 접속 ip 확인 코드
+			InetAddress local;
+			String ip;
+			try {
+				local = InetAddress.getLocalHost();
+				ip = local.getHostAddress();
+				model.addAttribute("ip", ip);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
 			}
-		
-		// PageInfo 객체 생성 후 페이징 처리 정보 저장
-		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
-		
-		// 5. 출고 처리 목록 가져오기 (키워드 검색 & 페이징 처리)
-				List<Out_schedule_total_viewVO> outTotalScheduleList = service.getOutTotalScheduleList(searchType, keyword, startRow, listLimit);
-//		// ---------------------------------------------------------------------------
-		
-		model.addAttribute("outTotalScheduleList", outTotalScheduleList);
-		model.addAttribute("pageInfo", pageInfo);
-		
-		return "out/out_processing_seletList";
-		
-	}
+			
+			// 4. 페이징 처리
+				int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+				int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+			
+				// (1). 한 페이지에서 표시할 페이지 목록(번호) 갯수 계산
+				int listCount = service.getOutTotalScheduleListCount(searchType, keyword);
+				System.out.println("총 게시물 수 : " + listCount);
+				// (2). 한 페이지에서 표시할 페이지 목록 갯수 설정
+				int pageListLimit = 10;
+				// (3). 전체 페이지 목록 수 계산
+				int maxPage = listCount / listLimit 
+								+ (listCount % listLimit == 0 ? 0 : 1); 
+				// (4). 시작 페이지 번호 계산
+				int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+				// 5. 끝 페이지 번호 계산
+				int endPage = startPage + pageListLimit - 1;
+				// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+				//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+				if(endPage > maxPage) {
+					endPage = maxPage;
+				}
+			
+			// PageInfo 객체 생성 후 페이징 처리 정보 저장
+			PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
+			
+			// 5. 출고 처리 목록 가져오기 (키워드 검색 & 페이징 처리)
+			List<Out_schedule_total_viewVO> outTotalScheduleList = service.getOutTotalScheduleList(searchType, keyword, startRow, listLimit);
+	//		// ---------------------------------------------------------------------------
+			
+			model.addAttribute("outTotalScheduleList", outTotalScheduleList);
+			model.addAttribute("pageInfo", pageInfo);
+			
+			return "out/out_processing_seletList";
+			
+		}else {
+			model.addAttribute("msg", "출고 관리 권한이 없습니다!");
+			return "fail_back";
+		}// 권한 판별 if문	
+			
+	}//outProcessingSelectList()
 	
 	// 출고 처리 항목 수정 페이지
 	@GetMapping(value =  "/outScheduleModifyForm")
-	public String outScheduleModifyForm(@RequestParam("out_schedule_cd") String out_schedule_cd, Model model) {
+	public String outScheduleModifyForm(
+			@RequestParam("out_schedule_cd") String out_schedule_cd,
+			Model model, HttpSession session) {
 		
-		// 1. 권한 처리
 		
-		// 2. sId 처리
-		
-		// 3. 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
-		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		// 1. sId 처리
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
-		
-		System.out.println("넘어왔니 출고번호" + out_schedule_cd);
-		// 4. 출고 번호에 해당하는 정보 조회 (출고 수정을 위한 목록 조회)
-		
-			// (1). 출고 정보 상단에 해당하는 정보 조회
-			List<Out_schedule_total_viewVO> outModifyFixedList = service.getOutModifyFixedList(out_schedule_cd);
-			model.addAttribute("outModifyFixedList", outModifyFixedList);
+		// 2. 권한 처리
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
+		if (isRightUser) {
+			// 3. 접속 ip 확인 코드
+			InetAddress local;
+			String ip;
+			try {
+				local = InetAddress.getLocalHost();
+				ip = local.getHostAddress();
+				model.addAttribute("ip", ip);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
 			
-			// (2). 출고 정보 하단 = 수정에 해당하는 목록 조회
-			List<Out_schedule_total_viewVO> outModifyList = service.getOutModifyList(out_schedule_cd);
-			model.addAttribute("outModifyList", outModifyList);
-		
-		return "out/out_modifyForm";
-	}
+			System.out.println("넘어왔니 출고번호" + out_schedule_cd);
+			// 4. 출고 번호에 해당하는 정보 조회 (출고 수정을 위한 목록 조회)
+			
+				// (1). 출고 정보 상단에 해당하는 정보 조회
+				List<Out_schedule_total_viewVO> outModifyFixedList = service.getOutModifyFixedList(out_schedule_cd);
+				model.addAttribute("outModifyFixedList", outModifyFixedList);
+				
+				// (2). 출고 정보 하단 = 수정에 해당하는 목록 조회
+				List<Out_schedule_total_viewVO> outModifyList = service.getOutModifyList(out_schedule_cd);
+				model.addAttribute("outModifyList", outModifyList);
+			
+			return "out/out_modifyForm";
+		}else {
+			model.addAttribute("msg", "출고 관리 권한이 없습니다!");
+			return "fail_back";
+		} // 권한 판별 if()
+
+	}// outScheduleModifyForm()
 	
 	
 	// 출고 처리 항목 수정 내용 비즈니스 로직 실행
@@ -277,21 +308,19 @@ public class OutController {
 			
 		}
 		
-		System.out.println("성공했지롱!");
-		
-		
 		try {
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
-			out.println("window.close();");
+			out.println("alert('출고 처리 항목 수정 완료!');");
+			out.println("opener.document.location.reload();");
 			out.println("self.close();");
 			out.println("</script>");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-	}
+	} // outScheduleModifyPro()
 	
 	//-------------------------------------------------------------- 23/02/09 (미주)
 

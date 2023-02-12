@@ -277,12 +277,6 @@ $(function () {
 		// (3). 이동수량과 조정수량이 선택된 경우 합계수량을 표시한다
 		$(this).closest("tr").find('.sum_result').text(qty);
 		
-// 		alert($("select[name=stock_control_type_cd]").val());
-// 		$("#stock-table").closest("tbody").find("input[type=hidden]").val($("select[name=stock_control_type_cd] option:selected").val());
-// 		console.log($("#stock-table").closest("tbody").find("input[name=stockHistoryList[${ i.index}].stock_control_type_cd]").val($("select[name=stock_control_type_cd]").val()));
-// 		alert($("#stock-table").closest("tbody").find("input[name=stockHistoryList[${ i.index}].stock_control_type_cd]").val($("select[name=stock_control_type_cd]").val()));
-// 		alert($(this).closest("td").find("input[type=Number]").val());
-// 		$("#stock-table").closest("tbody").find("input[type=hidden]").next(2).val($(this).closest("td").find("input[type=Number]").val());
 	});
 	
 

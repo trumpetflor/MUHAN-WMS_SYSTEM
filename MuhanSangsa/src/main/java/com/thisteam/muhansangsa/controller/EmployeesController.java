@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +55,28 @@ public class EmployeesController {
 
 	//---------------------------------------------------인사 관리 (사원 등록)--------------------------
 	
+	// 사원 등록 페이지
 	@GetMapping(value = "/employeeRegisterForm")
-	public String register() {
-		return "employee_registration_form";
+	public String register(HttpSession session, Model model) {
+		
+		// 1. sId 
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+		}
+		
+		// 2. 권한 판별
+		boolean isRightUser = service.getPrivilege(sId, Privilege.사원관리);
+		if (isRightUser) {
+			return "employee_registration_form";
+		}else {
+			model.addAttribute("msg", "사원 등록 권한이 없습니다.");
+			return "fail_back";
+		}
 	}
 	
 	@PostMapping(value = "/employeeRegisterPro")
@@ -65,7 +85,7 @@ public class EmployeesController {
 		System.out.println("잘 넘어왔냐 :  " + employee);
 		
 		
-		// ---------------------------------------- 사원 번호 생ㅇ성 
+		// ---------------------------------------- 사원 번호 생성 
 		// 2. 부서코드(이름) -> 부서코드(코드)
 //	      String deptCd = "";
 //	      switch (employee.getDept_cd()) {
@@ -154,10 +174,8 @@ public class EmployeesController {
 		
 		String[] arr = employee.getPriv_cd().split(",");
 		for(String code : arr) {
-			// 권한 int타입으로 변환하여 계산
 
-			// 23/01/30
-			// 2진수로 바로 처리해도 됩니다
+			// 권한 int타입으로 변환하여 계산 (2진수로 처리)
 			priv_code += Integer.parseInt(code, 2);
 			System.out.println("권한코드 잘 계산되고 있니 : " + priv_code);
 
@@ -775,6 +793,31 @@ public class EmployeesController {
 			return "employees/dept_detail";
 		}
 	   
+	// ==================== 23/02/11 추가 (미주) ==============================
+		// 사원 등록 폼 이메일 중복확인
+		@GetMapping(value = "/EmployeeIdCheck")
+		public void employeeIdCheck(@RequestParam("id") String id, HttpServletResponse response) {
+			System.out.println("ajax 로 넘어온 아이디 : " + id);
+			
+			// 이메일 중복 확인
+			int duplicateCount = service.checkDuplicateId(id);
+			try { // 중복되는 이메일 존재
+				if(duplicateCount > 0) {
+					response.setCharacterEncoding("UTF-8");
+				    response.getWriter().print("true"); 
+				} else { // 입력 이메일 사용 가능
+					response.setCharacterEncoding("UTF-8");
+				    response.getWriter().print("false"); 
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+	// ==================== 23/02/11 추가 (미주) ==============================	
+		
+		
 	   
 	   //-------------------------------------------사원조회/상세정보조회 끝------------------------------------------------
 	   //---------------------------------------------------------------------------------------------------------------------
