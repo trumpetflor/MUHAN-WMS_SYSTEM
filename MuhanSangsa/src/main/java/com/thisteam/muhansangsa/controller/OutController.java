@@ -171,7 +171,19 @@ public class OutController {
 	
 }
 	
-	
+	// 출고 예정 목록 중 '조회' 버튼 클릭 시 출고처리상태 리스트 시작
+	@GetMapping(value = "/OutWaitingChecking")
+	public	String outWaitingChecking(
+		@RequestParam(defaultValue = "") String out_schedule_cd,
+		Model model, HttpSession session) {
+		
+		List<Out_scheduleListVO> outList = service.getOutListDetail(out_schedule_cd);
+		
+		
+		model.addAttribute("out_schedule_cd", out_schedule_cd);
+		model.addAttribute("outList", outList);
+		return "out/out_waiting_checking";
+	}
 	
 	
 	

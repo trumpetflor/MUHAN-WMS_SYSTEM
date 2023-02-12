@@ -38,6 +38,12 @@ public class OutService {
 	}
 	
 
+	//출고 예정 목록 중 '조회' 버튼 클릭 시 출고처리상태 리스트 시작
+	public List<Out_scheduleListVO> getOutListDetail(String out_schedule_cd) {
+		return mapper.getOutListDetail(out_schedule_cd);
+	}
+	
+
 	//=====================================================================================================
   
   
@@ -151,6 +157,8 @@ public Out_scheduleVO getEmpNum(String out_schedule_cd) {
 public int changeOutComplete(Out_schedule_per_productVO ospp) {
 	return mapper.updateOutComplete(ospp);
 }
+
+
 
 //-------------------------------------------------------- jakyoung 끝
 

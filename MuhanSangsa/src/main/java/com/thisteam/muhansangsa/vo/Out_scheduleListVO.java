@@ -45,6 +45,8 @@ public class Out_scheduleListVO { //출고예정 테이블
 	private String product_name; // 품목명 PRODUCT 테이블과 조인함!
 	private int out_schedule_qty; //출고예정수량
 	private int out_qty; //출고 수량
+	private int not_out_qty; //미출고 수량
+	
 	private Date out_date;  // 납기일자 (테이블 중복)
 	private String stock_cd; //재고번호
 	private String out_complete; //진행상태 (테이블 중복)
@@ -109,6 +111,12 @@ public class Out_scheduleListVO { //출고예정 테이블
 	public void setOut_qty(int out_qty) {
 		this.out_qty = out_qty;
 	}
+	public int getNot_out_qty() {
+		return not_out_qty;
+	}
+	public void setNot_out_qty(int not_out_qty) {
+		this.not_out_qty = not_out_qty;
+	}
 	public Date getOut_date() {
 		return out_date;
 	}
@@ -133,9 +141,11 @@ public class Out_scheduleListVO { //출고예정 테이블
 		return "Out_scheduleListVO [out_schedule_cd=" + out_schedule_cd + ", business_no=" + business_no
 				+ ", cust_name=" + cust_name + ", emp_num=" + emp_num + ", emp_name=" + emp_name + ", remarks="
 				+ remarks + ", product_cd=" + product_cd + ", product_name=" + product_name + ", out_schedule_qty="
-				+ out_schedule_qty + ", out_qty=" + out_qty + ", out_date=" + out_date + ", stock_cd=" + stock_cd
-				+ ", out_complete=" + out_complete + "]";
+				+ out_schedule_qty + ", out_qty=" + out_qty + ", not_out_qty=" + not_out_qty + ", out_date=" + out_date
+				+ ", stock_cd=" + stock_cd + ", out_complete=" + out_complete + "]";
 	}
+	
+
 	
 	
 	
