@@ -49,8 +49,8 @@ public interface StockMapper {
 	// 재고이력 목록 조회 
 	List<StockHistoryViewVO> selectHistoryList(
 			@Param("stock_cd") int stock_cd, 
-			@Param("keyword") String keyword, 
 			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
 			@Param("startRow") int startRow, 
 			@Param("listLimit") int listLimit);
 

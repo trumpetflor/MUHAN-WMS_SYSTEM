@@ -396,7 +396,7 @@ function productInfo(product_cd) {
                         <div class="page-header float-right rounded-start ">
                             <div class="page-title ">
                                 <ol class="breadcrumb text-right ">
-                                    <li><a href="#">출고 예정</a></li>
+                                    <li><a href="#">출고 처리</a></li>
                                     <li><a href="#">출고 관리</a></li>
                                 </ol>
                             </div>

@@ -1,6 +1,7 @@
 package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
@@ -178,8 +179,7 @@ public class StockController {
 		   
 		} // for문
 		   
-
-		return "redirect:Inventory_View";
+		   return "redirect:Inventory_View";
 	
    	 }else {
 			model.addAttribute("msg", "재고 조정 권한이 없습니다!");
@@ -260,7 +260,7 @@ public class StockController {
 			
 			// 3. 재고 이력 조회 리스트 생성
 			// 파라미터 : 재고번호,  리턴타입 : 리스트(StockVo)
-			System.out.println("재고 이력 조회를 위한 컨트롤러 " + stock_cd+ searchType+ keyword+ startRow+ listLimit);
+			System.out.println("재고 이력 컨트롤러 - 재고번호 :" + stock_cd+ "검색타입"+ searchType+"키워드 :"+ keyword);
 			List<StockHistoryViewVO> stockHistoryList = service.getStockHistoryList(stock_cd, searchType, keyword, startRow, listLimit);
 			model.addAttribute("stockHistoryList", stockHistoryList);
 			model.addAttribute("pageInfo", pageInfo);

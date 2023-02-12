@@ -68,7 +68,7 @@ var idResult = false;
 // jquery 시작 부분 페이지 동작시 적용
 	$(function() {
 		//// ID = 이메일 미입력시 체크 ////
-		$("#email").on("focusout", function() {
+		$("#email").on("keyup", function() {
 			let id = $("#email").val();
 			console.log(id);
 			if(id == "") {
@@ -81,11 +81,11 @@ var idResult = false;
 					data: { id: $("#email").val()},
 					success: function(result) {
 						$("#checkId").html(result);
-						if(result == "true") {
+						if(result == "false") {
 							$("#checkId").html("사용 중인 이메일입니다").css("color","red");
 							idResult = false;
 						} else {
-							$("#checkId").html("사용 가능한 이메일입니다").css("color","#00ff00");
+							$("#checkId").html("사용 가능한 이메일입니다").css("color","#1E90FF");
 							idResult = true;
 						}
 					}// success

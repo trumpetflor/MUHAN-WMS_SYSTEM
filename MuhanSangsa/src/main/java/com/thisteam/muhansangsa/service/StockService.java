@@ -28,9 +28,9 @@ public class StockService {
 
 	// ---------------------23/02/11 페이징 처리 추가
 	// 재고이력 목록 조회 
-	public List<StockHistoryViewVO> getStockHistoryList(int stock_cd, String keyword, String searchType, int startRow, int listLimit) {
-		System.out.println("서비스로 넘어온 " + stock_cd + listLimit + keyword+ searchType);
-		return mapper.selectHistoryList(stock_cd, keyword, searchType, startRow, listLimit);
+	public List<StockHistoryViewVO> getStockHistoryList(int stock_cd, String searchType, String keyword, int startRow, int listLimit) {
+		System.out.println("재고 이력 서비스 - 재고번호 :" + stock_cd+ "검색타입 : "+ searchType+"키워드 :"+ keyword);
+		return mapper.selectHistoryList(stock_cd, searchType, keyword, startRow, listLimit);
 	}
 	// ---------------------23/02/11 페이징 처리 추가
 	
