@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.thisteam.muhansangsa.mapper.StockMapper">
-
+<!-- =======================================hawon==================================================================== -->
 	<select id="selectStockList" resultType="Stock_viewVO">
 		SELECT * 
 		FROM stock_view
@@ -74,14 +74,60 @@
 		INSERT INTO STOCK VALUES( #{STOCK_CD}+1, #{product_cd} , #{wh_loc_in_area_cd} , 0)
 	</insert>
 
-
-	<!-- 재고이력 목록 조회 -->
-	<select id="selectHistoryList" resultType="StockHistoryViewVO">
-		SELECT * 
-			FROM stock_history_view
-			WHERE STOCK_CD = #{stock_cd}
-			ORDER BY STOCK_DATE DESC
+	
+	<!-- 페이징처리를 위한 재고리스트 총 개수 조회 230211 추가-->
+	<select id="selectStockListCount" resultType="int">
+		SELECT COUNT(STOCK_CD) 
+		FROM STOCK_VIEW
+			<if test="!keyword.equals('')">
+				<!-- 2. 검색타입(searchType) 에 따른 WHERE 대상 변경 -->
+				<!-- => 조건이 복수개이므로 choose 태그 사용 -->
+				<choose>
+		            <when test="searchType.equals('STOCK_CD')">
+		               WHERE STOCK_CD LIKE '%${keyword}%'
+		            </when>
+		            <when test="searchType.equals('PRODUCT_NAME')">
+		               WHERE PRODUCT_NAME LIKE '%${keyword}%'
+		            </when>
+		 			<otherwise></otherwise>
+				</choose>		
+			</if>
 	</select>
+<!-- =========================================================================================================== -->
+
+
+<!--========================== 23/02/11 수정 ==================================== -->
+<!-- 재고이력 목록 조회 -->
+	<select id="selectHistoryList" resultType="StockHistoryViewVO" >
+		SELECT * 
+			FROM 
+				stock_history_view
+			<if test="!keyword.equals('')">
+   			WHERE
+	  			<choose>
+					<when test="searchType.equals('STOCK_DATE')">
+						  STOCK_DATE LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('STOCK_CONTROL_TYPE_CD')">
+						  STOCK_CONTROL_TYPE_CD LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('EMP_NAME')">
+						  EMP_NAME LIKE '%${keyword}%'
+					</when>
+					<otherwise></otherwise>
+				</choose>
+				AND STOCK_CD = #{stock_cd}
+			</if>
+			<if test="keyword.equals('')">
+				WHERE STOCK_CD = #{stock_cd}
+			</if>
+			ORDER BY 
+				STOCK_DATE DESC
+			LIMIT 
+				#{startRow}, #{listLimit}
+	</select>
+	<!--========================== 23/02/11 수정 ==================================== -->
+	
 	
 	<!-- 이동 & 조정수량 입력을 통한 재고 수량 변경 -->
 	<update id="updateStockQty" >
@@ -152,8 +198,6 @@
 	</select>
 
 
-	<!-- ===========================23/02/07 추가======================= -->
-	
 	<update id="updateTargetStockQty">
 		<selectKey resultType="int" order="BEFORE" keyProperty="STOCK_QTY">
 			SELECT STOCK_QTY 
@@ -166,7 +210,32 @@
 	</update>
 	
 	
-	<!-- ===========================23/02/07 추가======================= -->
+	<!-- ===========================23/02/11 추가======================= -->
+	<select id="selectinventoryHistoryViewListCount" resultType="int">
+		SELECT COUNT(*)
+			FROM stock_history_view
+			<if test="!keyword.equals('')">
+   			WHERE
+	  			<choose>
+					<when test="searchType.equals('STOCK_DATE')">
+						  STOCK_DATE LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('STOCK_CONTROL_TYPE_CD')">
+						  STOCK_CONTROL_TYPE_CD LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('EMP_NAME')">
+						  EMP_NAME LIKE '%${keyword}%'
+					</when>
+				</choose>
+				AND STOCK_CD = #{stock_cd}
+			</if>
+			<if test="keyword.equals('')">
+				WHERE STOCK_CD = #{stock_cd}
+			</if>
+	</select>
+	
+	
+	<!-- ===========================23/02/11 추가======================= -->
 
 	<!-- ========================= jakyoung 시작 ============================ -->
 	

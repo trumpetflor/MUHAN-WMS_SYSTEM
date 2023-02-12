@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -27,8 +28,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.OutService;
 import com.thisteam.muhansangsa.service.StockService;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
@@ -39,25 +43,32 @@ import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_Arr_viewVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 import com.thisteam.muhansangsa.vo.PageInfo;
+
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.StockVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
+import com.thisteam.muhansangsa.vo.Privilege;
+
+
 
 
 @Controller
 public class OutController {
 	//log4j
 	private static final Logger logger = LoggerFactory.getLogger(OutController.class);
+  
 	@Autowired	
-	private OutService service ;
+	private OutService service;
 	// 다들... 서비스를 사용하신다면... 메서드에서 객체 생성하지 마시고... 
 	// 반드시 어노테이션으로 주입하세요... - 만신창이 올림
 	@Autowired 
 	private StockService stockSvc;
 
-	
-	
+	@Autowired	
+	private EmployeesService empService;
+
+
 
 	//========================= SEWON ======================================= 
 	
@@ -65,10 +76,34 @@ public class OutController {
 	@GetMapping(value = "/OutWaitingSelectList")
 	public	String outWaitingSelectList(
 			@RequestParam(defaultValue = "") String msg,
-			Model model) {
+			Model model, HttpSession session) {
 	
 	model.addAttribute("msg", msg);
-			
+	String sId = (String)session.getAttribute("sId");
+	
+	//sId가 null일 경우 접근 차단!
+	if(session.getAttribute("sId") == null) {
+		model.addAttribute("msg", "잘못된 접근입니다.");
+		return "fail_back";
+	} 
+	
+	// 접속 ip 확인 코드
+	InetAddress local;
+	String ip;
+	try {
+		local = InetAddress.getLocalHost();
+		ip = local.getHostAddress();
+		model.addAttribute("ip", ip);
+	} catch (UnknownHostException e) {
+		e.printStackTrace();
+	}
+	
+	if(sId != null) { // 세션아이디가 있을 경우 시작 
+		// 권한 조회 메서드
+		boolean isRightUser = empService.getPrivilege(sId, 
+				Privilege.WMS관리, Privilege.기본등록, Privilege.사원관리, Privilege.재고관리);
+	}
+		
 	return "out/out_waiting_seletList";
 }
 
@@ -147,91 +182,122 @@ public class OutController {
 				@RequestParam(defaultValue = "") String searchType,
 				@RequestParam(defaultValue = "") String keyword,
 				@RequestParam(defaultValue = "1") int pageNum,
-				Model model) {
+				Model model, HttpSession session) {
 		
-		// 1. 권한 처리
 		
-		// 2. sId 처리
-		
-		// 3. 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
-		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		// 1. sId 처리
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; 
 		}
 		
-		// 4. 페이징 처리
-			int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
-			int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
-		
-			// (1). 한 페이지에서 표시할 페이지 목록(번호) 갯수 계산
-			int listCount = service.getOutTotalScheduleListCount(searchType, keyword);
-			System.out.println("총 게시물 수 : " + listCount);
-			// (2). 한 페이지에서 표시할 페이지 목록 갯수 설정
-			int pageListLimit = 10;
-			// (3). 전체 페이지 목록 수 계산
-			int maxPage = listCount / listLimit 
-							+ (listCount % listLimit == 0 ? 0 : 1); 
-			// (4). 시작 페이지 번호 계산
-			int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
-			// 5. 끝 페이지 번호 계산
-			int endPage = startPage + pageListLimit - 1;
-			// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
-			//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
-			if(endPage > maxPage) {
-				endPage = maxPage;
+		// 2. 권한 처리
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
+		if (isRightUser) {
+			// 3. 접속 ip 확인 코드
+			InetAddress local;
+			String ip;
+			try {
+				local = InetAddress.getLocalHost();
+				ip = local.getHostAddress();
+				model.addAttribute("ip", ip);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
 			}
-		
-		// PageInfo 객체 생성 후 페이징 처리 정보 저장
-		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
-		
-		// 5. 출고 처리 목록 가져오기 (키워드 검색 & 페이징 처리)
-				List<Out_schedule_total_viewVO> outTotalScheduleList = service.getOutTotalScheduleList(searchType, keyword, startRow, listLimit);
-//		// ---------------------------------------------------------------------------
-		
-		model.addAttribute("outTotalScheduleList", outTotalScheduleList);
-		model.addAttribute("pageInfo", pageInfo);
-		
-		return "out/out_processing_seletList";
-		
-	}
+			
+			// 4. 페이징 처리
+				int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+				int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+			
+				// (1). 한 페이지에서 표시할 페이지 목록(번호) 갯수 계산
+				int listCount = service.getOutTotalScheduleListCount(searchType, keyword);
+				System.out.println("총 게시물 수 : " + listCount);
+				// (2). 한 페이지에서 표시할 페이지 목록 갯수 설정
+				int pageListLimit = 10;
+				// (3). 전체 페이지 목록 수 계산
+				int maxPage = listCount / listLimit 
+								+ (listCount % listLimit == 0 ? 0 : 1); 
+				// (4). 시작 페이지 번호 계산
+				int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+				// 5. 끝 페이지 번호 계산
+				int endPage = startPage + pageListLimit - 1;
+				// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+				//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+				if(endPage > maxPage) {
+					endPage = maxPage;
+				}
+			
+			// PageInfo 객체 생성 후 페이징 처리 정보 저장
+			PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
+			
+			// 5. 출고 처리 목록 가져오기 (키워드 검색 & 페이징 처리)
+			List<Out_schedule_total_viewVO> outTotalScheduleList = service.getOutTotalScheduleList(searchType, keyword, startRow, listLimit);
+	//		// ---------------------------------------------------------------------------
+			
+			model.addAttribute("outTotalScheduleList", outTotalScheduleList);
+			model.addAttribute("pageInfo", pageInfo);
+			
+			return "out/out_processing_seletList";
+			
+		}else {
+			model.addAttribute("msg", "출고 관리 권한이 없습니다!");
+			return "fail_back";
+		}// 권한 판별 if문	
+			
+	}//outProcessingSelectList()
 	
 	// 출고 처리 항목 수정 페이지
 	@GetMapping(value =  "/outScheduleModifyForm")
-	public String outScheduleModifyForm(@RequestParam("out_schedule_cd") String out_schedule_cd, Model model) {
+	public String outScheduleModifyForm(
+			@RequestParam("out_schedule_cd") String out_schedule_cd,
+			Model model, HttpSession session) {
 		
-		// 1. 권한 처리
 		
-		// 2. sId 처리
-		
-		// 3. 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
-		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		// 1. sId 처리
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
-		
-		System.out.println("넘어왔니 출고번호" + out_schedule_cd);
-		// 4. 출고 번호에 해당하는 정보 조회 (출고 수정을 위한 목록 조회)
-		
-			// (1). 출고 정보 상단에 해당하는 정보 조회
-			List<Out_schedule_total_viewVO> outModifyFixedList = service.getOutModifyFixedList(out_schedule_cd);
-			model.addAttribute("outModifyFixedList", outModifyFixedList);
+		// 2. 권한 처리
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
+		if (isRightUser) {
+			// 3. 접속 ip 확인 코드
+			InetAddress local;
+			String ip;
+			try {
+				local = InetAddress.getLocalHost();
+				ip = local.getHostAddress();
+				model.addAttribute("ip", ip);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
 			
-			// (2). 출고 정보 하단 = 수정에 해당하는 목록 조회
-			List<Out_schedule_total_viewVO> outModifyList = service.getOutModifyList(out_schedule_cd);
-			model.addAttribute("outModifyList", outModifyList);
-		
-		return "out/out_modifyForm";
-	}
+			System.out.println("넘어왔니 출고번호" + out_schedule_cd);
+			// 4. 출고 번호에 해당하는 정보 조회 (출고 수정을 위한 목록 조회)
+			
+				// (1). 출고 정보 상단에 해당하는 정보 조회
+				List<Out_schedule_total_viewVO> outModifyFixedList = service.getOutModifyFixedList(out_schedule_cd);
+				model.addAttribute("outModifyFixedList", outModifyFixedList);
+				
+				// (2). 출고 정보 하단 = 수정에 해당하는 목록 조회
+				List<Out_schedule_total_viewVO> outModifyList = service.getOutModifyList(out_schedule_cd);
+				model.addAttribute("outModifyList", outModifyList);
+			
+			return "out/out_modifyForm";
+		}else {
+			model.addAttribute("msg", "출고 관리 권한이 없습니다!");
+			return "fail_back";
+		} // 권한 판별 if()
+
+	}// outScheduleModifyForm()
 	
 	
 	// 출고 처리 항목 수정 내용 비즈니스 로직 실행
@@ -262,21 +328,19 @@ public class OutController {
 			
 		}
 		
-		System.out.println("성공했지롱!");
-		
-		
 		try {
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
-			out.println("window.close();");
+			out.println("alert('출고 처리 항목 수정 완료!');");
+			out.println("opener.document.location.reload();");
 			out.println("self.close();");
 			out.println("</script>");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-	}
+	} // outScheduleModifyPro()
 	
 	//-------------------------------------------------------------- 23/02/09 (미주)
 
@@ -299,35 +363,52 @@ public class OutController {
 
 //======================================= hawon =================================================
 	
-	//출고 등록
+	// 출고 등록
 	@GetMapping(value = "/OutInsertForm")
-		public	String outInsertForm(
-				@RequestParam(defaultValue = "") String msg,
-				Model model) {
+	public String outInsertForm(@RequestParam(defaultValue = "") String msg, Model model, HttpSession session) {
 		model.addAttribute("msg", msg);
-		
-		// 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
+
+		// 세션 아이디
+		String sId;
+		if (session.getAttribute("sId") != null) {
+			sId = (String) session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+		}
+
+		// 아이피 주소
 		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
+			InetAddress local = InetAddress.getLocalHost();
+			String ip = local.getHostAddress();
 			model.addAttribute("ip", ip);
+			logger.info("접속 ip : " + ip);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-	
-		
-		 // 현재 날짜 구하기
-        LocalDate now = LocalDate.now();
-        // 포맷 정의 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd00");
-        int formatedNow = Integer.parseInt(now.format(formatter));
-        model.addAttribute("now", now);
-        
-		return "out/out_insertForm";
-		
-	}	
+
+		// 권한 조회 메서드
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
+
+		if (isRightUser) {
+
+			// 현재 날짜 구하기
+			LocalDate now = LocalDate.now();
+			// 포맷 정의
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd00");
+			int formatedNow = Integer.parseInt(now.format(formatter));
+			model.addAttribute("now", now);
+
+			return "out/out_insertForm";
+
+		} else {
+			
+			model.addAttribute("msg", "권한이 없습니다.");
+			return "fail_back";
+
+		}
+	}
 
 	@PostMapping(value = "/OutInsertFormPro")
 	public	String OutInsertFormPro(
@@ -389,20 +470,19 @@ public class OutController {
 	public void Search_emp(@RequestParam(defaultValue = "") String keyword,
 							HttpServletResponse response) {
 			
-		List<Emp_viewVO> empList =  service.searchEmp(keyword);
+		List<Emp_viewVO> empList = service.searchEmp(keyword);
 		JSONArray empArr = new JSONArray();
 		for(Emp_viewVO emp : empList) {
 			empArr.put(new JSONObject(emp));
-			
 		}
-	      try {
-			      response.setCharacterEncoding("UTF-8");
-			      response.getWriter().print(empArr); // toString() 생략됨
-			      System.out.println("empList: " + empArr);
-		   } catch (IOException e) {
-		      e.printStackTrace();
-		   }
-	
+		
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(empArr); // toString() 생략됨
+			System.out.println("empList: " + empArr);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	
 	}
 

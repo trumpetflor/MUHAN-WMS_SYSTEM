@@ -67,29 +67,7 @@
 
 
 </style>
-<!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
-<script type="text/javascript">
-	let pageNum = 1;
-	
-	$(function() {
-		$(window).scroll(function() {
-			// 1. window 객체와 document 객체를 활용하여 스크롤 관련 값 가져오기
-			let scrollTop = $(window).scrollTop();
-			let windowHeight = $(window).height();
-			let documentHeight = $(document).height();
-			
 
-			// 2. 스크롤바 위치값 + 창 높이 + x 가 문서 전체 높이 이상이면
-			//    다음 페이지 게시물 목록 로딩하여 추가
-			if(scrollTop + windowHeight + 1 >= documentHeight) {
-				// 다음 페이지 로딩하기 위한 load_list() 함수 호출
-				// => 이 때, 페이지 번호를 1 증가시켜 다음 페이지 목록 로딩
-				pageNum++;
-// 				load_list(searchType, keyword);
-			}
-		});
-	});
-</script>
 <body>
 
 <jsp:include page="../inc/left.jsp"></jsp:include>
@@ -122,7 +100,19 @@
 
 <div class="content">
    <div class="animated fadeIn">
-
+	<section id="searchSection" class="m-0 d-flex justify-content-end">
+  		<form action="Inventory_History_View">
+  			<input type="hidden" name="stock_cd" value="${param.stock_cd }">
+				<!-- 검색 타입 추가 -->
+				<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
+					<option value="STOCK_DATE" <c:if test="${param.searchType eq 'STOCK_DATE'}">selected</c:if>>작업일자</option>
+					<option value="STOCK_CONTROL_TYPE_CD" <c:if test="${param.searchType eq 'STOCK_CONTROL_TYPE_CD'}">selected</c:if>>작업구분</option>
+					<option value="EMP_NAME" <c:if test="${param.searchType eq 'EMP_NAME'}">selected</c:if>>작업자명</option>
+				</select>			
+				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
+				<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
+		</form>
+   </section>
 	<!-- 해당 재고번호의 재고 이력 표시 화면 띄우기 -->
 	<table class="table"  id="">
 		<thead>
@@ -166,7 +156,56 @@
 		</tbody>
 	
 	</table>
+	
+	<!-- 23/02/11 페이징 처리 기능 추가 -->
+	<div class="float-right">
+	<section id="pageList">
+		<!-- 
+		현재 페이지 번호(pageNum)가 1보다 클 경우에만 [이전] 링크 동작
+		=> 클릭 시 BoardList.bo 서블릿 주소 요청하면서 
+		   현재 페이지 번호(pageNum) - 1 값을 page 파라미터로 전달
+		-->
+		<c:choose>
+					<c:when test="${empty param.pageNum }">
+						<c:set var="pageNum" value="1" />
+					</c:when>
+					<c:otherwise>
+						<c:set var="pageNum" value="${param.pageNum }" />
+					</c:otherwise>
+				</c:choose>
+		<c:choose>
+			<c:when test="${pageNum > 1}">
+				<input type="button" value="이전" class = "btn btn-primary btn-sm  " onclick="location.href='Inventory_History_View?pageNum=${pageNum - 1}&stock_cd=${param.stock_cd }'">
+			</c:when>
+			<c:otherwise>
+				<input type="button" value="이전" class = "btn btn-primary btn-sm  ">
+			</c:otherwise>
+		</c:choose>
+			
+		<!-- 페이지 번호 목록은 시작 페이지(startPage)부터 끝 페이지(endPage) 까지 표시 -->
+		<c:forEach var="i" begin="${pageInfo.startPage }" end="${pageInfo.endPage }">
+			<!-- 단, 현재 페이지 번호는 링크 없이 표시 -->
+			<c:choose>
+				<c:when test="${pageNum eq i}">
+					${i }
+				</c:when>
+				<c:otherwise>
+					<a href="Inventory_History_View?pageNum=${i }&stock_cd=${param.stock_cd }">${i }</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
 
+		<!-- 현재 페이지 번호(pageNum)가 총 페이지 수보다 작을 때만 [다음] 링크 동작 -->
+		<c:choose>
+			<c:when test="${pageNum < pageInfo.maxPage}">
+				<input type="button" value="다음" class = "btn btn-primary btn-sm  " onclick="location.href='Inventory_History_View?pageNum=${pageNum + 1}&stock_cd=${param.stock_cd }'">
+			</c:when>
+			<c:otherwise>
+				<input type="button" value="다음" class = "btn btn-primary btn-sm  ">
+			</c:otherwise>
+		</c:choose>
+	</section>
+	</div>
 </div>
 </div>
 
