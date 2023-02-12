@@ -47,7 +47,9 @@
 	 height: 100%;
 	}
 	
-
+.close-modal {
+	display: none;
+}
 	a{
 	 text-decoration: none;
 	 color: 	#000080;
@@ -131,14 +133,10 @@
 	}
 	/* 모달 */
 	.modal{
-	max-width: 1000px;
-	
+		max-width: 1000px;
 	}
 	
-	.modal a.close-modal{
-	 display: none;
-	
-	}
+
 	#product_search_modalDiv{
 	  width:800PX;
  	 height: 500px;
@@ -390,7 +388,7 @@ $(document).on("click","#client_search_modalDiv #client_table > tbody tr",functi
 	
 	
 $(function () {
-	
+
 //담당자 검색 모달창 내 검색바
 	$("#search_emp").on("keyup",function(){
 		
@@ -413,13 +411,15 @@ $(function () {
 			        },
 			        contentType: 'application/json;charset=UTF-8',
 			        success: function(data,status,xhr) {
-	// 		        	alert(JSON.stringify(JSON.parse(data)));
+			        	$("#emp_search_modalDiv table tbody").empty();
 							if(JSON.stringify(JSON.parse(data)) == "[]"){
+								
 								let msg = "<tr><td colspan='4'>검색된 결과가 없습니다.</td></tr>"
 							
 								$("#emp_search_modalDiv table tbody").prepend(msg);
 							}
 				     		 for(let emp of JSON.parse(data)){
+				     		 
 								let result = "<tr id="+emp.emp_num+" onclick=\'selectedEmp(\""+ emp.emp_num+"\",\""+emp.emp_name+"\")'>"
 												+"<td>"+ emp.emp_num +"</td>"
 												+"<td>"+ emp.emp_name +"</td>"
@@ -466,7 +466,7 @@ $(function () {
 			
 	$("#addProduct").on("click",function(){
 		let addCode="<tr>"
-						+'<td><input type="text" class="form-control" name="product_cd" required="required"></td>'
+						+'<td><input type="text" class="form-control" name="product_cd" required="required" readonly="readonly"></td>'
 						+'<td><input type="text" class="form-control" name="product_name" readonly="readonly"></td>'
 						+'<td align="center"><input type="number" class="form-control" name="out_schedule_qty" max="" required="required"></td>'
 						+'<td align="center"><input type="date" class="form-control" name="p_out_date" required="required"></td>'
@@ -483,26 +483,7 @@ $(function () {
 	
 
 	
-	$("form").submit(function(){
 
-// 		let arr = [];
-// 		let canSubmit = false;
-		
-// 		$("input[name=stock_cd]").each(function(){
-// 			if(arr.includes($(this).val())){
-// 				alert("하나의 발주서에 같은 재고번호를 사용할 수 없습니다.");
-// 				canSubmit = false;
-// 				return false;
-// 			}else{
-// 				arr.push($(this).val());
-// 				canSubmit = true;
-// 			};
-			
-// 		});
-// 			return canSubmit;
-		
-		
-	});
 	
 
 
@@ -613,7 +594,7 @@ $(function () {
 					<thead>
 						<tr>
 							<td><b>일 자</b></td>
-							<td>${now}</td>
+							<td id="today_date">${now}</td>
 							<td><b>유형</b></td>
 							<!-- 수정해서 사용하세요!! 기존꺼 복붙해둠!! -->
 							<td align="left">
@@ -656,7 +637,7 @@ $(function () {
 							</td>
 							<td><b>비고</b></td>
 							<td><input type="text" name="remarks"
-								class="rounded-start form-control" value=" "></td>
+								class="rounded-start form-control" ></td>
 						</tr>
 				</table>
 	<!-- =====================하단 테이블===================== -->
@@ -674,7 +655,7 @@ $(function () {
 					<tbody>
 						<tr>
 							<td><input type="text" class="form-control"
-								name="product_cd" required="required"></td>
+								name="product_cd" required="required" readonly="readonly"></td>
 							<td><input type="text" class="form-control"
 								name="product_name" readonly="readonly"></td>
 							<td align="center"><input type="number" class="form-control"
