@@ -285,9 +285,17 @@ public class InController {
 
 	// ======================== sangwoo ============================
 	@GetMapping(value = "/InSchedule")
-	public String waiting(Model model) {
-//		List<InVO> inList = service.getInList();
-//		model.addAttribute("inList", inList);
+	public String waiting(Model model,HttpSession session) {
+		// 세션 아이디
+				String sId;
+				if (session.getAttribute("sId") != null) {
+					sId = (String) session.getAttribute("sId");
+				} else {
+					model.addAttribute("msg", "로그인이 필요합니다");
+					model.addAttribute("url", "/Login");
+					return "redirect";
+				}
+		
 		return "in/in_waiting_form";
 	}
 	
@@ -349,7 +357,7 @@ public class InController {
 	public String inProQtyAjax(@RequestParam String in_schedule_cd, Model model) {
 		model.addAttribute("in_schedule_cd", in_schedule_cd);
 		System.out.println("예정 번호 : " + in_schedule_cd);
-		return "in/in_inProQtyAjax";
+		return "in/in_inProQtyAjax?in_schedule_cd=" + in_schedule_cd;
 	}
 	
 	@ResponseBody
@@ -377,6 +385,20 @@ public class InController {
 		}
 	}
 	
+	@GetMapping(value = "/inProQtyAjax2")
+	public String inProQtyAjax2(@RequestParam(defaultValue = "") String in_schedule_cd, Model model) {
+		
+		System.out.println("나왔으면 좋겠다");
+		
+		List<inProcessingVO> ProQtyList = service.getProQtyList(in_schedule_cd);
+		System.out.println(ProQtyList);
+		
+		
+		model.addAttribute("in_array", ProQtyList);
+		
+		return"in/inProQtyAjax2";
+	}
+	
 	@GetMapping(value = "/InWaitingInsertForm")
 	public String waitingInsert(Model model) {
 		String lastNum = service.getLastNum();
@@ -384,7 +406,6 @@ public class InController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		int formatNow = Integer.parseInt(localDate.format(formatter));
 		String in_schedule_cd = (formatNow + "-" + lastNum);
-		System.out.println(in_schedule_cd);
 		
 		model.addAttribute("now",localDate);
 //		System.out.println(lastNum);
