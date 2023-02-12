@@ -213,20 +213,20 @@ a:hover {
 		<tbody>
 			<c:forEach var="productList" items="${productList }">
 			<tr>
-				<td>
+				<td class="align-middle">
 				    <a id="updateBtn" href='javascript:void(0);' onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm','width=800, top= 20,left=600, height=920,location=no,status=no,scrollbars=yes');">
 				    ${productList.product_cd}</a>
 				</td>
-				<td>
+				<td class="align-middle">
 				    <a id="updateBtn" href='javascript:void(0);' onclick="window.open('ProdUpdateForm?product_cd=${productList.product_cd}','ProdUpdateForm','width=800, top= 20,left=600, height=920,location=no,status=no,scrollbars=yes');">
 				    ${productList.product_name}</a>
 				</td>
-				<td>${productList.product_group_bottom_name}</td>
-				<td>${productList.cust_name}</td>
-				<td>${productList.barcode}</td>
-				<td><fmt:formatNumber value="${productList.in_unit_price}" pattern="#,###" />원</td>
-				<td><fmt:formatNumber value="${productList.out_unit_price}" pattern="#,###" />원</td>
-				<td>
+				<td class="align-middle">${productList.product_group_bottom_name}</td>
+				<td class="align-middle">${productList.cust_name}</td>
+				<td class="align-middle">${productList.barcode}</td>
+				<td class="align-middle"><fmt:formatNumber value="${productList.in_unit_price}" pattern="#,###" />원</td>
+				<td class="align-middle"><fmt:formatNumber value="${productList.out_unit_price}" pattern="#,###" />원</td>
+				<td class="align-middle">
 				    <c:choose>
 				        <c:when test="${productList.product_type_cd eq '1'}">
 				            ${fn:replace(productList.product_type_cd, '1', '원재료')}    
@@ -245,7 +245,8 @@ a:hover {
 				        </c:when>
 				    </c:choose>
 				</td>
-				<td><img class="id_pht" src="${pageContext.request.contextPath}/resources/upload/product/${productList.product_image }"
+				<td class="align-middle">
+					<img class="id_pht" src="${pageContext.request.contextPath}/resources/upload/${productList.product_image }"
 					onerror="this.src='${pageContext.request.contextPath}/resources/images/prod_img.png';" style="width: 80px;height: 80px"></td>
 <!-- 				<td> -->
 <!-- 					<input type="button" value="상세정보" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn" -->
