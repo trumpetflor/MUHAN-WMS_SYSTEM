@@ -125,6 +125,9 @@ public int registerOutScheduleProduct(Out_schedule_per_productVO ospList) {
 //출고예정코드 생성
 public String createOut_schedule_cd(int today) {
 	String index = mapper.getMaxOut_schedule_codeIndex(today);
+	if(index.length()==1) {
+		index = "0"+index;
+	}
 	//생성된 코드
 	String createdCode = today+"-"+index;
 	
