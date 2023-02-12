@@ -35,7 +35,7 @@ public interface InMapper {
 	public List<InVO> selectSelectedInList(String in_schedule_cd);
 
 	// 재고번호 max 검색
-//	public int selectMaxStockCd();
+	public int selectMaxStockCd();
 
 	// 재고 목록
 	public List<StockWhVO> selectStockList(
@@ -69,7 +69,9 @@ public interface InMapper {
 	public int selectWhLocCd(@Param("wh_loc") String wh_loc);
 	
 	// 재고번호 신규 생성
-	public int insertStockCd(int product_cd, int wh_loc_in_area_cd, int stock_qty);
+	public int insertStockCd(@Param("product_cd") int product_cd,
+			@Param("wh_loc_in_area_cd") int wh_loc_in_area_cd,
+			@Param("stock_qty") int stock_qty);
 	
 	// 입고 예정 수정 작업
 	public int updateInSchedule(@Param("inList") InVO inList);	

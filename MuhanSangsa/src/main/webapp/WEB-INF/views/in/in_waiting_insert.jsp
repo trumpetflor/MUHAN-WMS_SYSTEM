@@ -259,7 +259,7 @@ function addRow() {
     var cell5 = row.insertCell(4);
     var cell6 = row.insertCell(5);
     
-    cell1.innerHTML = '<button onclick="deleteRow(this)" class = "btn btn-primary mx-4">제삭</button>';
+    cell1.innerHTML = '<button onclick="deleteRow(this)" class = "btn btn-primary mx-4">삭제</button>';
     cell2.innerHTML = "<div class='d-flex' id='testing'>"
     				+ '<input type="text" class="form-control rounded-start" id="product_cd'+index+'" name="product_cd" readonly="readonly" placeholder=" 검색하세요.">' 
 	  				+ '<input type="button" value="검색" class="btn btn-sm btn-dark p-2" onclick="productBtn('+index+')">'
@@ -548,7 +548,7 @@ function openSearchArea() {
 			</thead>
 			<tbody>
 			<tr>
-				<td><button onclick="deleteRow(this)" class = "btn btn-primary mx-4">제삭</button></td>
+				<td><button onclick="deleteRow(this)" class = "btn btn-primary mx-4">삭제</button></td>
 				<td>
 					<div class='d-flex' id="testing">
 				 	  <input type="text" class="form-control" id="product_cd0" name="product_cd" readonly="readonly" placeholder=" 검색하세요."> 

@@ -195,8 +195,9 @@ public class InController {
 					int wh_loc_in_area_cd = service.getWhLocCd(wh_loc);
 					int stock_qty = inRegister.getIn_qty();
 					
-					int newStockcd = service.insertStockCd(product_cd, wh_loc_in_area_cd, stock_qty);
-					inRegister.setStock_cd(newStockcd);
+					int insertStockCount = service.insertStockCd(product_cd, wh_loc_in_area_cd, stock_qty);
+					int newStockCd = service.getMaxStockCd();
+					inRegister.setStock_cd(newStockCd);
 				} else {
 					inRegister.setStock_cd(voArr.getStock_cd()[i]);
 				}

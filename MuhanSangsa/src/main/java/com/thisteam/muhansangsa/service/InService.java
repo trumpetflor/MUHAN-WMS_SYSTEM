@@ -52,10 +52,10 @@ public class InService {
 		return mapper.selectSelectedInList(in_schedule_cd);
 	}
 	
-//	// 재고번호 max 검색
-//	public int getMaxStockCd() {
-//		return mapper.selectMaxStockCd();
-//	}
+	// 재고번호 max 검색
+	public int getMaxStockCd() {
+		return mapper.selectMaxStockCd();
+	}
 	
 	// 재고 목록
 	public List<StockWhVO> getStockList(String searchType, String keyword, int startRow, int listLimit) {

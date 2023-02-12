@@ -47,10 +47,10 @@
 	</select>
 	
 	<!-- 재고번호 max 검색 -->
-<!-- 	<select id="selectMaxStockCd" resultType="integer"> -->
-<!-- 		SELECT MAX(STOCK_CD) -->
-<!-- 			FROM STOCK -->
-<!-- 	</select> -->
+	<select id="selectMaxStockCd" resultType="integer">
+		SELECT MAX(STOCK_CD)
+			FROM STOCK
+	</select>
 	
 	<!-- 재고 목록 -->
 	<select id="selectStockList" resultType="StockWhVO">
@@ -153,7 +153,8 @@
 		</selectKey>
 		INSERT INTO STOCK
 			VALUES (
-			#{stock_cd},
+			#{stock_cd} + 1,
+			#{product_cd},
 			#{wh_loc_in_area_cd},
 			#{stock_qty}
 			)
