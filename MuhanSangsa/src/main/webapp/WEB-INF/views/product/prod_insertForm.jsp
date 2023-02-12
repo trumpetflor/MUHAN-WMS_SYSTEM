@@ -117,7 +117,19 @@
 		
 	}
 
-
+	//첨부파일 이미지 미리보기
+	function readURL(input) {
+	  if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+	    reader.onload = function(e) {
+	      document.getElementById('prod_insert_photo').src = e.target.result;
+	    };
+	    reader.readAsDataURL(input.files[0]);
+	  } else {
+	    document.getElementById('prod_insert_photo').src = "";
+	  }
+	}
+	
 </script>
 <body>
 
@@ -158,12 +170,21 @@
 			<div class="m-2 row">
 			
 					<table class=" table">
+								<!-- 사진 이미지 -->
 								<tr>
-									<th>품목명</th>
+									<th style =" vertical-align : middle">대표이미지</th>
+									<td><img id="prod_insert_photo" alt="증명사진" name="photo" 
+											src="${pageContext.request.contextPath}/resources/upload/${productList.product_image }"
+											onerror="this.src='${pageContext.request.contextPath}/resources/images/prod_img.png';" width="150px" />
+										<input type="file" id="file" onchange="readURL(this);" name="file" class="form-control-file" style="margin-top: 10px;">
+									</td>
+								</tr>	
+								<tr>
+									<th style =" vertical-align : middle">품목명</th>
 									<td> <input type="text" class="form-control" name="product_name" required="required">  </td>
 								</tr>
 								<tr>
-									<th>품목그룹</th>
+									<th style =" vertical-align : middle">품목그룹</th>
 									<td><div class="input-group mb-3">
 											  <input type="hidden" class="form-control" id="product_group_bottom_cd" name="product_group_bottom_cd"
 											  	placeholder="" aria-label="" aria-describedby="button-addon" width="100px">									
@@ -177,7 +198,7 @@
 								<!-- 품목그룹(검색하여 선택) - 대분류&소분류 선택  -->
 								
 								<tr>
-									<th>단위</th>
+									<th style =" vertical-align : middle">단위</th>
 									<td>
 										<select class="form-control" name="unit">
 											<option disable="disable">-- 선택하세요 --</option>
@@ -188,15 +209,15 @@
 									   </td>
 								</tr>
 								<tr>
-									<th>입고단가</th>
+									<th style =" vertical-align : middle">입고단가</th>
 									<td><input type="text" class="form-control" name="in_unit_price" placeholder="숫자만 입력해주세요 ex)15000"  required="required">  </td>
 								</tr>
 								<tr>
-									<th>출고단가</th>
+									<th style =" vertical-align : middle">출고단가</th>
 									<td><input type="text" class="form-control" name="out_unit_price" placeholder="숫자만 입력해주세요 ex)50000"  required="required">  </td>
 								</tr>
 								<tr>
-									<th>품목구분</th>
+									<th style =" vertical-align : middle">품목구분</th>
 									<td>									
 										<select class="form-control" name="product_type_cd" required="required">
 											<option disable="disable">-- 선택하세요 --</option>
@@ -209,7 +230,7 @@
 									</td>
 								</tr>
 								<tr><!-- 구매거래처(거래처 테이블에서 검색하여 선택)  -->
-									<th>거래처</th>
+									<th style =" vertical-align : middle">거래처</th>
 									<td>
 										<div> 
 											<div class="input-group">
@@ -224,22 +245,20 @@
 										</div> 
 									</td>
 								</tr>
+<!-- 								<tr> -->
+<!-- 									<th style =" vertical-align : middle">대표이미지</th> -->
+<!-- 									<td> <input type="file" name="file" class="form-control" name="product_image">  </td> -->
+<!-- 								</tr> -->
 								<tr>
-									<th>대표이미지</th>
-									<td> <input type="file" name="file" class="form-control" name="product_image">  </td>
-								</tr>
-								<tr>
-									<th>적요</th>
+									<th style =" vertical-align : middle">적요</th>
 									<td><input type="text" class="form-control" name="remarks"> </td>
 								</tr>
 					 </table>
 			
 			</div>
 	</div>	
-	<div style="text-align: center">
-		<input type="submit" value="등록" class = "btn btn-primary mx-2"  onclick="javascript:confirm_insert()"/>
-		<input type="button" value="닫기" class = "btn btn-primary mx-2"  onclick="top.window.close()">
-	</div>
+
+	<input type="submit" value="등록" class = "btn btn-primary mx-4"  onclick="javascript:confirm_insert()"/>
 </form>
 
 

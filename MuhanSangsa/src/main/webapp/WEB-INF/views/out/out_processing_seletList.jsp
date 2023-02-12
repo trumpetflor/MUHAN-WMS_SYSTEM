@@ -187,13 +187,64 @@ $(function(){
 	
 // ======================= jquery jakyoung 시작 ====================================
 	// 출고 처리 모달창 날짜 계산
-	let today = new Date().toISOString().substring(0, 10);
-// 	alert(today); 
-	$("#currentDate").val(today);
+	let today = new Date();
 
+	let year = today.getFullYear();
+	let month = ('0' + (today.getMonth() + 1)).slice(-2);
+	let day = ('0' + today.getDate()).slice(-2);
+
+	let dateString = year + '-' + month  + '-' + day;
 	
+// 	alert(dateString); 
+	$("#currentDate").val(dateString);
+
+	// 체크박스 체크 시 출고 지시 수량 required
+	$('input[type=checkbox][name=outScheduleChecked]').change(function() {
+       	let tr_id = $(this).closest("tr").attr("id");
+// 		alert(tr_id);
+        if ($(this).is(':checked')) {
+        	$("#" + tr_id).find("input[type=number][name=input_out_qty]").prop("readonly", false);
+        } else {
+        	$("#" + tr_id).find("input[type=number][name=input_out_qty]").prop("readonly", true);
+        }
+    });
 	
-	
+	$("#naga").on("click", function() {
+		
+		let osppArr = new Array(); // Out_schedule_total_viewVO
+		
+		$("#out_table > tbody > tr").each(function(index, item) {
+			let ospp = new Object();
+			
+// 			ospp.out_date = $("#currentDate").val(); // 출고 일자 (왜 필요하지)
+			ospp.out_schedule_cd = $("#outList" + index + " td:eq(0)").text(); // 출고 예정 코드
+			ospp.out_qty = $("#outList" + index + " td:eq(2)").text(); // 출고 지시 수량
+			ospp.stock_cd = $("#outList" + index + " td:eq(3)").text(); // 재고 코드
+			
+			console.log(index + ", " + ospp);
+			
+			osppArr.push(ospp);
+		});
+		
+		console.log(osppArr);
+		
+		$.ajax({
+			type : "POST",
+			url : "OutProcessing",
+			dataType: "text", // 응답 데이터 타입
+			contentType: "application/json", // 요청 시 전송 데이터 타입
+			data: JSON.stringify(osppArr)
+		})
+		.done(function(result) {
+			alert("출고 처리가 완료되었습니다.");
+			location.href = "OutProcessingSeletList";
+		})
+		.fail(function(result) {
+			alert("일시적인 오류로 인해 출고 처리가 완료되지 않았습니다.")
+			location.reload();
+		});
+		
+	});
 	
 	
 // ======================= jquery jakyoung 끝 ====================================
@@ -219,47 +270,50 @@ function productInfo(product_cd) {
 // 	});
 	
 	// 재고 입력 창에 포커스 들어오면 div 열기
-	$(document).on("focus", "input[name=stock_cd]", function() {
-		const div_id = "#select_" + $(this).val();
-		let stock_cd = $(this).val();
-		console.log("div 아이디 : " + div_id + "재고 코드 : " + stock_cd);
+// 	$(document).on("focus", "input[name=stock_cd]", function() {
+// 		const div_id = "#select_" + $(this).val();
+// 		let stock_cd = $(this).val();
+// 		console.log("div 아이디 : " + div_id + "재고 코드 : " + stock_cd);
 		
-		$("#select_" + stock_cd).css("display", "block");
+// 		$("#select_" + stock_cd).css("display", "block");
 		
-		$(this).on("keyup", function() {
+// 		$(this).on("keyup", function() {
 			
-		});
+// 		});
 		
-		
-	});
+// 	});
 
 	// 재고 입력창에 포커스 빠지면 div 닫기
-	$(document).on("focusout", "input[name=stock_cd]", function() {
+// 	$(document).on("focusout", "input[name=stock_cd]", function() {
 		
-		let stock_cd = $(this).val();
-		console.log(stock_cd);
+// 		let stock_cd = $(this).val();
+// 		console.log(stock_cd);
 		
-		$("#select_" + stock_cd).css("display", "none");
+// 		$("#select_" + stock_cd).css("display", "none");
 		
-	});
+// 	});
 	
 	
 	// 출고 버튼 클릭 시 모달 창 open~~
 	function openOutModal() {
 		
-// 		console.log('나와랏');
-// 		alert("모달창 열리네요~ 출고가 들어오죠");
-		//모달창 열기
-		$('#out_naga_modal').modal('show');
-		$('#out_naga_modal').show();
-		
 		$("#out_table > tbody").empty();
 		
-		let checkedList = [];
 		
-		$('input[name=outScheduleChecked]:checked').each(function() {
+		let inputQtySum = 0; // 출고 지시 수량 합계 변수 선언
+		
+		$('input[name=outScheduleChecked]:checked').each(function(i, elements) {
+			
+// 			console.log('나와랏');
+// //	 		alert("모달창 열리네요~ 출고가 들어오죠");
+// 			//모달창 열기
+// 			$('#out_naga_modal').modal('show');
+// 			$('#out_naga_modal').show();
+			
+			let index = $(elements).index('input[name=outScheduleChecked]:checked');
 			
 			let out_list = ''; // 출력문 비우기
+			let result = 0; // 결과 초기화
 			
 			let tr_id = $(this).closest("tr").attr("id"); // 해당 <tr> id 값 저장
 			
@@ -267,47 +321,51 @@ function productInfo(product_cd) {
 			
 			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
 			let product_name = $(this).val().split("/")[1]; // 품목명
-			let out_qty = $("#" + tr_id).find("input[name=out_qty]").val(); // 출고 지시수량
-			let stock_cd = $(this).val().split("/")[2]; // 재고 코드
+			let not_out_qty = $(this).val().split("/")[2]; // 미출고수량
+			let input_out_qty = $("#" + tr_id).find("input[name=input_out_qty]").val(); // 출고 지시수량
+			let stock_cd = $(this).val().split("/")[3]; // 재고 코드
 			let wh_loc_in_area = ''; // 위치명
 			
-			out_list += '<tr>';
+// 			alert(input_out_qty);
+			
+			inputQtySum += input_out_qty;
+			result = not_out_qty - input_out_qty;
+			console.log(not_out_qty + " - " + input_out_qty + " = " + result);
+			
+			if(result >= 0 && input_out_qty >= 1) { // 출고 지시 수량이 미출고 수량보다 작거나 같고, 1보다 크거나 같을 때
+// 				console.log('나와랏');
+//		 		alert("모달창 열리네요~ 출고가 들어오죠");
+				//모달창 열기
+				$('#out_naga_modal').modal('show');
+				$('#out_naga_modal').show();
+			} else {
+				alert("출고 불가능한 수량이 포함되어 있습니다.");
+				return;
+			}
+			
+			out_list += '<tr id="outList' + index + '">';
 			out_list += '<td>' + out_schedule_cd + '</td>';
 			out_list += '<td>' + product_name + '</td>';
-			out_list += '<td>' + out_qty + '</td>';
-			out_list += '<td><input type="text" name="stock_cd" value="' + stock_cd + '" class=" bg-light border border-secondary rounded-1 px-1 adjust">';
-			out_list += '<button type="button" class="btn-sm btn-dark " onclick="findWhLocArea(' + stock_cd + ')">검색</button>';
-			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
-			out_list += '<td name="wh_loc_in_area">' + wh_loc_in_area + '</td>';
+			out_list += '<td>' + input_out_qty + '</td>';
+			out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
+// 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
+// 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
+			out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
 			out_list += '</tr>';
 			
 			$("#out_table").append(out_list);
+			$("#input_qty_sum").text(inputQtySum);
 			
 		});
 		
 	
 	}
 	
-	function findWhLocArea(stock_cd) {
+	function findWhLocArea(stock_cd, index) {
 		console.log(stock_cd);
+		console.log(index);
 		
-		$.ajax({
-			
-			
-		})
-		.done({
-
-		
-		})
-		.fail({
-		
-		
-		
-		});
-		
-		
-		
-		
+		window.open("Out_Inventory_View?searchType=STOCK_CD&keyword=" + stock_cd + "&index=" + index, "출고처리 - 재고코드 검색", "width=650, height=450, top=50, left=800");
 	}
 	
 	
@@ -387,15 +445,15 @@ function productInfo(product_cd) {
 		</thead>
 		<tbody>
 		<c:forEach items="${outTotalScheduleList }" var="total" varStatus="status" >
-			<tr>
-			<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }"></td>
+			<tr id="out_schedule_${status.index }">
+				<td align="center"><input type="checkbox" name="outScheduleChecked" class="form-check-input" value="${total.out_schedule_cd }/${total.product_name }/${total.out_schedule_qty - total.out_qty }/${total.stock_cd }"></td>
 				<td><a onclick="window.open('outScheduleModifyForm?out_schedule_cd=${total.out_schedule_cd }','outScheduleModifyForm','width=1009, height=900, top= 40,left=450, location=no,status=no,scrollbars=yes')">${total.out_schedule_cd }</a></td>
 				<td>${total.cust_name }</td>
 				<td>${total.product_name }</td>
 				<td>${total.out_date }</td>
 				<td>${total.out_schedule_qty }</td>
-				<td>${total.out_qty }</td>
-				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust"></td>
+				<td>${total.out_schedule_qty - total.out_qty }</td>
+				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust" name="input_out_qty" min="1" max="${total.out_schedule_qty - total.out_qty }" readonly="readonly"></td>
 				<td>${total.remarks }</td>
 			</tr>
 			</c:forEach>
@@ -404,7 +462,7 @@ function productInfo(product_cd) {
 	
 	</table>
 	<div class="float-left">
-		<input type="button" value="출고" class = "btn btn-sm btn-success m-2"	onclick="location.href='#'">
+		<input type="button" value="출고" class = "btn btn-sm btn-success m-2"	onclick="openOutModal()">
 	</div>
 	
 	<div class="float-right">
@@ -470,7 +528,7 @@ function productInfo(product_cd) {
 <!-- 출고 버튼 클릭 시 모달 -->
 
 	<div id="out_naga_modal" class="modal" data-backdrop="static">
-		<form action="">
+		<form class="">
 		
 			<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
 				<div class="p-2 bg-light text-black well rounded-2" >출고</div>
@@ -493,10 +551,12 @@ function productInfo(product_cd) {
 						
 						
 						</tbody>
-		
 					</table>		
 				</div>
-	  		<button type="button" class="btn btn-dark ">출고</button>
+<!-- 				<div> -->
+<!-- 					<b>합계 :</b><span id="input_qty_sum"></span> --> <!-- 문자열로 나옴 -->
+<!-- 				</div> -->
+	  		<button type="button" class="btn btn-dark" id="naga" >출고 처리</button>
 		
 		</form>
 		

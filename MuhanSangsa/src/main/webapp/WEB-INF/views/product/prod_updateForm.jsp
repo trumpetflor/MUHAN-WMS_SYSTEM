@@ -77,16 +77,23 @@
 		
 	}
 	
+	//첨부파일 이미지 미리보기
+	function readURL(input) {
+	  if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+	    reader.onload = function(e) {
+	      document.getElementById('prod_update_photo').src = e.target.result;
+	    };
+	    reader.readAsDataURL(input.files[0]);
+	  } else {
+	    document.getElementById('prod_update_photo').src = "";
+	  }
+	}
+	
 </script>
 <body>
 
-    <!-- Right Panel -->
-
     <div id="" class="">
-
-        <!-- Header-->
- 
-        <!-- Header-->
 
         <div class="breadcrumbs">
             <div class="breadcrumbs-inner">
@@ -98,125 +105,119 @@
                             </div>
                         </div>
                     </div>
-<!--                     <div class="col-sm-8"> -->
-<!--                         <div class="page-header float-right"> -->
-<!--                             <div class="page-title"> -->
-<!--                                 <ol class="breadcrumb text-right"> -->
-<!--                                     <li><a href="#">Dashboard</a></li> -->
-<!--                                     <li><a href="#">Forms</a></li> -->
-<!--                                     <li class="active">Basic</li> -->
-<!--                                 </ol> -->
-<!--                             </div> -->
-<!--                         </div> -->
-<!--                     </div> -->
                 </div>
             </div>
         </div>
 
-        <div class="content">
-            <div class="animated fadeIn">
-
-<form action="ProdUpdatePro" method="post" enctype="multipart/form-data" id="ProdUpdatePro">
-	<div class="container m-0">
+<div class="content">
+	<div class="animated fadeIn">
+		<form action="ProdUpdatePro" method="post" enctype="multipart/form-data" id="ProdUpdatePro">
+		<div class="container m-0">
 			<div class="m-2 row">
+				<table class=" table">
+					<!-- 사진 이미지 -->
+					<tr>
+						<th style ="vertical-align : middle">대표이미지</th>
+						<td>
+							<img id="prod_update_photo" alt="품목사진" name="product_image" 
+								src="${pageContext.request.contextPath}/resources/upload/${product.product_image }"
+								onerror="this.src='${pageContext.request.contextPath}/resources/images/prod_img.png';" width="160px" height="160px" />
+							<input type="file" id="file" onchange="readURL(this);" name="file" class="form-control-file" style="margin-top: 10px;">
+						</td>
+					</tr>						
+					<tr>
+						<th style ="vertical-align : middle">품목코드</th>
+						<td style =" vertical-align : middle">
+							<input type="text" class="form-control" name="product_cd" readonly="readonly" value="${product.product_cd }">
+						</td>
+					</tr>					
+					<tr>
+						<th style ="vertical-align : middle">품목명</th>
+							<td><input type="text" class="form-control" name="product_name" value="${product.product_name }" required="required">
+						</td>
+					</tr>
+					<tr>
+						<th style ="vertical-align : middle">품목그룹</th>
+						<td><div class="input-group mb-3">
+								  <input type="hidden" class="form-control" id="product_group_bottom_cd" name="product_group_bottom_cd"
+								  	value="${product.product_group_bottom_cd }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px">									
+								  <input type="text" class="form-control" id="product_group_bottom_name" name="product_group_bottom_name"
+								   value="${product.product_group_bottom_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" readonly="readonly" required="required">
+								  <button class="btn btn-outline-secondary " type="button" id="button-addon"
+								  onclick="window.open('Product/GroupBottomSelectList','GroupBottomSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색</button>
+							</div>
+						 </td>
+					</tr>
+					<!-- 품목그룹(검색하여 선택) - 대분류&소분류 선택  -->
+					
+					<tr>
+						<th style ="vertical-align : middle">단위</th>
+						<td>
+							<select class="form-control" name="unit">
+								<option disable="disable">-- 선택하세요 --</option>
+								<option value="1" <c:if test="${product.unit eq '1'}">selected</c:if>>SET</option>
+								<option value="2" <c:if test="${product.unit eq '2'}">selected</c:if>>BOX</option>
+								<option value="3" <c:if test="${product.unit eq '3'}">selected</c:if>>EA</option>
+						   </select>
+						   </td>
+					</tr>
+					<tr>
+						<th style ="vertical-align : middle">바코드</th>
+						<td>  <input type="text" class="form-control" name="barcode" value="${product.barcode }" readonly="readonly"></td>
+					</tr>								
+					<tr>
+						<th style ="vertical-align : middle">입고단가</th>
+						<td><input type="text" class="form-control" name="in_unit_price" value="${product.in_unit_price }" 
+								placeholder="숫자만 입력해주세요 ex)15000" required="required"></td>
+					</tr>
+					<tr>
+						<th style ="vertical-align : middle">출고단가</th>
+						<td><input type="text" class="form-control" name="out_unit_price" value="${product.out_unit_price }" 
+							placeholder="숫자만 입력해주세요 ex)55000"  required="required"></td>
+					</tr>
+					<tr>
+						<th style ="vertical-align : middle">품목구분</th>
+						<td>									
+							<select class="form-control" name="product_type_cd" required="required">
+								<option disable="disable">-- 선택하세요 --</option>
+								<option value="1" <c:if test="${product.product_type_cd eq '1'}">selected</c:if>>원재료</option>
+								<option value="2" <c:if test="${product.product_type_cd eq '2'}">selected</c:if>>부재료</option>
+								<option value="3" <c:if test="${product.product_type_cd eq '3'}">selected</c:if>>제품</option>
+								<option value="4" <c:if test="${product.product_type_cd eq '4'}">selected</c:if>>반제품</option>
+								<option value="5" <c:if test="${product.product_type_cd eq '5'}">selected</c:if>>상품</option>
+						   </select>
+						</td>
+					</tr>
+					<tr><!-- 구매거래처(거래처 테이블에서 검색하여 선택)  -->
+						<th style ="vertical-align : middle">거래처</th>
+						<td>
+							<div> 
+								<div class="input-group">
+								 <input type="hidden" class="form-control" name="business_no" id="business_no"
+								  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
+								 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
+								  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
+								  <button class="btn btn-outline-secondary " type="button" id="button-addon"
+								  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
+								  </button>
+								</div>
+							</div> 
+						</td>
+					</tr>
+					<tr>
+						<th style ="vertical-align : middle">적요</th>
+						<td><input type="text" class="form-control" value="${product.remarks }" name="remarks"></td>
+					</tr>
+				 </table>
 			
-					<table class=" table">
-								<tr>
-									<th>품목코드</th>
-									<td><input type="text" class="form-control" name="product_cd" readonly="readonly" value="${product.product_cd }"></td>
-								</tr>					
-								<tr>
-									<th>품목명</th>
-									<td><input type="text" class="form-control" name="product_name" value="${product.product_name }" required="required"></td>
-								</tr>
-								<tr>
-									<th>품목그룹</th>
-									<td><div class="input-group mb-3">
-											  <input type="hidden" class="form-control" id="product_group_bottom_cd" name="product_group_bottom_cd"
-											  	value="${product.product_group_bottom_cd }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px">									
-											  <input type="text" class="form-control" id="product_group_bottom_name" name="product_group_bottom_name"
-											   value="${product.product_group_bottom_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" readonly="readonly" required="required">
-											  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-											  onclick="window.open('Product/GroupBottomSelectList','GroupBottomSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색</button>
-										</div>
-									 </td>
-								</tr>
-								<!-- 품목그룹(검색하여 선택) - 대분류&소분류 선택  -->
-								
-								<tr>
-									<th>단위</th>
-									<td>
-										<select class="form-control" name="unit">
-											<option disable="disable">-- 선택하세요 --</option>
-											<option value="1" <c:if test="${product.unit eq '1'}">selected</c:if>>SET</option>
-											<option value="2" <c:if test="${product.unit eq '2'}">selected</c:if>>BOX</option>
-											<option value="3" <c:if test="${product.unit eq '3'}">selected</c:if>>EA</option>
-									   </select>
-									   </td>
-								</tr>
-								<tr>
-									<th>바코드</th>
-									<td>  <input type="text" class="form-control" name="barcode" value="${product.barcode }" readonly="readonly"></td>
-								</tr>								
-								<tr>
-									<th>입고단가</th>
-									<td><input type="text" class="form-control" name="in_unit_price" value="${product.in_unit_price }" 
-											placeholder="숫자만 입력해주세요 ex)15000" required="required"></td>
-								</tr>
-								<tr>
-									<th>출고단가</th>
-									<td><input type="text" class="form-control" name="out_unit_price" value="${product.out_unit_price }" 
-										placeholder="숫자만 입력해주세요 ex)55000"  required="required"></td>
-								</tr>
-								<tr>
-									<th>품목구분</th>
-									<td>									
-										<select class="form-control" name="product_type_cd" required="required">
-											<option disable="disable">-- 선택하세요 --</option>
-											<option value="1" <c:if test="${product.product_type_cd eq '1'}">selected</c:if>>원재료</option>
-											<option value="2" <c:if test="${product.product_type_cd eq '2'}">selected</c:if>>부재료</option>
-											<option value="3" <c:if test="${product.product_type_cd eq '3'}">selected</c:if>>제품</option>
-											<option value="4" <c:if test="${product.product_type_cd eq '4'}">selected</c:if>>반제품</option>
-											<option value="5" <c:if test="${product.product_type_cd eq '5'}">selected</c:if>>제품</option>
-									   </select>
-									</td>
-								</tr>
-								<tr><!-- 구매거래처(거래처 테이블에서 검색하여 선택)  -->
-									<th>거래처</th>
-									<td>
-										<div> 
-											<div class="input-group">
-											 <input type="hidden" class="form-control" name="business_no" id="business_no"
-											  	value="${product.business_no }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
-											 <input type="text" class="form-control" name="cust_name" id="cust_name" readonly="readonly"
-											  	value="${product.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
-											  <button class="btn btn-outline-secondary " type="button" id="button-addon"
-											  onclick="window.open('Product/ClientSelectList','ClientSelectList','width=500, height=500,location=no,status=no,scrollbars=yes');">검색
-											  </button>
-											</div>
-										</div> 
-									</td>
-								</tr>
-								<tr>
-									<th>대표이미지</th>
-									<td><input type="file" name="file" class="form-control" name="product_image">
-									<br><small>(기존파일 : ${product.product_image })</small></td>
-									</td>
-								</tr>
-								<tr>
-									<th>적요</th>
-									<td><input type="text" class="form-control" value="${product.remarks }" name="remarks"></td>
-								</tr>
-					 </table>
-			
-			</div>
-	</div>	
-	<!-- 수정, 닫기 버튼  -->
-	<div style="text-align: center">
-		<input type="button" value="수정" class = "btn btn-primary mx-2" onclick="javascript:confirm_modify()"/>
-		<input type="button" value="닫기" class = "btn btn-primary mx-2"  onclick="top.window.close()">
-	</div>
-</form>
+				</div>
+		</div>	
+		<!-- 수정, 닫기 버튼  -->
+		<div style="text-align: center">
+			<input type="button" value="수정" class = "btn btn-primary mx-2" onclick="javascript:confirm_modify()"/>
+			<input type="button" value="닫기" class = "btn btn-primary mx-2"  onclick="top.window.close()">
+		</div>
+	</form>
 
         </div><!-- .animated -->
     </div><!-- .content -->

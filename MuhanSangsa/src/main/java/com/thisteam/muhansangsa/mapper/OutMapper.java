@@ -82,11 +82,27 @@ public interface OutMapper {
 	void updateOutScheduleModifyPro(
 			@Param("total") Out_schedule_total_viewVO total);
 
+
+
 	
       
 	//==========================================================================23/02/09 미주  
       
+	//-------------------------------------------------------- jakyoung 시작
+	// 출고 처리 완료된 출고 수량 수정
+	int updateOutQty(Out_schedule_per_productVO ospp);
 
+	// 출고 예정 때려넣은 뷰
+	Out_schedule_total_viewVO selectOutScheduleTotal(Out_schedule_per_productVO ospp);
+
+	// 출고 예정 정보
+	Out_scheduleVO selectOutSchedule(String out_schedule_cd);
+
+	// 출고 완료 상태
+	int updateOutComplete(Out_schedule_per_productVO ospp);
+	
+	
+	//-------------------------------------------------------- jakyoung 끝
 
 
 

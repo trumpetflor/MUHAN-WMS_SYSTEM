@@ -216,6 +216,7 @@
 	
 	
 	
+
 	<!-- ======================== yeram ============================== -->
 	
 	<!-- ======================== sangwoo ============================ -->
@@ -283,6 +284,118 @@
 		SELECT product_cd, product_name
 			FROM product
 			WHERE business_no = #{businese_no_ajax}
+	</select>
+	
+	<select id="getLastNum" resultType="String" >
+		SELECT SUBSTRING(MAX(in_schedule_cd), 10)
+			FROM in_schedule
+	</select>
+	
+	<select id="in_schedule_cd_Index" resultType="String">
+		SELECT COUNT(in_schedule_cd) + 1
+			FROM in_schedule
+			WHERE in_schedule_cd LIKE "${today}%"
+	</select>
+	
+	<insert id="registInScheduleTop">
+		INSERT INTO in_schedule
+			VALUES (
+				#{in_schedule.in_schedule_cd}
+				,#{in_schedule.in_type_cd}
+				,#{in_schedule.business_no}
+				,#{in_schedule.emp_num}
+				,#{in_schedule.in_date}
+				," "
+				,"0"
+				
+			)
+	</insert>
+	
+	<insert id="registInScheduleBottom">
+		INSERT INTO in_schedule_per_product
+			VALUES (
+				#{in_schedule_p.in_schedule_cd}
+				,#{in_schedule_p.product_cd}
+				,#{in_schedule_p.in_schedule_qty}
+				,#{in_schedule_p.in_qty}
+				,date_format(#{in_schedule_p.in_date},"%Y-%m-%d")
+				,#{in_schedule_p.remarks}
+				,"0"
+				,"0"
+				
+			)
+			
+	</insert>
+	
+	<select id="selectInScheduleList" resultType="InVO">
+		SELECT
+			a.in_schedule_cd,
+			d.in_type_name,
+			b.cust_name,
+			a.business_no,
+			a.emp_num,
+			c.emp_name,
+			a.in_date,
+			(
+				SELECT concat(MAX(f.product_name), ' 외 ', count(*), '건')
+					FROM 
+						in_schedule_per_product e,
+						product f
+					WHERE e.product_cd = f.product_cd
+					AND e.in_schedule_cd = a.in_schedule_cd
+			) product_name,
+			a.in_complete,
+			(
+				SELECT sum(e.in_schedule_qty)
+					FROM in_schedule_per_product e
+					WHERE e.in_schedule_cd = a.in_schedule_cd
+			) in_schedule_qty
+			FROM
+				in_schedule a,
+				client b,
+				employees c,
+				in_type d
+			Where
+				a.business_no = b.business_no
+				AND a.emp_num = c.emp_num
+				AND a.in_type_cd = d.in_type_cd
+				<if test="status gte 0">
+					AND a.in_complete = #{status}
+				</if>
+				<if test="!keyword.equals('')">
+					<choose>
+						<when test="searchType.equals('in_schedule_cd)">
+							AND a.in_schedule_cd LIKE '%${keyword}%'
+						</when>
+					</choose>
+				</if>
+			ORDER BY
+				a.in_schedule_cd DESC
+	</select>
+	
+	<!-- 입고예정 리스트 종결/취소 상태전환 -->
+	<update id="inWaitingChangeStautsJson">
+		UPDATE in_schedule
+			SET
+			<choose>
+				<when test='in_complete eq "0"'>
+					in_complete='1'
+				</when>
+				<when test='in_complete eq "1"'>
+					in_complete='0'
+				</when>
+			</choose>
+			WHERE
+				in_schedule_cd = #{in_schedule_cd}
+	</update>
+	
+	<select id="getProQtyList" resultType="inProcessingVO">
+		SELECT
+			product_cd, product_name, in_schedule_qty, no_in_qty
+			FROM
+				in_processing_view
+			WHERE
+				in_schedule_cd = #{iscd}
 	</select>
 	
 	<!-- ======================== sangwoo ============================ -->

@@ -16,6 +16,9 @@ public class InVO {
 	private String cust_name;
 	private String emp_name;
 	private String product_name;
+	private int product_cd;
+	private int in_schedule_qty;
+	private int in_qty;
 	public String getIn_schedule_cd() {
 		return in_schedule_cd;
 	}
@@ -82,12 +85,31 @@ public class InVO {
 	public void setProduct_name(String product_name) {
 		this.product_name = product_name;
 	}
+	public int getProduct_cd() {
+		return product_cd;
+	}
+	public void setProduct_cd(int product_cd) {
+		this.product_cd = product_cd;
+	}
+	public int getIn_schedule_qty() {
+		return in_schedule_qty;
+	}
+	public void setIn_schedule_qty(int in_schedule_qty) {
+		this.in_schedule_qty = in_schedule_qty;
+	}
+	public int getIn_qty() {
+		return in_qty;
+	}
+	public void setIn_qty(int in_qty) {
+		this.in_qty = in_qty;
+	}
 	@Override
 	public String toString() {
 		return "InVO [in_schedule_cd=" + in_schedule_cd + ", in_type_cd=" + in_type_cd + ", business_no=" + business_no
 				+ ", emp_num=" + emp_num + ", in_date=" + in_date + ", remarks=" + remarks + ", in_complete="
 				+ in_complete + ", in_type_name=" + in_type_name + ", cust_name=" + cust_name + ", emp_name=" + emp_name
-				+ ", product_name=" + product_name + "]";
+				+ ", product_name=" + product_name + ", product_cd=" + product_cd + ", in_schedule_qty="
+				+ in_schedule_qty + ", in_qty=" + in_qty + "]";
 	}
 	
 	

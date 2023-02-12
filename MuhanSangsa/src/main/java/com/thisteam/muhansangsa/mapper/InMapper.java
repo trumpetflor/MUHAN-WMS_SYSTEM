@@ -10,6 +10,8 @@ import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InRegisterTotalVO;
 import com.thisteam.muhansangsa.vo.InVO;
+
+import com.thisteam.muhansangsa.vo.InWatingRegister_nomalVO;
 import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockWhVO;
@@ -27,7 +29,8 @@ public interface InMapper {
 			@Param("product_name")ArrayList<String> product_name,
 			@Param("in_date")ArrayList<String> in_date);
 	
-	// 입고예정 품목 목록
+
+	// 입고예정 목록
 	public List<inProcessingVO> selectSelectedProList(String in_schedule_cd);
 	
 	// 입고예정 품목 목록
@@ -87,6 +90,7 @@ public interface InMapper {
 	
 	
 	
+
 	// ======================== yeram ==============================
 	
 	// ======================== sangwoo ============================
@@ -98,9 +102,26 @@ public interface InMapper {
 
 	List<ProductVO> getProductList(String businese_no_ajax);
 
+	public String getLastNum();
 
+	public String in_schedule_cd_Index(@Param("today") int today);
 
+	public int registInScheduleTop(@Param("in_schedule") InWatingRegister_nomalVO in_schedule);
 
+	public int registInScheduleBottom(@Param("in_schedule_p") InVO isp);
+
+	public List<InVO> selectInScheduleList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit, 
+			@Param("status") int status);
+
+	public int inWaitingChangeStautsJson(
+			@Param("in_schedule_cd") String in_schedule_cd, 
+			@Param("in_complete") String in_complete);
+
+	public List<inProcessingVO> getProQtyList(@Param("iscd") String in_schedule_cd);
 
 
 

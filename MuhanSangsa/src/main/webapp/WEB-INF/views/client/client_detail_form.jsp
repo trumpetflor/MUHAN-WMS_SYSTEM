@@ -81,7 +81,6 @@
 	
 	.col-lg-10{
 		margin: auto;
-		max-width: 85%;
 		flex: 100 100;
 	}
 	
@@ -255,10 +254,10 @@
                                                     <input type="radio" name="g_gubun" id="g_gubun_02" value="02" class="form-check-input" <c:if test="${client.g_gubun eq '02' }">checked</c:if>>사업자 (해외)
                                                 </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <label for="g_gubun_03" class="form-check-label ">
-                                                    <input type="radio" name="g_gubun" id="g_gubun_03" value="03" class="form-check-input" <c:if test="${client.g_gubun eq '03' }">checked</c:if>>비사업자 (국내)>비사업자 (국내)
+                                                    <input type="radio" name="g_gubun" id="g_gubun_03" value="03" class="form-check-input" <c:if test="${client.g_gubun eq '03' }">checked</c:if>>비사업자 (국내)
                                                 </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <label for="g_gubun_04" class="form-check-label ">
-                                                    <input type="radio" name="g_gubun" id="g_gubun_04" value="04" class="form-check-input" <c:if test="${client.g_gubun eq '04' }">checked</c:if>>비사업자 (해외)>비사업자 (해외)
+                                                    <input type="radio" name="g_gubun" id="g_gubun_04" value="04" class="form-check-input" <c:if test="${client.g_gubun eq '04' }">checked</c:if>>비사업자 (해외)
                                                 </label>
                                             </div>
                                           <small class="help-block form-text text-muted">미선택시 사업자(국내)로 구분</small>
@@ -409,7 +408,7 @@
     <div class="clearfix"></div>
 
 	<!-- footer -->
-	   	<br><br><br><br><br><br><br><br><br><br><br><br>
+	   	<br><br><br>
 		<jsp:include page="../inc/footer.jsp"></jsp:include>
 	<!-- footer -->
 

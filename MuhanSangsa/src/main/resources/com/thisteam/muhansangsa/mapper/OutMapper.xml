@@ -162,6 +162,7 @@
 				</when>
 			</choose>
 		</if>
+			ORDER BY OUT_CD_1 ASC, OUT_CD_2 ASC
 			LIMIT 
 				#{startRow}, #{listLimit}
    </select>
@@ -218,5 +219,57 @@
 	</update>
 	
    <!-- ==========================================================================23/02/09 미주-->	
+  
+ 	<!-- ========================= jakyoung 시작 ============================ -->
+ 	<update id="updateOutQty">
+<!--  		<selectKey resultType="int" order="BEFORE" keyProperty="out_schedule_qty"> -->
+<!-- 			SELECT OUT_SCHEDULE_QTY -->
+<!-- 				FROM out_schedule_per_product  -->
+<!-- 				WHERE  -->
+<!-- 					OUT_SCHEDULE_CD = #{out_schedule_cd} -->
+<!-- 					AND STOCK_CD = #{stock_cd} -->
+<!-- 		</selectKey> -->
+ 		UPDATE out_schedule_per_product
+ 			SET 
+ 				OUT_QTY = (OUT_QTY + #{out_qty})
+<!--  				<if test="#{out_schecule_qty} == (OUT_QTY + #{out_qty})"> -->
+<!--  					, OUT_COMPLETE = '1' -->
+<!--  				</if> -->
+ 			WHERE
+ 				OUT_SCHEDULE_CD = #{out_schedule_cd}
+				AND STOCK_CD = #{stock_cd}
+ 	</update>
+ 	
+	<select id="selectOutScheduleTotal" resultType="Out_schedule_total_viewVO">
+		SELECT *
+			FROM
+				out_schedule_total_view
+			WHERE
+				out_schedule_cd = #{out_schedule_cd}
+				AND stock_cd = #{stock_cd}
+	</select>
+  
+  	<select id="selectOutSchedule" resultType="Out_scheduleVO">
+  		SELECT * 
+  			FROM 
+  				out_schedule
+  			WHERE 
+  				out_schedule_cd = #{out_schedule_cd}
+  	</select>
+  	
+  	<update id="updateOutComplete">
+  		UPDATE out_schedule_per_product
+  			SET
+  				out_complete = '1'
+  			WHERE
+  				out_schedule_cd = #{out_schedule_cd}
+				AND stock_cd = #{stock_cd}
+  	</update>
+  
+ 	<!-- ========================= jakyoung 끝 ============================ -->
+
+
+
+
   
 </mapper>

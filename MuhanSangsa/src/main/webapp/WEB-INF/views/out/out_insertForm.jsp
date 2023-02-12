@@ -279,9 +279,7 @@ $(document).on("click","#client_search_modalDiv #client_table > tbody tr",functi
 	
 	//품목삭제버튼 클릭시 삭제	
 	$(document).on("click",".deleteProduct",function(){
-	
 		$(this).closest("tr").remove();
-	
 	});
 	
 	
@@ -293,7 +291,17 @@ $(document).on("click","#client_search_modalDiv #client_table > tbody tr",functi
 				
 		console.log("stock_cd: "+stock_cd );
 		console.log("tr_index: "+tr_index );
+		let isExistStock_cd = false;
+		$("input[name=stock_cd]").each(function(){
+			if($(this).val() == stock_cd){
+				isExistStock_cd = true;
+				alert("이미 등록된 재고번호입니다. 다른 재고번호를 선택해주세요.")
+			}
 		
+		});
+		
+		if(!isExistStock_cd){
+			
 		$("input[name=stock_cd]").eq(tr_index).val(stock_cd);
 		$("input[name=out_schedule_qty]").eq(tr_index).attr("max",stock_qty);
 		$("input[name=out_schedule_qty]").eq(tr_index).attr("placeholder","최대 "+stock_qty+"개");
@@ -302,6 +310,8 @@ $(document).on("click","#client_search_modalDiv #client_table > tbody tr",functi
 		 $('#stock_search_modalDiv').modal('hide'); 
 		 $('#stock_search_modalDiv').hide();
 		 $('.jquery-modal').click();
+		}
+		
 	
 	});
 	
@@ -471,17 +481,28 @@ $(function () {
 	});
 
 	
-	//----------재고번호 검색창에서 검색시 ajax호출
-// 	$("#search_stock").on("change",function(){
-// 		let keyword = $(this).val();
-// 		//함수 호출
-// 		getStockcode_byProductcd(keyword);
+
+	
+	$("form").submit(function(){
+
+// 		let arr = [];
+// 		let canSubmit = false;
 		
-	
-// 	});
-	
-	
-	//==========여기까지==========
+// 		$("input[name=stock_cd]").each(function(){
+// 			if(arr.includes($(this).val())){
+// 				alert("하나의 발주서에 같은 재고번호를 사용할 수 없습니다.");
+// 				canSubmit = false;
+// 				return false;
+// 			}else{
+// 				arr.push($(this).val());
+// 				canSubmit = true;
+// 			};
+			
+// 		});
+// 			return canSubmit;
+		
+		
+	});
 	
 
 
@@ -635,7 +656,7 @@ $(function () {
 							</td>
 							<td><b>비고</b></td>
 							<td><input type="text" name="remarks"
-								class="rounded-start form-control" value=""></td>
+								class="rounded-start form-control" value=" "></td>
 						</tr>
 				</table>
 	<!-- =====================하단 테이블===================== -->
@@ -665,7 +686,7 @@ $(function () {
 								required="required"></td>
 							<td align="center">
 								<div class="d-flex">
-									<input type="text" class="form-control" id="히히" name="stock_cd"
+									<input type="text" class="form-control" name="stock_cd"
 										readonly="readonly" placeholder=" 클릭하세요." required="required"><span
 										class="badge bg-danger m-2 deleteProduct">-</span>
 								</div>
@@ -679,8 +700,7 @@ $(function () {
 						</tr>
 					</tfoot>
 				</table>
-				<input type="submit" value="등록" class="btn btn-primary mx-4"
-					onclick="OutInsertForm" />
+				<input type="submit" value="등록" class="btn btn-primary mx-4" />
 			</form>
 		</div>
 </div>
