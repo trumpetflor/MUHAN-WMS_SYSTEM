@@ -1,11 +1,12 @@
 package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,23 +17,30 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
+import org.springframework.validation.Errors;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thisteam.muhansangsa.service.InService;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
+import com.thisteam.muhansangsa.vo.InRegisterTotalVO;
 import com.thisteam.muhansangsa.vo.InVO;
 import com.thisteam.muhansangsa.vo.InWatingRegisterVO;
 import com.thisteam.muhansangsa.vo.InWatingRegister_nomalVO;
+import com.thisteam.muhansangsa.vo.Out_scheduleVO;
 import com.thisteam.muhansangsa.vo.ProductVO;
+import com.thisteam.muhansangsa.vo.StockHistoryVO;
+import com.thisteam.muhansangsa.vo.StockWhVO;
+import com.thisteam.muhansangsa.vo.inProcessingArrVO;
 import com.thisteam.muhansangsa.vo.inProcessingVO;
+import com.thisteam.muhansangsa.vo.inRegisterArrVO;
 import com.thisteam.muhansangsa.vo.inRegisterVO;
 
 
@@ -58,7 +66,7 @@ public class InController {
 	
 	// 입고처리 폼(입고버튼)
 	@GetMapping(value = "/InRegister")
-	public String register(String[] inRegisterList, Model model, HttpServletResponse response, RedirectAttributes rttr) {
+	public String register(String[] inRegisterList, Model model, HttpServletResponse response) {
 		System.out.println("inRegisterList : " + Arrays.toString(inRegisterList));
 		
 		ArrayList<String> in_schedule_cd = new ArrayList<String>();
@@ -79,7 +87,7 @@ public class InController {
 		System.out.println("product_name :" + product_name);
 		System.out.println("in_date :" + in_date);
 		
-		List<inRegisterVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
+		List<InRegisterTotalVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
 		
 		System.out.println("add 전 : " + resultList);
 		model.addAttribute("resultList", resultList);
@@ -89,8 +97,104 @@ public class InController {
 	}
 	
 	// 입고처리 저장 버튼
-	@GetMapping("/InRegisterPro")
-	public void registerPro() {
+	@PostMapping("/InRegisterPro")
+	public void registerPro(@ModelAttribute inRegisterArrVO voArr,
+							Model model,
+							HttpServletResponse response
+							) {
+		System.out.println(voArr);
+		try {
+			int insertStockHistory = 0;
+			for(int i = 0; i < voArr.getIn_schedule_cd().length; i ++) {
+				inRegisterVO inRegister = new inRegisterVO();
+				inRegister.setIn_schedule_cd(voArr.getIn_schedule_cd()[i]);
+				inRegister.setProduct_cd(voArr.getProduct_cd()[i]);
+//				vo.setProduct_name(voArr.getProduct_name()[i]);
+				inRegister.setIn_qty(voArr.getIn_qty()[i]);
+				inRegister.setIn_date(voArr.getIn_date()[i]);
+				System.out.println(voArr.getStock_cd()[i]);
+				System.out.println(voArr.getIn_date()[i]);
+				int stock_cd = voArr.getStock_cd()[i];
+				//선반명 분리
+				String whLoc = voArr.getWh_loc_in_area()[i];
+				String wh_loc_in_area = whLoc.split("_")[1];
+				System.out.println("선반명 : " + wh_loc_in_area);
+				inRegister.setWh_loc_in_area(wh_loc_in_area);
+				// 재고테이블에 신규 재고번호생성
+				if(stock_cd == 0) {
+					int product_cd = inRegister.getProduct_cd();
+					int wh_loc_in_area_cd = service.getWhLocCd(inRegister.getWh_loc_in_area());
+					int stock_qty = inRegister.getIn_qty();
+					
+					int newStockcd = service.insertStockCd(product_cd, wh_loc_in_area_cd, stock_qty);
+					inRegister.setStock_cd(newStockcd);
+				} else {
+					inRegister.setStock_cd(voArr.getStock_cd()[i]);
+				}
+
+				// 입고 처리 등록
+				service.inRegister(inRegister);
+				
+				
+				
+				// 재고 이력 등록
+				StockHistoryVO stock = new StockHistoryVO();
+				stock.setStock_cd(inRegister.getStock_cd());
+				stock.setStock_control_type_cd("0");
+				stock.setProduct_cd(inRegister.getProduct_cd());
+				stock.setSource_stock_cd(0);
+				stock.setTarget_stock_cd(0);
+				stock.setQty(inRegister.getIn_qty());
+				// 작업자코드 =>InVO
+				String emp_num = service.getInEmpNum(inRegister.getIn_schedule_cd());
+				stock.setEmp_num(emp_num);
+				// 오늘 날짜
+//				LocalDate now = LocalDate.now();
+//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+//				int formatedNow = Integer.parseInt(now.format(formatter));
+//				stock.setStock_date(formatedNow);
+				// 비고 => inVO
+				String remarks = service.getInRemarks(inRegister.getIn_schedule_cd());
+				stock.setRemarks(remarks);
+
+				System.out.println("재고수정 내용~ " + stock);
+		        insertStockHistory = service.registerHistory(stock);
+			}
+			System.out.println("재고수정..됐니? : " + insertStockHistory);
+			
+			// 미입고수량 = 0 되면 진행 상태 1로 바꾸기
+			int[] checkArr = service.getNoInQty();
+			System.out.println(checkArr);
+			if(checkArr != null) {
+				for(int i = 0; i < checkArr.length; i++) {
+					if(checkArr[i] == 0) {
+						// 진행상태 바꾸기
+						service.updateInComplete();
+					}
+				}
+			}
+			
+			
+//			if(insertStockHistory > 0) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('등록 처리가 완료되었습니다!');");
+				out.println("opener.document.location.reload();");
+				out.println("self.close();");
+				out.println("</script>");
+//			} else {
+//				response.setContentType("text/html; charset=UTF-8");
+//				PrintWriter out = response.getWriter();
+//				out.println("<script>");
+//				out.println("alert('입고 처리에 실패했습니다!');");
+//				out.println("opener.document.location.reload();");
+//				out.println("self.close();");
+//				out.println("</script>");
+//			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -102,6 +206,76 @@ public class InController {
 		return "in/in_processing_modify";
 	}
 	
+
+	// 입고 예정 수정 작업
+	@PostMapping(value = "/InProcessingModifyPro")
+	public void modifyPro(@ModelAttribute InVO inList,
+			@ModelAttribute inProcessingArrVO proArr,
+			@RequestParam("remarks2") String remarks2, 
+			HttpServletResponse response) {
+		System.out.println("inList : " + inList);
+		System.out.println("proList : " + proArr);
+		// 비고란 중복
+		inList.setRemarks(remarks2);
+		int modifyInCount = service.modifyInSchedule(inList);
+		System.out.println(modifyInCount);
+		
+		for(int i = 0; i < proArr.getIn_schedule_cd().length; i ++) {
+			inProcessingVO inProcessing = new inProcessingVO();
+			inProcessing.setIn_schedule_cd(proArr.getIn_schedule_cd()[i]);
+			inProcessing.setProduct_cd(proArr.getProduct_cd()[i]);
+			// 품목명 자동 변경
+			inProcessing.setIn_schedule_qty(proArr.getIn_schedule_qty()[i]);
+			inProcessing.setIn_date(proArr.getIn_date()[i]);
+			inProcessing.setRemarks(proArr.getRemarks()[i]);
+			// 입고품목 테이블 수정
+			service.modifyInProcessing(inProcessing);
+		}
+		
+		try {
+			if(modifyInCount > 0) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('수정 처리가 완료되었습니다!');");
+				out.println("opener.document.location.reload();");
+				out.println("self.close();");
+				out.println("</script>");
+			} else {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('수정 처리에 실패했습니다!');");
+				out.println("opener.document.location.reload();");
+				out.println("self.close();");
+				out.println("</script>");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	// 재고번호 생성
+//	@GetMapping(value = "/NewStockCd")
+//	public void insertStockCd(HttpServletResponse response) {
+//		
+//		try {
+//			int newStockCd = service.getMaxStockCd() + 1;
+//			response.setContentType("text/html; charset=UTF-8");
+//			PrintWriter out = response.getWriter();
+//			out.print(newStockCd);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+//	}
+	
+	// 재고 조회 페이지
+	@GetMapping(value = "/In/StockSelectList")
+	public String stockSelectList() {
+		return "in/stockList_inPage";
+
 	
 	
 	

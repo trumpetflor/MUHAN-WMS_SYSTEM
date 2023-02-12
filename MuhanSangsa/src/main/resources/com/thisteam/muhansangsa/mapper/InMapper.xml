@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.thisteam.muhansangsa.mapper.InMapper">
-
+ 
 	<!-- ======================== yeram ============================== -->
 	<!-- 입고예정목록 -->
 	<select id="selectInProList" resultType="inProcessingVO">
 		SELECT *
 			FROM in_processing_view
+			WHERE in_complete = '0'
+			AND NO_IN_QTY > 0
+			ORDER BY IN_SCHEDULE_CD ASC
 	</select>
 	
 	<!-- 입고처리 폼 -->
-	<select id="selectInRegisterList" resultType="inRegisterVO">
-		SELECT in_schedule_cd, product_name, in_schedule_qty
-			FROM IN_REGISTER_VIEW
+	<select id="selectInRegisterList" resultType="InRegisterTotalVO">
+		SELECT in_schedule_cd, product_name, in_schedule_qty, product_cd, in_date, stock_cd, CONCAT(wh_area, '_', wh_loc_in_area) as wh_loc_in_area
+			FROM IN_REGISTER_TOTAL_VIEW
 			WHERE IN_SCHEDULE_CD IN
 			<foreach collection="in_schedule_cd" item="code" separator="," open="(" close=")"  index="index">
 				#{code}
@@ -27,6 +30,193 @@
 			</foreach>
 	</select>
 	
+	<!-- 입고예정 품목 목록 -->
+	<select id="selectSelectedProList" resultType="inProcessingVO">
+		SELECT *
+			FROM IN_PROCESSING_VIEW
+			WHERE IN_SCHEDULE_CD = #{in_schedule_cd}
+	</select>
+	
+	<!-- 입고예정 목록 -->
+	<select id="selectSelectedInList" resultType="InVO">
+		SELECT a.in_schedule_cd, a.in_type_cd, a.business_no, a.emp_num, b.emp_name, a.in_date, a.remarks, a.in_complete
+			FROM in_schedule a
+			JOIN employees b
+			WHERE a.emp_num = b.emp_num
+			AND a.in_schedule_cd = #{in_schedule_cd}
+	</select>
+	
+	<!-- 재고번호 max 검색 -->
+<!-- 	<select id="selectMaxStockCd" resultType="integer"> -->
+<!-- 		SELECT MAX(STOCK_CD) -->
+<!-- 			FROM STOCK -->
+<!-- 	</select> -->
+	
+	<!-- 재고 목록 -->
+	<select id="selectStockList" resultType="StockWhVO">
+		SELECT stock_cd, product_name, wh_area, wh_loc_in_area
+			FROM stock_wh_view
+			<if test="!keyword.equals('')">
+			WHERE
+			<choose>
+				<when test="searchType.equals('stock_cd')">
+					stock_cd LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('product_name')">
+					product_name LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('wh_area')">
+					wh_area LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('wh_loc_in_area')">
+					wh_loc_in_area LIKE '%${keyword}%'
+				</when>
+			</choose>		
+		</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>
+	
+	<!-- 창고선반 목록 -->
+	<select id="selectWhLocList" resultType="StockWhVO">
+		SELECT wh_area, wh_loc_in_area
+			FROM stock_wh_view
+			<if test="!keyword.equals('')">
+			WHERE
+			<choose>
+				<when test="searchType.equals('wh_area')">
+					wh_area LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('wh_loc_in_area')">
+					wh_loc_in_area LIKE '%${keyword}%'
+				</when>
+			</choose>		
+		</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>
+	
+	<!-- 입고 등록 - 수량, 재고코드 -->
+	<update id="updateinRegister">
+		UPDATE IN_SCHEDULE_PER_PRODUCT
+			SET
+				IN_QTY = #{inRegister.in_qty},
+				STOCK_CD = #{inRegister.stock_cd}
+<!-- 				WH_LOC_IN_AREA = #{inRegister.wh_loc_in_area} -->
+			WHERE IN_SCHEDULE_CD = #{inRegister.in_schedule_cd}
+			AND PRODUCT_CD = #{inRegister.product_cd}
+<!-- 			T0_DATE(#{inRegister.in_date}, 'YYYY-MM-DD HH24MISS') -->
+<!-- 			AND T0_DATE(IN_DATE, 'YYYY-MM-DD HH24MISS') = #{inRegister.in_date} -->
+			AND IN_DATE = #{inRegister.in_date}
+	</update>
+	
+	<!-- 입고 등록 - 창고코드 -->
+	<update id="updateWhLoc">
+		UPDATE IN_REGISTER_VIEW
+			SET
+<!-- 				IN_QTY = #{inRegister.in_qty}, -->
+<!-- 				STOCK_CD = #{inRegister.stock_cd}, -->
+				WH_LOC_IN_AREA = #{inRegister.wh_loc_in_area}
+			WHERE IN_SCHEDULE_CD = #{inRegister.in_schedule_cd}
+			AND PRODUCT_CD = #{inRegister.product_cd}
+<!-- 			AND IN_DATE = #{inRegister.in_date} -->
+	</update>
+	
+	<!-- 미입고 수량 조회 -->
+	<select id="selectNoInQty" resultType="int">
+		SELECT NO_IN_QTY
+			FROM in_processing_view
+	</select>
+	
+	<!-- 진행 상태 변경 -->
+	<update id="updateInComplete">
+		UPDATE IN_PROCESSING_VIEW
+			SET IN_COMPLETE = '1'
+			WHERE NO_IN_QTY = 0
+	</update>
+	
+	<!-- 선반 코드 -->
+	<select id="selectWhLocCd" resultType="int">
+		SELECT WH_LOC_IN_AREA_CD
+			FROM warehouse_in_area
+			WHERE WH_LOC_IN_AREA = #{wh_loc_in_area}
+	</select>
+	
+	<!-- 신규 재고 번호 생성 -->
+	<insert id="insertStockCd">
+		<selectKey keyProperty="stock_cd" resultType="integer" order="BEFORE">
+		SELECT MAX(STOCK_CD) FROM STOCK
+		</selectKey>
+		INSERT INTO STOCK
+			VALUES (
+			#{stock_cd},
+			#{wh_loc_in_area_cd},
+			#{stock_qty}
+			)
+	</insert>
+	
+	<!-- 입고 예정 수정 작업 -->
+	<update id="updateInSchedule">
+		UPDATE IN_SCHEDULE
+			SET
+			BUSINESS_NO = #{inList.business_no},
+			IN_TYPE_CD = #{inList.in_type_cd},
+<!-- 			CUST_NAME = #{inList.cust_name}, -->
+			IN_DATE = #{inList.in_date},
+			EMP_NUM = #{inList.emp_num},
+			REMARKS = #{inList.remarks}
+		WHERE IN_SCHEDULE_CD = #{inList.in_schedule_cd}
+	</update>
+	
+	<!--  -->
+	<update id="updateInProcessing">
+		UPDATE IN_SCHEDULE_PER_PRODUCT
+			SET
+			PRODUCT_CD = #{inProcessing.product_cd},
+			IN_SCHEDULE_QTY = #{inProcessing.in_schedule_qty},
+			IN_DATE = #{inProcessing.in_date},
+			REMARKS = #{inProcessing.remarks}
+		WHERE IN_SCHEDULE_CD = #{inProcessing.in_schedule_cd}
+	</update>
+	
+	<!-- 작업자코드 =>InVO -->
+	<select id="selectInEmpNum" resultType="string">
+		SELECT EMP_NUM
+			FROM IN_SCHEDULE
+			WHERE IN_SCHEDULE_CD = #{in_schedule_cd}
+	</select>
+	
+	<!-- 비고 => inVO -->
+	<select id="selectInRemarks" resultType="string">
+		SELECT REMARKS
+			FROM IN_SCHEDULE
+			WHERE IN_SCHEDULE_CD = #{in_schedule_cd}
+	</select>	
+	
+	<!-- 재고 이력 입력 -->
+	<insert id="insertHistory">
+		INSERT INTO STOCK_HISTORY
+		VALUES (
+			#{stock.stock_cd},
+			#{stock.stock_control_type_cd},
+			#{stock.product_cd},
+			#{stock.source_stock_cd},
+			#{stock.target_stock_cd},
+			#{stock.qty},
+			#{stock.emp_num},
+			now(),
+			#{stock.remarks}
+		)
+		
+	</insert>
+	
+	
+	
+
 	<!-- ======================== yeram ============================== -->
 	
 	<!-- ======================== sangwoo ============================ -->
@@ -76,7 +266,7 @@
 	</select>
 	
 	<select id="getInList" resultType="InVO">
-		SELECT i.in_schedule_cd,it.in_type_name,c.cust_name,e.emp_name,pd.product_name,i.in_date 
+		SELECT i.in_schedule_cd,it.in_type_name,c.cust_name,e.emp_name,pd.product_name,i.in_date
 			FROM in_schedule i
 			JOIN in_type it
 			ON i.in_type_cd = it.in_type_cd
