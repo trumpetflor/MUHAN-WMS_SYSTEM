@@ -4,7 +4,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title> 출고 예정 수정 | 출고처리</title>
+	<title> 출고 수정 | 출고처리</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -280,7 +280,7 @@ z-index: 0;
                     <div class="col-sm-4 ">
                         <div class="page-header float-left rounded-start ">
                             <div class="page-title ">
-                               <h1 class="m-1"><b>출고 예정 수정</b></h1>   
+                               <h1 class="m-1"><b>출고 수정</b></h1>   
                             </div>
                         </div>
                     </div>
@@ -288,7 +288,7 @@ z-index: 0;
                         <div class="page-header float-right rounded-start ">
                             <div class="page-title ">
                                 <ol class="breadcrumb text-right ">
-                                    <li><a href="#">출고 처리</a></li>
+                                    <li><a href="#">출고 수정</a></li>
                                     <li><a href="#">출고 관리</a></li>
                                    
                                 </ol>

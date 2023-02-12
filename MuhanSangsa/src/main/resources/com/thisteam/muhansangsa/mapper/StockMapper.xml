@@ -102,24 +102,20 @@
 		SELECT * 
 			FROM 
 				stock_history_view
+			WHERE 
+				STOCK_CD = #{stock_cd}	
 			<if test="!keyword.equals('')">
-   			WHERE
 	  			<choose>
-					<when test="searchType.equals('STOCK_DATE')">
-						  STOCK_DATE LIKE '%${keyword}%'
+					<when test='searchType.equals("STOCK_DATE")'>
+					AND	STOCK_DATE LIKE '%${keyword}%'
 					</when>
 					<when test="searchType.equals('STOCK_CONTROL_TYPE_CD')">
-						  STOCK_CONTROL_TYPE_CD LIKE '%${keyword}%'
+					AND	STOCK_CONTROL_TYPE_CD LIKE '%${keyword}%'
 					</when>
 					<when test="searchType.equals('EMP_NAME')">
-						  EMP_NAME LIKE '%${keyword}%'
+					AND	EMP_NAME LIKE '%${keyword}%'
 					</when>
-					<otherwise></otherwise>
 				</choose>
-				AND STOCK_CD = #{stock_cd}
-			</if>
-			<if test="keyword.equals('')">
-				WHERE STOCK_CD = #{stock_cd}
 			</if>
 			ORDER BY 
 				STOCK_DATE DESC
