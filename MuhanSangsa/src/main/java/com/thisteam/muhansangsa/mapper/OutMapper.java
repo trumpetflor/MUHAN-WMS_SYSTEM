@@ -53,9 +53,9 @@ public interface OutMapper {
 			@Param("out_schedule_cd") String out_schedule_cd, 
 			@Param("out_complete") String out_complete);
 
-      
-      
-      
+
+	//출고 예정 목록 중 '조회' 버튼 클릭 시 출고처리상태 리스트 시작
+	List<Out_scheduleListVO> getOutListDetail(@Param("out_schedule_cd") String out_schedule_cd); 
 
 
 	//==========================================================================23/02/09 미주
@@ -100,6 +100,7 @@ public interface OutMapper {
 
 	// 출고 완료 상태
 	int updateOutComplete(Out_schedule_per_productVO ospp);
+
 	
 	
 	//-------------------------------------------------------- jakyoung 끝

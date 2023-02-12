@@ -142,7 +142,7 @@ a:visited :active {
 			let sum = 0; // 출고예정수량 총 합계 수량 계산을 위해 변수 선언
 			for(let row of resultList) {
 				result += "<tr>"
-							+ "<th align='center'>"+ "<input type='checkbox' name='stockChecked' id='stockChecked'>" + "</th>" // 체크박스
+// 							+ "<th align='center'>"+ "<input type='checkbox' name='stockChecked' id='stockChecked'>" + "</th>" // 체크박스
 							+ "<td>"+ row.out_schedule_cd + "</td>" //출고예정번호
 							+ "<td>"+ "발주서" + "</td>" //유형(테이블 컬럼없어서 임의로 데이터 삽입)
 							+ "<td>"+ row.cust_name + "</td>" //받는곳명(거래처명)
@@ -150,15 +150,15 @@ a:visited :active {
 							+ "<td>"+ row.product_name + "</td>" //품목명
 							+ "<td>"+ row.out_date + "</td>" //납기일자
 							+ "<td>"+ row.out_schedule_qty + "</td>" //출고예정수량합계
-							;
+							+ "<td><a href=\"#none\" onclick=\"window.open('OutWaitingChecking?out_schedule_cd="+row.out_schedule_cd+"','OutList','width=800, top=50,left=600, height=300,location=no,status=no,scrollbars=yes');\">조회</a></td>" ;
 
 						/* 230209 tab(전체:-1/진행중:0/완료:1)이동을 위한 작업 => "종결=진행중, 취소=완료"로 정리함! */
 						if(row.out_complete == 0){
-							result 	+= "<td>"+ "<a href='javascript:fn_change(\""+row.out_schedule_cd+"\",\""+ row.out_complete+"\","+status+")'>종결</a>" + "</td>"; //종결
+							result 	+= "<td>"+ "<a href='javascript:fn_change(\""+row.out_schedule_cd+"\",\""+ row.out_complete+"\","+status+")' style=\"color:blue\" >종결</a>" + "</td>"; //종결
 							result 	+= "<td>"+ "진행중" + "</td>"; // 종결 = 진행중 
 											
 						}	else{
-							result 	+= "<td>"+ "<a href='javascript:fn_change(\""+row.out_schedule_cd+"\",\""+ row.out_complete+"\","+status+")'>취소</a>" + "</td>"; //종결
+							result 	+= "<td>"+ "<a href='javascript:fn_change(\""+row.out_schedule_cd+"\",\""+ row.out_complete+"\","+status+")' style=\"color:red\">취소</a>" + "</td>"; //종결
 							result 	+= "<td>"+ "완료"  + "</td>"; // 취소 = 완료
 						}
 						
@@ -297,13 +297,13 @@ a:visited :active {
 			<!-- 출고 예정 목록 표시 
 	 출고예정번호, 유형, 받는곳명, 담당자명, 품목명, 납기일자, 출고예정수량합계, 종결여부, 진행상태 표시 -->
 
-			<div id="selectCount">
-				<small class="text-secondary"> 0 개 선택됨</small>
-			</div>
+<!-- 			<div id="selectCount"> -->
+<!-- 				<small class="text-secondary"> 0 개 선택됨</small> -->
+<!-- 			</div> -->
 			<table class="table" id="OutWaitingTable">
 				<thead>
 					<tr>
-						<td align="center"><input type="checkbox" name="AllChecked"></td>
+<!-- 						<td align="center"><input type="checkbox" name="AllChecked"></td> -->
 						<th>출고예정번호</th>
 						<th>유형</th>
 						<th>받는곳명(거래처명)</th>
@@ -311,6 +311,7 @@ a:visited :active {
 						<th>품목명</th>
 						<th>납기일자</th>
 						<th>출고예정수량합계</th>
+						<th>조회</th>
 						<th>종결여부</th>
 						<th>진행상태</th>
 					</tr>
@@ -325,57 +326,6 @@ a:visited :active {
 				<input type="button" value="신규등록" class="btn btn-sm btn-success m-2"
 					onclick="location.href='OutInsertForm'">
 			</div>
-	<!-- ================= 페이징 처리 =================   -->
- <div class="float-right">
- 
-   <section id="pageList">
-      <!-- 
-      현재 페이지 번호(pageNum)가 1보다 클 경우에만 [이전] 링크 동작
-      => 클릭 시 BoardList.bo 서블릿 주소 요청하면서 
-         현재 페이지 번호(pageNum) - 1 값을 page 파라미터로 전달
-      -->
-      <c:choose>
-               <c:when test="${empty param.pageNum }">
-                  <c:set var="pageNum" value="1" />
-               </c:when>
-               <c:otherwise>
-                  <c:set var="pageNum" value="${param.pageNum }" />
-               </c:otherwise>
-            </c:choose>
-      <c:choose>
-         <c:when test="${pageNum > 1}">
-            <input type="button" value="이전" class = "btn btn-primary btn-sm  " onclick="location.href='OutWaitingSelectList?pageNum=${pageNum - 1}'">
-         </c:when>
-         <c:otherwise>
-            <input type="button" value="이전" class = "btn btn-primary btn-sm  ">
-         </c:otherwise>
-      </c:choose>
-         
-      <!-- 페이지 번호 목록은 시작 페이지(startPage)부터 끝 페이지(endPage) 까지 표시 -->
-      <c:forEach var="i" begin="${pageInfo.startPage }" end="${pageInfo.endPage }">
-         <!-- 단, 현재 페이지 번호는 링크 없이 표시 -->
-         <c:choose>
-            <c:when test="${pageNum eq i}">
-               ${i }
-            </c:when>
-            <c:otherwise>
-               <a href="OutWaitingSelectList?pageNum=${i }">${i }</a>
-            </c:otherwise>
-         </c:choose>
-      </c:forEach>
-
-      <!-- 현재 페이지 번호(pageNum)가 총 페이지 수보다 작을 때만 [다음] 링크 동작 -->
-      <c:choose>
-         <c:when test="${pageNum < pageInfo.maxPage}">
-            <input type="button" value="다음" class = "btn btn-primary btn-sm  " onclick="location.href='OutWaitingSelectList?pageNum=${pageNum + 1}'">
-         </c:when>
-         <c:otherwise>
-            <input type="button" value="다음" class = "btn btn-primary btn-sm  ">
-         </c:otherwise>
-      </c:choose>
-   </section>
-   </div>
-	<!-- ================= 페이징 처리 끝=================   -->
 
 		</div>
 	</div>
