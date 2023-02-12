@@ -446,7 +446,7 @@ function open_addLoc_modal(stock_cd,product_cd) {
 					</td>
 					<td><input type="number" name="qty" class=" bg-light border border-secondary rounded-1 px-1 adjust" disabled="disabled" min="0"></td>
 					<td style="position: relative;" id="${stock.stock_cd}_${stock.product_cd}">
-						<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-2 " >
+						<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-2 " readonly="readonly">
 					    <div class=" rounded-1 search_div">
 						    <div class="float-right close-loc-Btn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
 						    	<div class="mt-3 add-New-loc" onclick="open_addLoc_modal('${stock.stock_cd}','${stock.product_cd}');"> <a href="#modal_container_stock" rel="modal:open">새 위치 추가 + </a></div>

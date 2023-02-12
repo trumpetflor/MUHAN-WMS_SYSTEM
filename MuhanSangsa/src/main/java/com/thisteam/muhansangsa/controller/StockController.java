@@ -312,84 +312,80 @@ public class StockController {
 	
 	
 	// ==================================== hawon =============================================
-	@GetMapping(value = "/Inventory_View") 
+	@GetMapping(value = "/Inventory_View")
 	public String inventoryView(@RequestParam(defaultValue = "") String searchType,
-								@RequestParam(defaultValue = "") String keyword,
-								@RequestParam(defaultValue = "1") int pageNum,
-								Model model, HttpSession session){
+			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int pageNum, Model model,
+			HttpSession session) {
+		// 세션 아이디
 		String sId;
-		if(session.getAttribute("sId") != null) {
-			sId = (String)session.getAttribute("sId");
-		}else {
+		if (session.getAttribute("sId") != null) {
+			sId = (String) session.getAttribute("sId");
+		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
-			return "fail_back";
+			model.addAttribute("url", "/Login");
+			return "redirect";
 		}
-		
-		InetAddress local;
-		String ip;
+
+		// 아이피 주소
 		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
+			InetAddress local = InetAddress.getLocalHost();
+			String ip = local.getHostAddress();
 			model.addAttribute("ip", ip);
-			
+			logger.info("접속 ip : " + ip);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
 
-		//< 페이징처리를 위한 작업>------------------------
+		// 권한 조회 메서드
+		boolean isRightUser = service_emp.getPrivilege(sId, Privilege.재고조회);
 
-		// 한 페이지에서 표시할 페이지 목록(번호) 갯수 계산
-		// 1. Service 객체의 selectBoardListCount() 메서드를 호출하여 전체 게시물 수 조회
-		// => 파라미터 : 검색타입, 검색어   리턴타입 : int(listCount)
-		int listCount = service.getStockListCount(searchType,keyword);
-		System.out.println(listCount);
-//		
-//		 2. 한 페이지에서 표시할 페이지 목록 갯수 설정
-		int pageListLimit = 30; // 한 페이지에서 표시할 페이지 목록을 3개로 제한
-//		
-//		// 3. 전체 페이지 목록 수 계산
-		int maxPage = listCount / pageListLimit 
-						+ (listCount % pageListLimit == 0 ? 0 : 1); 
-//		
-//		// 4. 시작 페이지 번호 계산
-		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
-//		
-//		// 5. 끝 페이지 번호 계산
-		int endPage = startPage + pageListLimit - 1;
-//		
-//		// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
-//		//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
-		if(endPage > maxPage) {
-			endPage = maxPage;
-		}
-		
-		
-//		// PageInfo 객체 생성 후 페이징 처리 정보 저장
-		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
-//		// ---------------------------------------------------------------------------
-//		// 게시물 목록 객체(boardList) 와 페이징 정보 객체(pageInfo)를 Model 객체에 저장
-		model.addAttribute("pageInfo", pageInfo);
-		// 페이징 처리를 위한 변수 선언
-		int listLimit = 30; // 한 페이지에서 표시할 게시물 목록을 30개로 제한
-		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+		if (isRightUser) {
+			// 페이징 처리를 위한 변수 선언
+			int listLimit = 30; // 한 페이지에서 표시할 게시물 목록을 30개로 제한
+			int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
 
-			//권한 조회 메서드
-			boolean isRightUser = service_emp.getPrivilege(sId,Privilege.재고조회);
-			
-			
-			if(isRightUser) {
-				List<Stock_viewVO> stockList = service.getStockList(searchType, keyword, startRow, listLimit);
-				model.addAttribute("stockList", stockList);
-				session.setAttribute("stockList_currentPage", stockList);
-				System.out.println("stockList: "+ stockList);
-				return "stock/stock_list";
-			}else {
-				model.addAttribute("msg", "잘못된 접근입니다. ");
-				return "fail_back";
-			
+			List<Stock_viewVO> stockList = service.getStockList(searchType, keyword, startRow, listLimit);
+			model.addAttribute("stockList", stockList);
+			session.setAttribute("stockList_currentPage", stockList);
+			System.out.println("stockList: " + stockList);
+
+			// < 페이징처리를 위한 작업>------------------------
+
+			// 한 페이지에서 표시할 페이지 목록(번호) 갯수 계산
+			int listCount = service.getStockListCount(searchType, keyword);
+			System.out.println(listCount);
+//				
+//				 2. 한 페이지에서 표시할 페이지 목록 갯수 설정
+			int pageListLimit = 30; // 한 페이지에서 표시할 페이지 목록을 3개로 제한
+//				
+//				// 3. 전체 페이지 목록 수 계산
+			int maxPage = listCount / pageListLimit + (listCount % pageListLimit == 0 ? 0 : 1);
+//				
+//				// 4. 시작 페이지 번호 계산
+			int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+//				
+//				// 5. 끝 페이지 번호 계산
+			int endPage = startPage + pageListLimit - 1;
+//				
+//				// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+//				//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+			if (endPage > maxPage) {
+				endPage = maxPage;
 			}
-		
+
+//				// PageInfo 객체 생성 후 페이징 처리 정보 저장
+			PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
+//				// ---------------------------------------------------------------------------
+//				// 게시물 목록 객체(boardList) 와 페이징 정보 객체(pageInfo)를 Model 객체에 저장
+			model.addAttribute("pageInfo", pageInfo);
+
+			return "stock/stock_list";
+		} else {
+			model.addAttribute("msg", "잘못된 접근입니다. ");
+			return "fail_back";
+
+		}
+
 	}
 	
 
@@ -403,48 +399,45 @@ public class StockController {
 	@GetMapping(value = "/StockAdjustment")
 	public String stock_adjustment(int[] stock_cd, Model model,HttpSession session){
 		
-		
-		if(stock_cd == null) {
-			model.addAttribute("msg", "잘못된 접근입니다. ");
-			return "fail_back";
+		// 세션 아이디
+		String sId;
+		if (session.getAttribute("sId") != null) {
+			sId = (String) session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect";
 		}
-		InetAddress local;
-		String ip;
+
+		// 아이피 주소
 		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
+			InetAddress local = InetAddress.getLocalHost();
+			String ip = local.getHostAddress();
 			model.addAttribute("ip", ip);
-			
+			logger.info("접속 ip : " + ip);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
-		if(session.getAttribute("sId") != null) {
-			String sId = (String)session.getAttribute("sId");
-				//권한 조회 메서드
-				boolean isRightUser = service_emp.getPrivilege(sId,Privilege.창고등록);
-				isRightUser = true;//TODO: 로그인되면 지우기
-				
-				//권한이 존재하면 작업시작
-				if(isRightUser) {
-						System.out.println("stock :  "+Arrays.toString(stock_cd));
-						List<Stock_viewVO> stockList = service.getSelectedStock(stock_cd);
-						System.out.println("stockList : "+ stockList);
-						
-						model.addAttribute("stockList",stockList);
-						return "stock/stock_adjustment";
-					
-				}else {
-						model.addAttribute("msg", "잘못된 접근입니다. ");
-						return "fail_back";
-						
-				}
-				
-		}else {
-			model.addAttribute("msg", "로그인이 필요합니다");
+
+		// 권한 조회 메서드
+		boolean isRightUser = service_emp.getPrivilege(sId, Privilege.재고관리);
+
+
+		// 권한이 존재하면 작업시작
+		if (isRightUser) {
+			System.out.println("stock :  " + Arrays.toString(stock_cd));
+			List<Stock_viewVO> stockList = service.getSelectedStock(stock_cd);
+			System.out.println("stockList : " + stockList);
+
+			model.addAttribute("stockList", stockList);
+			return "stock/stock_adjustment";
+
+		} else {
+			model.addAttribute("msg", "잘못된 접근입니다. ");
 			return "fail_back";
+
 		}
-		
+				
 
 		
 	}
@@ -488,7 +481,7 @@ public class StockController {
 			String sId = (String)session.getAttribute("sId");
 				//권한 조회 메서드
 				boolean isRightUser = service_emp.getPrivilege(sId,Privilege.창고등록);
-				isRightUser = true;//TODO: 로그인되면 지우기
+				
 				
 				//권한이 존재하면 작업시작
 				if(isRightUser) {
@@ -497,7 +490,6 @@ public class StockController {
 						//새 위치 추가 페이지
 						List<WarehouseVO> warehouseList = service.getWarehouseList();
 					
-						
 						
 						model.addAttribute("warehouseList", warehouseList);
 						model.addAttribute("product_cd", stock.getProduct_cd());
@@ -558,8 +550,8 @@ public class StockController {
 			  }
 		  }else {
 			  System.out.println("전체 페이지 다운");
-			  
-			  stockList = service.getStockList("", "", 1, 100);
+			  int ListCount = service.getStockListCount("", "");
+			  stockList = service.getStockList("", "", 1, ListCount);
 		  }
 		  // 현재 날짜 구하기
 	        LocalDate now = LocalDate.now();
@@ -575,7 +567,8 @@ public class StockController {
 			    Cell cell = null;
 			    int rowNo = 0;
 
-
+			    sheet.setColumnWidth(2, 30*256);//행 번호 
+			    sheet.setColumnWidth(3, 15*256);//행 번호 
 
 			    // 테이블 헤더용 스타일
 			    CellStyle headStyle = wb.createCellStyle();
@@ -691,7 +684,7 @@ public class StockController {
 			    
 			    // response 헤더 설정
 			    response.setContentType("ms-vnd/excel");
-			    response.setHeader("Content-Disposition", "attachment;filename="+formatedNow+"_stock.xls");
+			    response.setHeader("Content-Disposition", "attachment;filename="+formatedNow+"_stock_muhan.xls");
 
 
 			    // 엑셀 출력

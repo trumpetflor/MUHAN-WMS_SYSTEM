@@ -164,7 +164,7 @@
             <when test="searchType.equals('emp_email')">
                WHERE EMP_EMAIL LIKE '%${keyword}%'
             </when>
-            <when test="searchType.equals('dep_name')">
+            <when test="searchType.equals('dept_name')">
                WHERE DEPT_NAME LIKE '%${keyword}%'
             </when>
             <otherwise>

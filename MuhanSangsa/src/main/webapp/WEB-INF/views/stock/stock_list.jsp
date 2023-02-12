@@ -65,6 +65,7 @@
 	 text-decoration: none;
 	 color: 	#000080;
 	}
+
 	
 	/* 모달 */
 	#modal_container_stock{
@@ -114,10 +115,13 @@ function openStockModal() {
 $(function(){
 	//전체선택 버튼 클릭
 	$('input:checkbox[name=AllChecked]').on("click",function(){
+		
 		if($(this).is(":checked") == true){
 			$("input[name=stockChecked]").prop("checked",true);
+			$("#selectCount > small").html($('input[name=stockChecked]:checked').length +" 개 선택됨");
 		}else{
 			$("input[name=stockChecked]").prop("checked",false);
+			$("#selectCount > small").html($('input[name=stockChecked]:checked').length +" 개 선택됨");
 		}
 	});
 	
@@ -127,9 +131,8 @@ $(function(){
 		let stock_cd = $(this).val();
 		
 		
-		
-		
 	});
+
 	//하단 조정버튼 클릭시
 	$("#stockAdjustmentBtn").on("click",function(){
 		if($('input:checkbox[name=stockChecked]:checked').length == 0){

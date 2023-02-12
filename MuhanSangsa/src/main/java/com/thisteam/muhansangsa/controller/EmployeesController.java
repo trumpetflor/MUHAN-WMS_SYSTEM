@@ -407,34 +407,36 @@ public class EmployeesController {
 			@RequestParam(defaultValue = "1") int pageNum, 
 			Model model,
 			HttpSession session) {
+		
+		// 세션 아이디
+		String sId;
+		if (session.getAttribute("sId") != null) {
+			sId = (String) session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+		}
 
+		// 아이피 주소
 		try {
 			InetAddress local = InetAddress.getLocalHost();
 			String ip = local.getHostAddress();
 			model.addAttribute("ip", ip);
-			logger.info("접속 ip : "+ ip);
-			
+			logger.info("접속 ip : " + ip);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-
-		// 페이징 처리를 위한 변수 선언
-		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
-		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
-
-		if (session.getAttribute("sId") == null) {
-			model.addAttribute("msg", "잘못된 접근입니다.");
-			return "fail_back";
-
-		}
-
-		String sId = (String) session.getAttribute("sId");
 
 		// 권한 조회 메서드
 		boolean isRightUser = service.getPrivilege(sId, Privilege.사원조회);
 
 		if (isRightUser) {
-
+			// 페이징 처리를 위한 변수 선언
+			int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+			int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+			
+			
 			// 권한 있을 시에 조회 수행
 			List<Emp_viewVO> empList = service.getMemberList(searchType, keyword, startRow, listLimit);
 			model.addAttribute("empList", empList);
@@ -461,21 +463,19 @@ public class EmployeesController {
 				System.out.println(work);
 				workArr.put(new JSONObject(work));
 			}
-			
-			//< 페이징처리를 위한 작업>------------------------
 
-			// 한 페이지에서 표시할 페이지 목록(번호) 갯수 계산
-			// 1. Service 객체의 selectBoardListCount() 메서드를 호출하여 전체 게시물 수 조회
-			// => 파라미터 : 검색타입, 검색어   리턴타입 : int(listCount)
+			// < 페이징처리를 위한 작업>------------------------
+			
+			
+			// 한 페이지에서 표시할 페이지 목록(번호) 갯수
 			int listCount = service.getEmpListCount(searchType, keyword);
-//			System.out.println("총 게시물 수 : " + listCount);
+//			System.out.println("총 리스트 수 : " + listCount);
 //			
 //			 2. 한 페이지에서 표시할 페이지 목록 갯수 설정
-			int pageListLimit = 10; // 한 페이지에서 표시할 페이지 목록을 3개로 제한
+			int pageListLimit = 5;
 //			
 //			// 3. 전체 페이지 목록 수 계산
-			int maxPage = listCount / listLimit 
-							+ (listCount % listLimit == 0 ? 0 : 1); 
+			int maxPage = listCount / listLimit + (listCount % listLimit == 0 ? 0 : 1);
 //			
 //			// 4. 시작 페이지 번호 계산
 			int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
@@ -485,11 +485,10 @@ public class EmployeesController {
 //			
 //			// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
 //			//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
-			if(endPage > maxPage) {
+			if (endPage > maxPage) {
 				endPage = maxPage;
 			}
-			
-			
+
 //			// PageInfo 객체 생성 후 페이징 처리 정보 저장
 			PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
 //			// ---------------------------------------------------------------------------
@@ -497,11 +496,13 @@ public class EmployeesController {
 			model.addAttribute("pageInfo", pageInfo);
 			model.addAttribute("deptArr", deptArr);
 			model.addAttribute("workArr", workArr);
-		
+
 			System.out.println("workArr : " + workArr);
 			System.out.println("deptArr : " + deptArr);
 			System.out.println("sId   : " + sId);
+			
 			return "employees/emp_List";
+			
 		} else {
 			model.addAttribute("msg", "권한이 없습니다.");
 			return "fail_back";
@@ -509,79 +510,76 @@ public class EmployeesController {
 
 	}
 	   
-	   
 			@GetMapping(value = "/employees_search")
 			public String emp_view_sch(@RequestParam(defaultValue = "") String searchType,
 					@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int pageNum,
 					Model model, HttpSession session) {
-				// 공통코드
-				String ip;
+				
+				// 세션 아이디
+				String sId;
+				if (session.getAttribute("sId") != null) {
+					sId = (String) session.getAttribute("sId");
+				} else {
+					model.addAttribute("msg", "로그인이 필요합니다");
+					model.addAttribute("url", "/Login");
+					return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+				}
+
+				// 아이피 주소
 				try {
 					InetAddress local = InetAddress.getLocalHost();
-					ip = local.getHostAddress();
+					String ip = local.getHostAddress();
 					model.addAttribute("ip", ip);
-
+					logger.info("접속 ip : " + ip);
 				} catch (UnknownHostException e) {
 					e.printStackTrace();
 				}
 
-				// 페이징 처리를 위한 변수 선언
-				int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
-				int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+				// 권한 조회 메서드
+				boolean isRightUser = service.getPrivilege(sId, Privilege.사원관리);
 
-		
-				if (session.getAttribute("sId") == null) {
-					model.addAttribute("msg", "잘못된 접근입니다.");
+				if (isRightUser) {// 권한 있을 시에 조회 수행
+					
+					// 페이징 처리를 위한 변수 선언
+					int listLimit = 20; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+					int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+
+					List<Emp_viewVO> empList = service.getMemberList(searchType, keyword, startRow, listLimit);
+					model.addAttribute("empList", empList);
+					isRightUser = service.getPrivilege(sId, Privilege.사원관리);
+					model.addAttribute("priv", "1");
+
+					// 부서 및 재직상태 변경을 위한 테이블 컬럼 가져오기
+					List<DepartmentVO> deptList = service.getdeptList();
+					List<WorksVO> workList = service.getworkList();
+
+					// JSON데이터로 변환
+					JSONArray deptArr = new JSONArray();
+					JSONArray workArr = new JSONArray();
+
+					for (DepartmentVO dept : deptList) {
+						System.out.println(dept);
+						deptArr.put(new JSONObject(dept));
+					}
+					for (WorksVO work : workList) {
+						System.out.println(work);
+						workArr.put(new JSONObject(work));
+					}
+					System.out.println("deptList : " + deptList);
+					System.out.println("workList : " + workList);
+
+					model.addAttribute("deptList", deptList);
+					model.addAttribute("workList", workList);
+					model.addAttribute("deptArr", deptArr);
+					model.addAttribute("workArr", workArr);
+					
+					return "employees/emp_List";
+					
+				} else {
+					model.addAttribute("msg", "권한이 없습니다.");
 					return "fail_back";
 				}
 
-			
-				String sId = (String) session.getAttribute("sId");
-			
-					// 권한 조회 메서드
-					boolean isRightUser = service.getPrivilege(sId, Privilege.사원관리);
-					isRightUser = true;// TODO:
-					if (isRightUser) {
-						// 권한 있을 시에 조회 수행
-						List<Emp_viewVO> empList = service.getMemberList(searchType, keyword, startRow, listLimit);
-						model.addAttribute("empList", empList);
-						isRightUser = service.getPrivilege(sId, Privilege.사원관리);
-						System.out.println("사원관리 권한: " + isRightUser);
-						model.addAttribute("priv", "1");
-
-						// 부서 및 재직상태 변경을 위한 테이블 컬럼 가져오기
-						List<DepartmentVO> deptList = service.getdeptList();
-						List<WorksVO> workList = service.getworkList();
-
-						
-						// JSON데이터로 변환
-						JSONArray deptArr = new JSONArray();
-						JSONArray workArr = new JSONArray();
-
-						for (DepartmentVO dept : deptList) {
-							System.out.println(dept);
-							deptArr.put(new JSONObject(dept));
-						}
-						for (WorksVO work : workList) {
-							System.out.println(work);
-							workArr.put(new JSONObject(work));
-						}
-						System.out.println("deptList : " + deptList);
-						System.out.println("workList : " + workList);
-
-						model.addAttribute("deptList", deptList);
-						model.addAttribute("workList", workList);
-						
-						
-						
-						model.addAttribute("deptArr", deptArr);
-						model.addAttribute("workArr", workArr);
-					}else {
-						model.addAttribute("msg", "권한이 없습니다.");
-						return "fail_back";
-				}
-
-				return "employees/emp_List";
 			}
 	      
 
@@ -592,9 +590,7 @@ public class EmployeesController {
 		public void emp_update_part(@RequestBody String data, Model model, HttpSession session,
 				HttpServletResponse response) {
 	
-			List<Map<String, String>> info = new Gson().fromJson(String.valueOf(data),
-					new TypeToken<List<Map<String, Object>>>() {
-					}.getType());
+			List<Map<String, String>> info = new Gson().fromJson(String.valueOf(data),new TypeToken<List<Map<String, Object>>>() {}.getType());
 
 			List<Emp_viewVO> empList = new ArrayList<Emp_viewVO>();
 			String updateObj = "";
