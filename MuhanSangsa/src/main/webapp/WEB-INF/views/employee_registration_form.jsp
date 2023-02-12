@@ -6,61 +6,99 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ela Admin - HTML5 Admin Template</title>
-    <meta name="description" content="Ela Admin - HTML5 Admin Template">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>인사관리 | 사원 등록</title>
+<meta name="description" content="Ela Admin - HTML5 Admin Template">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
-    <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
+<link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script>
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+<style type="text/css">
 
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
-	<style type="text/css">
-	
-	.col-lg-6{
-		margin: auto;
-		max-width: 50%;
-		flex: 100 100;
-	}
-	
-	/*        23/02/10 수정 사항     */
-	@font-face {
-	    font-family: 'NEXON Lv1 Gothic OTF';
-	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-	    font-weight: normal;
-	    font-style: normal;
-	}
-	
-	* {
-		font-family: 'NEXON Lv1 Gothic OTF';
-	}
-	.col-md-3 {
-	padding-left: 3em;
-	}
-	input[name=emp_name],[name=emp_tel],[name=emp_dtel],[name=emp_email],[name=emp_post_No]{
-		width: 300px;
-	}
-	input[name=emp_addr],[type=date], select[name=work_cd] {
-		width: 450px;
-	}
-	select[name=dept_cd],[name=grade_cd]{
-		width: 300px;
-	}
-	
-	/*        23/02/10 수정 사항     */
-	</style>
+.col-lg-6{
+	margin: auto;
+	max-width: 50%;
+	flex: 100 100;
+}
+
+/*        23/02/10 수정 사항     */
+@font-face {
+    font-family: 'NEXON Lv1 Gothic OTF';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+	font-family: 'NEXON Lv1 Gothic OTF';
+}
+.col-md-3 {
+padding-left: 3em;
+}
+input[name=emp_name],[name=emp_tel],[name=emp_dtel],[name=emp_email],[name=emp_post_No]{
+	width: 300px;
+}
+input[name=emp_addr],[type=date], select[name=work_cd] {
+	width: 450px;
+}
+select[name=dept_cd],[name=grade_cd]{
+	width: 300px;
+}
+
+/*        23/02/10 수정 사항     */
+</style>
+<script type="text/javascript">
+// 이메일 중복 확인용 전역변수
+var idResult = false;
+
+// jquery 시작 부분 페이지 동작시 적용
+	$(function() {
+		//// ID = 이메일 미입력시 체크 ////
+		$("#email").on("focusout", function() {
+			let id = $("#email").val();
+			console.log(id);
+			if(id == "") {
+				$("#checkId").html("필수 입력").css("color","red");
+				idResult = false;
+			} else {
+				//// ID 중복체크 ////
+				$.ajax({
+					url: "EmployeeIdCheck",
+					data: { id: $("#email").val()},
+					success: function(result) {
+						$("#checkId").html(result);
+						if(result == "true") {
+							$("#checkId").html("사용 중인 이메일입니다").css("color","red");
+							idResult = false;
+						} else {
+							$("#checkId").html("사용 가능한 이메일입니다").css("color","#00ff00");
+							idResult = true;
+						}
+					}// success
+						
+				}); // ajax
+				
+			} // if
+		}); // focus
+		
+		
+}); // func()
+
+</script>
 </head>
 <body>
     <jsp:include page="inc/left.jsp"></jsp:include>
@@ -147,12 +185,12 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="email" class=" form-control-label">Email</label></div>
                                         <div class="col-12 col-md-9"><input type="email" id="email" name="emp_email" required="required" placeholder="이메일을 입력하세요" class="form-control" >
-                                        <small class="help-block form-text">사원의 이메일은 무한상사 관리시스템 아이디로 사용됩니다</small></div>
+                                        <div id="checkId" class="help-block form-text"><small class="help-block form-text" ></small></div></div>
                                     </div>
                                     <!-- 주소 -->
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="postCode" class=" form-control-label">우편번호</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="postCode" name="emp_post_No" placeholder="우편번호를 입력하세요" class="form-control"><input type="button" value="주소 검색" onclick="kakaoAddr()" ></div>
+                                        <div class="col-12 col-md-9 d-flex"><input type="text" id="postCode" name="emp_post_No" placeholder="우편번호를 입력하세요" class="form-control"><input type="button" value="주소 검색" onclick="kakaoAddr()" ></div>
                                     </div>
                                		 <div class="row form-group">
                                         <div class="col col-md-3"><label for="address1" class=" form-control-label">주소</label></div>

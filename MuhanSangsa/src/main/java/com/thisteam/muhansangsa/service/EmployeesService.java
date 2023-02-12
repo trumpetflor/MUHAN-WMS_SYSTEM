@@ -161,8 +161,14 @@ public class EmployeesService {
 			// TODO Auto-generated method stub
 			return mapper.selectEmpListCount(searchType,keyword);
 		}
-		   
 
+		// ==================== 23/02/11 추가 (미주) ==============================
+		// 사원 등록 폼 이메일 중복확인
+		public int checkDuplicateId(String id) {
+			return mapper.selectDuplicateId(id);
+		}
+		   
+		// ==================== 23/02/11 추가 (미주) ==============================
 
 
 
