@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.OutService;
 import com.thisteam.muhansangsa.vo.Emp_viewVO;
 import com.thisteam.muhansangsa.vo.Out_scheduleListVO;
@@ -33,6 +34,7 @@ import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_Arr_viewVO;
 import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 import com.thisteam.muhansangsa.vo.PageInfo;
+import com.thisteam.muhansangsa.vo.Privilege;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
 
 
@@ -43,9 +45,8 @@ public class OutController {
 	@Autowired	
 	private OutService service ;
 	
-
-	
-	
+	@Autowired
+	private EmployeesService empService;
 
 	//========================= SEWON ======================================= 
 	
@@ -53,10 +54,34 @@ public class OutController {
 	@GetMapping(value = "/OutWaitingSelectList")
 	public	String outWaitingSelectList(
 			@RequestParam(defaultValue = "") String msg,
-			Model model) {
+			Model model, HttpSession session) {
 	
 	model.addAttribute("msg", msg);
-			
+	String sId = (String)session.getAttribute("sId");
+	
+	//sId가 null일 경우 접근 차단!
+	if(session.getAttribute("sId") == null) {
+		model.addAttribute("msg", "잘못된 접근입니다.");
+		return "fail_back";
+	} 
+	
+	// 접속 ip 확인 코드
+	InetAddress local;
+	String ip;
+	try {
+		local = InetAddress.getLocalHost();
+		ip = local.getHostAddress();
+		model.addAttribute("ip", ip);
+	} catch (UnknownHostException e) {
+		e.printStackTrace();
+	}
+	
+	if(sId != null) { // 세션아이디가 있을 경우 시작 
+		// 권한 조회 메서드
+		boolean isRightUser = empService.getPrivilege(sId, 
+				Privilege.WMS관리, Privilege.기본등록, Privilege.사원관리, Privilege.재고관리);
+	}
+		
 	return "out/out_waiting_seletList";
 }
 
