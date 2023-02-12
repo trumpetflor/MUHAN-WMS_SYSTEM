@@ -8,4 +8,39 @@
 			FROM wms_wh_view
 	</select>
 
+	<select id="selectWhNameList" resultType="Wms_wh_viewVO">
+		SELECT *
+<!-- 				<if test="!wh_cd.equals('')"> -->
+<!-- 					wh_name -->
+<!-- 					<if test="wh_area_cd neq 0"> -->
+<!-- 						, wh_area -->
+<!-- 						<if test="wh_loc_in_area_cd neq 0"> -->
+<!-- 							, wh_loc_in_area_cd -->
+<!-- 						</if> -->
+<!-- 					</if> -->
+<!-- 				</if> -->
+			FROM wms_wh_view
+				WHERE 
+				<if test="!wh_cd.equals('')">
+					wh_cd = #{wh_cd}
+					<if test="wh_area_cd neq 0">
+						AND wh_area_cd = #{wh_area_cd}
+						<if test="wh_loc_in_area_cd neq 0">
+							AND wh_loc_in_area_cd = #{wh_loc_in_area_cd}
+						</if>
+					</if>
+				</if>
+<!-- 			<choose> -->
+<!-- 				<when test="!wh_cd.equals('')"> -->
+<!-- 					WHERE wh_cd = #{wh_cd} -->
+<!-- 				</when> -->
+<!-- 				<when test="wh_area_cd neq 0"> -->
+<!-- 					WHERE wh_area_cd = #{wh_area_cd} -->
+<!-- 				</when> -->
+<!-- 				<when test="wh_loc_in_area_cd neq 0"> -->
+<!-- 					WHERE wh_loc_in_area_cd = #{wh_loc_in_area_cd} -->
+<!-- 				</when> -->
+<!-- 			</choose> -->
+	</select>
+	
 </mapper>

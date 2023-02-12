@@ -66,6 +66,11 @@ public class WMSWhService {
 	public int deleteWhLocArea(int whLocArea) {
 		return locMapper.deleteWhLocArea(whLocArea);
 	}
+
+	// 창고, 창고 구역, 창고 구역 내 이름
+	public List<Wms_wh_viewVO> getWhNameList(String wh_cd, int wh_area_cd, int wh_loc_in_area_cd) {
+		return whViewMapper.selectWhNameList(wh_cd, wh_area_cd, wh_loc_in_area_cd);
+	}
 	
 	
 }

@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.StockService;
+import com.thisteam.muhansangsa.service.WMSWhService;
 import com.thisteam.muhansangsa.vo.PageInfo;
 import com.thisteam.muhansangsa.vo.Privilege;
 import com.thisteam.muhansangsa.vo.StockHistoryArrVO;
@@ -57,7 +58,10 @@ public class StockController {
 	
 	@Autowired
 	private EmployeesService service_emp;
-		
+	
+	@Autowired // jakyoung 최종 깃머지 추가
+	private WMSWhService service_wms; // jakyoung 최종 깃머지 추가
+	
 // =============================================== mijoo =====================================================
 // 23/02/07 수정   
 // 재고 조정 페이지 비즈니스 로직
@@ -807,6 +811,18 @@ public class StockController {
 				}
 				return "wms_wh/wms_stock_list";
 			} else {
+				
+				// 창고 이름 => 자경 최종 깃머지 추가
+				List<Wms_wh_viewVO> wmsViewList = service_wms.getWhNameList(wh_cd, wh_area_cd, wh_loc_in_area_cd);
+				if(!wh_cd.equals("")) {
+					model.addAttribute("wh_name", wmsViewList.get(0).getWh_name());
+					if(wh_area_cd != 0) {
+						model.addAttribute("wh_area", wmsViewList.get(0).getWh_area());
+						if(wh_loc_in_area_cd != 0) {
+							model.addAttribute("wh_loc_in_area", wmsViewList.get(0).getWh_loc_in_area());
+						}
+					}
+				}
 				return "wms_wh/wms_stock_list";
 			}
 				
