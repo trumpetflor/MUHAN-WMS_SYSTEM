@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -43,12 +44,11 @@ public class OutController {
 	//log4j
 	private static final Logger logger = LoggerFactory.getLogger(OutController.class);
 	@Autowired	
-	private OutService service ;
-	@Autowired
-	private EmployeesService service_emp;
+	private OutService service;
 
-	
-	
+	@Autowired	
+	private EmployeesService empService;
+
 
 	//========================= SEWON ======================================= 
 	
@@ -56,10 +56,34 @@ public class OutController {
 	@GetMapping(value = "/OutWaitingSelectList")
 	public	String outWaitingSelectList(
 			@RequestParam(defaultValue = "") String msg,
-			Model model) {
+			Model model, HttpSession session) {
 	
 	model.addAttribute("msg", msg);
-			
+	String sId = (String)session.getAttribute("sId");
+	
+	//sId가 null일 경우 접근 차단!
+	if(session.getAttribute("sId") == null) {
+		model.addAttribute("msg", "잘못된 접근입니다.");
+		return "fail_back";
+	} 
+	
+	// 접속 ip 확인 코드
+	InetAddress local;
+	String ip;
+	try {
+		local = InetAddress.getLocalHost();
+		ip = local.getHostAddress();
+		model.addAttribute("ip", ip);
+	} catch (UnknownHostException e) {
+		e.printStackTrace();
+	}
+	
+	if(sId != null) { // 세션아이디가 있을 경우 시작 
+		// 권한 조회 메서드
+		boolean isRightUser = empService.getPrivilege(sId, 
+				Privilege.WMS관리, Privilege.기본등록, Privilege.사원관리, Privilege.재고관리);
+	}
+		
 	return "out/out_waiting_seletList";
 }
 
@@ -152,7 +176,7 @@ public class OutController {
 		}
 		
 		// 2. 권한 처리
-		boolean isRightUser = service_emp.getPrivilege(sId, Privilege.WMS관리);
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
 		if (isRightUser) {
 			// 3. 접속 ip 확인 코드
 			InetAddress local;
@@ -223,7 +247,7 @@ public class OutController {
 			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		// 2. 권한 처리
-		boolean isRightUser = service_emp.getPrivilege(sId, Privilege.WMS관리);
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
 		if (isRightUser) {
 			// 3. 접속 ip 확인 코드
 			InetAddress local;
@@ -319,35 +343,52 @@ public class OutController {
 
 //======================================= hawon =================================================
 	
-	//출고 등록
+	// 출고 등록
 	@GetMapping(value = "/OutInsertForm")
-		public	String outInsertForm(
-				@RequestParam(defaultValue = "") String msg,
-				Model model) {
+	public String outInsertForm(@RequestParam(defaultValue = "") String msg, Model model, HttpSession session) {
 		model.addAttribute("msg", msg);
-		
-		// 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
+
+		// 세션 아이디
+		String sId;
+		if (session.getAttribute("sId") != null) {
+			sId = (String) session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+		}
+
+		// 아이피 주소
 		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
+			InetAddress local = InetAddress.getLocalHost();
+			String ip = local.getHostAddress();
 			model.addAttribute("ip", ip);
+			logger.info("접속 ip : " + ip);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-	
-		
-		 // 현재 날짜 구하기
-        LocalDate now = LocalDate.now();
-        // 포맷 정의 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd00");
-        int formatedNow = Integer.parseInt(now.format(formatter));
-        model.addAttribute("now", now);
-        
-		return "out/out_insertForm";
-		
-	}	
+
+		// 권한 조회 메서드
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
+
+		if (isRightUser) {
+
+			// 현재 날짜 구하기
+			LocalDate now = LocalDate.now();
+			// 포맷 정의
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd00");
+			int formatedNow = Integer.parseInt(now.format(formatter));
+			model.addAttribute("now", now);
+
+			return "out/out_insertForm";
+
+		} else {
+			
+			model.addAttribute("msg", "권한이 없습니다.");
+			return "fail_back";
+
+		}
+	}
 
 	@PostMapping(value = "/OutInsertFormPro")
 	public	String OutInsertFormPro(
@@ -409,20 +450,19 @@ public class OutController {
 	public void Search_emp(@RequestParam(defaultValue = "") String keyword,
 							HttpServletResponse response) {
 			
-		List<Emp_viewVO> empList =  service.searchEmp(keyword);
+		List<Emp_viewVO> empList = service.searchEmp(keyword);
 		JSONArray empArr = new JSONArray();
 		for(Emp_viewVO emp : empList) {
 			empArr.put(new JSONObject(emp));
-			
 		}
-	      try {
-			      response.setCharacterEncoding("UTF-8");
-			      response.getWriter().print(empArr); // toString() 생략됨
-			      System.out.println("empList: " + empArr);
-		   } catch (IOException e) {
-		      e.printStackTrace();
-		   }
-	
+		
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(empArr); // toString() 생략됨
+			System.out.println("empList: " + empArr);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	
 	}
 

@@ -71,6 +71,7 @@ empList-table>th {
 
 .id_pht {
 	width: 80px;
+	height: 90px;
 	transition: 0.5s;
 }
 
@@ -138,7 +139,7 @@ a:visited :active {
 	display: none;
 }
 </style>
-<!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
+
 <script type="text/javascript">
 
 
@@ -173,7 +174,7 @@ a:visited :active {
 		               
 		        	if(parseInt(data) > 0){
 		        		 alert("변경되었습니다.");
-		        		
+		        		 location.reload();
 		        	}else{
 		        		alert("일시적인 오류로 변경에 실패했습니다.");
 		        	}
@@ -201,8 +202,10 @@ a:visited :active {
 	
 			if($(this).is(":checked") == true){
 				$("input[name=empChecked]").prop("checked",true);
+				$("#selectCount > small").html($('input:checkbox[name=empChecked]:checked').length +" 개 선택됨");
 			}else{
 				$("input[name=empChecked]").prop("checked",false);
+				$("#selectCount > small").html($('input:checkbox[name=empChecked]:checked').length +" 개 선택됨");
 			}
 		});
 		
@@ -217,7 +220,6 @@ a:visited :active {
 				if($('input:checkbox[name=empChecked]:checked').length == 0 ){
 					alert("선택된 사원이 없습니다.");
 				}else{
-
 					$("#modal_container").modal({
 			        fadeDuration: 250 //모달창 올라오는 시간
 //		 		    escapeClose: false,
@@ -254,7 +256,7 @@ a:visited :active {
 		
 		//2-1 radio버튼(재직변경/부서변경) 클릭시 select박스 보이는 작업 실행
 		$("#modal_container input[name=changeInfo]").on("click",function(){
-			
+		
 			 $("#modal_container select").empty();//select영역 비우기
 			 
 			if($(this).val()=="work_change"){//재직상태 변경 버튼 클릭시
@@ -325,97 +327,6 @@ a:visited :active {
 			}
 			
 		});
-//============================================페이징 처리(무한스크롤 기능 구현)============================================
-	
-		// AJAX 를 활용한 게시물 목록 표시에 사용될 페이지 번호값 미리 저장
-		let pageNum = 1;
-		
-		$(function() {
-			
-			// 검색타입(searchType)과 검색어(keyword) 값 가져와서 변수에 저장
-			let searchType = $("#searchType").val();
-			let keyword = $("#keyword").val();
-	 		console.log(searchType + ", " + keyword);
-			
-			// 게시물 목록 조회를 처음 수행하기 위해 load_list() 함수 호출
-			load_empList(searchType, keyword);
-			
-			// 무한스크롤 기능 구현
-			// window 객체에서 scroll 동작 시 기능 수행(이벤트 처리)을 위해 scroll() 함수 호출
-			$(window).scroll(function() {
-
-				// 1. window 객체와 document 객체를 활용하여 스크롤 관련 값 가져오기
-				// => 스크롤바 현재 위치, 문서 표시되는 창의 높이, 문서 전체 높이
-				let scrollTop = $(window).scrollTop();
-				let windowHeight = $(window).height();
-				let documentHeight = $(document).height();
-				
-//	 			console.log("scrollTop : " + scrollTop + ", windowHeight : " + windowHeight + ", documentHeight : " + documentHeight + "<br>");
-
-				// 2. 스크롤바 위치값 + 창 높이 + x 가 문서 전체 높이 이상이면
-				//    다음 페이지 게시물 목록 로딩하여 추가
-				// => 이 때, x 값은 마지막으로부터 여유 공간으로 둘 스크롤바 아래쪽 남은 공간(픽셀값)
-				if(scrollTop + windowHeight + 1 >= documentHeight) {
-					
-					//페이징 처리를 위한 함수 호출
-					// => 이 페이지 번호를 1 증가시켜 다음 페이지 목록 로딩
-					pageNum++;
-					load_empList(searchType, keyword);
-				}
-			});
-		});
-		
-		// 게시물 목록 조회를 AJAX + JSON 으로 처리할 load_list() 함수 정의
-		// => 검색타입과 검색어를 파라미터로 지정
-		function load_empList(searchType, keyword) {
-			$.ajax({
-				type: "GET",
-				url: "employees?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword,
-				dataType: "json"
-			})
-			.done(function(empList) { // 요청 성공 시
-				console.log(empList);
-//	 			$("#listForm > table").append(boardList);
-				
-				// JSONArray 객체를 통해 배열형태로 전달받은 JSON 데이터를
-				// 반복문을 통해 하나씩 접근하여 객체 꺼내기
-				for(let board of boardList) {
-					
-					// 테이블에 표시할 JSON 데이터 출력문 생성
-					// => 출력할 데이터는 board.xxx 형식으로 접근
-// 		<c:forEach items="${empList }" var="emp" varStatus="status" >
-// 			<tr>
-// 			<c:if test="${priv eq 1 }"><!-- 관리 권한 부여 시 보여짐 가능 -->
-// 				<td><input type="checkbox" name="empChecked" id="empChecked" class="form-check-input" value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
-// 			</c:if>
-<%-- 				<td><img class="id_pht" alt="${emp.emp_name } 의 사진" src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/ㅇ.img""></td> --%>
-// 				<td>${emp.emp_num }</td>
-// 				<td>${emp.emp_name }</td>
-// 				<td onclick="dept_modal('${emp.dept_cd}','${emp.dept_name }');">
-// 				<a href="#modal_container_dept" rel="modal:open" class="badge badge-dark">${emp.dept_name }</a></td>
-// 				<td>${emp.grade_name }</td>
-// 				<td>${emp.emp_tel }</td>
-// 				<td><a href="#">${emp.emp_email }</a></td>
-// 				<c:if test="${priv eq 1 }">
-// 					<th><!-- 관리 권한 부여 시 조회 가능 -->
-// 					<input type="button" value="상세 조회" class = "btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"
-//                  	 onclick="window.open('empListDetail?id=${emp.emp_email}','MemberDetailForm','width=800, height=920,location=no,status=no,scrollbars=yes');"> 
-// 						<input type="button" value="수정" class = "btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn"
-//                    onclick="window.open('empListDetailUpdate?id=${emp.emp_email}','MemberDetailModify','width=800, height=920,location=no,status=no,scrollbars=yes');">
-// 		 			</th>
-// 				</c:if>
-// 			</tr>
-// 		</c:forEach>
-					
-					// 지정된 위치(table 태그 내부)에 JSON 객체 출력문 추가
-					$("#empList-table > table tbody").append(result);
-				}
-			})
-			.fail(function() {
-				$("#listForm > table").append("<h3>요청 실패!</h3>");
-			});
-		}
-			
 
     
 	});//$(function() {---------------------------------------
@@ -531,44 +442,42 @@ a:visited :active {
 						<tr>
 							<c:if test="${priv eq 1 }">
 								<!-- 관리 권한 부여 시 보여짐 가능 -->
-								<td><input type="checkbox" name="empChecked"
+								<td class="align-middle"><input type="checkbox" name="empChecked"
 									id="empChecked" class="form-check-input"
 									value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
 							</c:if>
-							<td><img class="id_pht" alt="${emp.emp_name  }의 사진"
+							<td class="align-middle"><img class="id_pht" alt="${emp.emp_name  }의 사진"
 								src="${pageContext.request.contextPath}/resources/upload/${emp.photo  }"></td>
-							<td>${emp.emp_num }</td>
-							<td>${emp.emp_name }</td>
-							<td onclick="dept_modal('${emp.dept_cd}','${emp.dept_name }');">
+							<td class="align-middle">${emp.emp_num }</td>
+							<td class="align-middle">${emp.emp_name }</td>
+							<td class="align-middle" onclick="dept_modal('${emp.dept_cd}','${emp.dept_name }');">
 								<a href="#modal_container_dept" rel="modal:open"
 								class="badge badge-dark">${emp.dept_name }</a>
 							</td>
-							<td>${emp.grade_name }</td>
-							<td>${emp.emp_tel }</td>
-							<td><a href="#">${emp.emp_email }</a></td>
+							<td class="align-middle">${emp.grade_name }</td>
+							<td class="align-middle">${emp.emp_tel }</td>
+							<td class="align-middle"><a href="#">${emp.emp_email }</a></td>
 							<c:if test="${priv eq 1 }">
-								<th>
-									<!-- 관리 권한 부여 시 조회 가능 --> <input type="button" value="상세 조회"
-									class="btn btn-primary btn-sm m-1" name="detailBtn"
-									id="detailBtn"
-									onclick="window.open('empListDetail?id=${emp.emp_email}','MemberDetailForm','width=800, height=920,location=no,status=no,scrollbars=yes');">
-									<input type="button" value="수정"
-									class="btn btn-primary btn-sm m-1" name="updateBtn"
-									id="updateBtn"
-									onclick="window.open('empListDetailUpdate?id=${emp.emp_email}','MemberDetailModify','width=800, height=920,location=no,status=no,scrollbars=yes');">
-								</th>
+							
+							<td class="align-middle" >
+							<!-- 관리 권한 부여 시 조회 가능 -->
+								<input type="button" value="상세 조회" class="btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"
+										onclick="window.open('empListDetail?id=${emp.emp_email}','MemberDetailForm','width=800, height=920,top= 40,left=600,location=no,status=no,scrollbars=yes');">
+								<input type="button" value="수정" class="btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn"
+										onclick="window.open('empListDetailUpdate?id=${emp.emp_email}','MemberDetailModify','width=800, height=920, ,top= 40,left=600, location=no,status=no,scrollbars=yes');">
+							</td>
 							</c:if>
 						</tr>
 					</c:forEach>
 				</tbody>
 
 			</table>
-
+	<c:if test="${priv eq 1 }">
 	<div class="float-right">
-		<input type="button" value="신규등록" class = "btn btn-sm btn-success m-2" onclick="location.href='employeeRegisterForm'" >
+		<input type="button" value="신규등록" class = "btn btn-sm btn-success m-2" onclick="location.href='employeeRegisterForm' " >
 		<input type="button" value="일괄변경" class = "btn btn-sm btn-success m-2" id="changeCollective">
 	</div>
-	
+	</c:if>
 	
 		<div id="pageList" >
 		<div>
@@ -591,8 +500,8 @@ a:visited :active {
 		<c:forEach var="i" begin="${pageInfo.startPage }" end="${pageInfo.endPage }">
 			<!-- 단, 현재 페이지 번호는 링크 없이 표시 -->
 			<c:choose>
-				<c:when test="${pageNum eq 0}">
-					1&emsp;
+				<c:when test="${i eq 0}">
+					1
 				</c:when>
 				<c:when test="${pageNum eq i}">
 					${i }&emsp;
@@ -631,7 +540,7 @@ a:visited :active {
 <div id="modal_container" class="modal">
 	<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
 		<div class="p-2 text-white well rounded-2"style="background-color:#000000	" >◼ 선택된 사원</div>
-		<div class="mx-3 py-3" id="selected_empList">
+		<div class="mx-3 py-3 mb-2" id="selected_empList">
 		
 			
 		</div>
@@ -641,7 +550,7 @@ a:visited :active {
 					<input type="radio" name="changeInfo" value="work_change"> 재직 상태 변경<br>
 					<input type="radio" name="changeInfo" value="dept_change"> 부서 변경
 			</div>
-			<select>
+			<select class="my-2">
 				<option disabled selected value="">선택하세요</option>
 			</select>
 		</div>
@@ -650,7 +559,7 @@ a:visited :active {
 		</div>
 	<div id="modal-btn-div" class="float-right mt-4">
 		 <input type="button" value="일괄 수정" class = "btn btn-primary btn-sm  " id="updateAll">
-		 <a href="#" rel="modal:close"><input type="button" value="취소" class = "btn btn-primary btn-sm  " name="" id=""></a>
+		 <a href="#" rel="modal:close"><input type="button" value="취소" class = "btn btn-primary btn-sm " ></a>
 	</div>
  </div><!-- end of DIV #modal_container -->
 
@@ -660,11 +569,6 @@ a:visited :active {
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="../inc/footer.jsp"></jsp:include>
     
-<!-- Scripts -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
-<!-- <script src="resources/assets/js/main.js"></script> -->
+
 </body>
 </html>

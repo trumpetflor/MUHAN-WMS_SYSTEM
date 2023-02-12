@@ -12,7 +12,7 @@ import com.thisteam.muhansangsa.vo.WhAreaVO;
 import com.thisteam.muhansangsa.vo.Wms_wh_viewVO;
 
 public interface StockMapper {
-
+	//========================================hawon=========================================================================
 	List<Stock_viewVO> selectStockList(@Param("searchType") String searchType, 
 										@Param("keyword") String keyword,
 										@Param("startRow") int startRow, 
@@ -37,7 +37,13 @@ public interface StockMapper {
 	int insertNewStock(@Param("product_cd") int product_cd,
 						@Param("wh_loc_in_area_cd") int wh_loc_in_area_cd);
 
-	//========================== 23/02/11 수정 ==================================== 
+	
+	
+	//페이징처리를 위한 재고목록 총 개수 조회-------23/02/11 추가  갓예람 ♡
+	int selectStockListCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
+//=====================================================================================================================================
+	
+
 	// 재고이력 목록 조회 
 	List<StockHistoryViewVO> selectHistoryList(
 			@Param("stock_cd") int stock_cd, 
@@ -74,6 +80,7 @@ public interface StockMapper {
 			@Param("sourceStockCd") int sourceStockCd, 
 			@Param("targetStockCd") int targetStockCd, 
 			@Param("stockQty") int stockQty);
+
 
 	// --------------------------------------------------------23/02/11 추가
 	

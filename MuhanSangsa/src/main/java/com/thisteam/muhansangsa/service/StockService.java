@@ -81,6 +81,13 @@ public class StockService {
 		return mapper.insertNewStock(product_cd,wh_loc_in_area_cd);
 	}
 
+	//페이징처리를 위한  재고리스트 총 개수 조회
+	public int getStockListCount(String searchType, String keyword) {
+		return mapper.selectStockListCount(searchType,keyword);
+	}
+	
+	//==========================================================================================
+	
 	// WMS 창고 관리 페이지 속 재고 리스트 조회 (창고별, 창고 구역별, 창고 구역 내 위치별)
 	public List<Stock_viewVO> getWmsStockList(
 			String searchType, String keyword, int startRow, int listLimit,
@@ -95,6 +102,7 @@ public class StockService {
 
 	}
 
+
 	// --------------------------------------------------------23/02/11 추가
 	
 	// inventoryHistoryView 페이징 처리를 위한 게시물 수 조회
@@ -102,7 +110,7 @@ public class StockService {
 		System.out.println("페이징 처리를 위해 넘어온 historylistcount " + stock_cd);
 		return mapper.selectinventoryHistoryViewListCount(searchType,keyword,stock_cd);
 	}
-	
+
 	// --------------------------------------------------------23/02/11 추가
 	
 	
