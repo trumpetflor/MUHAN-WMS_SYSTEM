@@ -337,7 +337,7 @@
 			c.emp_name,
 			a.in_date,
 			(
-				SELECT concat(MAX(f.product_name), ' 외 ', count(*), '건')
+				SELECT concat(MAX(f.product_name), ' 외 ', count(*)-1, '건')
 					FROM 
 						in_schedule_per_product e,
 						product f
