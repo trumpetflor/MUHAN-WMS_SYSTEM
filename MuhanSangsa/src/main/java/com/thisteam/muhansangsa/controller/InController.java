@@ -1,8 +1,8 @@
 package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,6 @@ import com.thisteam.muhansangsa.service.InService;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InVO;
-import com.thisteam.muhansangsa.vo.StockWhVO;
 import com.thisteam.muhansangsa.vo.InWatingRegisterVO;
 import com.thisteam.muhansangsa.vo.InWatingRegister_nomalVO;
 import com.thisteam.muhansangsa.vo.ProductVO;
@@ -75,13 +75,13 @@ public class InController {
 			product_name.add(c);
 			in_date.add(d);
 		}
-//		System.out.println("in_schedule_cd :" + in_schedule_cd);
-//		System.out.println("product_name :" + product_name);
-//		System.out.println("in_date :" + in_date);
+		System.out.println("in_schedule_cd :" + in_schedule_cd);
+		System.out.println("product_name :" + product_name);
+		System.out.println("in_date :" + in_date);
 		
 		List<inRegisterVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
 		
-//		System.out.println("add 전 : " + resultList);
+		System.out.println("add 전 : " + resultList);
 		model.addAttribute("resultList", resultList);
 		
 		return "in/in_register_form";
@@ -96,126 +96,10 @@ public class InController {
 	
 	// 입고처리 수정 페이지
 	@GetMapping("/InProcessingModifyForm")
-	public String modify(@RequestParam("in_schedule_cd") String in_schedule_cd,
-			Model model) {
+	public String modify() {
 		
-		// 입고예정 리스트
-		List<InVO> inList = service.getSelectedInList(in_schedule_cd);
-		
-		// 입고품목 리스트
-		List<inProcessingVO> proList = service.getSelectedProList(in_schedule_cd);
-		
-		model.addAttribute("inList", inList);
-		model.addAttribute("proList", proList);
 		
 		return "in/in_processing_modify";
-	}
-	
-	// 재고번호 생성
-	@GetMapping(value = "/NewStockCd")
-	public void insertStockCd(HttpServletResponse response) {
-		
-		try {
-			int newStockCd = service.getMaxStockCd() + 1;
-			response.setContentType("text/html; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			out.print(newStockCd);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	// 재고 조회 페이지
-	@GetMapping(value = "/In/StockSelectList")
-	public String stockSelectList() {
-		return "in/stockList_inPage";
-	}
-	
-	// 재고 목록 조회
-	@ResponseBody
-	@GetMapping(value = "StockListJsonIn")
-	public void stockListJson_in(
-			@RequestParam(defaultValue = "") String searchType,
-			@RequestParam(defaultValue = "") String keyword,
-			@RequestParam(defaultValue = "1") int pageNum,
-			Model model,
-			HttpSession session,
-			HttpServletResponse response
-			) {
-		
-		// 페이징 처리를 위한 변수 선언
-		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
-		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
-		
-		// 거래처 목록 가져오기
-		List<StockWhVO> stockList = service.getStockList(searchType, keyword, startRow, listLimit);
-		
-		// JSON 형식 변환
-		JSONArray jsonArray = new JSONArray();
-		
-		for(StockWhVO stock : stockList) {
-//			stock.setAddr(stock.getAddr().split("/")[0]); // 도로명 주소만 가져오기
-//			stock.setRemarks(stock.getRemarks().replace("\r\n", "<br>")); // 출력 시 줄바꿈 처리
-			System.out.println(stock);
-			JSONObject jsonObject = new JSONObject(stock);
-			System.out.println(jsonObject.get("stock_cd"));
-			
-			jsonArray.put(jsonObject);
-		}
-		
-		try {
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().print(jsonArray);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	// 선반 조회 페이지
-	@GetMapping(value = "/In/WhLocSelectList")
-	public String LocSelectList() {
-		return "in/whLocList_inPage";
-	}
-	
-	// 선반 목록 조회
-	@ResponseBody
-	@GetMapping(value = "WhLocListJsonIn")
-	public void whLocListJson_in(
-			@RequestParam(defaultValue = "") String searchType,
-			@RequestParam(defaultValue = "") String keyword,
-			@RequestParam(defaultValue = "1") int pageNum,
-			Model model,
-			HttpSession session,
-			HttpServletResponse response
-			) {
-		
-		// 페이징 처리를 위한 변수 선언
-		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
-		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
-		
-		// 선반 목록 가져오기
-		List<StockWhVO> whLocList = service.getWhLocList(searchType, keyword, startRow, listLimit);
-		
-		// JSON 형식 변환
-		JSONArray jsonArray = new JSONArray();
-		
-		for(StockWhVO whLoc : whLocList) {
-			System.out.println(whLoc);
-			JSONObject jsonObject = new JSONObject(whLoc);
-			System.out.println(jsonObject.get("wh_area"));
-			
-			jsonArray.put(jsonObject);
-		}
-		
-		try {
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().print(jsonArray);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 	}
 	
 	
@@ -228,13 +112,108 @@ public class InController {
 	// ======================== sangwoo ============================
 	@GetMapping(value = "/InSchedule")
 	public String waiting(Model model) {
-		List<InVO> inList = service.getInList();
-		model.addAttribute("inList", inList);
+//		List<InVO> inList = service.getInList();
+//		model.addAttribute("inList", inList);
 		return "in/in_waiting_form";
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/InWaitingSelectListJson")
+	public void InWaitingSelectListJson(
+			@RequestParam(defaultValue = "") String searchType,
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "1") int pageNum,
+			@RequestParam(defaultValue = "-1") int status,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		int listLimit = 10;
+		int startRow = (pageNum - 1) * listLimit;
+		
+		List<InVO> inScheduleList = service.getInSchedultList(searchType, keyword,startRow,listLimit,status);
+		
+		JSONArray jsonArray = new JSONArray();
+		
+		for(InVO in : inScheduleList) {
+			JSONObject jsonObject = new JSONObject(in);
+			
+			jsonArray.put(jsonObject);
+		}
+		
+		try {
+			response.setCharacterEncoding("utf-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/InWaitingChangeStautsJson")
+	public void inWaitingChangeStautsJson(
+			@RequestParam(defaultValue = "") String in_schedule_cd,
+			@RequestParam(defaultValue = "") String in_complete,
+			@RequestParam(defaultValue = "1") int status,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		int result = service.inWaitingChangeStautsJson(in_schedule_cd, in_complete);
+		
+		try {
+			response.setCharacterEncoding("utf-8");
+			response.getWriter().print(result);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@GetMapping(value = "/inProQtyAjax")
+	public String inProQtyAjax(@RequestParam String in_schedule_cd, Model model) {
+		model.addAttribute("in_schedule_cd", in_schedule_cd);
+		System.out.println("예정 번호 : " + in_schedule_cd);
+		return "in/in_inProQtyAjax";
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/inProQtySearch")
+	public void inProQtySearch(
+			@RequestParam(defaultValue = "") String in_schedule_cd, 
+			Model model,
+			HttpServletResponse response) {
+		List<inProcessingVO> ProQtyList = service.getProQtyList(in_schedule_cd);
+		System.out.println(ProQtyList);
+		
+		JSONArray array = new JSONArray();
+		
+		for(inProcessingVO proqty : ProQtyList) {
+			JSONObject object = new JSONObject(proqty);
+			
+			array.put(object);
+		}
+		
+		try {
+			response.setCharacterEncoding("utf-8");
+			response.getWriter().print(array);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@GetMapping(value = "/InWaitingInsertForm")
 	public String waitingInsert(Model model) {
+		String lastNum = service.getLastNum();
+		LocalDate localDate = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		int formatNow = Integer.parseInt(localDate.format(formatter));
+		String in_schedule_cd = (formatNow + "-" + lastNum);
+		System.out.println(in_schedule_cd);
+		
+		model.addAttribute("now",localDate);
+//		System.out.println(lastNum);
 		return "in/in_waiting_insert";
 	}
 	
@@ -338,22 +317,70 @@ public class InController {
 		}
 	}
 	
+	// 입고 예정 등록 insert 작업
 	@PostMapping(value = "/inWaitingRegistPro")
-	public String in_RegistPro(@ModelAttribute InWatingRegisterVO register, 
-			@RequestParam(defaultValue = "") String hire_date, 
+	public String in_RegistPro(@ModelAttribute InWatingRegisterVO in_schedule_per,
+			@ModelAttribute InWatingRegister_nomalVO in_schedule,
 			Model model) {
-		System.out.println(register);
-		System.out.println("날짜 : " + hire_date );
-//		System.out.println(jsonData);
+//		System.out.println("regist : " + in_schedule_per);
+//		System.out.println("in_ schedule : " + in_schedule);
 		
-		for(int i = 0; i < register.getBusiness_no().length; i++) {
-			InWatingRegister_nomalVO nomalVO = new InWatingRegister_nomalVO();
+		// 현재 날짜 구해서 in_schedule_cd 만들기
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		int today = Integer.parseInt(now.format(formatter));
+		
+		String in_schedule_cd = service.createIn_schedule_cd(today);
+		in_schedule.setIn_schedule_cd(in_schedule_cd);
+		// ---------------------------------------------
+		
+		// in_schedule 상단 데이터 insert
+		int insertTopSchedule = service.registInScheduleTop(in_schedule);
+		System.out.println("입고예정 상단 insert = " + insertTopSchedule);
+		int insertBottomSchedule = 0;
+		for(int i = 0; i < in_schedule_per.getProduct_cd().length; i++) {
+			InVO isp = new InVO();
 			
-			nomalVO.setBusiness_no(register.getBusiness_no()[i]);
+			isp.setIn_schedule_cd(in_schedule_cd);
+			isp.setProduct_cd(in_schedule_per.getProduct_cd()[i]);
+			isp.setIn_schedule_qty(in_schedule_per.getIn_schedule_qty()[i]);
+			isp.setIn_date(in_schedule_per.getIn_date_detail()[i]);
+			isp.setIn_schedule_qty(in_schedule_per.getIn_schedule_qty()[i]);
+			isp.setRemarks(in_schedule_per.getRemarks()[i]);
+			isp.setIn_complete("0");
+			isp.setIn_qty(0);
+			
+			insertBottomSchedule = service.registInScheduleBottom(isp);
 		}
 		
+		if(insertTopSchedule > 0 && insertBottomSchedule > 0) {
+			model.addAttribute("msg", "입고 예정 등록에 성공하였습니다");
+			model.addAttribute("url", "//InSchedule");
+			return "redirect";
+		} else {
+			model.addAttribute("msg", "일시적인 오류로 등록에 실패했습니다.");
+        	return "fail_back";
+		}
 		
-		return "";
+//		for(int i = 0; i < register.getBusiness_no().length; i++) {
+//			InWatingRegister_nomalVO nomalVO = new InWatingRegister_nomalVO();
+//			
+//			nomalVO.setBusiness_no(register.getBusiness_no()[i]);
+//			nomalVO.setEmp_num(register.getEmp_num()[i]);
+//			nomalVO.setIn_date(register.getIn_date()[i]);
+//			nomalVO.setProduct_cd(register.getProduct_cd()[i]);
+//			nomalVO.setProduct_name(register.getProduct_name()[i]);
+//			nomalVO.setIn_schedule_qty(register.getIn_schedule_qty()[i]);
+//			nomalVO.setIn_date_detail(register.getIn_date_detail()[i]);
+//			nomalVO.setRemarks(register.getRemarks()[i]);
+//			System.out.println(nomalVO);
+			
+			
+//			int result = service.insertRegister(nomalVO);
+			
+			
+//		}
+		
 	}
 	
 	

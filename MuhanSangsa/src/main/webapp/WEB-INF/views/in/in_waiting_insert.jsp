@@ -263,6 +263,11 @@ function addRow() {
     cell2.innerHTML = "<div class='d-flex' id='testing'>"
     				+ '<input type="text" class="form-control rounded-start" id="product_cd'+index+'" name="product_cd" readonly="readonly" placeholder=" 검색하세요.">' 
 	  				+ '<input type="button" value="검색" class="btn btn-sm btn-dark p-2" onclick="productBtn('+index+')">'
+// 	  				+ '<input type="hidden" name="in_type_cd" value="'+$("#in_type_cd").val()+'">'
+	  				+ '<input type="hidden" id="in_complete" name="in_complete" value="'+$("#in_complete").val()+'">'
+// 	  				+ '<input type="hidden" name="business_no" value="'+$("#business_no").val()+'">'
+// 	  				+ '<input type="hidden" name="emp_num" value="'+$("#emp_num").val()+'">'
+// 	  				+ '<input type="hidden" name="in_date" value="'+$("#in_date").val()+'">'
 					+ '</div>';
     cell3.innerHTML = '<input type="text" class="form-control rounded-start" id="product_name'+index+'" name="product_name" readonly="readonly" placeholder=" 자동입력">';
     cell4.innerHTML = "<input type='number' class='input-field' name='in_schedule_qty' onchange='calculateSum()'>";
@@ -312,7 +317,6 @@ $(document).on("click","#emp_search_modalDiv #emp_table > tbody tr",function(){
 	});
 //품목코드 및 품목명 모달창 검색 후 텍스트 칸에 자동 입력되는 함수
 $(document).on("click","#product_search_modalDiv #pro_table > tbody tr",function(){
-		console.log("버튼 클릭시 값이 나오나 : " + $(this).children("input").attr("id"));
 		$("#product_name"+ index).val($(this).children("td").next().attr("id"));
 		$("#product_cd" + index).val($(this).children("td").attr("id"));
 		
@@ -401,8 +405,8 @@ $(function () {
 				});
 			
 			$("#product_searchBtn").on("click",function(){
-				$(this).closest("tr").index();
-				console.log($(this).closest("tr").index());
+// 				$(this).closest("tr").index();
+// 				console.log($(this).closest("tr").index());
 				$.ajax({
 			        type: "get",
 			        url: "inProSearchAjax?business_no=" + $("#business_no").val(),
@@ -495,11 +499,12 @@ function openSearchArea() {
 		<thead>
             <tr>
 				<th>일 자</th>
-				<td><input type="date" class="form-control" name="hire_date" required="required"></td>
+<!-- 				<td><input type="date" class="form-control" name="hire_date" required="required"></td> -->
+					<td>${now }</td>
 				<th>유형</th> 
 				<td align="left">
-					<div class="m-1"><input type="radio" value="1" name="in_type_cd" class="form-check-input" id="Purchase_Order"> 발주서</div>
-					<div class="m-1"><input type="radio" value="2" name="in_type_cd" class="form-check-input" id="release"> 구매</div>
+					<div class="m-1"><input type="radio" value="1" name="in_type_cd" class="form-check-input" id="in_type_cd1" checked="checked"> 발주서</div>
+					<div class="m-1"><input type="radio" value="2" name="in_type_cd" class="form-check-input" id="in_type_cd2"> 구매</div>
 				 </td>
 			</tr>
 			<tr>
@@ -512,7 +517,7 @@ function openSearchArea() {
 						</div>
 					</td>
 				<th>납기 일자</th>
-				<td><input type="date" class="form-control" name="in_date" required="required"></td>
+				<td><input type="date" class="form-control" name="in_date" id="in_date" required="required"></td>
 				
 			</tr>
 			<tr>
@@ -546,13 +551,13 @@ function openSearchArea() {
 				<td><button onclick="deleteRow(this)" class = "btn btn-primary mx-4">제삭</button></td>
 				<td>
 					<div class='d-flex' id="testing">
-				 	  <input type="text" class="form-control rounded-start" id="product_cd0" name="product_cd" readonly="readonly" placeholder=" 검색하세요."> 
+				 	  <input type="text" class="form-control" id="product_cd0" name="product_cd" readonly="readonly" placeholder=" 검색하세요."> 
 					  <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="product_searchBtn">
 					</div>
 				</td>
 				<td>
 					<div class="d-flex">
-						<input type="text" class="form-control rounded-start" id="product_name0" name="product_name" readonly="readonly" placeholder=" 자동입력">
+						<input type="text" class="form-control" id="product_name0" name="product_name" readonly="readonly" placeholder=" 자동입력">
 					</div>
 				</td>
 				<td><input type="number" class="input-field" name="in_schedule_qty" onchange="calculateSum()"></td>
