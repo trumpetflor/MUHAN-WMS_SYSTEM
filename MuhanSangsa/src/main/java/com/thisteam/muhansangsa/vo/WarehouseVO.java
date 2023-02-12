@@ -53,21 +53,6 @@ public class WarehouseVO {
 			wh_addr2 = wh_addr.split(", ")[1];
 		}
 		
-//		if(wh_addr2 == null) {
-//		} else {
-//		}
-		
-		
-//		if(wh_addr1 != null || !wh_addr1.equals("")) {
-//			wh_addr1 = wh_addr.split(", ")[0];
-//		} else if(wh_addr1 == null || wh_addr1.equals("")) {
-//			wh_addr1 = "";
-//		}
-//		if(wh_addr2 != null || !wh_addr2.equals("")) {
-//			wh_addr2 = wh_addr.split(", ")[1];
-//		} else if(wh_addr2 == null) {
-//			wh_addr2 = "";
-//		}
 	}
 	public String getWh_addr1() {
 		return wh_addr1;

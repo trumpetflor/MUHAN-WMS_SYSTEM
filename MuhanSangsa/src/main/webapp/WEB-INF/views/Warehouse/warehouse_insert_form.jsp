@@ -133,7 +133,7 @@ $(function() {
 <body>
 
 <jsp:include page="../inc/left.jsp"></jsp:include>
-
+ <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
         <div class="breadcrumbs">
             <div class="breadcrumbs-inner">
                 <div class="row m-0">

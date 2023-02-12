@@ -31,6 +31,45 @@
 <%-- <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script> --%>
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
+	$(document).ready(function(){
+		gubunDisabled();
+		checkMan();
+	});
+	
+	// 공장이면 구분 disable 시키기
+	function gubunDisabled(){
+		let wh_gubun = $("input[name='wh_gubun']:checked").val();
+		if(wh_gubun == '2'){ // 공장이면 선택 못하게함
+			$("input:radio[name=wh_location]").prop("disabled", true);
+			$("input:radio[name=wh_location]").prop("checked", false);
+		}
+	}
+	
+	// 물류팀 확인
+	function checkMan(){
+		$checkResult = false;
+		
+			let wh_man_name = $("#wh_man_name").val();
+			$.ajax({
+				type: "GET",
+				url: "WarehouseCheckMan",
+				data: { wh_man_name: $("#wh_man_name").val()},
+				success: function(result) {
+					$("#checkMan").html(result);
+					
+					if(result == "true"){
+						$("#checkMan").html("물류팀 직원만 가능합니다!!!!").css("color", "red");
+						checkResult = false;
+					} else {
+						$("#checkMan").html("물류팀 직원입니다.").css("color", "green");
+						CheckResult = true;
+					}
+				}
+		}); // 물류팀 확인
+		
+	}
+
+
 // 	var checkResult = false;
 	
 	//상품 수정 클릭 시 확인창
@@ -96,10 +135,11 @@
 		// 위치 = 1:내부 => 주소 내용 clear
 		$("input[name='wh_location']").on("click", function(){
 			let wh_location = $("input[name='wh_location']:checked").val();
-			alert(wh_location);
+// 			alert(wh_location);
 			if(wh_location == '1'){
 				$("#wh_addr1").val('');
 				$("#wh_addr2").val('');
+				$("#wh_pcode").val('');
 // 				$("text").empty();
 			}
 		});
@@ -136,8 +176,10 @@
 </head>
 <body>
 
+<!-- left bar -->
+<jsp:include page="../inc/left.jsp"></jsp:include>
 
-
+ <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
         <div class="content">
             <div class="animated fadeIn">
             
@@ -254,7 +296,7 @@
 	                             <div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">주소</label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_pcode" name="wh_pcode" style="width:150px;" placeholder="우편번호" readonly="readonly" class="form-control">
+	                        			<input type="text" id="wh_pcode" name="wh_pcode" value="${warehouse.wh_pcode }" style="width:150px;" placeholder="우편번호" readonly="readonly" class="form-control">
 	                        			<input type="button" value="주소 검색" onclick="isOut()">
 	                        			<input type="text" id="wh_addr1" name="wh_addr1" value="${warehouse.wh_addr1 }" placeholder="주소" readonly="readonly" class="form-control">
 	                        			<input type="text" id="wh_addr2" name="wh_addr2" value="${warehouse.wh_addr2 }" placeholder="상세주소 입력" class="form-control">
@@ -355,11 +397,11 @@
 <!-- Right Panel -->
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-<script src="resources/assets/js/main.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
+<!-- <script src="resources/assets/js/main.js"></script> -->
 
 
 </body>

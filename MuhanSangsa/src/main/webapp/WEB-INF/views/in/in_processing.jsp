@@ -189,7 +189,7 @@
 <jsp:include page="../inc/left.jsp"></jsp:include>
 
 <!-- 선택 탭 -->
-<div class=" pr-4 mr-4 mb-1 mt-4 float-right"></div> 
+<div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
         <div class=" breadcrumbs m-0">
             <div class="breadcrumbs-inner rounded-start p-2 " >
                 <div class="row m-0 ">
