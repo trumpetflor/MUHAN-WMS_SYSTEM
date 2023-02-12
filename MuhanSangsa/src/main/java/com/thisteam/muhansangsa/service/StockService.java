@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.muhansangsa.mapper.StockMapper;
+import com.thisteam.muhansangsa.vo.Out_schedule_per_productVO;
+import com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockHistoryViewVO;
 import com.thisteam.muhansangsa.vo.Stock_viewVO;
@@ -103,7 +105,9 @@ public class StockService {
 	}
 
 
+
 	// --------------------------------------------------------23/02/11 추가
+
 	
 	// inventoryHistoryView 페이징 처리를 위한 게시물 수 조회
 	public int getinventoryHistoryViewListCount(String searchType, String keyword, int stock_cd) {
@@ -113,7 +117,22 @@ public class StockService {
 
 	// --------------------------------------------------------23/02/11 추가
 	
+	// -------------------------------------------------------- jakyoung 시작
+	// 출고로 인한 재고 수량 변경
+	public int outStockQty(Out_schedule_per_productVO ospp) {
+		System.out.println("StockService : " + ospp);
+		return mapper.updateOutStockQty(ospp);
+	}
+
+	// 출고 처리에 따른 재고 이력
+	public int addOutHistory(StockHistoryVO stockHistory) {
+		return mapper.insertStockHistory(stockHistory);
+	}
 	
+	// 
+	
+	// -------------------------------------------------------- jakyoung 끝
+
 
 
 	

@@ -131,6 +131,28 @@ public String createOut_schedule_cd(int today) {
 	return createdCode;
 }
 
+//-------------------------------------------------------- jakyoung 시작
+// 출고 처리 완료된 출고 수량 수정
+public int modifyOutQty(Out_schedule_per_productVO ospp) {
+	return mapper.updateOutQty(ospp);
+}
+
+// 정보 구하기
+public Out_schedule_total_viewVO getOutScheduleTotal(Out_schedule_per_productVO ospp) {
+	return mapper.selectOutScheduleTotal(ospp);
+}
+
+// 출고 담당 사원 번호
+public Out_scheduleVO getEmpNum(String out_schedule_cd) {
+	return mapper.selectOutSchedule(out_schedule_cd);
+}
+
+
+public int changeOutComplete(Out_schedule_per_productVO ospp) {
+	return mapper.updateOutComplete(ospp);
+}
+
+//-------------------------------------------------------- jakyoung 끝
 
 
 	

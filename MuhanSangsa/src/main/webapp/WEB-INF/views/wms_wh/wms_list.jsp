@@ -66,10 +66,10 @@
 	height: 100px;
 	}
 		
-	.id_pht{
-	 width: 80px;
-	 transition: 0.5s;
-	}
+/* 	.id_pht{ */
+/* 	 width: 80px; */
+/* 	 transition: 0.5s; */
+/* 	} */
 
 	.col-lg-6{
 		margin: auto;
@@ -97,28 +97,41 @@
 /* 	 position: relative; */
 	}
 	
-	#layoutSidenav {
-    position: fixed;
-    }
+/* 	#layoutSidenav { */
+/*     position: fixed; */
+/*     } */
 	
-	#layoutSidenav_nav {
-    width: 500px; 
-    }
+/* 	#layoutSidenav_nav { */
+/*     width: 500px;  */
+/*     } */
 	
-    .menu a{cursor:pointer;}
+    .menu a{
+    	cursor:pointer;
+    	text-decoration: none;
+    }
+    
+    a:visited{
+		text-decoration: none;
+	}
+    
   	.menu .hide{display:none;}
    
-    ul { 
-    	list-style:none; 
-    } 
+	ul {  
+   		list-style:none;  
+	}  
+    
+    li{
+		font-family: 'NEXON Lv1 Gothic OTF' !important;
+	
+	}
     
     .w1 {
     	list-style:none;
-    	padding-left: 3px; 
+    	padding-left: 0px; 
     }
      .w2 {
     	list-style:none;
-    	padding-left: 6px; 
+    	padding-left: 0px; 
     }
     
     .add_wh_area, .add_wh_loc_area {
@@ -437,7 +450,8 @@
 	$(document).on("click", ".remove_wh_area", function(){
 		let wh_cd = $(this).closest("ul").prop("id"); // 창고 코드
 		let wh_area_cd = $(this).closest("li").prop("id"); // 창고 구역 코드
-		let confirmDelete = confirm("삭제하시겠습니까?");
+		let wh_area = $(this).prev().prev().text(); // 창고 구역 이름
+		let confirmDelete = confirm("해당 창고 구역(위치명 : " + wh_area + ") 을 삭제하시겠습니까?");
 		
 		if(confirmDelete) {
 			$.ajax({
@@ -461,7 +475,8 @@
 // 		let li = $(this).closest("li"); // 창고 구역 코드
 // 		let wh_area_cd = li.closet("li").prop("id"); // 창고 구역 코드
 		let wh_loc_in_area_cd = $(this).closest("li").prop("id"); // 창고 구역 내 위치 코드
-		let confirmDelete = confirm("삭제하시겠습니까?");
+		let wh_loc_in_area = $(this).prev().prev().text(); // 창고 구역 내 위치 이름
+		let confirmDelete = confirm("해당 창고 구역 내 위치(위치명 : " + wh_loc_in_area + ") 를 삭제하시겠습니까?");
 		
 		if(confirmDelete) {
 			$.ajax({

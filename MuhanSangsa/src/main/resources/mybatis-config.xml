@@ -22,8 +22,9 @@
 		<typeAlias type="com.thisteam.muhansangsa.vo.Wms_wh_viewVO" alias="Wms_wh_viewVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.inProcessingVO" alias="inProcessingVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.inRegisterVO" alias="inRegisterVO"/>
-    <typeAlias type="com.thisteam.muhansangsa.vo.Out_scheduleListVO" alias="Out_scheduleListVO"/>
-    <typeAlias type="com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO" alias="Out_schedule_total_viewVO"/>
+   		<typeAlias type="com.thisteam.muhansangsa.vo.Out_scheduleVO" alias="Out_scheduleVO"/>
+   		<typeAlias type="com.thisteam.muhansangsa.vo.Out_scheduleListVO" alias="Out_scheduleListVO"/>
+   		<typeAlias type="com.thisteam.muhansangsa.vo.Out_schedule_total_viewVO" alias="Out_schedule_total_viewVO"/>
 		<typeAlias type="com.thisteam.muhansangsa.vo.StockWhVO" alias="StockWhVO"/>
     
 

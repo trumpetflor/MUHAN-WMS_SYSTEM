@@ -178,12 +178,14 @@ public class StockController {
 		   
 		} // for문
 		   
+
 		return "redirect:Inventory_View";
 	
    	 }else {
 			model.addAttribute("msg", "재고 조정 권한이 없습니다!");
 			return "fail_back";
 	 }
+
 	   
    } // stockModifyPro
 
@@ -816,6 +818,56 @@ public class StockController {
 		
 	}
 
+	// 출고 처리 재고리스트 팝업
+	@GetMapping(value = "/Out_Inventory_View")
+	public String outInventoryView(@RequestParam(defaultValue = "") String searchType,
+								@RequestParam(defaultValue = "") String keyword,
+								@RequestParam(defaultValue = "1") int pageNum,
+								@RequestParam int index,
+								Model model, HttpSession session){
+		String sId;
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+		}
+		
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+
+			//권한 조회 메서드
+			boolean isRightUser = service_emp.getPrivilege(sId,Privilege.WMS관리);
+			isRightUser = true;//TODO: 로그인되면 지우기
+			
+			if(isRightUser) {
+				List<Stock_viewVO> stockList = service.getStockList(searchType, keyword, startRow, listLimit);
+				model.addAttribute("stockList", stockList);
+				System.out.println("stockList: "+ stockList);
+				model.addAttribute("index", index);
+				return "out/out_stock_list";
+			}else {
+				model.addAttribute("msg", "잘못된 접근입니다. ");
+				return "fail_back";
+			
+			}
+		
+	}
+	
 	
 	
 }

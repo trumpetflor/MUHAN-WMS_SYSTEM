@@ -75,7 +75,7 @@ public class WMSWhController {
 			// 권한 조회 메서드
 		    boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
 		    System.out.println("거래처등록 권한: " + isRightUser);
-		    isRightUser = true; // 임시
+//		    isRightUser = true; // 임시
 		    
 		    if(isRightUser) { // 권한 존재할 경우
 	            model.addAttribute("priv", "1");
@@ -253,7 +253,7 @@ public class WMSWhController {
 			// 권한 조회 메서드
 		    boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
 		    System.out.println("거래처등록 권한: " + isRightUser);
-		    isRightUser = true; // 임시
+//		    isRightUser = true; // 임시
 		    
 		    if(isRightUser) { // 권한 존재할 경우
 	            model.addAttribute("priv", "1");
@@ -328,7 +328,7 @@ public class WMSWhController {
 			// 권한 조회 메서드
 		    boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
 		    System.out.println("거래처등록 권한: " + isRightUser);
-		    isRightUser = true; // 임시
+//		    isRightUser = true; // 임시
 		    
 		    if(isRightUser) { // 권한 존재할 경우
 	            model.addAttribute("priv", "1");
@@ -401,7 +401,7 @@ public class WMSWhController {
 			// 권한 조회 메서드
 		    boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
 		    System.out.println("거래처등록 권한: " + isRightUser);
-		    isRightUser = true; // 임시
+//		    isRightUser = true; // 임시
 		    
 		    if(isRightUser) { // 권한 존재할 경우
 	            model.addAttribute("priv", "1");
@@ -474,7 +474,7 @@ public class WMSWhController {
 			// 권한 조회 메서드
 		    boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
 		    System.out.println("거래처등록 권한: " + isRightUser);
-		    isRightUser = true; // 임시
+//		    isRightUser = true; // 임시
 		    
 		    if(isRightUser) { // 권한 존재할 경우
 	            model.addAttribute("priv", "1");
