@@ -167,6 +167,7 @@
 	<table class="table table-hover"  id="pro_table">
 		<thead>
 			<tr>
+			<input type='hidden' id='tr_index'>
 				<th>품목 코드</th>
 				<th>품목명</th>
 			</tr>

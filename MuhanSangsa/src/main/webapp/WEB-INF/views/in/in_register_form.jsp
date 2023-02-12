@@ -311,28 +311,35 @@ function newStockCd(index){
 	
 $(function(){
 	// 입고지시수량 계산
-	$("input[type=number]").on("focusout", function(){
+	$("input[type=number]").on("change", function(){
+	var index = $("#index").val();
 		let sum = 0;
 		$("input[type=number]").each(function(){
 			sum += Number($(this).val()); 
 			document.getElementById('in_qty_result').innerText = sum;
 				
-				// 전체 합계 못넘게 하기!
-// 				if(sum > )
 		});
+		
+		var in_schedule_qty = $("#in_schedule_qty"+index).val();
+		var in_qty = $("#in_qty"+index).val();
+		
+		if(in_qty > in_schedule_qty){
+			alert('입고예정수량을 초과할 수 없습니다!');
+			$("#in_qty"+index).val(in_schedule_qty);
+		}
 	    
+		
 	}); // 입고지시수량 계산
 	
 	
 }); //jQuery
-	
-	
+
 </script>
 </head>
 <body>
 <br>
 
-
+<div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div>
         <div class="content">
             <div class="animated fadeIn">
             <h3>입고</h3>
@@ -373,8 +380,8 @@ $(function(){
 	                                    			<input type="hidden" name="in_date" value="${inList.in_date}">
 		                                    		<td><input type="text" class="form-control rounded-start" name="in_schedule_cd" value="${inList.in_schedule_cd }" readonly="readonly"></td>
 		                                    		<td><input type="text" class="form-control rounded-start" name="product_name" value="${inList.product_name }" readonly="readonly"></td>
-		                                    		<td><input type="text" class="form-control rounded-start" name="in_schedule_qty" value="${inList.in_schedule_qty }" readonly="readonly"></td>
-		                                    		<td><input type="text" class="form-control rounded-start" name="in_qty" id="in_qty" value="${inList.in_schedule_qty }"></td>
+		                                    		<td><input type="text" class="form-control rounded-start" name="in_schedule_qty" id="in_schedule_qty${i.index }" value="${inList.in_schedule_qty }" readonly="readonly"></td>
+		                                    		<td><input type="number" class="form-control rounded-start" name="in_qty" id="in_qty${i.index }" value="${inList.in_schedule_qty }"></td>
 		                                    		<td><!-- 재고번호 검색 -->
 														<div class='d-flex'><!-- 수정 필요 -->
 													 	  <input type="text" class="form-control rounded-start" id="stock_cd${i.index }" name="stock_cd" value="${inList.stock_cd }" onclick="newStockCd(${i.index})" readonly="readonly"> 
@@ -387,7 +394,14 @@ $(function(){
 		                                    		</td>
 		                                    		<td><!-- 선반명 검색 -->
 														<div class='d-flex'><!-- 수정 필요 -->
-													 	  <input type="text" class="form-control rounded-start" name="wh_loc_in_area" id="wh_loc_in_area${i.index }" value="${inList.wh_loc_in_area }"> 
+														<c:choose>
+														  <c:when test="${inList.stock_cd eq 0 }">
+													 	  <input type="text" class="form-control rounded-start" name="wh_loc_in_area" id="wh_loc_in_area${i.index }"> 
+													 	  </c:when>
+													 	  <c:otherwise>
+													 	  <input type="text" class="form-control rounded-start" name="wh_loc_in_area" id="wh_loc_in_area${i.index }" value="${inList.wh_loc_in_area }">
+													 	  </c:otherwise>
+													 	</c:choose> 
 <!-- 													 	  <input type="hidden" name="product_name" id="product_name" value=""> -->
 <!-- 															 <a href="#stock_search_modalDiv" rel="modal:open"> -->
 															 <input type="button" value="검색" class="btn btn-sm btn-dark p-2 whLoc_cd_btn" id="whLoc_searchBtn${i.index }">

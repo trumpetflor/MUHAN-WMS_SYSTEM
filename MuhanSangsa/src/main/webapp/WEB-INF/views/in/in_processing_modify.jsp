@@ -202,9 +202,11 @@ $(document).on("click","#emp_search_modalDiv #emp_table > tbody tr",function(){
 	});
 //품목코드 및 품목명 모달창 검색 후 텍스트 칸에 자동 입력되는 함수
 $(document).on("click","#product_search_modalDiv #pro_table > tbody tr",function(){
-		console.log("버튼 클릭시 값이 나오나 : " + $(this).children("input").attr("id"));
-		$("#product_name"+ index).val($(this).children("td").next().attr("id"));
-		$("#product_cd" + index).val($(this).children("td").attr("id"));
+// 		console.log("버튼 클릭시 값이 나오나 : " + $(this).children("input").attr("id"));
+		let tr_index = $("#tr_index").val();
+		console.log("tr_index : " +tr_index);
+		$("#product_name"+ tr_index).val($(this).children("td").next().attr("id"));
+		$("#product_cd" + tr_index).val($(this).children("td").attr("id"));
 		
 		
 		
@@ -215,7 +217,7 @@ $(document).on("click","#product_search_modalDiv #pro_table > tbody tr",function
 	});
 	
 	// 품목 검색 버튼 클릭 시 모달창 활성화
-	function productBtn(indexNum) {
+	function productBtn(index) {
 		
 // 		$(this).closest("tr").index();
 // 		$(this).children('input').attr('id');
@@ -226,7 +228,7 @@ $(document).on("click","#product_search_modalDiv #pro_table > tbody tr",function
 	        contentType: 'html',
 	        success: function(data,status,xhr) {
 	        	$('#product_search_modalDiv').html(data);
-	    
+	        	$("#tr_index").val(index);
 	        	
 	        },
 	        error: function(xhr,status,error) {
@@ -290,32 +292,36 @@ $(function () {
 				 $('#emp_search_modalDiv').modal('show'); 
 				});
 			
-			$("#product_searchBtn").on("click",function(){
-				$(this).closest("tr").index();
-				console.log($(this).closest("tr").index());
-				$.ajax({
-			        type: "get",
-			        url: "inProSearchAjax?business_no=" + $("#business_no").val(),
-			        contentType: 'html',
-			        success: function(data,status,xhr) {
-			        	$('#product_search_modalDiv').html(data);
-			    
-			        	
-			        },
-			        error: function(xhr,status,error) {
-			            console.log(error);
-			        }
-			        
-				});
-				
-			
-			//모달창 열기
-			 $('#product_search_modalDiv').modal('show'); 
-			});
+
 			
 			
 });
+
+// 품목 검색 버튼
+$(document).on("click", ".productBtn", function(){
+	let index = $(this).closest("tr").index();
+	console.log("index_tr: "+$(this).closest("tr").index());
 	
+		$.ajax({
+	        type: "get",
+	        url: "inProSearchAjax?business_no=" + $("#business_no").val(),
+	        contentType: 'html',
+	        success: function(data,status,xhr) {
+	        	$('#product_search_modalDiv').html(data);
+	        	$("#tr_index").val(index);
+	        	
+	        },
+	        error: function(xhr,status,error) {
+	            console.log(error);
+	        }
+	        
+		});
+		
+	
+	//모달창 열기
+	 $('#product_search_modalDiv').modal('show'); 
+	
+});
 
 	
 	
@@ -430,7 +436,7 @@ function openSearchArea() {
 						  	value="${proList.cust_name }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client">
 						 <input type="text" class="form-control" id="product_cd${i.index }" name="product_cd" readonly="readonly"
 						  	value="${proList.product_cd }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
-						 <input type="button" value="검색" class="btn btn-sm btn-dark p-2" id="product_searchBtn${i.index }">
+						 <input type="button" value="검색" class="btn btn-sm btn-dark p-2 productBtn" onclick="productBtn(${i.index})" id="product_searchBtn">
 						</div>
 					</td>
 					<!-- 품목명 -->
@@ -438,7 +444,7 @@ function openSearchArea() {
 <!-- 					<input type="hidden" name="business_no" id="business_no"> -->
 					<input type="text" class="form-control" id="product_name${i.index }" name="product_name" value="${proList.product_name}" readonly="readonly"></td>
 					<!-- 수량 -->
-					<td><input type="text" class="form-control" name="in_schedule_qty" value="${proList.in_qty}"></td>
+					<td><input type="text" class="form-control" name="in_schedule_qty" value="${proList.in_schedule_qty}"></td>
 					<!-- 납기일자 -->
 					<td><input type="date" class="form-control" name="in_date" value="${proList.in_date }" required="required"></td>
 					<!-- 적요 -->
