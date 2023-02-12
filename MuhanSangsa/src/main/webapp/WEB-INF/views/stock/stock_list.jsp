@@ -65,6 +65,7 @@
 	 text-decoration: none;
 	 color: 	#000080;
 	}
+
 	
 	/* 모달 */
 	#modal_container_stock{
@@ -75,6 +76,25 @@
 	  left: 50%;
 	  overflow-y: scroll;
 	}
+	
+	#excelDowm{
+	vertical-align: middle;
+	padding-left: 0 !important ;
+	}
+	#excelDowm li{
+		text-align: left;
+ 		vertical-align: middle; 
+		background:  url(${pageContext.request.contextPath}/resources/images/excel.png) no-repeat 0px 1px;
+	    list-style-type: none;
+	    padding: 1px 1px 3px 30px;
+	    transition: 0.5s;
+	    margin-top: 5px;
+	    height: 30px;
+	}
+	#excelDowm .dropdown-menu.show{
+	top:2em !important ;
+	}
+	
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
 
@@ -95,10 +115,13 @@ function openStockModal() {
 $(function(){
 	//전체선택 버튼 클릭
 	$('input:checkbox[name=AllChecked]').on("click",function(){
+		
 		if($(this).is(":checked") == true){
 			$("input[name=stockChecked]").prop("checked",true);
+			$("#selectCount > small").html($('input[name=stockChecked]:checked').length +" 개 선택됨");
 		}else{
 			$("input[name=stockChecked]").prop("checked",false);
+			$("#selectCount > small").html($('input[name=stockChecked]:checked').length +" 개 선택됨");
 		}
 	});
 	
@@ -108,26 +131,29 @@ $(function(){
 		let stock_cd = $(this).val();
 		
 		
-		
-		
 	});
+
 	//하단 조정버튼 클릭시
 	$("#stockAdjustmentBtn").on("click",function(){
-		
-		let stock_cd = [];//배열 선언, 변수명 컨트롤러 파라미터명과 동일
-     	$('input:checkbox[name=stockChecked]').each(function (index) {
-     		
-     		if($(this).is(":checked")==true){
-     	    	console.log("id값=stock_cd :"+$(this).val());
-     	   		stock_cd.push($(this).val());//배열에 추가
-     	    }
-     	});
-		
-    	console.log("stock_cd[] : "+ stock_cd);
-    	let result = confirm("재고번호 "+$('input:checkbox[name=stockChecked]:checked').length+ " 개를 조정하시겠습니까? ");
-    	if(result){
-	    	location.href="StockAdjustment?stock_cd="+stock_cd
-    	}
+		if($('input:checkbox[name=stockChecked]:checked').length == 0){
+			alert("선택된 재고번호가 없습니다.");
+		}else{
+			
+			let stock_cd = [];//배열 선언, 변수명 컨트롤러 파라미터명과 동일
+	     	$('input:checkbox[name=stockChecked]').each(function (index) {
+	     		
+	     		if($(this).is(":checked")==true){
+	     	    	console.log("id값=stock_cd :"+$(this).val());
+	     	   		stock_cd.push($(this).val());//배열에 추가
+	     	    }
+	     	});
+			
+	    	console.log("stock_cd[] : "+ stock_cd);
+	    	let result = confirm("재고 "+$('input:checkbox[name=stockChecked]:checked').length+ " 개를 조정하시겠습니까? ");
+	    	if(result){
+		    	location.href="StockAdjustment?stock_cd="+stock_cd
+	    	}
+		}
 	});
 	
 	
@@ -281,6 +307,65 @@ function productInfo(product_cd) {
 	<div id="modal-btn-div" class="float-right">
 		 <input type="button" value="조정" class = "btn btn-primary btn-sm  " id="stockAdjustmentBtn">
 	</div>
+			<div id="pageList" >
+		<div>
+		<!-- 
+		현재 페이지 번호(pageNum)가 1보다 클 경우에만 [이전] 링크 동작
+		=> 클릭 시 BoardList.bo 서블릿 주소 요청하면서 
+		   현재 페이지 번호(pageNum) - 1 값을 page 파라미터로 전달
+		-->
+	
+		<c:choose>
+			<c:when test="${pageNum > 1}">
+				<span onclick="location.href='Inventory_View?pageNum=${pageNum - 1}'">&#8249;</span>
+			</c:when>
+			<c:otherwise>
+				<span >&#8249;</span>
+			</c:otherwise>
+		</c:choose>
+			
+		<!-- 페이지 번호 목록은 시작 페이지(startPage)부터 끝 페이지(endPage) 까지 표시 -->
+		<c:forEach var="i" begin="${pageInfo.startPage }" end="${pageInfo.endPage }">
+			<!-- 단, 현재 페이지 번호는 링크 없이 표시 -->
+			<c:choose>
+				<c:when test="${i eq 0}">
+					1
+				</c:when>
+				<c:when test="${pageNum eq i}">
+					${i }&emsp;
+				</c:when>
+				<c:otherwise>
+					<a href="Inventory_View?pageNum=${i }">${i }</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+
+		<!-- 현재 페이지 번호(pageNum)가 총 페이지 수보다 작을 때만 [다음] 링크 동작 -->
+		<c:choose>
+			<c:when test="${pageNum < pageInfo.maxPage}" >
+				<span onclick="location.href='Inventory_View?pageNum=${pageNum + 1}'">&#8250;</span>
+			</c:when>
+			<c:otherwise>
+				<span>&#8250;</span>
+			</c:otherwise>
+		</c:choose>
+	</div>
+	</div>
+	
+	
+	
+	<ul class="dropdown " id="excelDowm" >
+		<li class="menu-item-has-children " ><a href="#"
+			class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+			aria-expanded="false"> <small>Excel 다운로드</small></a>
+			<ul class="sub-menu children dropdown-menu">
+				<li><a class="dropdown-item"
+					href="downloadExcel?currentPage=1">현재 페이지만 다운</a></li>
+				<li><a class="dropdown-item"
+					href="downloadExcel?currentPage=0">전체 파일 다운</a></li>
+			</ul></li>
+	</ul>
+
 
 </div>
 </div>
@@ -291,6 +376,7 @@ function productInfo(product_cd) {
  		 <a href="#" rel="modal:close">Close</a>
  
 	</div><!-- end of DIV #modal_container -->
+<br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="../inc/footer.jsp"></jsp:include>
     

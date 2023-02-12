@@ -192,7 +192,7 @@ $(function () {
 		     			 
 		     		  let inner_stock_cd_product_cd = "\'"+stock_cd+"','"+product_cd+"'," //재고번호
 		     		  let inner_var2 = "\'"+prod.wh_loc_in_area_cd+"\',";//위치코드
-		     		  let inner_var3 = "\'"+prod.wh_loc_in_area+"\',";
+		     		  let inner_var3 = "\'"+prod.wh_name +"-" + prod.wh_area + "-" + prod.wh_loc_in_area+"\',";
 		     		  let inner_var4 = "\'"+prod.stock_cd+"\'";
 		     		 
 		     			let result = "<li onclick=\"selected_loc("+ inner_stock_cd_product_cd+inner_var2+inner_var3+inner_var4+");\"> <b>[ "+ prod.wh_name + "-" + prod.wh_area + "-" + prod.wh_loc_in_area + " / 재고번호"+prod.stock_cd+" ]</b><br> "
@@ -297,11 +297,11 @@ function openSearchArea() {
 }
 
 //
-function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_loc_in_area,change_stock_cd) {
-	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd+"/"+wh_loc_in_area );
+function selected_loc(stock_cd, product_cd, wh_loc_in_area_cd, wh_full_loc ,change_stock_cd) {
+// 	console.log("선택된 위치:" + wh_loc_in_area_cd + "/"+ product_cd+"/"+wh_loc_in_area );
 	//https://hianna.tistory.com/718
 	$(function(){
-		$("#"+stock_cd+"_"+product_cd).children("input").val(change_stock_cd+"["+wh_loc_in_area+"]");
+		$("#"+stock_cd+"_"+product_cd).children("input").val(change_stock_cd+"["+wh_full_loc+"]");
 		$("#"+stock_cd+"_"+product_cd).children(".search_div").css("display","none");
 		//
 		
@@ -446,7 +446,7 @@ function open_addLoc_modal(stock_cd,product_cd) {
 					</td>
 					<td><input type="number" name="qty" class=" bg-light border border-secondary rounded-1 px-1 adjust" disabled="disabled" min="0"></td>
 					<td style="position: relative;" id="${stock.stock_cd}_${stock.product_cd}">
-						<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-2 " >
+						<input type="text" placeholder="위치를 선택하세요" class="loc_search bg-light border border-secondary rounded-1 px-2 " readonly="readonly">
 					    <div class=" rounded-1 search_div">
 						    <div class="float-right close-loc-Btn"><button type="button" class="btn-close" disabled aria-label="Close"></button></div>
 						    	<div class="mt-3 add-New-loc" onclick="open_addLoc_modal('${stock.stock_cd}','${stock.product_cd}');"> <a href="#modal_container_stock" rel="modal:open">새 위치 추가 + </a></div>
