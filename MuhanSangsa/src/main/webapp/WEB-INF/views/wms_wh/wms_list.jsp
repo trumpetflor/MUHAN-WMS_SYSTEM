@@ -326,8 +326,9 @@
 //			var aNextUl = $(this).next();
 //			var submenu2 = aNextUl.next("ul");
 		let whCd = "'" + wh_cd + "'";
+// 		let whAreaCd = "'" + wh_area_cd + "'";
 		
-// 		console.log("에이젝스");
+		console.log(wh_area_cd + ", " + wh_cd);
 		$("#" + wh_area_cd + "> ul").empty();
 		
 		$.ajax({
@@ -500,13 +501,14 @@
 		let wh_area_cd = $(this).parent().prop("id");
 		let wh_area = $.trim($(this).prev().text());
 		let wh_cd = $(this).parent().closest("ul").prop("id");
-// 		alert(wh_area + " 창고 구역명 수정창, 창고 구역명 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
+		let whCd = "'" + wh_cd + "'";
+		alert(wh_area + " 창고 구역명 수정창, 창고 구역명 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
 		
 		let html = '<li class="w1" id=' + wh_area_cd + '>'
 					+ '<form action="ModifyWhArea" method="post">'
 					+ '<input type="hidden" value=' + wh_area_cd + ' name="wh_area_cd">'
 					+ '&nbsp;&nbsp;<input type="text" name="wh_area" value="'+ wh_area + '" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
-					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whArea(' + wh_cd + ')">'
+					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whArea(' + whCd + ')">'
 					+ '</form>'
 					+ '</li>';
 
@@ -519,14 +521,15 @@
 		let wh_loc_in_area_cd = $(this).parent().prop("id");
 		let wh_loc_in_area = $.trim($(this).prev().text());
 		let wh_area_cd = $(this).parent().closest("li").prop("id");
-		let wh_cd = $(this).parent().closest("li").closest("ul").prop("id");
-// 		alert(wh_loc_in_area + " 창고 내 위치명 수정창, 창고 내 위치 코드 : " + wh_loc_in_area_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
+		let wh_cd = $(this).closest("ul").closest("li").closest("ul").prop("id"); // 아 왜 못가지고 오지..? => 가지고 옴!
+		let whCd = "'" + wh_cd + "'";
+		alert(wh_loc_in_area + " 창고 내 위치명 수정창, 창고 내 위치 코드 : " + wh_loc_in_area_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
 		
 		let html = '<li class="w2" id=' + wh_loc_in_area_cd + '>'
 					+ '<form action="ModifyWhLocArea" method="post">'
 					+ '<input type="hidden" value=' + wh_loc_in_area_cd + ' name="wh_loc_in_area_cd">'
 					+ '<input type="text" name="wh_loc_in_area" value="'+ wh_loc_in_area + '" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
-					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whLocArea(' + wh_area_cd + ', ' + wh_cd + ')">' 
+					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whLocArea(' + wh_area_cd + ', ' + whCd + ')">' 
 					+ '</form>'
 					+ '</li>';
 
