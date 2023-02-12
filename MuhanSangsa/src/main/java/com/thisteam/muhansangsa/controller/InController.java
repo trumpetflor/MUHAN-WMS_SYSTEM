@@ -275,7 +275,7 @@ public class InController {
 	@GetMapping(value = "/In/StockSelectList")
 	public String stockSelectList() {
 		return "in/stockList_inPage";
-
+	}
 	
 	
 	
