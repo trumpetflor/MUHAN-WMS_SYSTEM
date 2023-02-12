@@ -71,6 +71,7 @@ empList-table>th {
 
 .id_pht {
 	width: 80px;
+	height: 90px;
 	transition: 0.5s;
 }
 
@@ -441,32 +442,30 @@ a:visited :active {
 						<tr>
 							<c:if test="${priv eq 1 }">
 								<!-- 관리 권한 부여 시 보여짐 가능 -->
-								<td><input type="checkbox" name="empChecked"
+								<td class="align-middle"><input type="checkbox" name="empChecked"
 									id="empChecked" class="form-check-input"
 									value="${status.index}/${emp.emp_name }/${emp.emp_num }/${emp.dept_name}"></td>
 							</c:if>
-							<td><img class="id_pht" alt="${emp.emp_name  }의 사진"
+							<td class="align-middle"><img class="id_pht" alt="${emp.emp_name  }의 사진"
 								src="${pageContext.request.contextPath}/resources/upload/${emp.photo  }"></td>
-							<td>${emp.emp_num }</td>
-							<td>${emp.emp_name }</td>
-							<td onclick="dept_modal('${emp.dept_cd}','${emp.dept_name }');">
+							<td class="align-middle">${emp.emp_num }</td>
+							<td class="align-middle">${emp.emp_name }</td>
+							<td class="align-middle" onclick="dept_modal('${emp.dept_cd}','${emp.dept_name }');">
 								<a href="#modal_container_dept" rel="modal:open"
 								class="badge badge-dark">${emp.dept_name }</a>
 							</td>
-							<td>${emp.grade_name }</td>
-							<td>${emp.emp_tel }</td>
-							<td><a href="#">${emp.emp_email }</a></td>
+							<td class="align-middle">${emp.grade_name }</td>
+							<td class="align-middle">${emp.emp_tel }</td>
+							<td class="align-middle"><a href="#">${emp.emp_email }</a></td>
 							<c:if test="${priv eq 1 }">
-								<th>
-									<!-- 관리 권한 부여 시 조회 가능 --> <input type="button" value="상세 조회"
-									class="btn btn-primary btn-sm m-1" name="detailBtn"
-									id="detailBtn"
-									onclick="window.open('empListDetail?id=${emp.emp_email}','MemberDetailForm','width=800, height=920,location=no,status=no,scrollbars=yes');">
-									<input type="button" value="수정"
-									class="btn btn-primary btn-sm m-1" name="updateBtn"
-									id="updateBtn"
-									onclick="window.open('empListDetailUpdate?id=${emp.emp_email}','MemberDetailModify','width=800, height=920,location=no,status=no,scrollbars=yes');">
-								</th>
+							
+							<td class="align-middle" >
+							<!-- 관리 권한 부여 시 조회 가능 -->
+								<input type="button" value="상세 조회" class="btn btn-primary btn-sm m-1" name="detailBtn" id="detailBtn"
+										onclick="window.open('empListDetail?id=${emp.emp_email}','MemberDetailForm','width=800, height=920,top= 40,left=600,location=no,status=no,scrollbars=yes');">
+								<input type="button" value="수정" class="btn btn-primary btn-sm m-1" name="updateBtn" id="updateBtn"
+										onclick="window.open('empListDetailUpdate?id=${emp.emp_email}','MemberDetailModify','width=800, height=920, ,top= 40,left=600, location=no,status=no,scrollbars=yes');">
+							</td>
 							</c:if>
 						</tr>
 					</c:forEach>
@@ -475,7 +474,7 @@ a:visited :active {
 			</table>
 	<c:if test="${priv eq 1 }">
 	<div class="float-right">
-		<input type="button" value="신규등록" class = "btn btn-sm btn-success m-2" onclick="location.href='employeeRegisterForm'" >
+		<input type="button" value="신규등록" class = "btn btn-sm btn-success m-2" onclick="location.href='employeeRegisterForm' " >
 		<input type="button" value="일괄변경" class = "btn btn-sm btn-success m-2" id="changeCollective">
 	</div>
 	</c:if>

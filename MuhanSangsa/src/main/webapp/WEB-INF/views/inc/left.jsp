@@ -52,28 +52,31 @@
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href=""><i class="menu-icon fa fa-laptop"></i>Main </a>
+                        <a href="./"><i class="menu-icon fa fa-laptop"></i>Main </a>
+                    </li>
+                    <li>
+                        <a href="About"><i class="menu-icon fa fa-handshake-o"></i>About </a>
                     </li>
                     <li class="menu-title"><b>인사</b></li><!-- /.menu-title -->
                     <li>
-                        <a href="employeeRegisterForm"><i class="menu-icon ti-email"></i>사원 등록</a>
+                        <a href="employeeRegisterForm"><i class="menu-icon ti-user"></i>사원 등록</a>
                     </li>
                     <li>
-                        <a href="employees"> <i class="menu-icon ti-email"></i>사원 조회</a>
+                        <a href="employees"> <i class="menu-icon ti-heart"></i>사원 조회</a>
                     </li>
                         
                     <li class="menu-title">재고관리</li><!-- /.menu-title -->
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>기본 등록</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="ClientList">거래처 조회</a></li>
-                            <li><i class="fa fa-table"></i><a href="ClientInsertForm">거래처 등록</a></li>
+                            <li><i class="ti-search"></i><a href="ClientList">거래처 조회</a></li>
+                            <li><i class="ti-plus"></i><a href="ClientInsertForm">거래처 등록</a></li>
                             <li> ------------------ </li>
-                            <li><i class="fa fa-table"></i><a href="WarehouseList">창고 조회</a></li>
-                            <li><i class="fa fa-table"></i><a href="WarehouseInsertForm">창고 등록</a></li>
+                            <li><i class="ti-search"></i><a href="WarehouseList">창고 조회</a></li>
+                            <li><i class="ti-plus"></i><a href="WarehouseInsertForm">창고 등록</a></li>
                               <li> ------------------ </li>
-                            <li><i class="fa fa-table"></i><a href="ProdSelectList">품목 조회</a></li>
-                            <li><i class="fa fa-table"></i><a href="ProdInsertForm">품목 등록</a></li>
+                            <li><i class="ti-search"></i><a href="ProdSelectList">품목 조회</a></li>
+                            <li><i class="ti-plus"></i><a href="ProdInsertForm">품목 등록</a></li>
                         </ul>
                     </li>
                     
@@ -81,24 +84,24 @@
                     
                     <li class="menu-title">WMS</li><!-- /.menu-title -->
                     <li>
-                        <a href="WmsWarehouse"><i class="menu-icon ti-email"></i>창고 관리</a>
+                        <a href="WmsWarehouse"><i class="menu-icon ti-shopping-cart"></i>창고 관리</a>
                     </li>
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>입고 관리</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti-check-box"></i>입고 관리</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="InSchedule">입고 예정</a></li>
                             <li><i class="fa fa-table"></i><a href="InProcessing">입고 처리</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>출고 관리</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti-check-box"></i>출고 관리</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="OutWaitingSelectList">출고 예정</a></li>
                             <li><i class="fa fa-table"></i><a href="OutProcessingSeletList">출고 처리</a></li>
                         </ul>
                     </li>
 					<li>
-                        <a href="Inventory_View"><i class="menu-icon ti-email"></i>재고 조회</a>
+                        <a href="Inventory_View"><i class="menu-icon ti-truck"></i>재고 조회</a>
                     </li>
 
           
@@ -136,7 +139,7 @@
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 <%--                        <img class="user-avatar rounded-circle" src="${pageContext.request.contextPath}/resources/images/login.png" alt="User Avatar"> --%>
 							<img id="photo" name="photo" class="user-avatar rounded-circle"
-							src="${pageContext.request.contextPath}/resources/upload/${employees.photo }"
+							src="${pageContext.request.contextPath}/resources/upload/${sessionScope.sPhoto }"
 							onerror="this.src='${pageContext.request.contextPath}/resources/images/login.png';" style="width: 40px; height:40px" alt="Logo">
                         </a>
 
@@ -145,7 +148,7 @@
                         	<%-- 로그인 상태일 경우 아이디 표시, 마이페이지, Logout 링크 표시 --%>
 							<%-- EL 을 사용하여 세션 객체 접근 시 sessionScope.속성명 으로 접근 --%>
 							<c:when test="${not empty sessionScope.sId }">
-                            	<a class="nav-link" href="./Mypage"><i class="fa fa-user"></i>${sessionScope.sId } 님</a>
+                            	<a class="nav-link" href="./Mypage"><i class="fa fa-user"></i>${sessionScope.sName } 님</a>
                             	<a class="nav-link" href="./Mypage"><i class="fa fa-bell-o"></i>MYPAGE <span class="count">13</span></a>
 <!-- 	                           	<a class="nav-link" href="#"><i class="fa fa-cog"></i>Settings</a> -->
 	                            <a class="nav-link" href="javascript:logout()"><i class="fa fa-power-off"></i>Logout</a>

@@ -63,6 +63,18 @@
 		
 	});
 	
+	//첨부파일 이미지 미리보기
+	function readURL(input) {
+	  if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+	    reader.onload = function(e) {
+	      document.getElementById('myPagephoto').src = e.target.result;
+	    };
+	    reader.readAsDataURL(input.files[0]);
+	  } else {
+	    document.getElementById('myPagephoto').src = "";
+	  }
+	}
 	
 
 </script>
@@ -86,17 +98,6 @@
                             </div>
                         </div>
                     </div>
-<!--                     <div class="col-sm-8"> -->
-<!--                         <div class="page-header float-right"> -->
-<!--                             <div class="page-title"> -->
-<!--                                 <ol class="breadcrumb text-right"> -->
-<!--                                     <li><a href="#">Dashboard</a></li> -->
-<!--                                     <li><a href="#">Forms</a></li> -->
-<!--                                     <li class="active">Basic</li> -->
-<!--                                 </ol> -->
-<!--                             </div> -->
-<!--                         </div> -->
-<!--                     </div> -->
                 </div>
             </div>
         </div>
@@ -113,14 +114,20 @@
                             <div class="card-body card-block">
                                 <form action="empListDetailUpdatePro" id="empListDetailUpdatePro" method="post" enctype="multipart/form-data" class="form-horizontal">
                                  <!-- 사진 이미지 -->
-                                  <div class="row form-group">   
-                                 	<div class="col col-md-3"><label class=" form-control-label" style="margin-top: 80px;">사진 이미지</label></div>
-                                  		<div class=" col-12 col-md-4" id="imgWapper">
-											<img id="photo" alt="증명사진" style="width: 150px" name="photo"
+                                 <div class="row form-group">   
+                                 	<div class="col col-md-3"><label class=" form-control-label" style="margin-top: 80px;">사진 이미지<font style="color: red;">*</font></label></div>
+                                  		<div class=" col-12 col-md-9" id="imgWapper">
+                                  			<!-- 사진 미리보기  -->
+											<img id="myPagephoto" alt="증명사진" style="width:150px;" name="photo" 
 											src="${pageContext.request.contextPath}/resources/upload/${employees.photo }"	
-											onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';" width="150px" />
+											onerror="this.src='${pageContext.request.contextPath}/resources/images/profile.png';" width="150px" height="170px"/>
+											<!-- 이미지 파일 첨부  -->
+										<div class="col-12 col-md-9 mt-3" style="padding-left: 0;">
+											<input type="file" id="file" onchange="readURL(this);" name="file" class="form-control-file">
+                                        </div>
 									</div>
 								  </div>
+								  
                                     <!-- 사원번호(코드) -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
@@ -247,38 +254,58 @@
                                             </div>
                                         </div>
                                     </div>
-                                     <!-- 권한 -->
-                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label class=" form-control-label">권한설정</label></div>
-                                        <div class="col col-md-9">
-                                            <div class="form-check-inline form-check">
-                                                <label for="level1" class="form-check-label ">
-                                                    <input type="checkbox" id="level1" name="priv_Cd" value="10000" class="form-check-input">기본등록&nbsp;&nbsp;
-                                                </label>
-                                                <label for="level2" class="form-check-label ">
-                                                    <input type="checkbox" id="level2" name="priv_Cd" value="1000" class="form-check-input" >사원조회&nbsp;&nbsp;
-                                                </label>
-                                                <label for="level2" class="form-check-label ">
-                                                    <input type="checkbox" id="level3" name="priv_Cd" value="100" class="form-check-input" >사원관리&nbsp;&nbsp;
-                                                </label>
-                                                <label for="level3" class="form-check-label ">
-                                                    <input type="checkbox" id="level4" name="priv_Cd" value="10" class="form-check-input">재고조회&nbsp;&nbsp;
-                                                </label>
-                                                <label for="level4" class="form-check-label ">
-                                                    <input type="checkbox" id="level5" name="priv_Cd" value="1" class="form-check-input">재고관리&nbsp;&nbsp;
-                                                </label>
-                                            </div>
-                                        </div>
+                           <!-- 권한 -->
+                             <div class="row form-group">
+                                <div class="col col-md-3"><label class=" form-control-label">권한설정</label></div>
+                                <div class="col col-md-9">
+                                       <div class="form-check-inline form-check" >
+                                        <label for="level1" class="form-check-label ">
+                                            <input type="checkbox" id="level1" name="priv_cd" value="10000000" class="form-check-input"
+                                            <c:if test="${employees.priv_cd.charAt(0).toString() eq '1'}">checked</c:if>>기본등록
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </label>
+                                        <label for="level2" class="form-check-label ">
+                                            <input type="checkbox" id="level2" name="priv_cd" value="1000000" class="form-check-input"
+                                            <c:if test="${employees.priv_cd.charAt(1).toString() eq '1'}">checked</c:if>>사원조회
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </label>
+                                        <label for="level3" class="form-check-label ">
+                                            <input type="checkbox" id="level3" name="priv_cd" value="100000" class="form-check-input" 
+                                            <c:if test="${employees.priv_cd.charAt(2).toString() eq '1'}">checked</c:if>>사원관리
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </label>
+                                        <label for="level4" class="form-check-label ">
+                                          	<input type="checkbox" id="level4" name="priv_cd" value="10000" class="form-check-input"
+                                          	<c:if test="${employees.priv_cd.charAt(3).toString() eq '1'}">checked</c:if>>재고조회
+                                          	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </label>
+                                      </div>
+                                       <div class="form-check-inline form-check">
+                                        <label for="level5" class="form-check-label ">
+                                            <input type="checkbox" id="level5" name="priv_cd" value="1000" class="form-check-input"
+                                            <c:if test="${employees.priv_cd.charAt(4).toString() eq '1'}">checked</c:if>>재고관리
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </label>
+                                        <label for="level6" class="form-check-label ">
+                                            <input type="checkbox" id="level6" name="priv_cd" value="100" class="form-check-input"
+                                            <c:if test="${employees.priv_cd.charAt(5).toString() eq '1'}">checked</c:if>>거래처등록
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </label>
+                                        <label for="level7" class="form-check-label ">
+                                            <input type="checkbox" id="level7" name="priv_cd" value="10" class="form-check-input"
+                                           	<c:if test="${employees.priv_cd.charAt(6).toString() eq '1'}">checked</c:if>>창고등록
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </label>
+                                        <label for="level8" class="form-check-label ">
+                                            <input type="checkbox" id="level8" name="priv_cd" value="1" class="form-check-input"
+                                            <c:if test="${employees.priv_cd.charAt(7).toString() eq '1'}">checked</c:if>>WMS관리
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                        </label>
                                     </div>
-                                    <!-- 권한 -->                                    
-                                    <!--사진이미지 -->
-                                    <div class="row form-group">
-                                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">사진이미지*</label></div>
-                                        <div class="col-12 col-md-4"><input type="file" id="file" name="file"  class="form-control-file">
-                                        	<br><small>(기존파일 : ${employees.photo })</small>
-                                        </div>
-                                    </div>
-                                    <!--  -->
+                                </div>
+                            </div>
+                            <!-- 권한 -->         
+
                                 </form>
                             </div>
                         </div>

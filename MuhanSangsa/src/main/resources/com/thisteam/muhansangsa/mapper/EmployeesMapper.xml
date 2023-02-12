@@ -89,7 +89,8 @@
 			, e.emp_post_No
 			, e.emp_addr
 			, e.hire_date
-			, e.work_cd 
+			, e.work_cd
+			, e.priv_cd 
 			, e.photo
 		FROM  employees e, department d, grade g
 		WHERE 
@@ -133,6 +134,7 @@
 				,EMP_ADDR = #{emp_addr}
 				,HIRE_DATE = #{hire_date}
 				,WORK_CD = #{work_cd}
+				,PRIV_CD = #{priv_cd}
 				<if test='photo != null and photo !="" '>
 					,PHOTO = #{photo}
 				</if>

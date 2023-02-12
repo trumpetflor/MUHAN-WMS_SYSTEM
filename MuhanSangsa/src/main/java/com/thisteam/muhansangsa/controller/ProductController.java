@@ -2,6 +2,7 @@ package com.thisteam.muhansangsa.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.System.Logger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,32 +48,34 @@ public class ProductController {
 				Model model, HttpSession session) {
 		model.addAttribute("msg", msg);
 		
-		String sId = (String)session.getAttribute("sId");
+		String sId;
+		if (session.getAttribute("sId") != null) {
+			sId = (String) session.getAttribute("sId");
 
-		//sId가 null일 경우 접근 차단!
-		if(session.getAttribute("sId") == null) {
-			model.addAttribute("msg", "잘못된 접근입니다.");
-			return "fail_back";
+			// 접속 ip 확인 코드
+			InetAddress local;
+			String ip;
+			try {
+				local = InetAddress.getLocalHost();
+				ip = local.getHostAddress();
+				model.addAttribute("ip", ip);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+
+			if(sId != null) {
+				// 권한 조회 메서드
+				boolean isRightUser = empService.getPrivilege(sId, 
+						Privilege.WMS관리, Privilege.기본등록, Privilege.사원관리, Privilege.재고관리);
+			}
+
+			return "product/prod_insertForm";
+
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
-		
-		// 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
-		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
-		if(sId != null) {
-			// 권한 조회 메서드
-			boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
-		}
-		
-		return "product/prod_insertForm";
-		
 	}
 
 	
@@ -80,7 +84,7 @@ public class ProductController {
 		 @RequestParam("file") MultipartFile file, MultipartRequest request) {
 		
 		//파일업로드 시작
-		String uploadDir = "/resources/upload/product/"; 
+		String uploadDir = "/resources/upload"; 
 		String saveDir = session.getServletContext().getRealPath(uploadDir);
 		//실제 업로드 경로 
 		System.out.println("실제 업로드 경로 : " + saveDir);
@@ -182,63 +186,84 @@ public class ProductController {
 		@RequestParam(defaultValue = "") String searchType,
 		@RequestParam(defaultValue = "") String keyword,
 		@RequestParam(defaultValue = "1") int pageNum,
-		Model model) {
+		Model model, HttpSession session) {
 		
-		//페이징 처리를 위한 변수 선언
-		int listLimit = 10; // 게시물 목록 10개로 제한
-		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
-		
-		//품목 목록 조회
-		List<ProductVO> productList = service.getProductList(keyword, searchType, startRow, listLimit);
-		
-		//-------------------------------------------------
-		// 페이징 처리
-		// 1. 한 페이지에 표시할 페이지 목록(번호) 갯수 계산
-		//=> 파라미터 : 검색타입, 검색어   리턴타입 : int(listCount)
-		int listCount = service.getProductListCount(keyword, searchType);
-		
-		// 2. 한 페이지에서 표시할 페이지 목록 갯수 설정 (페이지 번들의 갯수)
-		int pageListLimit = 10; // 한 페이지에서 표시할 페이지 목록을 10개로 제한
-		
-		// 3. 전체 페이지 목록 수 계산
-		int maxPage = listCount / listLimit 
-						+ (listCount % listLimit == 0 ? 0 : 1); 
-		
-		// 4. 시작 페이지 번호 계산
-		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
-		
-		// 5. 끝 페이지 번호 계산
-		int endPage = startPage + pageListLimit - 1;
-		
-		// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
-		//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
-		if(endPage > maxPage) {
-			endPage = maxPage;
+		String sId = (String)session.getAttribute("sId");
+
+		//sId가 null일 경우 접근 차단!
+		if(session.getAttribute("sId") == null) {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
 		}
 		
-		// PageInfo 객체 생성 후 페이징 처리 정보 저장
-		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);		
-		
-		// 품목 리스트 객체(productList) 와 페이징 정보 객체(pageInfo)
-		// 검색타입(searchType), 키워드(keyword)를 Model 객체에 저장
-		model.addAttribute("keyword", keyword);		
-		model.addAttribute("searchType", searchType);		
-		model.addAttribute("productList", productList);
-		model.addAttribute("pageInfo", pageInfo);		
-		
-		
-		// 접속 ip 확인 코드
-		InetAddress local;
-		String ip;
-		try {
-			local = InetAddress.getLocalHost();
-			ip = local.getHostAddress();
-			model.addAttribute("ip", ip);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		if(sId != null && !sId.equals("")) { // 세션 아이디가 있을 경우! 
+			
+			// 권한 조회 메서드
+			boolean isRightUser = empService.getPrivilege(sId, 
+			Privilege.WMS관리, Privilege.기본등록, Privilege.사원관리, Privilege.재고관리);
+			
+			//페이징 처리를 위한 변수 선언
+			int listLimit = 10; // 게시물 목록 10개로 제한
+			int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+			
+			//품목 목록 조회
+			List<ProductVO> productList = service.getProductList(keyword, searchType, startRow, listLimit);
+			
+			//-------------------------------------------------
+			// 페이징 처리
+			// 1. 한 페이지에 표시할 페이지 목록(번호) 갯수 계산
+			//=> 파라미터 : 검색타입, 검색어   리턴타입 : int(listCount)
+			int listCount = service.getProductListCount(keyword, searchType);
+			
+			// 2. 한 페이지에서 표시할 페이지 목록 갯수 설정 (페이지 번들의 갯수)
+			int pageListLimit = 10; // 한 페이지에서 표시할 페이지 목록을 10개로 제한
+			
+			// 3. 전체 페이지 목록 수 계산
+			int maxPage = listCount / listLimit 
+							+ (listCount % listLimit == 0 ? 0 : 1); 
+			
+			// 4. 시작 페이지 번호 계산
+			int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+			
+			// 5. 끝 페이지 번호 계산
+			int endPage = startPage + pageListLimit - 1;
+			
+			// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+			//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+			if(endPage > maxPage) {
+				endPage = maxPage;
+			}
+			
+			// PageInfo 객체 생성 후 페이징 처리 정보 저장
+			PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);		
+			
+			// 품목 리스트 객체(productList) 와 페이징 정보 객체(pageInfo)
+			// 검색타입(searchType), 키워드(keyword)를 Model 객체에 저장
+			model.addAttribute("keyword", keyword);		
+			model.addAttribute("searchType", searchType);		
+			model.addAttribute("productList", productList);
+			model.addAttribute("pageInfo", pageInfo);		
+			
+			
+			// 접속 ip 확인 코드
+			InetAddress local;
+			String ip;
+			try {
+				local = InetAddress.getLocalHost();
+				ip = local.getHostAddress();
+				model.addAttribute("ip", ip);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+
+			return "product/prod_selectList";
+			
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
 		}
 		
-		return "product/prod_selectList";
 		
 	}
 	//--------------------------------- 품목 조회 끝 ---------------------------------
@@ -270,7 +295,7 @@ public class ProductController {
 			if(sId != null) { // 로그인 되어있을 때
 				if(file.getSize() >0 ) { // 첨부파일을 수정할 경우 1이상 카운트 되기때문에 이렇게 조건문 줬음! 
 					//파일업로드 시작
-					String uploadDir = "/resources/upload/product/"; 
+					String uploadDir = "/resources/upload"; 
 					String saveDir = session.getServletContext().getRealPath(uploadDir);
 					//실제 업로드 경로 
 					System.out.println("실제 업로드 경로 : " + saveDir);
