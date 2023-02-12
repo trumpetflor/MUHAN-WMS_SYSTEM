@@ -138,7 +138,7 @@ a:visited :active {
 	display: none;
 }
 </style>
-<!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
+
 <script type="text/javascript">
 
 
@@ -201,8 +201,10 @@ a:visited :active {
 	
 			if($(this).is(":checked") == true){
 				$("input[name=empChecked]").prop("checked",true);
+				$("#selectCount > small").html($('input:checkbox[name=empChecked]:checked').length +" 개 선택됨");
 			}else{
 				$("input[name=empChecked]").prop("checked",false);
+				$("#selectCount > small").html($('input:checkbox[name=empChecked]:checked').length +" 개 선택됨");
 			}
 		});
 		
@@ -217,7 +219,6 @@ a:visited :active {
 				if($('input:checkbox[name=empChecked]:checked').length == 0 ){
 					alert("선택된 사원이 없습니다.");
 				}else{
-
 					$("#modal_container").modal({
 			        fadeDuration: 250 //모달창 올라오는 시간
 //		 		    escapeClose: false,
@@ -472,12 +473,12 @@ a:visited :active {
 				</tbody>
 
 			</table>
-
+	<c:if test="${priv eq 1 }">
 	<div class="float-right">
 		<input type="button" value="신규등록" class = "btn btn-sm btn-success m-2" onclick="location.href='employeeRegisterForm'" >
 		<input type="button" value="일괄변경" class = "btn btn-sm btn-success m-2" id="changeCollective">
 	</div>
-	
+	</c:if>
 	
 		<div id="pageList" >
 		<div>
@@ -569,11 +570,6 @@ a:visited :active {
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="../inc/footer.jsp"></jsp:include>
     
-<!-- Scripts -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
-<!-- <script src="resources/assets/js/main.js"></script> -->
+
 </body>
 </html>
