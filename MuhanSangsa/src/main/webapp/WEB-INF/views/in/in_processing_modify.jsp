@@ -434,7 +434,9 @@ function openSearchArea() {
 						</div>
 					</td>
 					<!-- 품목명 -->
-					<td><input type="text" class="form-control" id="product_name${i.index }" name="product_name" value="${proList.product_name}" readonly="readonly"></td>
+					<td>
+<!-- 					<input type="hidden" name="business_no" id="business_no"> -->
+					<input type="text" class="form-control" id="product_name${i.index }" name="product_name" value="${proList.product_name}" readonly="readonly"></td>
 					<!-- 수량 -->
 					<td><input type="text" class="form-control" name="in_schedule_qty" value="${proList.in_qty}"></td>
 					<!-- 납기일자 -->

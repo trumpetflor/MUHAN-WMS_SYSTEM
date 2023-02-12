@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Warehouse List</title>
+    <title>창고 조회 | 창고 관리</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -31,7 +31,9 @@
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
-	
+	function modifyOpen(code){
+		window.open('WarehouseModifyForm?wh_cd='+code,'WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');
+	}
 </script>
 </head>
 <style type="text/css">
@@ -76,8 +78,8 @@
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="#">재고 관리</a></li>
-                                    <li><a href="#">창고</a></li>
-                                    <li class="active">창고 목록</li>
+                                    <li><a href="#">창고 관리</a></li>
+                                    <li class="active">창고 조회</li>
                                 </ol>
                             </div>
                         </div>
@@ -121,7 +123,7 @@
 	                                    	<c:forEach var="warehouse" items="${whList }" varStatus="status">
 		                                    	<tr>
 		                                    		<td><a id="wh_cd" href='javascript:void(0);' onclick="window.open('WarehouseModifyForm?wh_cd=${warehouse.wh_cd }','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');">${warehouse.wh_cd }</a></td>
-		                                    		<td><a id="wh_name" href='javascript:void(0);' onclick="window.open(WarehouseModifyForm?wh_cd=${warehouse.wh_cd }','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');">${warehouse.wh_name }</a></td>
+		                                    		<td><a id="wh_name" href='javascript:void(0);' onclick="window.open('WarehouseModifyForm?wh_cd=${warehouse.wh_cd }','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');">${warehouse.wh_name }</a></td>
 		                                    		<td>
 		                                    		<input type="hidden" value="${status.begin }" id="begin">
 		                                    			<c:choose>
