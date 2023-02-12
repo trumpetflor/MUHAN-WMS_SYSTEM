@@ -91,7 +91,7 @@
 	}
 	
 	.search_div{
-	    width: 400px;
+	    width: 450px;
 	    height: 350px;
 	    background-color: white;
 	    position: absolute;
@@ -102,6 +102,7 @@
 	    z-index: 1;
 	    box-shadow: 1px 1px 20px 3px rgba(169, 168, 167, 0.2);
 	    border-color: rgba(169, 168, 167, 0.2);
+	    overflow: scroll; 
 	}
 	
 	.search_div::-webkit-scrollbar {
