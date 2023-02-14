@@ -231,24 +231,24 @@ var idResult = false;
                                                 <label for="level2" class="form-check-label ">
                                                     <input type="checkbox" id="level2" name="priv_cd" value="1000000" class="form-check-input" >사원조회&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
-                                                <label for="level2" class="form-check-label ">
+                                                <label for="level3" class="form-check-label ">
                                                     <input type="checkbox" id="level3" name="priv_cd" value="100000" class="form-check-input" >사원관리&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
-                                                <label for="level3" class="form-check-label ">
+                                                <label for="level4" class="form-check-label ">
                                                   	<input type="checkbox" id="level4" name="priv_cd" value="10000" class="form-check-input">재고조회&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                               </div>
                                                <div class="form-check-inline form-check">
-                                                <label for="level4" class="form-check-label ">
+                                                <label for="level5" class="form-check-label ">
                                                     <input type="checkbox" id="level5" name="priv_cd" value="1000" class="form-check-input">재고관리&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
-                                                <label for="level5" class="form-check-label ">
+                                                <label for="level6" class="form-check-label ">
                                                     <input type="checkbox" id="level6" name="priv_cd" value="100" class="form-check-input">거래처등록&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
-                                                <label for="level6" class="form-check-label ">
+                                                <label for="level7" class="form-check-label ">
                                                     <input type="checkbox" id="level7" name="priv_cd" value="10" class="form-check-input">창고등록&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
-                                                <label for="level7" class="form-check-label ">
+                                                <label for="level8" class="form-check-label ">
                                                     <input type="checkbox" id="level8" name="priv_cd" value="1" class="form-check-input">WMS관리&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </label>
                                             </div>

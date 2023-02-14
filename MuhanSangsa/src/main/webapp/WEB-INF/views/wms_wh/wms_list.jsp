@@ -502,7 +502,7 @@
 		let wh_area = $.trim($(this).prev().text());
 		let wh_cd = $(this).parent().closest("ul").prop("id");
 		let whCd = "'" + wh_cd + "'";
-		alert(wh_area + " 창고 구역명 수정창, 창고 구역명 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
+// 		alert(wh_area + " 창고 구역명 수정창, 창고 구역명 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
 		
 		let html = '<li class="w1" id=' + wh_area_cd + '>'
 					+ '<form action="ModifyWhArea" method="post">'
@@ -523,7 +523,7 @@
 		let wh_area_cd = $(this).parent().closest("li").prop("id");
 		let wh_cd = $(this).closest("ul").closest("li").closest("ul").prop("id"); // 아 왜 못가지고 오지..? => 가지고 옴!
 		let whCd = "'" + wh_cd + "'";
-		alert(wh_loc_in_area + " 창고 내 위치명 수정창, 창고 내 위치 코드 : " + wh_loc_in_area_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
+// 		alert(wh_loc_in_area + " 창고 내 위치명 수정창, 창고 내 위치 코드 : " + wh_loc_in_area_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
 		
 		let html = '<li class="w2" id=' + wh_loc_in_area_cd + '>'
 					+ '<form action="ModifyWhLocArea" method="post">'
