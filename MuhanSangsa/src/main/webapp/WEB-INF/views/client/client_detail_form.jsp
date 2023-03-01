@@ -144,7 +144,7 @@
 						$("#check_bn").html(result);
 						
 						if(result == "true") { // 거래처 코드 존재 (중복 O)
-							$("#check_bn").html("이미 존재하는 코드입니다.").css("color","#00ff00");
+							$("#check_bn").html("이미 존재하는 코드입니다.").css("color","#ff0000");
 							idResult = false;
 						} else { // 거래처 코드 존재 X (중복 X)
 							$("#check_bn").html("사용 가능한 코드입니다.").css("color","#00ff00");
@@ -197,7 +197,8 @@
 	}
 	
 // 	function close() {
-// 		opener.document.location.reload(); // 부모창 새로고침
+// 		opener.parent.location='ClientList'; // 부모창 새로고침
+// 		opener.parent.location.reload(); // 부모창 새로고침
 // 		window.close(); // 자식창 닫기
 // 	}
 	
@@ -391,7 +392,7 @@
                                 <button type="button" class="btn btn-danger btn-sm" onclick="confirmReset()">
                                     <i class="fa fa-ban"></i> Reset
                                 </button>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="window.close()">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="opener.location.reload(); window.close();">
                                     <i class="fa fa-dot-circle-o"></i> 창닫기
                                 </button>
                             </div>
