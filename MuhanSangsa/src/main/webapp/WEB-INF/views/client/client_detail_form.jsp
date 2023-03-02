@@ -392,7 +392,7 @@
                                 <button type="button" class="btn btn-danger btn-sm" onclick="confirmReset()">
                                     <i class="fa fa-ban"></i> Reset
                                 </button>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="opener.location.reload(); window.close();">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="opener.parent.location='ClientList?pageNum=${pageNum}'; window.close();">
                                     <i class="fa fa-dot-circle-o"></i> 창닫기
                                 </button>
                             </div>

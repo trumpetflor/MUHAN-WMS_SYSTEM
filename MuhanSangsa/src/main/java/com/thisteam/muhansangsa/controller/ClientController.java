@@ -336,6 +336,7 @@ public class ClientController {
 					System.out.println(client);
 
 					model.addAttribute("client", client); // Model 객체에 ClientVO 객체 저장
+					model.addAttribute("pageNum", pageNum); // Model 객체에 pageNum 저장
 
 					return "client/client_detail_form";
 

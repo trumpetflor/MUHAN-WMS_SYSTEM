@@ -164,6 +164,7 @@
 				aNextOne.css("display", "none");
 			} else {
 				aNextTwo.slideDown();
+// 				aNextTwo.css("background-color", "gray");
 				aNextOne.css("display", "block");
 			}
 
