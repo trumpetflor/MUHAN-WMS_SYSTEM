@@ -129,7 +129,6 @@
 
 
 
-
 /* *********************** CSS jakyoung 끝 *************************** */	
 	
 	
@@ -204,8 +203,10 @@ $(function(){
 // 		alert(tr_id);
         if ($(this).is(':checked')) {
         	$("#" + tr_id).find("input[type=number][name=input_out_qty]").prop("readonly", false);
+        	$("#" + tr_id).find("input[type=number][name=input_out_qty]").css("background-color", "rgb(230, 236, 255)");
         } else {
         	$("#" + tr_id).find("input[type=number][name=input_out_qty]").prop("readonly", true);
+        	$("#" + tr_id).find("input[type=number][name=input_out_qty]").css("background-color", "#FFFFFF");
         }
     });
 	
@@ -396,7 +397,7 @@ function productInfo(product_cd) {
                         <div class="page-header float-right rounded-start ">
                             <div class="page-title ">
                                 <ol class="breadcrumb text-right ">
-                                    <li><a href="#">출고 예정</a></li>
+                                    <li><a href="#">출고 처리</a></li>
                                     <li><a href="#">출고 관리</a></li>
                                 </ol>
                             </div>
@@ -453,7 +454,7 @@ function productInfo(product_cd) {
 				<td>${total.out_date }</td>
 				<td>${total.out_schedule_qty }</td>
 				<td>${total.out_schedule_qty - total.out_qty }</td>
-				<td><input type="number" class=" bg-light border border-secondary rounded-1 px-1 adjust" name="input_out_qty" min="1" max="${total.out_schedule_qty - total.out_qty }" readonly="readonly"></td>
+				<td><input type="number" class=" border border-secondary rounded-1 px-1 adjust" name="input_out_qty" min="1" max="${total.out_schedule_qty - total.out_qty }" readonly="readonly"></td>
 				<td>${total.remarks }</td>
 			</tr>
 			</c:forEach>

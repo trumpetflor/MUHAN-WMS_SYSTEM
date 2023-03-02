@@ -271,6 +271,7 @@ public class ClientController {
 	@GetMapping(value = "ClientDetail")
 	public String clientDetail(
 			@RequestParam(defaultValue = "") String business_no,
+			@RequestParam(defaultValue = "1") int pageNum,
 			Model model,
 			HttpSession session
 			) {

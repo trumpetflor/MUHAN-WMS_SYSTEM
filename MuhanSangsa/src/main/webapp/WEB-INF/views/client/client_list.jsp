@@ -76,7 +76,11 @@
 <script type="text/javascript">
 
 	//AJAX 를 활용한 게시물 목록 표시에 사용될 페이지 번호값 미리 저장
-	let pageNum = 1;
+	if(${param.pageNum eq null}) {
+		let pageNum = 1;
+	} else {
+		let pageNum = ${param.pageNum};
+	}
 // 	let pageList = '';
 	
 	$(function() {
@@ -156,8 +160,8 @@
 				// 뿌릴 내용
 				// 받아온jsonArray변수명[인덱스명].접근할컬럼변수명 => 각 VO 객체의 변수에 접근)
 				let result = "<tr>"
-							+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + jsonArray[index].business_no + "</td>"
-							+ "<td class='click' onclick='openClientDetail(" + strBn + ")'>" + jsonArray[index].cust_name + "</td>"
+							+ "<td class='click' onclick='openClientDetail(" + strBn + ", "+ pageNum + ")'>" + jsonArray[index].business_no + "</td>"
+							+ "<td class='click' onclick='openClientDetail(" + strBn + ", "+ pageNum + ")'>" + jsonArray[index].cust_name + "</td>"
 // 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + jsonArray[index].business_no + "</a></td>"
 // 							+ "<td><a href='ClientDetail?business_no=" + client.business_no + "'>" + jsonArray[index].cust_name + "</a></td>"
 							+ "<td>" + jsonArray[index].boss_name + "</td>"
@@ -182,7 +186,7 @@
 			
 			for(let i = jsonArray[jsonArray.length - 1].startPage; i <= jsonArray[jsonArray.length - 1].endPage; i++) {
 				if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
-					pageList += '&nbsp;&nbsp;<a class="active" href="javascript:(0)">' + i +'</a>'; 
+					pageList += '&nbsp;&nbsp;<a href="javascript:(0)" style="color: #212529; font-weight: bold;">' + i +'</a>'; 
 				} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
 					pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ')">' + i + '</a>';
 				}
@@ -206,10 +210,10 @@
 	
 	// 거래처 세부 정보 창 - 아아ㅏ아가가각가가각!!!1!!!!!! 파라미터 왜 이따구로 넘어와ㅠㅠㅠ 
 	// => 해겨류ㅠㅠㅠㅠㅠㅠ!!!!! - by. 킹갓제너럴영진
-	function openClientDetail(business_no) {
+	function openClientDetail(business_no, pageNum) {
 // 		let business_no = strBn.replace("N", "");
 // 		alert(business_no);
-		window.open("ClientDetail?business_no=" + business_no, "_blank", "width=880, height=700, top=50, left=1000");
+		window.open("ClientDetail?business_no=" + business_no + "&pageNum=" + pageNum, "_blank", "width=880, height=700, top=50, left=1000");
 		
 	}
 	
