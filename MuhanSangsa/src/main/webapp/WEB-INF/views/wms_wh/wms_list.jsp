@@ -108,6 +108,7 @@
     .menu a{
     	cursor:pointer;
     	text-decoration: none;
+    	color: #212529;
     }
     
     a:visited{
@@ -194,6 +195,16 @@
 			}
 		});
 
+		// 추가 버튼 마우스 오버 시 해당 창고명, 창고 구역 명 표시 (해당 창고만 됨..)
+		$(".ti-plus").hover(function() {
+			$(this).siblings("a").css("color", "rgb(10, 88, 202)");
+// 			$(this).prev("a").css("color", "rgb(10, 88, 202)");
+
+		}, function() {
+			$(this).siblings("a").css("color", "#212529");
+// 			$(this).prev("a").css("color", "#212529");
+		});
+		
 // 		$("#add_wh_area").focusout(function() {
 // 			let add_wh_area = $("#add_wh_area").val();
 // 			alert("창고명 : " + add_wh_area);
@@ -521,7 +532,8 @@
 	$(document).on("click", ".modify_wh_loc_area", function(){
 		let wh_loc_in_area_cd = $(this).parent().prop("id");
 		let wh_loc_in_area = $.trim($(this).prev().text());
-		let wh_area_cd = $(this).parent().closest("li").prop("id");
+// 		let wh_area_cd = $(this).parent().closest("li").prop("id"); // 창고 구역 내 위치 코드를 가지고 옴..
+		let wh_area_cd = $(this).closest("ul").closest("li").prop("id");
 		let wh_cd = $(this).closest("ul").closest("li").closest("ul").prop("id"); // 아 왜 못가지고 오지..? => 가지고 옴!
 		let whCd = "'" + wh_cd + "'";
 // 		alert(wh_loc_in_area + " 창고 내 위치명 수정창, 창고 내 위치 코드 : " + wh_loc_in_area_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
