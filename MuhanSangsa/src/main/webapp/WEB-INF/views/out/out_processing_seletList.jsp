@@ -213,37 +213,47 @@ $(function(){
 	$("#naga").on("click", function() {
 		
 		let osppArr = new Array(); // Out_schedule_total_viewVO
+		let confirmOut = false;
 		
 		$("#out_table > tbody > tr").each(function(index, item) {
-			let ospp = new Object();
+			if($("#outList" + index + " td:eq(4)").text() == "") {
+				alert($("#outList" + index + " td:eq(3)").text() + " 의 위치를 선택하세요.");
+				return;
+			} else {
+				let ospp = new Object();
+				
+	// 			ospp.out_date = $("#currentDate").val(); // 출고 일자 (왜 필요하지)
+				ospp.out_schedule_cd = $("#outList" + index + " td:eq(0)").text(); // 출고 예정 코드
+				ospp.out_qty = $("#outList" + index + " td:eq(2)").text(); // 출고 지시 수량
+				ospp.stock_cd = $("#outList" + index + " td:eq(3)").text(); // 재고 코드
+				
+// 				console.log(index + ", " + ospp);
+				
+				osppArr.push(ospp);
+// 				console.log(osppArr);
+
+				confirmOut = true;
+			}
 			
-// 			ospp.out_date = $("#currentDate").val(); // 출고 일자 (왜 필요하지)
-			ospp.out_schedule_cd = $("#outList" + index + " td:eq(0)").text(); // 출고 예정 코드
-			ospp.out_qty = $("#outList" + index + " td:eq(2)").text(); // 출고 지시 수량
-			ospp.stock_cd = $("#outList" + index + " td:eq(3)").text(); // 재고 코드
-			
-			console.log(index + ", " + ospp);
-			
-			osppArr.push(ospp);
 		});
 		
-		console.log(osppArr);
-		
-		$.ajax({
-			type : "POST",
-			url : "OutProcessing",
-			dataType: "text", // 응답 데이터 타입
-			contentType: "application/json", // 요청 시 전송 데이터 타입
-			data: JSON.stringify(osppArr)
-		})
-		.done(function(result) {
-			alert("출고 처리가 완료되었습니다.");
-			location.href = "OutProcessingSeletList";
-		})
-		.fail(function(result) {
-			alert("일시적인 오류로 인해 출고 처리가 완료되지 않았습니다.")
-			location.reload();
-		});
+		if(confirmOut) {
+			$.ajax({
+				type : "POST",
+				url : "OutProcessing",
+				dataType: "text", // 응답 데이터 타입
+				contentType: "application/json", // 요청 시 전송 데이터 타입
+				data: JSON.stringify(osppArr)
+			})
+			.done(function(result) {
+				alert("출고 처리가 완료되었습니다.");
+				location.href = "OutProcessingSeletList";
+			})
+			.fail(function(result) {
+				alert("일시적인 오류로 인해 출고 처리가 완료되지 않았습니다.")
+				location.reload();
+			});
+		}
 		
 	});
 	
@@ -299,7 +309,7 @@ function productInfo(product_cd) {
 	function openOutModal() {
 		
 		$("#out_table > tbody").empty();
-		
+		$("#input_qty_sum").empty();
 		
 		let inputQtySum = 0; // 출고 지시 수량 합계 변수 선언
 		
@@ -328,37 +338,40 @@ function productInfo(product_cd) {
 			let wh_loc_in_area = ''; // 위치명
 			
 // 			alert(input_out_qty);
-			
-			inputQtySum += input_out_qty;
 			result = not_out_qty - input_out_qty;
 			console.log(not_out_qty + " - " + input_out_qty + " = " + result);
 			
 			if(result >= 0 && input_out_qty >= 1) { // 출고 지시 수량이 미출고 수량보다 작거나 같고, 1보다 크거나 같을 때
 // 				console.log('나와랏');
 //		 		alert("모달창 열리네요~ 출고가 들어오죠");
+				
+				// 출고 수량 합계 계산
+				inputQtySum = Number(inputQtySum) + Number(input_out_qty);
+
 				//모달창 열기
 				$('#out_naga_modal').modal('show');
 				$('#out_naga_modal').show();
+				
+				out_list += '<tr id="outList' + index + '">';
+				out_list += '<td>' + out_schedule_cd + '</td>';
+				out_list += '<td>' + product_name + '</td>';
+				out_list += '<td>' + input_out_qty + '</td>';
+				out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
+	// 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
+	// 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
+				out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
+				out_list += '</tr>';
+				
+				$("#out_table").append(out_list);
+				
 			} else {
-				alert("출고 불가능한 수량이 포함되어 있습니다.");
-				return;
+				alert(out_schedule_cd + " 은(는) 출고 불가능한 수량입니다.");
+				return; // 왜 안 빠져나가지..? (함수 두 개 빠져나와야 함.. 어떻게..?)
 			}
-			
-			out_list += '<tr id="outList' + index + '">';
-			out_list += '<td>' + out_schedule_cd + '</td>';
-			out_list += '<td>' + product_name + '</td>';
-			out_list += '<td>' + input_out_qty + '</td>';
-			out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
-// 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
-// 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
-			out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
-			out_list += '</tr>';
-			
-			$("#out_table").append(out_list);
-			$("#input_qty_sum").text(inputQtySum);
 			
 		});
 		
+		$("#input_qty_sum").append("<b>출고 수량 합계 : " + inputQtySum + "</b>");
 	
 	}
 	
@@ -554,11 +567,11 @@ function productInfo(product_cd) {
 						</tbody>
 					</table>		
 				</div>
-<!-- 				<div> -->
-<!-- 					<b>합계 :</b><span id="input_qty_sum"></span> --> <!-- 문자열로 나옴 -->
-<!-- 				</div> -->
-	  		<button type="button" class="btn btn-dark" id="naga" >출고 처리</button>
-		
+			<div class="float-right">
+		  		<button type="button" class="btn btn-dark mx-3" id="naga" >출고 처리</button>
+			</div>
+			<div class="float-right" id="input_qty_sum">
+			</div>
 		</form>
 		
 	</div>

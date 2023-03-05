@@ -83,7 +83,7 @@
 	}
 	
 	#left {
-	 width: 500px;
+	 width: 300px;
 /* 	 background-color: grey; */
 	 height: 1200px;
 	 position: relative;
@@ -503,7 +503,7 @@
 		let wh_area = $.trim($(this).prev().text());
 		let wh_cd = $(this).parent().closest("ul").prop("id");
 		let whCd = "'" + wh_cd + "'";
-		alert(wh_area + " 창고 구역명 수정창, 창고 구역명 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
+// 		alert(wh_area + " 창고 구역명 수정창, 창고 구역명 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
 		
 		let html = '<li class="w1" id=' + wh_area_cd + '>'
 					+ '<form action="ModifyWhArea" method="post">'
@@ -524,13 +524,13 @@
 		let wh_area_cd = $(this).parent().closest("li").prop("id");
 		let wh_cd = $(this).closest("ul").closest("li").closest("ul").prop("id"); // 아 왜 못가지고 오지..? => 가지고 옴!
 		let whCd = "'" + wh_cd + "'";
-		alert(wh_loc_in_area + " 창고 내 위치명 수정창, 창고 내 위치 코드 : " + wh_loc_in_area_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
+// 		alert(wh_loc_in_area + " 창고 내 위치명 수정창, 창고 내 위치 코드 : " + wh_loc_in_area_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 창고 코드 : " + wh_cd);
 		
 		let html = '<li class="w2" id=' + wh_loc_in_area_cd + '>'
 					+ '<form action="ModifyWhLocArea" method="post">'
 					+ '<input type="hidden" value=' + wh_loc_in_area_cd + ' name="wh_loc_in_area_cd">'
 					+ '<input type="text" name="wh_loc_in_area" value="'+ wh_loc_in_area + '" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
-					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whLocArea(' + wh_area_cd + ', ' + whCd + ')">' 
+					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whLocArea(' + wh_area_cd + ', ' + whCd + ')">'
 					+ '</form>'
 					+ '</li>';
 
@@ -603,7 +603,7 @@
 <!-- 						<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" > -->
 <!-- 					</form> -->
 <!-- 				</section> -->
-			    <ul style=" width: 400px;" id="wareHouse">
+			    <ul style="width: 300px;" id="wareHouse">
 			    	<c:forEach var="wh" items="${whList }" varStatus="wh_idx"> <!-- 창고 반복 -->
 			        <li class="menu" style="" >
 			            <a href="javascript:whArea('${wh.wh_cd }')"><img src="./resources/images/right-arrow.png" width="10px" />&nbsp;<i>${wh.wh_name }</i></a>
