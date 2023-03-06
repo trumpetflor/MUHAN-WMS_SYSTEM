@@ -67,6 +67,11 @@ public class WarehouseService {
 		
 		return isChecked;
 	}
+	
+	// 창고 코드 갯수
+	public int getCodeCount(String keyword) {
+		return mapper.selectCodeCount(keyword)+1;
+	}
 
 }
 

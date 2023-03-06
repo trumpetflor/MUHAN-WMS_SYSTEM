@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Warehouse Insert</title>
+    <title>창고 등록 | 창고 관리</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -73,25 +73,25 @@ $(function() {
 	$checkNameResult = false;
 	
 	// 창고코드 중복 확인
-	$("#wh_cd").on("focusout", function(){
-		let wh_cd = $("#wh_cd").val();
-		$.ajax({
-			type: "GET",
-			url: "WarehouseCheckCode",
-			data: { wh_cd: $("#wh_cd").val()},
-			success: function(result) {
-				$("#checkCode").html(result);
+// 	$("#wh_cd").on("focusout", function(){
+// 		let wh_cd = $("#wh_cd").val();
+// 		$.ajax({
+// 			type: "GET",
+// 			url: "WarehouseCheckCode",
+// 			data: { wh_cd: $("#wh_cd").val()},
+// 			success: function(result) {
+// 				$("#checkCode").html(result);
 				
-				if(result == "true"){
-					$("#checkCode").html("코드 중복입니다!!").css("color", "red");
-					checkResult = false;
-				} else {
-					$("#checkCode").html("사용 가능한 코드입니다.").css("color", "green");
-					CheckResult = true;
-				}
-			},
-		});
-	});// 물류팀 확인
+// 				if(result == "true"){
+// 					$("#checkCode").html("코드 중복입니다!!").css("color", "red");
+// 					checkResult = false;
+// 				} else {
+// 					$("#checkCode").html("사용 가능한 코드입니다.").css("color", "green");
+// 					CheckResult = true;
+// 				}
+// 			},
+// 		});
+// 	});// 창고코드 확인
 	
 	// 물류팀 확인
 	$("#wh_man_name").on("focusout", function(){
@@ -148,8 +148,8 @@ $(function() {
                         <div class="page-header float-right">
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
-                                    <li><a href="#">재고 관리</a></li>
-                                    <li><a href="#">창고</a></li>
+                                    <li>재고 관리</li>
+                                    <li>창고 관리</li>
                                     <li class="active">창고 등록</li>
                                 </ol>
                             </div>
@@ -173,8 +173,8 @@ $(function() {
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">창고코드<font style="color: red;">*</font></label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_cd" name="wh_cd" class="form-control" required="required">
-	                        			<small id="checkCode" class="form-text text-muted">창고 코드는 중복 불가합니다</small>
+	                        			<input type="text" id="wh_cd" name="wh_cd" class="form-control" readonly="readonly">
+	                        			<small id="checkCode" class="form-text text-muted">창고 코드는 자동 부여됩니다</small>
                         			</div>
                         		</div>
                         		<div class="row form-group">
@@ -228,7 +228,7 @@ $(function() {
 	                        			<input type="text" id="wh_pcode" name="wh_pcode" style="width:150px;" placeholder="우편번호" readonly="readonly" class="form-control">
 	                        			<input type="button" id="addrSearch" value="주소 검색" onclick="isOut()">
 	                        			<input type="text" id="wh_addr1" name="wh_addr1" placeholder="주소" readonly="readonly" class="form-control">
-	                        			<input type="text" id="text-input" name="wh_addr2" placeholder="상세주소 입력" class="form-control">
+	                        			<input type="text" id="wh_addr2" name="wh_addr2" placeholder="상세주소 입력" class="form-control">
                         			</div>
                         		</div>
                         		<div class="row form-group">

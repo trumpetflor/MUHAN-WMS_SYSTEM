@@ -88,8 +88,8 @@
                         <div class="page-header float-right">
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
-                                    <li><a href="#">재고 관리</a></li>
-                                    <li><a href="#">창고 관리</a></li>
+                                    <li>재고 관리</li>
+                                    <li>창고 관리</li>
                                     <li class="active">창고 조회</li>
                                 </ol>
                             </div>
