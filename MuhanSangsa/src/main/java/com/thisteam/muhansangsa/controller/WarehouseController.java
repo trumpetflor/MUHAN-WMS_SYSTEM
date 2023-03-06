@@ -27,8 +27,8 @@ import com.thisteam.muhansangsa.vo.WarehouseVO;
 @Controller
 public class WarehouseController {
 	
-	  //log4j
-	  private static final Logger logger = LoggerFactory.getLogger(WarehouseController.class);
+	//log4j
+	private static final Logger logger = LoggerFactory.getLogger(WarehouseController.class);
 	
 	@Autowired
 	private WarehouseService service;
@@ -95,13 +95,60 @@ public class WarehouseController {
 	@PostMapping(value = "/WarehouseInsertPro")
 	public String insertPro(@ModelAttribute WarehouseVO warehouse,
 							Model model) {
-		
+		System.out.println("수정 전:"+warehouse);
 		// 창고 내부
 		if(warehouse.getWh_addr1() == null) {
 			warehouse.setWh_addr("");
 		} else {
 			warehouse.setWh_addr(warehouse.getWh_addr1()+", "+warehouse.getWh_addr2());
 		}
+		
+		// 창고 코드 부여
+		// 구분,위치 값 들고와서 searchType에 in,out,pl로 count 검색하고
+		// mapper에서 +1로 들고오기~
+		// (count+1) < 10 => 00 + (count+1), (count+1) < 100 => 0+ (count+1), else => +(count+1)
+		// String wh_cd = in/out/pl + count;
+		// setwh_cd(wh_cd)
+		String keyword = "";
+		String wh_cd = "";
+		String gubun = warehouse.getWh_gubun();
+		if(gubun.equals("2")) { // 공장
+			keyword = "pl";
+			int count = service.getCodeCount(keyword);
+			if(count < 10) {
+				wh_cd = "PL_00"+count;
+			} else if(count<100) {
+				wh_cd = "PL_0"+count;
+			} else {
+				wh_cd = "PL_"+count;
+			}
+			warehouse.setWh_cd(wh_cd);
+		} else if(gubun.equals("1")) { // 창고
+			if(warehouse.getWh_location().equals("1")) { // 내부
+				keyword = "in";
+				int count = service.getCodeCount(keyword);
+				if(count < 10) {
+					wh_cd = "WH_IN_00"+count;
+				} else if(count<100) {
+					wh_cd = "WH_IN_0"+count;
+				} else {
+					wh_cd = "WH_IN_"+count;
+				}
+				warehouse.setWh_cd(wh_cd);
+			} else { // 외부
+				keyword = "out";
+				int count = service.getCodeCount(keyword);
+				if(count < 10) {
+					wh_cd = "WH_OUT_00"+count;
+				} else if(count<100) {
+					wh_cd = "WH_OUT_0"+count;
+				} else {
+					wh_cd = "WH_OUT_"+count;
+				}
+				warehouse.setWh_cd(wh_cd);
+			}
+		}
+		System.out.println("수정 후 : "+warehouse);
 		// 창고 등록
 		int insertCount = service.registerWarehouse(warehouse);
 		
@@ -111,9 +158,7 @@ public class WarehouseController {
 			model.addAttribute("msg", "등록 실패!");
 			return "fail_back";
 		}
-			
-//		}
-		
+
 	}
 	
 	// 창고 조회

@@ -89,4 +89,11 @@
 				wh_cd = '${wh_cd}'
 	</select>
 	
+	<!-- 창고 코드 갯수 확인 -->
+	<select id="selectCodeCount" resultType="int">
+		SELECT count(*)
+			FROM warehouse
+			WHERE wh_cd LIKE '%${keyword}%'
+	</select>
+	
 </mapper>

@@ -26,6 +26,9 @@ public interface WarehouseMapper {
 	
 	// 창고코드 중복 확인
 	String selectWarehouseCode(String wh_cd);
+	
+	// 창고 코드 갯수 확인
+	int selectCodeCount(String keyword);
 
 }
 
