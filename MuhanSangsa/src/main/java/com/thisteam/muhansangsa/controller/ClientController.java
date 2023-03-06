@@ -99,7 +99,7 @@ public class ClientController {
 		// ------------------------- 쌤이랑 한 부분 --------------------------------------------
 
 		// 페이징 처리를 위한 변수 선언
-		int listLimit = 7; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int listLimit = 7; // 한 페이지에서 표시할 게시물 목록을 7개로 제한
 		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
 
 		// 거래처 목록 가져오기
@@ -336,6 +336,7 @@ public class ClientController {
 					System.out.println(client);
 
 					model.addAttribute("client", client); // Model 객체에 ClientVO 객체 저장
+					model.addAttribute("pageNum", pageNum); // Model 객체에 pageNum 저장
 
 					return "client/client_detail_form";
 

@@ -73,14 +73,21 @@
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+
+<!-- pageNum 이 없을 경우 기본값 1, 있을 경우 pageNum 값 저장 -->
+<c:choose>
+	<c:when test="${param.pageNum eq null}">
+		<c:set var="pageNum" value="1"></c:set>
+	</c:when>
+	<c:otherwise>
+		<c:set var="pageNum" value="${param.pageNum }"></c:set>
+	</c:otherwise>
+</c:choose>
+
 <script type="text/javascript">
 
-	//AJAX 를 활용한 게시물 목록 표시에 사용될 페이지 번호값 미리 저장
-	if(${param.pageNum eq null}) {
-		let pageNum = 1;
-	} else {
-		let pageNum = ${param.pageNum};
-	}
+	// 페이지번호 저장
+	let pageNum = ${pageNum};
 // 	let pageList = '';
 	
 	$(function() {
