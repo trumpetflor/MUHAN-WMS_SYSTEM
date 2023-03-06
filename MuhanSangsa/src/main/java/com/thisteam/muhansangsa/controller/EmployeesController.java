@@ -247,11 +247,18 @@ public class EmployeesController {
 //		System.out.println("1==="+employeeDetail.getEmp_passwd());
 		
 		//암호화 비밀번호 비교
-		if(employeeDetail.getEmp_passwd() == null || !passwdEncoder.matches(employees.getEmp_passwd(), employeeDetail.getEmp_passwd())) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
+		if(employeeDetail == null) {
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
 			return "fail_back";
-	
-		} else { // 성공 시
+		}else if(employeeDetail.getEmp_passwd() == null) { // 실패(id 에 해당하는 pass 없거나 pass 맞지 X)			
+			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
+			return "fail_back";
+		}else if(!passwdEncoder.matches(employees.getEmp_passwd(), employeeDetail.getEmp_passwd())) {
+			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다");
+			return "fail_back";
+		}
+		
+		else { // 성공 시
 			session.setAttribute("sId", employees.getEmp_email());        //세션 아이디 저장
 			session.setAttribute("sName", employeeDetail.getEmp_name());    //세션 emp_name같이 저장 (로그인 시 상단에 이름을 띄우기 위한 작업)
 			session.setAttribute("sPhoto", employeeDetail.getPhoto());     //세션 photo (로그인 시 상단에 사진을 띄우기 위한 작업)
