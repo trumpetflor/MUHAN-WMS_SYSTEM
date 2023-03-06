@@ -19,14 +19,14 @@
 	
 		<!-- SQL 로그를 위한 log4jdbc 라이브러리 관련 DBCP 정보 변경(driverClassName, jdbcUrl) -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
-		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://db.itwillbs.dev:3306/class5_220823_team2_c"></property>
-		<property name="username" value="class5_220823_team2"></property>
-		<property name="password" value="1234"></property>
+<!-- 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property> -->
+<!-- 		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://db.itwillbs.dev:3306/class5_220823_team2_c"></property> -->
+<!-- 		<property name="username" value="class5_220823_team2"></property> -->
+<!-- 		<property name="password" value="1234"></property> -->
 		<!-- 발표 시 해제해야 할 주석 -->
-<!-- 		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://itwillbs-rds-class5-team2.cwyqfeylunq5.ap-northeast-2.rds.amazonaws.com/class5_220823_team2_c"></property> -->
-<!-- 		<property name="username" value="root"></property> -->
-<!-- 		<property name="password" value="class50823"></property> -->
+		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://itwillbs4.cafe24.com/itwillbs4"></property>
+		<property name="username" value="itwillbs4"></property>
+		<property name="password" value="itwillbs8030909"></property>
 		<!-- 발표 시 해제해야 할 주석 -->
 	</bean>	
 	

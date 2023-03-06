@@ -63,7 +63,15 @@
  text-decoration: none;
  color: 	#000080;
 }
-
+#product_search_modalDiv{
+	width: 500px;
+	height: 600px;
+	position: fixed;
+	top: 20%;
+	left: 40%;
+	overflow-y: scroll;
+	
+}
 
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
@@ -90,28 +98,31 @@ function fn_change(in_schedule_cd,in_complete,status) {
 	}
 	
 }
-function fn_modal(in_schedule_cd) {
-// 	alert(in_schedule_cd);
-	$.ajax({
-        type: "get",
-        url: "inProQtyAjax?in_schedule_cd=" + in_schedule_cd,
-        contentType: 'html',
-        success: function(data,status,xhr) {
-        	$('#product_search_modalDiv').html(data);
+// function fn_modal(in_schedule_cd) {
+// // 	alert(in_schedule_cd);
+// 	$.ajax({
+//         type: "get",
+//         url: "inProQtyAjax?in_schedule_cd=" + in_schedule_cd,
+//         contentType: 'html',
+//         success: function(data,status,xhr) {
+//         	$('#product_search_modalDiv').html(data);
     
         	
-        },
-        error: function(xhr,status,error) {
-            console.log(error);
-        }
+//         },
+//         error: function(xhr,status,error) {
+//             console.log(error);
+//         }
         
-	});
+// 	});
 	
 
-//모달창 열기
- $('#product_search_modalDiv').modal('show'); 
+// //모달창 열기
+//  $('#product_search_modalDiv').modal('show'); 
+// }
+function openPop(in_schedule_cd) {
+	var url = "inProQtyAjax2?in_schedule_cd="+in_schedule_cd;
+	var popup = window.open(url ,'조회','width=500px, height=500px,scrollbars=yes');
 }
-
 
 
 
@@ -142,7 +153,8 @@ function load_list(status) {
 						+ "<td>"+ row.product_name + "</td>" //품목명
 						+ "<td>"+ row.in_date + "</td>" //납기일자
 						+ "<td>"+ row.in_schedule_qty + "</td>" //입고예정수량합계
-						+ "<td><a href='javascript:fn_modal(\""+row.in_schedule_cd+"\")'>조회</a></td>" // 조회
+// 						+ "<td><a href='javascript:fn_modal(\""+row.in_schedule_cd+"\")'>조회</a></td>" // 조회
+						+ "<td><a href='#none' target='_blank' onclick='openPop(\""+row.in_schedule_cd+"\")'>조회</a></td>"
 
 					/* 230209 tab(전체:-1/진행중:0/완료:1)이동을 위한 작업 => "종결=진행중, 취소=완료"로 정리함! */
 					if(row.in_complete == 0){

@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <html >
 <head>
-	<title>품목 조회</title>
+	<title>출고처리 진행상태</title>
 
     <meta charset="utf-8">
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
@@ -33,12 +33,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 </head>
 <style type="text/css">
+
 	@font-face {
 	    font-family: 'Pretendard-Regular';
 	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
 	    font-weight: 400;
 	    font-style: normal;
 	}
+
 	
 	@font-face {
 	    font-family: 'NEXON Lv1 Gothic OTF';
@@ -69,6 +71,11 @@
 	 transition: 0.5s;
 	}
 	
+
+
+
+
+
 /* 모달 */
 #modal_container{
   position: absolute;
@@ -113,70 +120,53 @@
  text-decoration: none;
  color: 	#000080;
 }
+
+
 </style>
 <script type="text/javascript">
-	$(function() {
-		var business_no = ${business_no};
-		load_list(); // 게시물 목록 조회 함수 호출
-		console.log("in_productAjax에서 찍어보는중 : " + ${num});
-	});
-	// 거래처 목록 조회 함수
-	function load_list() {
-		$.ajax({
-			type: "GET",
-			url:"inProductSearch?business_no=" + ${business_no} + "&num=" + ${num}, 
-			dataType: "json"
-		})
-		.done(function(proList) { // 요청 성공 시
-			let result ="";
-			var indexNum = ${num};
-			console.log("리스트 요청 성공 시 : " + indexNum);
-			for(let pro of proList) {
-				result += "<tr>"
-							+ "<td id="+pro.product_cd +">" + pro.product_cd + "</td>"
-							+ "<td id="+pro.product_name +">" + pro.product_name + "</td>"
-// 							+ "<td id="+emp.dept_cd+">" + emp.dept_cd + "</td>"
-// 							+ "<td id="+emp.dept_name+">" + emp.dept_name + "</td>"
-							+ "</tr>"
-							+ "<input type='hidden' name='indexNum' id='"+indexNum+"'>";
-					$("#idnname").val(pro.prodcut_cd);		
-				
-			}
-			$("#pro_table > tbody").html(result);
-		})
-		.fail(function() {
-			$("#pro_table").append("요청 실패!!");
-		});
-	}
+
+
 </script>
 <body>
 
 <div class="content">
    <div class="animated fadeIn">
-	<section id="searchSection" class="m-0 d-flex justify-content-end">
+<!-- 	<section id="searchSection" class="m-0 d-flex justify-content-end"> -->
 
- 					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
-						<option value="product_cd">품목 코드</option>
-						<option value="product_name">품목명</option>
-					</select>
+<!--  					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1"> -->
+<!-- 						<option value="business_no">품목코드</option> -->
+<!-- 						<option value="cust_name">품목명</option> -->
+<!-- 						<option value="boss_name">대표자명</option> -->
+<!-- 					</select>	 -->
 <!-- 			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" >  -->
 <!-- 			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();"> -->
 
-	   </section>
-
-	<table class="table table-hover"  id="pro_table">
+<!-- 	   </section> -->
+	
+	<div>출고예정번호 : ${out_schedule_cd}</div>
+	<table class="table"  id="out_waiting_chceking_table">
 		<thead>
 			<tr>
-			<input type='hidden' id='tr_index'>
 				<th>품목 코드</th>
 				<th>품목명</th>
+				<th>출고예정수량</th>
+				<th>미출고수량</th>
 			</tr>
 		</thead>
 		<tbody>
-            <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
+         	<c:forEach var="outList" items="${outList }">
+			<tr>
+				<td class="align-middle">${outList.product_cd }</td>
+				<td class="align-middle">${outList.product_name }</td>
+				<td class="align-middle">${outList.out_schedule_qty }</td>
+				<td class="align-middle">${outList.not_out_qty }</td>
+			</tr>
+         	</c:forEach>
         </tbody>
 	</table>
-
+	<div style="text-align: center">
+		<input type="button" value="닫기" class = "btn btn-primary mx-2"  onclick="top.window.close()">
+	</div>
 
 </div>
 </div>

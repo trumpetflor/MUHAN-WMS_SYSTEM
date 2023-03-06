@@ -89,8 +89,7 @@
 			, e.emp_post_No
 			, e.emp_addr
 			, e.hire_date
-			, e.work_cd
-			, e.priv_cd 
+			, e.work_cd 
 			, e.photo
 		FROM  employees e, department d, grade g
 		WHERE 
@@ -99,49 +98,48 @@
 			AND e.emp_email = #{id}
 	</select>
 
-	<!-- 마이페이지 수정 (업데이트 작업) -->
-	<!--
-	1) 패스워드가 null 또는 공백이 아닌경우를 위해 if조건문 사용
-	2) 주의! 사진은 수정을 하지않은 경우가 있다!
-	사진은 수정을 하지않은 경우가 있다! 다만 조건문이 없을 경우 기존 등록된 사진이 삭제되므로,
-	if 조건문 사용(photo가 null 또는 공백이 아닌경우)
-	-->
-	<update id="updateMypageMember">
-		UPDATE	employees 
-			SET EMP_TEL = #{emp_tel}
-				,EMP_DTEL = #{emp_dtel}
-				<if test='emp_passwd != null and emp_passwd != ""'>
-					,EMP_PASSWD = #{emp_passwd}
-				</if>
-				<if test='photo != null and photo !="" '>
-					,PHOTO = #{photo}
-				</if>
-			WHERE 
-				EMP_EMAIL = #{emp_email}
-	</update>
+	 <!-- 마이페이지 수정 (업데이트 작업) -->
+   <!--
+   1) 패스워드가 null 또는 공백이 아닌경우를 위해 if조건문 사용
+   2) 주의! 사진은 수정을 하지않은 경우가 있다!
+   사진은 수정을 하지않은 경우가 있다! 다만 조건문이 없을 경우 기존 등록된 사진이 삭제되므로,
+   if 조건문 사용(photo가 null 또는 공백이 아닌경우)
+   -->
+   <update id="updateMypageMember">
+      UPDATE   employees 
+         SET EMP_TEL = #{emp_tel}
+            ,EMP_DTEL = #{emp_dtel}
+            <if test='emp_passwd != null and emp_passwd != ""'>
+               ,EMP_PASSWD = #{emp_passwd}
+            </if>
+            <if test='photo != null and photo !="" '>
+               ,PHOTO = #{photo}
+            </if>
+         WHERE 
+            EMP_EMAIL = #{emp_email}
+   </update>
 
-	<!-- 상세페이지 수정(업데이트 작업) -->
-	<!-- 사진 수정을 하지 않을 경우 기존 등록된 사진이 삭제되므로, if 조건문을 사용하여 이를 방지  -->
-	<update id="updateDetail">
-		UPDATE	employees 
-			SET EMP_NUM = #{emp_num}
-				,EMP_NAME = #{emp_name}
-				,DEPT_CD = #{dept_cd}
-				,GRADE_CD = #{grade_cd}
-				,EMP_TEL = #{emp_tel}
-				,EMP_DTEL = #{emp_dtel}
-				,EMP_EMAIL = #{emp_email}
-				,EMP_ADDR = #{emp_addr}
-				,HIRE_DATE = #{hire_date}
-				,WORK_CD = #{work_cd}
-				,PRIV_CD = #{priv_cd}
-				<if test='photo != null and photo !="" '>
-					,PHOTO = #{photo}
-				</if>
-			WHERE 
-				EMP_EMAIL = #{emp_email}
-	</update>
-
+   <!-- 상세페이지 수정(업데이트 작업) -->
+   <!-- 사진 수정을 하지 않을 경우 기존 등록된 사진이 삭제되므로, if 조건문을 사용하여 이를 방지  -->
+   <update id="updateDetail">
+      UPDATE   employees 
+         SET EMP_NUM = #{emp_num}
+            ,EMP_NAME = #{emp_name}
+            ,DEPT_CD = #{dept_cd}
+            ,GRADE_CD = #{grade_cd}
+            ,EMP_TEL = #{emp_tel}
+            ,EMP_DTEL = #{emp_dtel}
+            ,EMP_EMAIL = #{emp_email}
+            ,EMP_ADDR = #{emp_addr}
+            ,HIRE_DATE = #{hire_date}
+            ,WORK_CD = #{work_cd}
+            ,PRIV_CD = #{priv_cd}
+            <if test='photo != null and photo !="" '>
+               ,PHOTO = #{photo}
+            </if>
+         WHERE 
+            EMP_EMAIL = #{emp_email}
+   </update>
 
 
 
@@ -166,7 +164,7 @@
             <when test="searchType.equals('emp_email')">
                WHERE EMP_EMAIL LIKE '%${keyword}%'
             </when>
-            <when test="searchType.equals('dept_name')">
+            <when test="searchType.equals('dep_name')">
                WHERE DEPT_NAME LIKE '%${keyword}%'
             </when>
             <otherwise>
@@ -254,7 +252,7 @@
          	#{emp.emp_num}
          </foreach>
    </update>
-   <!-- 페이징처리를 위한 작업 -->
+   
    <select id="selectEmpListCount" resultType="int">
    		SELECT COUNT(*)
 			FROM  emp_view -- 이후 작업 분기 일어남
@@ -281,7 +279,7 @@
    
    <!--  ==================== 23/02/11 추가 (미주) ==============================  -->
    <!-- 사원 등록 폼 이메일 중복확인 --> 
-   <select id="selectDuplicateId" resultType="int">
+   <select id="selectDuplicateId" resultType="String">
    	SELECT emp_email 
    		FROM EMPLOYEES
    		WHERE emp_email = #{id}

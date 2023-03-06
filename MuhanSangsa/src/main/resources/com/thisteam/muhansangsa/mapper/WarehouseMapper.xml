@@ -12,8 +12,8 @@
 				#{wh_gubun},
 				#{wh_location},
 				<choose>
-				<when test="#{wh_addr}.equals(', ')">
-				'',
+				<when test="wh_addr.equals('')">
+				' ',
 				</when>
 				<otherwise>
 				CONCAT(#{wh_addr1}, ', ', #{wh_addr2}),
@@ -55,8 +55,8 @@
 				wh_gubun = #{wh_gubun},
 				wh_location = #{wh_location},
 				<choose>
-				<when test="#{wh_addr}.equals(', ')">
-				'',
+				<when test="wh_addr.equals('')">
+				wh_addr = ' ',
 				</when>
 				<otherwise>
 				wh_addr = CONCAT(#{wh_addr1}, ', ', #{wh_addr2}),

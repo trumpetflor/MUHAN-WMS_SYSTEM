@@ -84,7 +84,14 @@
 			a.out_date,
 			a.remarks,
 			(
-				SELECT concat(MAX(C.PRODUCT_NAME),' 외 ',count(*),'건')  FROM out_schedule_per_product b ,	product c
+			SELECT
+				CASE 
+					WHEN  <![CDATA[ count(*) > 1 ]]>
+					THEN  concat(MAX(C.PRODUCT_NAME), ' 외 ', count(*)-1, '건')
+					ELSE
+						C.PRODUCT_NAME
+				END
+		  FROM out_schedule_per_product b ,	product c
 				WHERE b.product_cd = c.product_cd
 				AND b.out_schedule_cd = a.out_schedule_cd
 			) product_name,
@@ -136,9 +143,25 @@
 		  		out_schedule_cd = #{out_schedule_cd};
   	</update>
   
-	<!-- ========================================================================= -->
   
-   <!-- ==========================================================================23/02/09 미주-->
+  	<!-- 출고 예정 목록 중 '조회' 버튼 클릭 시 출고처리상태 리스트 시작 getOutListDetail  -->
+  	<select id="getOutListDetail" resultType="com.thisteam.muhansangsa.vo.Out_scheduleListVO">
+		select 
+				c.PRODUCT_NAME
+				,p.PRODUCT_CD 
+				,p.OUT_SCHEDULE_QTY
+				,p.OUT_QTY
+				,p.OUT_SCHEDULE_QTY - p.OUT_QTY not_out_qty
+			from out_schedule_per_product p, product c
+			WHERE p.product_cd = c.product_cd
+			and p.OUT_SCHEDULE_CD = #{out_schedule_cd}
+		ORDER BY 
+			p.out_schedule_cd DESC
+	</select>
+  
+  
+  
+   <!-- ==========================================================================23/02/09 미주 -->
 	
    <!--  
    		출고 관리 목록 조회 (출고번호에 해당하는 세부 항목 조회)

@@ -164,8 +164,14 @@ public class EmployeesService {
 
 		// ==================== 23/02/11 추가 (미주) ==============================
 		// 사원 등록 폼 이메일 중복확인
-		public int checkDuplicateId(String id) {
-			return mapper.selectDuplicateId(id);
+		public String checkDuplicateId(String id) {
+			
+			String checkId = mapper.selectDuplicateId(id);
+			if( checkId != null) { // 이메일 중복
+				return "false";
+			} else {
+				return "true";
+			}
 		}
 		   
 		// ==================== 23/02/11 추가 (미주) ==============================

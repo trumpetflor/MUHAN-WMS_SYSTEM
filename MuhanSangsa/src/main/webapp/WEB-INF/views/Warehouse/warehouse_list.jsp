@@ -55,14 +55,25 @@
 	
 	body {
 	 font-family: 'NEXON Lv1 Gothic OTF';
-	 width: 100%;
-	 height: 100%;
+/* 	 width: 100%; */
+/* 	 height: 100%; */
+	}
+	
+	#warehouse_table{
+		 vertical-align: middle;
+	}
+	table{
+	 text-align: center;
+	}
+	
+	td {
+	height: 40px;
 	}
 </style>
 <body>
 
 <jsp:include page="../inc/left.jsp"></jsp:include>
-
+ <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
         <div class="breadcrumbs">
             <div class="breadcrumbs-inner">
                 <div class="row m-0">
@@ -90,28 +101,25 @@
 
         <div class="content">
             <div class="animated fadeIn">
-                <div class="row">
+<!--                 <div class="row"> -->
 
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <strong class="card-title">창고 목록</strong>
-                            </div>
-                            <div class="card-body">
-                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
+<!--                     <div class="col-md-12"> -->
+<!--                         <div class="card"> -->
+<!--                             <div class="card-header"> -->
+<!--                                 <strong class="card-title">창고 목록</strong> -->
+<!--                             </div> -->
+<!--                             <div class="card-body"> -->
+                                <table id="warehouse_table" class="table">
                                     <thead>
                                         <tr>
                                             <th>창고코드</th>
                                             <th>창고명</th>
                                             <th>구분</th>
-                                            <th>위치</th>
-                                            <th>우편번호</th>
+<!--                                             <th>위치</th> -->
                                             <th>주소</th>
-                                            <th>전화번호</th>
+<!--                                             <th>전화번호</th> -->
                                             <th>관리자명</th>
                                             <th>사용여부</th>
-                                            <th>적요</th>
-<!--                                             <th>버튼</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -135,19 +143,18 @@
 		                                    				</c:otherwise>
 		                                    			</c:choose>
 		                                    		</td>
-		                                    		<td>
-		                                    			<c:choose>
-		                                    				<c:when test="${warehouse.wh_location eq '1'}">
-		                                    				내부
-		                                    				</c:when>
-		                                    				<c:otherwise>
-		                                    				외부
-		                                    				</c:otherwise>
-		                                    			</c:choose>
-		                                    		</td>
-		                                    		<td>${warehouse.wh_pcode}</td>
+<!-- 		                                    		<td> -->
+<%-- 		                                    			<c:choose> --%>
+<%-- 		                                    				<c:when test="${warehouse.wh_location eq '1'}"> --%>
+<!-- 		                                    				내부 -->
+<%-- 		                                    				</c:when> --%>
+<%-- 		                                    				<c:otherwise> --%>
+<!-- 		                                    				외부 -->
+<%-- 		                                    				</c:otherwise> --%>
+<%-- 		                                    			</c:choose> --%>
+<!-- 		                                    		</td> -->
 		                                    		<td>${warehouse.wh_addr }</td>
-		                                    		<td>${warehouse.wh_tel }</td>
+<%-- 		                                    		<td>${warehouse.wh_tel }</td> --%>
 		                                    		<td>${warehouse.wh_man_name }</td>
 		                                    		<td>
 		                                    			<c:choose>
@@ -159,12 +166,6 @@
 		                                    				</c:otherwise>
 		                                    			</c:choose>
 		                                    		</td>
-		                                    		<td>${warehouse.remarks }</td>
-<!-- 		                                    		<td> -->
-<!-- 		                                    			<input type="button" value="수정" -->
-<!-- 													class="btn btn-outline-dark" -->
-<%-- 													onclick="window.open('WarehouseModifyForm?wh_cd=${warehouse.wh_cd}','WarehouseModifyForm','width=1000, height=920,location=no,status=no,scrollbars=yes');"> --%>
-<!-- 		                                    		</td> -->
 		                                    	</tr>
 	                                    	</c:forEach>
                                     	</c:otherwise>
@@ -174,12 +175,12 @@
 									<div>
 										<input type="button" value="신규입력" class="btn btn-outline-dark" onclick="location.href='WarehouseInsertForm'">
 									</div>
-                            </div>
-                        </div>
-                    </div>
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
 
 
-                </div>
+<!--                 </div> -->
             </div><!-- .animated -->
         </div><!-- .content -->
 
@@ -197,16 +198,16 @@
 <!--     <script src="assets/js/main.js"></script> -->
 
 
-    <script src="assets/js/lib/data-table/datatables.min.js"></script>
-    <script src="assets/js/lib/data-table/dataTables.bootstrap.min.js"></script>
-    <script src="assets/js/lib/data-table/dataTables.buttons.min.js"></script>
-    <script src="assets/js/lib/data-table/buttons.bootstrap.min.js"></script>
-    <script src="assets/js/lib/data-table/jszip.min.js"></script>
-    <script src="assets/js/lib/data-table/vfs_fonts.js"></script>
-    <script src="assets/js/lib/data-table/buttons.html5.min.js"></script>
-    <script src="assets/js/lib/data-table/buttons.print.min.js"></script>
-    <script src="assets/js/lib/data-table/buttons.colVis.min.js"></script>
-    <script src="assets/js/init/datatables-init.js"></script>
+<!--     <script src="assets/js/lib/data-table/datatables.min.js"></script> -->
+<!--     <script src="assets/js/lib/data-table/dataTables.bootstrap.min.js"></script> -->
+<!--     <script src="assets/js/lib/data-table/dataTables.buttons.min.js"></script> -->
+<!--     <script src="assets/js/lib/data-table/buttons.bootstrap.min.js"></script> -->
+<!--     <script src="assets/js/lib/data-table/jszip.min.js"></script> -->
+<!--     <script src="assets/js/lib/data-table/vfs_fonts.js"></script> -->
+<!--     <script src="assets/js/lib/data-table/buttons.html5.min.js"></script> -->
+<!--     <script src="assets/js/lib/data-table/buttons.print.min.js"></script> -->
+<!--     <script src="assets/js/lib/data-table/buttons.colVis.min.js"></script> -->
+<!--     <script src="assets/js/init/datatables-init.js"></script> -->
 
 
     <script type="text/javascript">

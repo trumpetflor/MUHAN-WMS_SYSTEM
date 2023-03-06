@@ -1,6 +1,5 @@
 package com.thisteam.muhansangsa.mapper;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
 import com.thisteam.muhansangsa.vo.InRegisterTotalVO;
 import com.thisteam.muhansangsa.vo.InVO;
-
 import com.thisteam.muhansangsa.vo.InWatingRegister_nomalVO;
 import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
@@ -37,7 +35,7 @@ public interface InMapper {
 	public List<InVO> selectSelectedInList(String in_schedule_cd);
 
 	// 재고번호 max 검색
-//	public int selectMaxStockCd();
+	public int selectMaxStockCd();
 
 	// 재고 목록
 	public List<StockWhVO> selectStockList(
@@ -50,9 +48,9 @@ public interface InMapper {
 	// 창고선반 목록
 	public List<StockWhVO> selectWhLocList(
 			@Param("searchType") String searchType, 
-			@Param("keyword") String keyword, 
-			@Param("startRow") int startRow, 
-			@Param("listLimit") int listLimit
+			@Param("keyword") String keyword
+//			@Param("startRow") int startRow
+//			@Param("listLimit") int listLimit
 			);
 	
 	// 입고 등록 - 수량, 재고코드
@@ -68,10 +66,12 @@ public interface InMapper {
 	public void updateInComplete();
 	
 	// 선반 코드 조회
-	public int selectWhLocCd(String wh_loc_in_area);
+	public int selectWhLocCd(@Param("wh_loc") String wh_loc);
 	
 	// 재고번호 신규 생성
-	public int insertStockCd(int product_cd, int wh_loc_in_area_cd, int stock_qty);
+	public int insertStockCd(@Param("product_cd") int product_cd,
+			@Param("wh_loc_in_area_cd") int wh_loc_in_area_cd,
+			@Param("stock_qty") int stock_qty);
 	
 	// 입고 예정 수정 작업
 	public int updateInSchedule(@Param("inList") InVO inList);	

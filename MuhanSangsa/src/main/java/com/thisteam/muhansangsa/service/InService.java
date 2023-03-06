@@ -52,10 +52,10 @@ public class InService {
 		return mapper.selectSelectedInList(in_schedule_cd);
 	}
 	
-//	// 재고번호 max 검색
-//	public int getMaxStockCd() {
-//		return mapper.selectMaxStockCd();
-//	}
+	// 재고번호 max 검색
+	public int getMaxStockCd() {
+		return mapper.selectMaxStockCd();
+	}
 	
 	// 재고 목록
 	public List<StockWhVO> getStockList(String searchType, String keyword, int startRow, int listLimit) {
@@ -63,8 +63,8 @@ public class InService {
 	}
 	
 	// 창고선반 목록
-	public List<StockWhVO> getWhLocList(String searchType, String keyword, int startRow, int listLimit) {
-		return mapper.selectWhLocList(searchType, keyword, startRow, listLimit);
+	public List<StockWhVO> getWhLocList(String searchType, String keyword) {
+		return mapper.selectWhLocList(searchType, keyword);
 	}
 
 	// 입고 등록
@@ -85,8 +85,8 @@ public class InService {
 	}
 	
 	// 선반코드 조회
-	public int getWhLocCd(String wh_loc_in_area) {
-		return mapper.selectWhLocCd(wh_loc_in_area);
+	public int getWhLocCd(String wh_loc) {
+		return mapper.selectWhLocCd(wh_loc);
 	}
 	
 	// 재고코드 신규 생성

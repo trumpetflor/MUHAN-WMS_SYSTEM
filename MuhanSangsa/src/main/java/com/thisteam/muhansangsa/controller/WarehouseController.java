@@ -2,11 +2,15 @@ package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,60 +19,98 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.WarehouseService;
+import com.thisteam.muhansangsa.vo.Privilege;
 import com.thisteam.muhansangsa.vo.WarehouseVO;
 
 @Controller
 public class WarehouseController {
 	
+	  //log4j
+	  private static final Logger logger = LoggerFactory.getLogger(WarehouseController.class);
+	
 	@Autowired
 	private WarehouseService service;
+	@Autowired
+	private EmployeesService empService; // 사원 서비스
 	
 	// 창고 등록 폼
 	@GetMapping(value = "/WarehouseInsertForm")
 	public String insert(HttpSession session, Model model) {
-//		System.out.println("/////////////////insertForm/////////////////");
 		
-		// 권한 = 물류팀
-//		String sId = (String)session.getAttribute("sId");
-//		System.out.println(sId);
-//		String privilege = service.getWhPrivilege(sId);
-//		
-//		if(privilege != "03") { // 권한 없음
-//			model.addAttribute("msg", "물류팀만 가능합니다!");
-//			return "fail_back";
-//		} else { // 물류팀
+		// 세션 아이디
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+		}
+
+		// 아이피 주소
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		// 로그인 여부
+		if(sId != null && !sId.equals("")) {  // 세션 아이디 있을 경우
+			System.out.println("sId : " + sId);
+		} else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
+		
+		// 권한 조회 메서드
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.창고등록);
+		System.out.println("거래처등록 권한: " + isRightUser);
+		//		    isRightUser = true; // 임시
+
+		if(isRightUser) { // 권한 존재할 경우
+			model.addAttribute("priv", "1"); 
+			// 조회
+			List<WarehouseVO> whList = service.getWarehouseList();
+			
+			model.addAttribute("whList", whList);
+			
 			return "Warehouse/warehouse_insert_form";
-//		}
+		} else {
+			model.addAttribute("msg", "창고 등록 권한이 없습니다.");
+			
+			return "fail_back";
+		}
+		
 		
 	}
 	
 	// 창고 등록 작업
 	@PostMapping(value = "/WarehouseInsertPro")
 	public String insertPro(@ModelAttribute WarehouseVO warehouse,
-							Model model,
-							HttpSession session) {
-//		System.out.println("/////////////////insertPro/////////////////");
-//		System.out.println(warehouse);
+							Model model) {
 		
-		// 권한 = 물류팀
-//		String sId = (String)session.getAttribute("sId");
-//		String privilege = service.getWhPrivilege(sId);
+		// 창고 내부
+		if(warehouse.getWh_addr1() == null) {
+			warehouse.setWh_addr("");
+		} else {
+			warehouse.setWh_addr(warehouse.getWh_addr1()+", "+warehouse.getWh_addr2());
+		}
+		// 창고 등록
+		int insertCount = service.registerWarehouse(warehouse);
 		
-//		if(privilege != "03") { // 권한 없음
-//			model.addAttribute("msg", "물류팀만 가능합니다!");
-//			return "fail_back";
-//		} else { // 물류팀
-			
-			// 창고 등록
-			int insertCount = service.registerWarehouse(warehouse);
-			
-			if(insertCount > 0) { // 성공
-				return "redirect:/WarehouseList";
-			} else { // 실패
-				model.addAttribute("msg", "등록 실패!");
-				return "fail_back";
-			}
+		if(insertCount > 0) { // 성공
+			return "redirect:/WarehouseList";
+		} else { // 실패
+			model.addAttribute("msg", "등록 실패!");
+			return "fail_back";
+		}
 			
 //		}
 		
@@ -77,24 +119,56 @@ public class WarehouseController {
 	// 창고 조회
 	@GetMapping(value = "/WarehouseList")
 	public String list(Model model, HttpSession session) {
-//		System.out.println("/////////////////List/////////////////");
 		
-		// 권한 = 물류팀
-//		String sId = (String)session.getAttribute("sId");
-//		String privilege = service.getWhPrivilege(sId);
+		// 세션 아이디
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+		}
+
+		// 아이피 주소
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		
-//		if(privilege != "03") { // 권한 없음
-//			model.addAttribute("msg", "물류팀만 가능합니다!");
-//			return "fail_back";
-//		} else { // 물류팀
-			
+		// 로그인 여부
+		if(sId != null && !sId.equals("")) {  // 세션 아이디 있을 경우
+			System.out.println("sId : " + sId);
+		} else {
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
+		}
+		
+		// 권한 조회 메서드
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.창고등록);
+		System.out.println("거래처등록 권한: " + isRightUser);
+		//		    isRightUser = true; // 임시
+
+		if(isRightUser) { // 권한 존재할 경우
+			model.addAttribute("priv", "1"); 
 			// 조회
 			List<WarehouseVO> whList = service.getWarehouseList();
-	//		System.out.println(whList);
+			
 			model.addAttribute("whList", whList);
 			
 			return "Warehouse/warehouse_list";
-//		}
+		} else {
+			model.addAttribute("msg", "창고 조회 권한이 없습니다.");
+			
+			return "fail_back";
+		}
+		
 		
 	}
 	
@@ -102,7 +176,30 @@ public class WarehouseController {
 	@GetMapping(value = "/WarehouseModifyForm")
 	public String modify(@ModelAttribute WarehouseVO warehouse,
 						@RequestParam String wh_cd,
-						Model model) {
+						Model model,
+						HttpSession session) {
+		
+		// 세션 아이디
+		String sId = "";
+		if(session.getAttribute("sId") != null) {
+			sId = (String)session.getAttribute("sId");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/Login");
+			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+		}
+
+		// 아이피 주소
+		InetAddress local;
+		String ip;
+		try {
+			local = InetAddress.getLocalHost();
+			ip = local.getHostAddress();
+			model.addAttribute("ip", ip);
+
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		
 		// 조회
 		List<WarehouseVO> whList = service.getWarehouseDetail(wh_cd);
@@ -118,7 +215,12 @@ public class WarehouseController {
 							Model model,
 							HttpServletResponse response) {
 		System.out.println(warehouse);
-		
+		if(warehouse.getWh_addr1() == null) {
+			warehouse.setWh_addr("");
+		} else {
+			warehouse.setWh_addr(warehouse.getWh_addr1()+", "+warehouse.getWh_addr2());
+		}
+		System.out.println(warehouse);
 		int modifyCount = service.modifyWarehouse(warehouse);
 		try {
 			

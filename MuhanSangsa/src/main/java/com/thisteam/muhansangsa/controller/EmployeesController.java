@@ -800,14 +800,14 @@ public class EmployeesController {
 			System.out.println("ajax 로 넘어온 아이디 : " + id);
 			
 			// 이메일 중복 확인
-			int duplicateCount = service.checkDuplicateId(id);
+			String isduplicateIdExist = service.checkDuplicateId(id);
 			try { // 중복되는 이메일 존재
-				if(duplicateCount > 0) {
-					response.setCharacterEncoding("UTF-8");
-				    response.getWriter().print("true"); 
-				} else { // 입력 이메일 사용 가능
+				if(isduplicateIdExist.equals("false"))  {
 					response.setCharacterEncoding("UTF-8");
 				    response.getWriter().print("false"); 
+				} else { // 입력 이메일 사용 가능
+					response.setCharacterEncoding("UTF-8");
+				    response.getWriter().print("true"); 
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

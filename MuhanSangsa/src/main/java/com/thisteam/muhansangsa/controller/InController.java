@@ -2,7 +2,8 @@ package com.thisteam.muhansangsa.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,19 +15,18 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
-import org.springframework.validation.Errors;
-import org.springframework.validation.BindingResult;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.InService;
 import com.thisteam.muhansangsa.vo.ClientVO;
 import com.thisteam.muhansangsa.vo.EmployeesVO;
@@ -34,7 +34,7 @@ import com.thisteam.muhansangsa.vo.InRegisterTotalVO;
 import com.thisteam.muhansangsa.vo.InVO;
 import com.thisteam.muhansangsa.vo.InWatingRegisterVO;
 import com.thisteam.muhansangsa.vo.InWatingRegister_nomalVO;
-import com.thisteam.muhansangsa.vo.Out_scheduleVO;
+import com.thisteam.muhansangsa.vo.Privilege;
 import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockWhVO;
@@ -46,28 +46,96 @@ import com.thisteam.muhansangsa.vo.inRegisterVO;
 
 @Controller
 public class InController {
-	
+	//log4j
+	private static final Logger logger = LoggerFactory.getLogger(InController.class);
 	
 	@Autowired
 	private InService service;
-	
+	@Autowired
+	private EmployeesService empService; // 사원 서비스
 	
 	// ======================== yeram ==============================
 	// 입고예정목록
 	@GetMapping(value = "/InProcessing")
-	public String processing(Model model) {
+	public String processing(Model model, HttpSession session) {
 		
-		List<inProcessingVO> inProList = service.getInProList();
+		// 세션 아이디
+        String sId;
+        if (session.getAttribute("sId") != null) {
+           sId = (String) session.getAttribute("sId");
+        } else {
+           model.addAttribute("msg", "로그인이 필요합니다");
+           model.addAttribute("url", "/Login");
+           return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+        }
+
+        // 아이피 주소
+        try {
+           InetAddress local = InetAddress.getLocalHost();
+           String ip = local.getHostAddress();
+           model.addAttribute("ip", ip);
+           logger.info("접속 ip : " + ip);
+        } catch (UnknownHostException e) {
+           e.printStackTrace();
+        }
 		
-		model.addAttribute("inProList", inProList);
+        // 로그인 여부
+		if(sId != null && !sId.equals("")) {  // 세션 아이디 있을 경우
+			System.out.println("sId : " + sId);
+		} else {
+			model.addAttribute("msg", "로그인을 해주세요.");
+			return "fail_back";
+		}
 		
-		return "in/in_processing";
+		// 권한 조회 메서드
+		boolean isRightUser = empService.getPrivilege(sId, Privilege.WMS관리);
+		System.out.println("거래처등록 권한: " + isRightUser);
+		//		    isRightUser = true; // 임시
+
+		if(isRightUser) { // 권한 존재할 경우
+			model.addAttribute("priv", "1"); 
+			
+			List<inProcessingVO> inProList = service.getInProList();
+			
+			model.addAttribute("inProList", inProList);
+			
+			return "in/in_processing";
+		} else {
+			model.addAttribute("msg", "입고 조회 권한이 없습니다.");
+			return "fail_back";
+		}
+
+        
 	}
 	
 	// 입고처리 폼(입고버튼)
 	@GetMapping(value = "/InRegister")
-	public String register(String[] inRegisterList, Model model, HttpServletResponse response) {
+	public String register(String[] inRegisterList,
+							Model model,
+							HttpServletResponse response,
+							HttpSession session) {
 		System.out.println("inRegisterList : " + Arrays.toString(inRegisterList));
+		
+		// 세션 아이디
+        String sId;
+        if (session.getAttribute("sId") != null) {
+           sId = (String) session.getAttribute("sId");
+        } else {
+           model.addAttribute("msg", "로그인이 필요합니다");
+           model.addAttribute("url", "/Login");
+           return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+        }
+
+        // 아이피 주소
+        try {
+           InetAddress local = InetAddress.getLocalHost();
+           String ip = local.getHostAddress();
+           model.addAttribute("ip", ip);
+           logger.info("접속 ip : " + ip);
+        } catch (UnknownHostException e) {
+           e.printStackTrace();
+        }
+		
 		
 		ArrayList<String> in_schedule_cd = new ArrayList<String>();
 		ArrayList<String> product_name = new ArrayList<String>();
@@ -83,13 +151,13 @@ public class InController {
 			product_name.add(c);
 			in_date.add(d);
 		}
-		System.out.println("in_schedule_cd :" + in_schedule_cd);
-		System.out.println("product_name :" + product_name);
-		System.out.println("in_date :" + in_date);
+//		System.out.println("in_schedule_cd :" + in_schedule_cd);
+//		System.out.println("product_name :" + product_name);
+//		System.out.println("in_date :" + in_date);
 		
 		List<InRegisterTotalVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
 		
-		System.out.println("add 전 : " + resultList);
+//		System.out.println("add 전 : " + resultList);
 		model.addAttribute("resultList", resultList);
 		
 		return "in/in_register_form";
@@ -123,11 +191,13 @@ public class InController {
 				// 재고테이블에 신규 재고번호생성
 				if(stock_cd == 0) {
 					int product_cd = inRegister.getProduct_cd();
-					int wh_loc_in_area_cd = service.getWhLocCd(inRegister.getWh_loc_in_area());
+					String wh_loc = inRegister.getWh_loc_in_area();
+					int wh_loc_in_area_cd = service.getWhLocCd(wh_loc);
 					int stock_qty = inRegister.getIn_qty();
 					
-					int newStockcd = service.insertStockCd(product_cd, wh_loc_in_area_cd, stock_qty);
-					inRegister.setStock_cd(newStockcd);
+					int insertStockCount = service.insertStockCd(product_cd, wh_loc_in_area_cd, stock_qty);
+					int newStockCd = service.getMaxStockCd();
+					inRegister.setStock_cd(newStockCd);
 				} else {
 					inRegister.setStock_cd(voArr.getStock_cd()[i]);
 				}
@@ -200,13 +270,43 @@ public class InController {
 	
 	// 입고처리 수정 페이지
 	@GetMapping("/InProcessingModifyForm")
-	public String modify() {
+	public String modify(@RequestParam("in_schedule_cd") String in_schedule_cd,
+						Model model,
+						HttpSession session) {
 		
+		// 세션 아이디
+        String sId;
+        if (session.getAttribute("sId") != null) {
+           sId = (String) session.getAttribute("sId");
+        } else {
+           model.addAttribute("msg", "로그인이 필요합니다");
+           model.addAttribute("url", "/Login");
+           return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+        }
+
+        // 아이피 주소
+        try {
+           InetAddress local = InetAddress.getLocalHost();
+           String ip = local.getHostAddress();
+           model.addAttribute("ip", ip);
+           logger.info("접속 ip : " + ip);
+        } catch (UnknownHostException e) {
+           e.printStackTrace();
+        }
+		
+		
+		// 입고예정 리스트
+		List<InVO> inList = service.getSelectedInList(in_schedule_cd);
+		
+		// 입고품목 리스트
+		List<inProcessingVO> proList = service.getSelectedProList(in_schedule_cd);
+		
+		model.addAttribute("inList", inList);
+		model.addAttribute("proList", proList);
 		
 		return "in/in_processing_modify";
 	}
 	
-
 	// 입고 예정 수정 작업
 	@PostMapping(value = "/InProcessingModifyPro")
 	public void modifyPro(@ModelAttribute InVO inList,
@@ -277,6 +377,92 @@ public class InController {
 		return "in/stockList_inPage";
 	}
 	
+	// 재고 목록 조회
+	@ResponseBody
+	@GetMapping(value = "StockListJsonIn")
+	public void stockListJson_in(
+			@RequestParam(defaultValue = "") String searchType,
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "1") int pageNum,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+		
+		// 거래처 목록 가져오기
+		List<StockWhVO> stockList = service.getStockList(searchType, keyword, startRow, listLimit);
+		
+		// JSON 형식 변환
+		JSONArray jsonArray = new JSONArray();
+		
+		for(StockWhVO stock : stockList) {
+//			stock.setAddr(stock.getAddr().split("/")[0]); // 도로명 주소만 가져오기
+//			stock.setRemarks(stock.getRemarks().replace("\r\n", "<br>")); // 출력 시 줄바꿈 처리
+			System.out.println(stock);
+			JSONObject jsonObject = new JSONObject(stock);
+			System.out.println(jsonObject.get("stock_cd"));
+			
+			jsonArray.put(jsonObject);
+		}
+		
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	// 선반 조회 페이지
+	@GetMapping(value = "/In/WhLocSelectList")
+	public String LocSelectList() {
+		return "in/whLocList_inPage";
+	}
+	
+	// 선반 목록 조회
+	@ResponseBody
+	@GetMapping(value = "WhLocListJsonIn")
+	public void whLocListJson_in(
+			@RequestParam(defaultValue = "") String searchType,
+			@RequestParam(defaultValue = "") String keyword,
+//			@RequestParam(defaultValue = "1") int pageNum,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		// 페이징 처리를 위한 변수 선언
+//		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 10개로 제한
+//		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+		
+		// 선반 목록 가져오기
+		List<StockWhVO> whLocList = service.getWhLocList(searchType, keyword);
+		
+		// JSON 형식 변환
+		JSONArray jsonArray = new JSONArray();
+		
+		for(StockWhVO whLoc : whLocList) {
+			System.out.println(whLoc);
+			JSONObject jsonObject = new JSONObject(whLoc);
+			System.out.println(jsonObject.get("wh_area"));
+			
+			jsonArray.put(jsonObject);
+		}
+		
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(jsonArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 	
 	
@@ -285,9 +471,17 @@ public class InController {
 
 	// ======================== sangwoo ============================
 	@GetMapping(value = "/InSchedule")
-	public String waiting(Model model) {
-//		List<InVO> inList = service.getInList();
-//		model.addAttribute("inList", inList);
+	public String waiting(Model model,HttpSession session) {
+		// 세션 아이디
+				String sId;
+				if (session.getAttribute("sId") != null) {
+					sId = (String) session.getAttribute("sId");
+				} else {
+					model.addAttribute("msg", "로그인이 필요합니다");
+					model.addAttribute("url", "/Login");
+					return "redirect";
+				}
+		
 		return "in/in_waiting_form";
 	}
 	
@@ -349,7 +543,7 @@ public class InController {
 	public String inProQtyAjax(@RequestParam String in_schedule_cd, Model model) {
 		model.addAttribute("in_schedule_cd", in_schedule_cd);
 		System.out.println("예정 번호 : " + in_schedule_cd);
-		return "in/in_inProQtyAjax";
+		return "in/in_inProQtyAjax?in_schedule_cd=" + in_schedule_cd;
 	}
 	
 	@ResponseBody
@@ -377,6 +571,20 @@ public class InController {
 		}
 	}
 	
+	@GetMapping(value = "/inProQtyAjax2")
+	public String inProQtyAjax2(@RequestParam(defaultValue = "") String in_schedule_cd, Model model) {
+		
+		System.out.println("나왔으면 좋겠다");
+		
+		List<inProcessingVO> ProQtyList = service.getProQtyList(in_schedule_cd);
+		System.out.println(ProQtyList);
+		
+		
+		model.addAttribute("in_array", ProQtyList);
+		
+		return"in/inProQtyAjax2";
+	}
+	
 	@GetMapping(value = "/InWaitingInsertForm")
 	public String waitingInsert(Model model) {
 		String lastNum = service.getLastNum();
@@ -384,7 +592,6 @@ public class InController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		int formatNow = Integer.parseInt(localDate.format(formatter));
 		String in_schedule_cd = (formatNow + "-" + lastNum);
-		System.out.println(in_schedule_cd);
 		
 		model.addAttribute("now",localDate);
 //		System.out.println(lastNum);
