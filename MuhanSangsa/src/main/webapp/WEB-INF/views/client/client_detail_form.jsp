@@ -237,15 +237,15 @@
                                 <form action="ClientModify" method="post" class="form-horizontal">
                                 	<input type="hidden" name="originBn" value="${client.business_no }"> <!-- 기존 거래처 코드 (UPDATE 구문 시 필요) -->
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="business_no" class=" form-control-label">거래처 코드<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label for="business_no" class=" form-control-label font-weight-bold">거래처 코드<font style="color: red;">*</font></label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="business_no" name="business_no" value="${client.business_no }" class="form-control" required="required"><small class="form-text text-muted" id="check_bn">'-' 를 제외한 숫자만 입력</small></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="cust_name" class=" form-control-label">상호 (거래처명)<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label for="cust_name" class=" form-control-label font-weight-bold">상호 (거래처명)<font style="color: red;">*</font></label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="cust_name" name="cust_name" value="${client.cust_name }" class="form-control" required="required"><small class="form-text text-muted"></small></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label class=" form-control-label">거래처 구분<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label class=" form-control-label font-weight-bold">거래처 구분<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
                                             <div class="form-check-inline form-check">
                                                 <label for="g_gubun_01" class="form-check-label ">
@@ -265,11 +265,11 @@
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="boss_name" class=" form-control-label">대표자명<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label for="boss_name" class=" form-control-label font-weight-bold">대표자명<font style="color: red;">*</font></label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="boss_name" name="boss_name" value="${client.boss_name }" class="form-control" required="required"><small class="form-text text-muted"></small></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="uptae" class=" form-control-label">업태<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label for="uptae" class=" form-control-label font-weight-bold">업태<font style="color: red;">*</font></label></div>
                                         <div class="col col-md-9">
                                             <select name="uptae" id="uptae" multiple class="standardSelect" required="required" autocomplete="off">
                                             	<option value="농업 · 임업 및 어업">농업 · 임업 및 어업</option>
@@ -298,7 +298,7 @@
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="jongmok" class=" form-control-label">종목<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label for="jongmok" class=" form-control-label font-weight-bold">종목<font style="color: red;">*</font></label></div>
                                         <div class="col-12 col-md-9">
                                         	<div id="jongmokArea">
                                         		<input type="text" id="jongmok" name="jongmok" value="${client.jongmokArr[0] }" class="form-control" required="required">
@@ -311,25 +311,25 @@
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="tel" class=" form-control-label">대표전화<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label for="tel" class=" form-control-label font-weight-bold">대표전화<font style="color: red;">*</font></label></div>
                                         <div class="col-12 col-md-9">
                                         	<input type="tel" id="tel" name="tel" value="${client.tel }" class="form-control" required="required">
                                         	<small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small>
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="email" class=" form-control-label">이메일</label></div>
+                                        <div class="col col-md-3"><label for="email" class=" form-control-label font-weight-bold">이메일</label></div>
                                         <div class="col-12 col-md-9"><input type="email" id="email" name="email" value="${client.email }" class="form-control"><small class="help-block form-text text-muted">이메일을 입력하세요.</small></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="mobile_no" class=" form-control-label">모바일</label></div>
+                                        <div class="col col-md-3"><label for="mobile_no" class=" form-control-label font-weight-bold">모바일</label></div>
                                         <div class="col-12 col-md-9">
                                         	<input type="tel" id="mobile_no" name="mobile_no" value="${client.mobile_no }" class="form-control">
                                         	<small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small>
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="fax" class=" form-control-label">Fax</label></div>
+                                        <div class="col col-md-3"><label for="fax" class=" form-control-label font-weight-bold">Fax</label></div>
                                         <div class="col-12 col-md-9">
                                         	<input type="tel" id="fax" name="fax" value="${client.fax }" class="form-control">
                                         	<small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small>
@@ -360,29 +360,29 @@
 										</div>
 									</div>
 									<div class="row form-group">
-                                        <div class="col col-md-3"><label for="url_path" class=" form-control-label">홈페이지</label></div>
+                                        <div class="col col-md-3"><label for="url_path" class=" form-control-label font-weight-bold">홈페이지</label></div>
                                         <div class="col-12 col-md-9">
                                         	<input type="url" id="url_path" name="url_path" value="${client.url_path }" class="form-control">
                                         	<small class="form-text text-muted"></small>
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="man_name" class=" form-control-label">담당자<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label for="man_name" class=" form-control-label font-weight-bold">담당자<font style="color: red;">*</font></label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="man_name" name="man_name" value="${client.man_name }" class="form-control" required="required"><small class="form-text text-muted"></small></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="man_tel" class=" form-control-label">담당자 전화번호<font style="color: red;">*</font></label></div>
+                                        <div class="col col-md-3"><label for="man_tel" class=" form-control-label font-weight-bold">담당자 전화번호<font style="color: red;">*</font></label></div>
                                         <div class="col-12 col-md-9">
                                         	<input type="tel" id="man_tel" name="man_tel" value="${client.man_tel }" class="form-control" required="required">
                                         	<small class="form-text text-muted">'-' 를 제외한 숫자만 입력</small>
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="man_email" class=" form-control-label">담당자 이메일</label></div>
+                                        <div class="col col-md-3"><label for="man_email" class=" form-control-label font-weight-bold">담당자 이메일</label></div>
                                         <div class="col-12 col-md-9"><input type="email" id="man_email" name="man_email" value="${client.man_email }" class="form-control"><small class="help-block form-text text-muted">이메일을 입력하세요.</small></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="remarks" class=" form-control-label">적요(비고)</label></div>
+                                        <div class="col col-md-3"><label for="remarks" class=" form-control-label font-weight-bold">적요(비고)</label></div>
                                         <div class="col-12 col-md-9"><textarea name="remarks" id="remarks" rows="9" class="form-control">${client.remarks }</textarea></div>
                                     </div>
                             <div class="card-footer">

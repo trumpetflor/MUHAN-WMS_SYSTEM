@@ -45,6 +45,11 @@ public class ClientService {
 		return mapper.selectClientListCount(searchType, keyword);
 	}
 
+	// 거래처 상세 목록 조회
+	public List<ClientVO> getClientDetailList(String searchType, String keyword, int startRow, int listLimit) {
+		return mapper.selectClientDetailList(searchType, keyword, startRow, listLimit);
+	}
+
 	
 
 }

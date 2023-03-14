@@ -3,11 +3,23 @@ package com.thisteam.muhansangsa.controller;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -428,6 +441,292 @@ public class ClientController {
 		}
 
 	}
+	
+	@RequestMapping(value = "/downloadClientListExcel")
+	public void downloadClientList(@RequestParam(defaultValue = "0") int isDetailed,
+			HttpSession session,
+			HttpServletResponse response) {
+		
+		List<ClientVO> clientList = null;
+		if(isDetailed == 0) {
+			System.out.println("기본 정보");
+			int ListCount = service.getClientListCount("", "");
+			clientList = service.getClientList("", "", 1, ListCount);
+		} else {
+			System.out.println("상세정보");
+			int ListCount = service.getClientListCount("", "");
+			clientList = service.getClientDetailList("", "", 1, ListCount);
+		}
+		// 현재 날짜 구하기
+		LocalDate now = LocalDate.now();
+		// 포맷 정의 
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		int formatedNow = Integer.parseInt(now.format(formatter));
+
+
+		// 워크북 생성
+		Workbook wb = new HSSFWorkbook();
+		Sheet sheet = wb.createSheet("거래처 목록");
+		Row row = null;
+		Cell cell = null;
+		int rowNo = 0;
+
+
+
+		// 테이블 헤더용 스타일
+		CellStyle headStyle = wb.createCellStyle();
+
+		// 가는 경계선
+		headStyle.setBorderTop(BorderStyle.THIN);
+		headStyle.setBorderBottom(BorderStyle.THIN);
+		headStyle.setBorderLeft(BorderStyle.THIN);
+		headStyle.setBorderRight(BorderStyle.THIN);
+
+		// 배경색 노란색
+		headStyle.setFillForegroundColor(HSSFColorPredefined.YELLOW.getIndex());
+		headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		// 데이터는 가운데 정렬
+		headStyle.setAlignment(HorizontalAlignment.CENTER);
+
+		// 데이터용 경계 스타일 테두리만 지정
+		CellStyle bodyStyle = wb.createCellStyle();
+		bodyStyle.setBorderTop(BorderStyle.THIN);
+		bodyStyle.setBorderBottom(BorderStyle.THIN);
+		bodyStyle.setBorderLeft(BorderStyle.THIN);
+		bodyStyle.setBorderRight(BorderStyle.THIN);
+
+		if(isDetailed == 0) {
+			
+			// 헤더 생성 ★★★ 여기!가 맨 윗줄이고 가로로 주르륵 나오는겁니다,,,,,,,,,
+			row = sheet.createRow(rowNo++);
+			cell = row.createCell(0);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("거래처코드");
+			
+			cell = row.createCell(1);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("거래처명");
+			
+			cell = row.createCell(2);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("대표자명");
+			
+			cell = row.createCell(3);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("전화번호1");
+			
+			cell = row.createCell(4);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("전화번호2");
+			
+			cell = row.createCell(5);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("주소");
+			
+			cell = row.createCell(6);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("비고");
+			
+			// 데이터 부분 생성★★★ 여기서 VO객체를 바꿔주시면 될거같아요 !
+			
+			for(ClientVO vo : clientList) {
+				row = sheet.createRow(rowNo++);
+				cell = row.createCell(0);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getBusiness_no());
+				
+				cell = row.createCell(1);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getCust_name());
+				
+				cell = row.createCell(2);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getBoss_name());
+				
+				cell = row.createCell(3);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getTel());
+				
+				cell = row.createCell(4);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getMobile_no());
+				
+				cell = row.createCell(5);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getAddr());
+				
+				cell = row.createCell(6);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getRemarks());
+				
+			}
+			
+		} else {
+			
+			// 헤더 생성 ★★★ 여기!가 맨 윗줄이고 가로로 주르륵 나오는겁니다,,,,,,,,,
+			row = sheet.createRow(rowNo++);
+			cell = row.createCell(0);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("거래처코드");
+			
+			cell = row.createCell(1);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("거래처명");
+			
+			cell = row.createCell(2);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("거래처구분");
+			
+			cell = row.createCell(3);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("대표자명");
+			
+			cell = row.createCell(4);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("업태");
+			
+			cell = row.createCell(5);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("종목");
+			
+			cell = row.createCell(6);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("대표전화");
+			
+			cell = row.createCell(7);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("이메일");
+			
+			cell = row.createCell(8);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("모바일");
+			
+			cell = row.createCell(9);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("Fax");
+			
+			cell = row.createCell(10);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("우편번호");
+
+			cell = row.createCell(11);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("주소");
+			
+			cell = row.createCell(12);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("홈페이지");
+			
+			cell = row.createCell(13);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("담당자");
+			
+			cell = row.createCell(14);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("담당자 전화번호");
+			
+			cell = row.createCell(15);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("담당자 이메일");
+			
+			cell = row.createCell(16);
+			cell.setCellStyle(headStyle);
+			cell.setCellValue("비고");
+			
+			// 데이터 부분 생성★★★ 여기서 VO객체를 바꿔주시면 될거같아요 !
+			
+			for(ClientVO vo : clientList) {
+				row = sheet.createRow(rowNo++);
+				cell = row.createCell(0);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getBusiness_no());
+				
+				cell = row.createCell(1);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getCust_name());
+				
+				cell = row.createCell(2);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getG_gubun());
+				
+				cell = row.createCell(3);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getBoss_name());
+				
+				cell = row.createCell(4);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getUptae());
+				
+				cell = row.createCell(5);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getJongmok());
+				
+				cell = row.createCell(6);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getTel());
+				
+				cell = row.createCell(7);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getEmail());
+				
+				cell = row.createCell(8);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getMobile_no());
+				
+				cell = row.createCell(9);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getFax());
+				
+				cell = row.createCell(10);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getPost_no());
+				
+				cell = row.createCell(11);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getAddr());
+				
+				cell = row.createCell(12);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getUrl_path());
+				
+				cell = row.createCell(13);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getMan_name());
+				
+				cell = row.createCell(14);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getMan_tel());
+				
+				cell = row.createCell(15);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getMan_email());
+
+				cell = row.createCell(16);
+				cell.setCellStyle(bodyStyle);
+				cell.setCellValue(vo.getRemarks());
+			}
+			
+		}
+
+		// response 헤더 설정★★★ 여기서 다른건 건들지 마시고 filename= 뒷부분은 본인 페이지 관련된 이름으로 바꾸면 되는데 한글들어가면 오류나더라구요ㅠㅠ
+		response.setContentType("ms-vnd/excel");
+		response.setHeader("Content-Disposition", "attachment;filename="+formatedNow+"_client.xls");//★★filename= 뒷부분이  저장되는 파일명
+
+		// 엑셀 출력
+
+		try {
+			wb.write(response.getOutputStream());
+
+			wb.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	
 	// =========================================hawon ===============================================
 
 	//거래처 조회 페이지
@@ -478,175 +777,7 @@ public class ClientController {
 
 	}
 
-//	@RequestMapping("/downloadClientListExcel")
-//	public void downloadClientExcel(@RequestParam int pageNum,
-//			HttpSession session,
-//			HttpServletResponse response) {
-//		List<ClientVO> clientList = null;
-//		if(pageNum == 1) {
-//			System.out.println("현재 페이지만 다운");
-//			if(session.getAttribute("stockList_currentPage") instanceof List) { //TODO session객체에 저장될 수 있는 크기 궁금,,
-//				clientList = (List<ClientVO>)session.getAttribute("clientList_pageNum");
-//			}
-//		}else {
-//			System.out.println("전체 페이지 다운");
-//			clientList = service.getClientList("", "", 1, 100); //// ★★★여기서  List<XXXXVO> 객체리턴받기 밑에서 필요합니다ㅇ
-//		}
-//		// 현재 날짜 구하기
-//		LocalDate now = LocalDate.now();
-//		// 포맷 정의 
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-//		int formatedNow = Integer.parseInt(now.format(formatter));
-//
-//
-//		// 워크북 생성
-//		Workbook wb = new HSSFWorkbook();
-//		sheet = wb.createSheet("재고현황");
-//		Row row = null;
-//		Cell cell = null;
-//		int rowNo = 0;
-//
-//
-//
-//		// 테이블 헤더용 스타일
-//		CellStyle headStyle = wb.createCellStyle();
-//
-//		// 가는 경계선
-//		headStyle.setBorderTop(BorderStyle.THIN);
-//		headStyle.setBorderBottom(BorderStyle.THIN);
-//		headStyle.setBorderLeft(BorderStyle.THIN);
-//		headStyle.setBorderRight(BorderStyle.THIN);
-//
-//
-//
-//		// 배경색 노란색
-//		headStyle.setFillForegroundColor(HSSFColorPredefined.YELLOW.getIndex());
-//		headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//
-//
-//
-//		// 데이터는 가운데 정렬
-//		headStyle.setAlignment(HorizontalAlignment.CENTER);
-//
-//
-//
-//		// 데이터용 경계 스타일 테두리만 지정
-//		CellStyle bodyStyle = wb.createCellStyle();
-//		bodyStyle.setBorderTop(BorderStyle.THIN);
-//		bodyStyle.setBorderBottom(BorderStyle.THIN);
-//		bodyStyle.setBorderLeft(BorderStyle.THIN);
-//		bodyStyle.setBorderRight(BorderStyle.THIN);
-//
-//
-//
-//		// 헤더 생성 ★★★ 여기!가 맨 윗줄이고 가로로 주르륵 나오는겁니다,,,,,,,,,
-//		row = sheet.createRow(rowNo++);
-//		cell = row.createCell(0);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("재고번호");
-//
-//		cell = row.createCell(1);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("상품코드");
-//
-//		cell = row.createCell(2);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("상품이름");
-//
-//		cell = row.createCell(3);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("창고명");
-//
-//		cell = row.createCell(4);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("창고코드");
-//
-//		cell = row.createCell(5);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("구역명");
-//
-//		cell = row.createCell(6);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("구역코드");
-//
-//		cell = row.createCell(7);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("선반명");
-//
-//		cell = row.createCell(8);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("선반코드");
-//
-//		cell = row.createCell(9);
-//		cell.setCellStyle(headStyle);
-//		cell.setCellValue("현재 재고");
-//
-//
-//
-//		// 데이터 부분 생성★★★ 여기서 VO객체를 바꿔주시면 될거같아요 !
-//
-//		for(ClientVO vo : ClientList) {
-//			row = sheet.createRow(rowNo++);
-//			cell = row.createCell(0);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getStock_cd());
-//
-//			cell = row.createCell(1);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getProduct_cd());
-//
-//			cell = row.createCell(2);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getProduct_name());
-//
-//			cell = row.createCell(3);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getWh_name());
-//
-//			cell = row.createCell(4);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getWh_cd());
-//
-//			cell = row.createCell(5);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getWh_area());
-//
-//			cell = row.createCell(6);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getWh_area_cd());
-//
-//			cell = row.createCell(7);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getWh_loc_in_area());
-//
-//			cell = row.createCell(8);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getWh_loc_in_area_cd());
-//
-//			cell = row.createCell(9);
-//			cell.setCellStyle(bodyStyle);
-//			cell.setCellValue(vo.getStock_qty());
-//		}
-//
-//
-//		// response 헤더 설정★★★ 여기서 다른건 건들지 마시고 filename= 뒷부분은 본인 페이지 관련된 이름으로 바꾸면 되는데 한글들어가면 오류나더라구요ㅠㅠ
-//		response.setContentType("ms-vnd/excel");
-//		response.setHeader("Content-Disposition", "attachment;filename="+formatedNow+"_client.xls");//★★filename= 뒷부분이  저장되는 파일명
-//
-//
-//		// 엑셀 출력
-//
-//		try {
-//			wb.write(response.getOutputStream());
-//
-//			wb.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//
-//	}
+	
 
 }
 

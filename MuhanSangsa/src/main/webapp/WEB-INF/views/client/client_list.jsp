@@ -72,15 +72,22 @@
 	
 	#excelDowm{
 		vertical-align: middle;
-/* 		padding-left: 0 !important ; */
+		padding-left: 0 !important ;
+	}
+	
+	#excelDowm li{
 		text-align: left;
  		vertical-align: middle; 
 		background:  url(${pageContext.request.contextPath}/resources/images/excel.png) no-repeat 0px 1px;
 	    list-style-type: none;
 	    padding: 1px 1px 3px 30px;
 	    transition: 0.5s;
-/* 	    margin-top: 5px; */
-/* 	    height: 30px; */
+	    margin-top: 5px;
+	    height: 30px;
+	}
+	
+	#excelDowm .dropdown-menu.show{
+		top:2em !important ;
 	}
 	
 </style>
@@ -273,11 +280,21 @@
         <div class="content">
             <div class="animated fadeIn">
             	<section id="searchSection" class="m-1 clearfix">
-	            	<span class=" float-left" id="excelDowm" >
-						<a href="downloadClientExcel?currentPage=0" style="vertical-align: sub;" aria-haspopup="true" >
-							<small>거래처 목록 전체 다운로드</small>
-						</a>
-					</span>
+	            	<ul class="dropdown float-left" id="excelDowm" >
+						<li class="menu-item-has-children " ><a href="#"
+							class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false"> <small>거래처 전체 목록 내려받기</small></a>
+							<ul class="sub-menu children dropdown-menu">
+								<li>
+									<a class="dropdown-item" href="downloadClientListExcel?isDetailed=0">기본정보 내려받기</a>
+								</li>
+								<c:if test="${priv eq '1' }">
+									<li>
+										<a class="dropdown-item" href="downloadClientListExcel?isDetailed=1">상세정보 포함 내려받기</a>
+									</li>
+								</c:if>
+							</ul></li>
+					</ul>
 				   <form action=ClientList class="float-right">
 						<!-- 검색 타입 추가 -->
 						<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
