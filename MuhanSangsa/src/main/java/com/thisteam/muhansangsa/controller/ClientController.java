@@ -561,6 +561,10 @@ public class ClientController {
 				cell.setCellValue(vo.getRemarks());
 				
 			}
+
+			// response 헤더 설정★★★ 여기서 다른건 건들지 마시고 filename= 뒷부분은 본인 페이지 관련된 이름으로 바꾸면 되는데 한글들어가면 오류나더라구요ㅠㅠ
+			response.setContentType("ms-vnd/excel");
+			response.setHeader("Content-Disposition", "attachment;filename="+formatedNow+"_client.xls");//★★filename= 뒷부분이  저장되는 파일명
 			
 		} else {
 			
@@ -707,14 +711,13 @@ public class ClientController {
 				cell.setCellValue(vo.getRemarks());
 			}
 			
+			// response 헤더 설정★★★ 여기서 다른건 건들지 마시고 filename= 뒷부분은 본인 페이지 관련된 이름으로 바꾸면 되는데 한글들어가면 오류나더라구요ㅠㅠ
+			response.setContentType("ms-vnd/excel");
+			response.setHeader("Content-Disposition", "attachment;filename="+formatedNow+"_client_detailed.xls");//★★filename= 뒷부분이  저장되는 파일명
+
 		}
 
-		// response 헤더 설정★★★ 여기서 다른건 건들지 마시고 filename= 뒷부분은 본인 페이지 관련된 이름으로 바꾸면 되는데 한글들어가면 오류나더라구요ㅠㅠ
-		response.setContentType("ms-vnd/excel");
-		response.setHeader("Content-Disposition", "attachment;filename="+formatedNow+"_client.xls");//★★filename= 뒷부분이  저장되는 파일명
-
 		// 엑셀 출력
-
 		try {
 			wb.write(response.getOutputStream());
 
@@ -726,7 +729,6 @@ public class ClientController {
 
 	}
 	
-	
 	// =========================================hawon ===============================================
 
 	//거래처 조회 페이지
@@ -734,7 +736,6 @@ public class ClientController {
 	public	String clientSelectList() {
 		return "product/client_selectList_outPage";
 	}
-
 
 	// 거래처 목록 조회
 	@ResponseBody
