@@ -46,7 +46,7 @@ public class WarehouseVO {
 		
 		// null 값이면 저장 안하게 하기
 		if(wh_addr1 == null || wh_addr1.equals("") || wh_addr1.equals(null) || wh_addr1 == "") {
-			this.wh_addr = "";
+//			this.wh_addr = "";
 			wh_addr1 = "";
 			wh_addr2 = "";
 		} else {

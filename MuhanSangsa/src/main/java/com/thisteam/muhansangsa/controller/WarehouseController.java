@@ -9,6 +9,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.muhansangsa.service.EmployeesService;
 import com.thisteam.muhansangsa.service.WarehouseService;
+import com.thisteam.muhansangsa.vo.ClientVO;
+import com.thisteam.muhansangsa.vo.PageInfo;
 import com.thisteam.muhansangsa.vo.Privilege;
 import com.thisteam.muhansangsa.vo.WarehouseVO;
 
@@ -46,7 +51,7 @@ public class WarehouseController {
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
 			model.addAttribute("url", "/Login");
-			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+			return "redirect"; 
 		}
 
 		// 아이피 주소
@@ -76,10 +81,11 @@ public class WarehouseController {
 
 		if(isRightUser) { // 권한 존재할 경우
 			model.addAttribute("priv", "1"); 
-			// 조회
-			List<WarehouseVO> whList = service.getWarehouseList();
 			
-			model.addAttribute("whList", whList);
+			// 물류팀 직원 목록
+			List<String> employees = service.getLogiEmployeesList();
+			
+			model.addAttribute("employees", employees);
 			
 			return "Warehouse/warehouse_insert_form";
 		} else {
@@ -104,11 +110,6 @@ public class WarehouseController {
 		}
 		
 		// 창고 코드 부여
-		// 구분,위치 값 들고와서 searchType에 in,out,pl로 count 검색하고
-		// mapper에서 +1로 들고오기~
-		// (count+1) < 10 => 00 + (count+1), (count+1) < 100 => 0+ (count+1), else => +(count+1)
-		// String wh_cd = in/out/pl + count;
-		// setwh_cd(wh_cd)
 		String keyword = "";
 		String wh_cd = "";
 		String gubun = warehouse.getWh_gubun();
@@ -203,11 +204,11 @@ public class WarehouseController {
 		if(isRightUser) { // 권한 존재할 경우
 			model.addAttribute("priv", "1"); 
 			// 조회
-			List<WarehouseVO> whList = service.getWarehouseList();
+//			List<WarehouseVO> whList = service.getWarehouseList();
 			
-			model.addAttribute("whList", whList);
+//			model.addAttribute("whList", whList);
 			
-			return "Warehouse/warehouse_list";
+			return "Warehouse/warehouse_list2";
 		} else {
 			model.addAttribute("msg", "창고 조회 권한이 없습니다.");
 			
@@ -217,9 +218,95 @@ public class WarehouseController {
 		
 	}
 	
+	
+	// 거래처 목록 조회2
+	@ResponseBody
+	@GetMapping(value = "/WarehouseListJson")
+	public void WarehouseListJson(
+			@RequestParam(defaultValue = "1") int pageNum, // 현재 페이지 번호
+			@RequestParam(defaultValue = "") String searchType, // 검색 타입
+			@RequestParam(defaultValue = "") String keyword, // 검색어
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+
+		// ------------------------- 쌤이랑 한 부분 --------------------------------------------
+
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 7개로 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+
+		// 거래처 목록 가져오기
+		List<WarehouseVO> whList = service.getWarehouseList(searchType, keyword, startRow, listLimit);
+
+		// 페이징 처리 
+		//1. 검색어에 해당하는 거래처 정보(ClientVO)의 갯수 계산
+		int listCount = service.getWhListCount(searchType, keyword);
+
+		// 2. 한 페이지에서 표시할 페이지 숫자의 갯수 설정
+		int pageListLimit = 10; // 한 페이지에서 표시할 페이지 수를 10개로 제한
+		// 3. 전체 페이지 목록 수 계산
+		int maxPage = listCount / listLimit 
+				+ (listCount % listLimit == 0 ? 0 : 1); 
+
+		// 4. 시작 페이지 번호 계산
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+
+		// 5. 끝 페이지 번호 계산
+		int endPage = startPage + pageListLimit - 1;
+
+		// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+		//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+
+		// PageInfo 객체 생성 후 페이징 처리 정보 저장
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);		
+
+		System.out.println(pageInfo);
+
+		// JSON 형식 변환
+		JSONArray jsonArray = new JSONArray();
+
+		for(WarehouseVO warehouse : whList) {
+			System.out.println(warehouse);
+			if(warehouse.getWh_gubun().equals("1")) {
+				warehouse.setWh_gubun("창고");
+			} else {
+				warehouse.setWh_gubun("공장");
+			}
+			if(warehouse.getWh_use().equals("1")) {
+				warehouse.setWh_use("사용");
+			} else {
+				warehouse.setWh_use("미사용");
+			}
+			JSONObject jsonObject = new JSONObject(warehouse);
+			System.out.println("창고 코드 : " + jsonObject.get("wh_cd"));
+			
+			System.out.println(warehouse);
+			jsonArray.put(jsonObject);
+		}
+
+		JSONObject jsonObjectPage = new JSONObject(pageInfo);
+		System.out.println("시작 페이지 : " + jsonObjectPage.get("startPage"));
+		jsonArray.put(jsonObjectPage);
+
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(jsonArray);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	// 창고 수정 폼
 	@GetMapping(value = "/WarehouseModifyForm")
-	public String modify(@ModelAttribute WarehouseVO warehouse,
+	public String modify(
+//			@ModelAttribute WarehouseVO warehouse,
 						@RequestParam String wh_cd,
 						Model model,
 						HttpSession session) {
@@ -247,9 +334,21 @@ public class WarehouseController {
 		}
 		
 		// 조회
-		List<WarehouseVO> whList = service.getWarehouseDetail(wh_cd);
-		System.out.println(whList);
-		model.addAttribute("whList", whList);
+		WarehouseVO warehouse = service.getWarehouseDetail(wh_cd);
+		System.out.println("주소:" +warehouse.getWh_addr());
+		if(warehouse.getWh_addr() != null && !warehouse.getWh_addr().equals("") && !warehouse.getWh_addr().equals(null) && warehouse.getWh_addr() != "") {
+			warehouse.setWh_addr1(warehouse.getWh_addr().split(", ")[0]);
+			warehouse.setWh_addr2(warehouse.getWh_addr().split(", ")[1]);
+		} else {
+			warehouse.setWh_addr1(" ");
+			warehouse.setWh_addr2(" ");
+		}
+		System.out.println(warehouse);
+		model.addAttribute("warehouse", warehouse);
+		
+		// 물류팀 직원 목록
+		List<String> employees = service.getLogiEmployeesList();
+		model.addAttribute("employees", employees);
 		
 		return "Warehouse/warehouse_modify_form";
 	}

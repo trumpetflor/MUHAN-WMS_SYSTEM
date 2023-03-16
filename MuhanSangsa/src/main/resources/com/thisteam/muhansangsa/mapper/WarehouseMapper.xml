@@ -28,10 +28,62 @@
 	</insert>
 	
 	<!-- 창고 목록 조회 -->
-	<select id="selectWarehouseList" resultType="com.thisteam.muhansangsa.vo.WarehouseVO">
+	<select id="selectWarehouseList" resultType="WarehouseVO">
 		SELECT *
 			FROM warehouse
+			<if test="!keyword.equals('')">
+			WHERE
+				<choose>
+					<when test="searchType.equals('wh_cd')">
+						wh_cd LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('wh_name')">
+						wh_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('wh_addr')">
+						wh_addr LIKE '%${keyword}%' 
+					</when>
+					<when test="searchType.equals('wh_tel')">
+						wh_tel LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('wh_man_name')">
+						wh_man_name LIKE '%${keyword}%'
+					</when>
+				</choose>		
+			</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
 	</select>
+	
+	<!-- 목록 갯수 계산 (페이징 처리) -->
+	<select id="selectWhListCount" resultType="int">
+		SELECT COUNT(*)
+			FROM warehouse
+			<!-- 키워드 검색 있을 경우 -->
+			<if test="!keyword.equals('')">
+			WHERE
+				<choose>
+					<when test="searchType.equals('wh_cd')">
+						wh_cd LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('wh_name')">
+						wh_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('wh_addr')">
+						wh_addr LIKE '%${keyword}%' 
+					</when>
+					<when test="searchType.equals('wh_tel')">
+						wh_tel LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('wh_man_name')">
+						wh_man_name LIKE '%${keyword}%'
+					</when>
+				</choose>		
+			</if>
+	</select>
+	
 	
 	<!-- 창고 권한 -->
 	<select id="selectWhPrivilege" resultType="string">
@@ -41,7 +93,7 @@
 	</select>
 	
 	<!-- 창고 상세정보 -->
-	<select id="selectWarehouseDetail" resultType="com.thisteam.muhansangsa.vo.WarehouseVO">
+	<select id="selectWarehouseDetail" resultType="WarehouseVO">
 		SELECT *
 			FROM warehouse
 			WHERE wh_cd = #{wh_cd}
@@ -94,6 +146,13 @@
 		SELECT count(*)
 			FROM warehouse
 			WHERE wh_cd LIKE '%${keyword}%'
+	</select>
+	
+	<!-- 물류팀 직원 목록 -->
+	<select id="selectLogiEmployeesList" resultType="string">
+		SELECT emp_name
+			FROM employees
+			WHERE dept_cd = '03'
 	</select>
 	
 </mapper>

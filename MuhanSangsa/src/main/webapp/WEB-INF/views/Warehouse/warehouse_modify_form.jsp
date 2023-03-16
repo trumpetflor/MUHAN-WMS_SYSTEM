@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Warehouse Modify</title>
+    <title>창고 수정 | 창고 관리</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -24,53 +24,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
-
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/lib/chosen/chosen.min.css">
+    
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 <%-- <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script> --%>
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-		gubunDisabled();
-		checkMan();
-	});
-	
-	// 공장이면 구분 disable 시키기
-	function gubunDisabled(){
-		let wh_gubun = $("input[name='wh_gubun']:checked").val();
-		if(wh_gubun == '2'){ // 공장이면 선택 못하게함
-			$("input:radio[name=wh_location]").prop("disabled", true);
-			$("input:radio[name=wh_location]").prop("checked", false);
-		}
-	}
-	
-	// 물류팀 확인
-	function checkMan(){
-		$checkResult = false;
-		
-			let wh_man_name = $("#wh_man_name").val();
-			$.ajax({
-				type: "GET",
-				url: "WarehouseCheckMan",
-				data: { wh_man_name: $("#wh_man_name").val()},
-				success: function(result) {
-					$("#checkMan").html(result);
-					
-					if(result == "true"){
-						$("#checkMan").html("물류팀 직원만 가능합니다!!!!").css("color", "red");
-						checkResult = false;
-					} else {
-						$("#checkMan").html("물류팀 직원입니다.").css("color", "green");
-						CheckResult = true;
-					}
-				}
-		}); // 물류팀 확인
-		
-	}
-
-
-// 	var checkResult = false;
 	
 	//상품 수정 클릭 시 확인창
 	function confirm_modify() {
@@ -99,50 +60,59 @@
 	$(function() {
 		$checkResult = false;
 		
-		$("#wh_man_name").on("focusout", function(){
-			let wh_man_name = $("#wh_man_name").val();
-			$.ajax({
-				type: "GET",
-				url: "WarehouseCheckMan",
-				data: { wh_man_name: $("#wh_man_name").val()},
-				success: function(result) {
-					$("#checkMan").html(result);
+// 		$("#wh_man_name").on("focusout", function(){
+// 			let wh_man_name = $("#wh_man_name").val();
+// 			$.ajax({
+// 				type: "GET",
+// 				url: "WarehouseCheckMan",
+// 				data: { wh_man_name: $("#wh_man_name").val()},
+// 				success: function(result) {
+// 					$("#checkMan").html(result);
 					
-					if(result == "true"){
-						$("#checkMan").html("물류팀 직원만 가능합니다!!!!").css("color", "red");
-						checkResult = false;
-					} else {
-						$("#checkMan").html("물류팀 직원입니다.").css("color", "green");
-						CheckResult = true;
-					}
-				},
-			});
-		}); // 물류팀 확인
+// 					if(result == "true"){
+// 						$("#checkMan").html("물류팀 직원만 가능합니다!!!!").css("color", "red");
+// 						checkResult = false;
+// 					} else {
+// 						$("#checkMan").html("물류팀 직원입니다.").css("color", "green");
+// 						CheckResult = true;
+// 					}
+// 				},
+// 			});
+// 		}); // 물류팀 확인
 		
 		// 구분 = 창고 일때만 위치 선택
-		$("input[name='wh_gubun']").on("change", function(){
-			let wh_gubun = $("input[name='wh_gubun']:checked").val();
-//	 		alert(wh_gubun);
-//	 		alert(typeof(wh_gubun));
-			if(wh_gubun == '2'){ // 공장이면 선택 못하게함
-				$("input:radio[name=wh_location]").prop("disabled", true);
-				$("input:radio[name=wh_location]").prop("checked", false);
-			} else if(wh_gubun == '1') { // 창고는 선택 가능
-				$("input:radio[name=wh_location]").prop("disabled", false);
-			}
+		$("input[name='wh_gubun']").on("click", function(){
+// 			let wh_gubun = $("input[name='wh_gubun']:checked").val();
+// //	 		alert(wh_gubun);
+// //	 		alert(typeof(wh_gubun));
+// 			if(wh_gubun == '2'){ // 공장이면 선택 못하게함
+// 				$("input:radio[name=wh_location]").prop("disabled", true);
+// 				$("input:radio[name=wh_location]").prop("checked", false);
+// 			} else if(wh_gubun == '1') { // 창고는 선택 가능
+// 				$("input:radio[name=wh_location]").prop("disabled", false);
+// 			}
+			alert("구분은 수정 불가합니다.");
 		}); // 구분 제어
 		
 		// 위치 = 1:내부 => 주소 내용 clear
 		$("input[name='wh_location']").on("click", function(){
-			let wh_location = $("input[name='wh_location']:checked").val();
+// 			let wh_location = $("input[name='wh_location']:checked").val();
 // 			alert(wh_location);
-			if(wh_location == '1'){
-				$("#wh_addr1").val('');
-				$("#wh_addr2").val('');
-				$("#wh_pcode").val('');
-// 				$("text").empty();
-			}
+// 			if(wh_location == '1'){
+// 				$("#wh_addr1").val('');
+// 				$("#wh_addr2").val('');
+// 				$("#wh_pcode").val('');
+// // 				$("text").empty();
+// 			}
+			alert("위치는 수정 불가합니다.");
 		});
+		
+		// 담당자 select
+		let employees = $("#employees").val();
+		console.log(employees);
+		$("#wh_man_name option[value='" + employees + "']").prop("selected", true);
+		
+		// 구분,위치 수정불가 alert
 	});
 </script>
 <style type="text/css">
@@ -191,7 +161,7 @@
                         </div>
                         <div class="card-body card-block">
                         	<form action="WarehouseModifyPro" method="post" enctype="multipart/form-data" class="form-horizontal">
-                        	<c:forEach var="warehouse" items="${whList }">
+<%--                         	<c:forEach var="warehouse" items="${whList }"> --%>
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">창고코드<font style="color: red;">*</font></label></div>
                         			<div class="col-12 col-md-9">
@@ -213,14 +183,14 @@
                         				<div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio1" class="form-check-label ">
-		                                            <input type="radio" id="wh_gubun1" name="wh_gubun" value="1" checked="checked" class="form-check-input" required="required">1 : 창고
+		                                            <input type="radio" onclick="return(false);" id="wh_gubun1" name="wh_gubun" value="1" checked="checked" class="form-check-input" required="required">1 : 창고
 		                                        </label>
 		                                    </div>
 	                                    </div>
 	                                    <div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio2" class="form-check-label ">
-		                                            <input type="radio" id="wh_gubun2" name="wh_gubun" value="2" class="form-check-input" required="required">2 : 공장
+		                                            <input type="radio" onclick="return(false);" id="wh_gubun2" name="wh_gubun" value="2" class="form-check-input" required="required">2 : 공장
 		                                        </label>
 		                                    </div>
 	                                	</div>
@@ -234,14 +204,14 @@
                         				<div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio1" class="form-check-label ">
-		                                            <input type="radio" id="wh_gubun1" name="wh_gubun" value="1" class="form-check-input" required="required">1 : 창고
+		                                            <input type="radio" onclick="return(false);" id="wh_gubun1" name="wh_gubun" value="1" class="form-check-input" required="required">1 : 창고
 		                                        </label>
 		                                    </div>
 	                                    </div>
 	                                    <div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio2" class="form-check-label ">
-		                                            <input type="radio" id="wh_gubun2" name="wh_gubun" value="2" checked="checked" class="form-check-input" required="required">2 : 공장
+		                                            <input type="radio" onclick="return(false);" id="wh_gubun2" name="wh_gubun" value="2" checked="checked" class="form-check-input" required="required">2 : 공장
 		                                        </label>
 		                                    </div>
 	                                	</div>
@@ -257,14 +227,14 @@
                         				<div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio1" class="form-check-label ">
-		                                            <input type="radio" id="radio1" name="wh_location" value="1" checked="checked" class="form-check-input" required="required">1 : 내부
+		                                            <input type="radio" onclick="return(false);"id="radio1" name="wh_location" value="1" checked="checked" class="form-check-input" required="required">1 : 내부
 		                                        </label>
 		                                    </div>
 	                                    </div>
 	                                    <div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio2" class="form-check-label ">
-		                                            <input type="radio" id="radio2" name="wh_location" value="2" class="form-check-input" required="required">2 : 외부
+		                                            <input type="radio" onclick="return(false);"id="radio2" name="wh_location" value="2" class="form-check-input" required="required">2 : 외부
 		                                        </label>
 		                                    </div>
 	                                    </div>
@@ -278,14 +248,14 @@
                         				<div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio1" class="form-check-label ">
-		                                            <input type="radio" id="wh_location1" name="wh_location" value="1" class="form-check-input" required="required">1 : 내부
+		                                            <input type="radio" onclick="return(false);" id="wh_location1" name="wh_location" value="1" class="form-check-input" required="required">1 : 내부
 		                                        </label>
 		                                    </div>
 	                                    </div>
 	                                    <div class="form-check-inline form-check">
 		                                    <div class="radio">
 		                                        <label for="radio2" class="form-check-label ">
-		                                            <input type="radio" id="wh_location2" name="wh_location" value="2" checked="checked" class="form-check-input" required="required">2 : 외부
+		                                            <input type="radio" onclick="return(false);" id="wh_location2" name="wh_location" value="2" checked="checked" class="form-check-input" required="required">2 : 외부
 		                                        </label>
 		                                    </div>
 	                                    </div>
@@ -312,7 +282,12 @@
                         		<div class="row form-group">
                         			<div class="col col-md-3"><label class=" form-control-label">관리자명<font style="color: red;">*</font></label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_man_name" name="wh_man_name" value="${warehouse.wh_man_name }" class="form-control" required="required">
+	                        			<input type="hidden" id="employees" name="employees" value="${warehouse.wh_man_name }" class="form-control" required="required">
+	                        			<select class="form-control" id="wh_man_name" name="wh_man_name" data-placeholder="관리자를 선택해주세요" required="required">
+                       					<c:forEach var="logi" items="${employees }">
+                       						<option value="${logi }">${logi }</option>
+                       					</c:forEach> 
+                        				</select>
 	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
                         			</div>
                         		</div>
@@ -375,7 +350,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </c:forEach>
+<%--                             </c:forEach> --%>
                         	</form>
                         </div>
             		</div>
