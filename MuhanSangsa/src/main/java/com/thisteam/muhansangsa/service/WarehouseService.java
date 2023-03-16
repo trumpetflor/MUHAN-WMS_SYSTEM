@@ -20,8 +20,13 @@ public class WarehouseService {
 	}
 	
 	// 창고 조회
-	public List<WarehouseVO> getWarehouseList() {
-		return mapper.selectWarehouseList();
+	public List<WarehouseVO> getWarehouseList(String searchType, String keyword, int startRow, int listLimit) {
+		return mapper.selectWarehouseList(searchType, keyword, startRow, listLimit);
+	}
+	
+	// 목록 갯수 계산 (페이징 처리)
+	public int getWhListCount(String searchType, String keyword) {
+		return mapper.selectWhListCount(searchType, keyword);
 	}
 	
 	// 창고 권한
@@ -30,7 +35,7 @@ public class WarehouseService {
 	}
 	
 	// 창고 상세정보
-	public List<WarehouseVO> getWarehouseDetail(String wh_cd) {
+	public WarehouseVO getWarehouseDetail(String wh_cd) {
 		return mapper.selectWarehouseDetail(wh_cd);
 	}
 	
@@ -71,6 +76,11 @@ public class WarehouseService {
 	// 창고 코드 갯수
 	public int getCodeCount(String keyword) {
 		return mapper.selectCodeCount(keyword)+1;
+	}
+	
+	// 물류팀 직원 목록
+	public List<String> getLogiEmployeesList() {
+		return mapper.selectLogiEmployeesList();
 	}
 
 }

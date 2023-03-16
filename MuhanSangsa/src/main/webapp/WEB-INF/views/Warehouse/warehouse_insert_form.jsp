@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -23,6 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/lib/chosen/chosen.min.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
@@ -239,10 +241,15 @@ $(function() {
                         			</div>
                         		</div>
                         		<div class="row form-group">
-                        			<div class="col col-md-3"><label class=" form-control-label">관리자명<font style="color: red;">*</font></label></div>
+                        			<div class="col col-md-3"><label for="wh_man_name" class=" form-control-label">관리자명<font style="color: red;">*</font></label></div>
                         			<div class="col-12 col-md-9">
-	                        			<input type="text" id="wh_man_name" name="wh_man_name" class="form-control" required="required">
-	                        			<small id="checkMan" class="form-text text-muted">물류팀 직원만 가능합니다</small>
+<!-- 	                        			<input type="text" id="wh_man_name" name="wh_man_name" class="form-control" required="required"> -->
+                        				<select class="form-control" id="wh_man_name" name="wh_man_name" data-placeholder="관리자를 선택해주세요" required="required">
+                        					<c:forEach var="logi" items="${employees }">
+                        						<option value="${logi }">${logi }</option>
+                        					</c:forEach> 
+                        				</select>
+	                        			<small class="form-text text-muted">물류팀 직원만 가능합니다</small>
                         			</div>
                         		</div>
                         		<div class="row form-group">
