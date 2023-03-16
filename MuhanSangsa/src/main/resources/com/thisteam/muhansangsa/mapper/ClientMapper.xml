@@ -115,6 +115,32 @@
 			</if>
 	</select>
 	
+	<!-- 거래처 상세 목록 조회 -->
+	<select id="selectClientDetailList" resultType="ClientVO">
+		SELECT *
+			FROM client
+			<if test="!keyword.equals('')">
+			WHERE
+				<choose>
+					<when test="searchType.equals('business_no')">
+						business_no LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('cust_name')">
+						cust_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('boss_name')">
+						boss_name LIKE '%${keyword}%' 
+					</when>
+					<when test="searchType.equals('addr')">
+						addr LIKE '%${keyword}%'
+					</when>
+				</choose>		
+			</if>
+<!-- 		ORDER BY -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>
 	
 	
 </mapper>

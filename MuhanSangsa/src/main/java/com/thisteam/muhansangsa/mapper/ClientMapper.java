@@ -29,6 +29,13 @@ public interface ClientMapper {
 
 	// 거래처 목록 갯수 계산 (페이징 처리)
 	int selectClientListCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
+
+	// 거래처 상세 목록 조회
+	List<ClientVO> selectClientDetailList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit);
 	
 	
 
