@@ -151,11 +151,9 @@
 		//---------------------------------------토글 처리 부분
 
 		// menu 클래스 바로 하위에 있는 a 태그를 클릭했을때 (창고목록 > 창고구역명 )
-		
 		$(".menu > a").click(function() {
 			
 			// 창고 구역 목록 보이기
-// 			var submenu = $(this).next("ul");
 			var aNextOne = $(this).next(); // 이름 변경 버튼
 			var aNextTwo = aNextOne.next("ul");
 			
@@ -165,35 +163,29 @@
 				aNextOne.css("display", "none");
 			} else {
 				aNextTwo.slideDown();
-// 				aNextTwo.css("background-color", "gray");
 				aNextOne.css("display", "block");
 			}
 
-			// submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
-// 			if (submenu.is(":visible")) {
-// 				submenu.slideUp();
-// 			} else {
-// 				submenu.slideDown();
-// 			}
-
 		});
 		
-		$(".hide > .w1").click(function() {
-			// 창고구역명 > 창고 구역 내 위치명 - 얘가 실행이 안되고 에이젝스만 실행됨ㅠ     
-			console.log("카운트");
+// 		$(".w1 > a").click(function() {
+// 			창고구역명 > 창고 구역 내 위치명 - 얘가 실행이 안되고 에이젝스만 실행됨ㅠ     
+// 			console.log("카운트");
 // 			alert("w1(창고 구역) 클릭");
 // 			var aNextA = $(this).next();
 // 			var aNextUl = $(this).next();
 // 			var submenu2 = aNextUl.next("ul");
-			var submenu2 = $(this).next("ul");
+// 			var submenu2 = $(this).closest(".warehouse-loc-area");
 			
-			if (submenu2.is(":visible")) {
-				submenu2.slideUp();
+// 			if (submenu2.is(":visible")) {
+// 				submenu2.slideUp();
 // 				submenu2.empty();
-			} else {
-				submenu2.slideDown();
-			}
-		});
+// 				submenu2.css("display", "none");
+// 			} else {
+// 				submenu2.slideDown();
+// 				submenu2.css("display", "block");
+// 			}
+// 		});
 
 		// 추가 버튼 마우스 오버 시 해당 창고명, 창고 구역 명 표시 (해당 창고만 됨..)
 		$(".ti-plus").hover(function() {
@@ -205,70 +197,6 @@
 // 			$(this).prev("a").css("color", "#212529");
 		});
 		
-// 		$("#add_wh_area").focusout(function() {
-// 			let add_wh_area = $("#add_wh_area").val();
-// 			alert("창고명 : " + add_wh_area);
-			
-// 			$.ajax({
-				
-// 			});
-
-// 		});
-		
-		//---------------------------------------토글 처리 부분 		
-
-		// 이미지 롤오버 처리
-		// 	        $("a.imgRollover").on("click", function(){
-		// 	            // a 태그 하위에 있는 img 태그 찾기
-		// 	            var img = $(this).find("img");
-		// 	            var src = img.attr("src");
-
-		// 	            // 현재 이미지가 on 인지 off 인지 판단
-		// 	            var isOn = src.indexOf("_on.") > 0;
-
-		// 	            // on 상태면 이미지 파일이름을 *_off 로 바꾸고 아니면 *_on 로 바꾸기
-		// 	            if( isOn ){
-		// 	                img.attr("src", src.replace("_on.", "_off."));
-		// 	            }else{
-		// 	                img.attr("src", src.replace("_off.", "_on."));
-		// 	            }
-		// 	        });
-
-		// 메뉴 클릭 처리
-		// 	        $(".menu>a").on("click", function(){
-		// 	            // 전에 펼쳐져 있던 메뉴
-		// 	            var oldMenu = $(".menu>ul").filter(":visible");
-		// 	            var oldMenuImg = oldMenu.prev("a").find("img");
-
-		// 	            // 전에 펼쳐져 있던 메뉴가 있으면
-		// 	            if( oldMenu.length>0 ){
-		// 	                // 메뉴버튼 이미지를 off 로 바꾸고 하위 메뉴를 안보이게 한다.
-		// 	                oldMenuImg.attr("src", oldMenuImg.attr("src").replace("_on.", "_off."));
-		// 	                oldMenu.hide();
-		// 	            }
-
-		// 	            // 지금 클릭한 메뉴
-		// 	            var menu = $(this).next("ul");
-		// 	            var menuImg = $(this).find("img");
-
-		// 	            // 지금 클릭한 메뉴버튼 이미지는 on 으로 바꾸고 하위메뉴를 보이게 한다.
-		// 	            menuImg.attr("src", menuImg.attr("src").replace("_off.", "_on."));
-		// 	            menu.show();
-		// 	        });
-		// 	   	 });
-		// --------------------------이미지 롤오버 처리
-
-		//-------------------항목 + / - 처리
-
-		// 항목 + 처리하기 
-		// 		 $("#addColumn").on("click", (function(){
-
-		// 			 $(".w1").after("<li class="w1"><a><img src="./resources/images/right-arrow.png" width="10px" />&nbsp;&nbsp;창고 구역명 1-3");
-
-		//             });
-		
-		
-
 	}); // document
 	
 	// 창고 입력창 삭제
@@ -313,16 +241,12 @@
 			})
 			.done(function(result) { // 요청 성공 시
 				
-// 				let insert = $.html(result).find('li');
-				
 				$("#right").append(result);
 					
 			})
 			.fail(function(result) {
 				$("#right").append(result);
-// 				$("#" + whArea.wh_cd).append("요청 실패..ㅠㅠ");
 			});
-				
 				
 		})
 		.fail(function() {
@@ -331,12 +255,17 @@
 		
 	}
 	
+// 	let clickCount = 0;
+	
 	function whLocArea(wh_area_cd, wh_cd) { // 걍 안 뜸 -> 뜸 - by. 에이젝스 광공 하원
 		
-// 		alert("w1(창고 구역) 클릭");
-//			var aNextA = $(this).next();
-//			var aNextUl = $(this).next();
-//			var submenu2 = aNextUl.next("ul");
+// 		if(clickCount % 2 == 1) {
+// 			$("#" + wh_area_cd + " ul").slideUp(); 
+// 			$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "none");
+// 			return;
+// 		}
+		
+// 		clickCount = 0;
 		let whCd = "'" + wh_cd + "'";
 // 		let whAreaCd = "'" + wh_area_cd + "'";
 		
@@ -356,11 +285,14 @@
 							+ '<a href="javascript:getWhLocAreaStock(' + whCd + ', ' + wh_area_cd + ', ' + whLocArea.wh_loc_in_area_cd + ')">' + whLocArea.wh_loc_in_area + '</a>&nbsp;&nbsp;&nbsp;'
 							+ '<span class="ti-pencil-alt modify_wh_loc_area"></span>&nbsp;<span class="ti-minus remove_wh_loc_area"></span>'
 							+ '</li>';
-// 							+ "</ul>";
-// 				alert(result);
-// 				alert(wh_area_cd);
-// 				$("#" + wh_area_cd).append(result);
+
 				$("#" + wh_area_cd + "> ul").append(result);
+				$("#" + wh_area_cd + " ul").slideDown();
+				
+				$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "block");
+// 	 			clickCount = 1;
+// 				console.log("클릭 횟수 : " + clickCount);
+				
 			}
 			
 			$("#right").empty();
@@ -376,10 +308,8 @@
 			})
 			.done(function(result) { // 요청 성공 시
 				
-// 				let insert = $.html(result).find('li');
-				
 				$("#right").append(result);
-					
+	 			
 			})
 			.fail(function(result) {
 				$("#right").append(result);
@@ -390,36 +320,17 @@
 			$(".warehouse-loc-area").append("목록을 불러올 수 없습니다.");
 		});
 		
-// 		var submenu2 = $(".w1 ul");
-		
-// 		submenu2.css("display", "block");
-		
-// 		if($(".w1 ul").is(":visible")) { // 되긴 하는데 여러 창고 구역 위치가 같이 됨..
-		if($("#" + wh_area_cd + " ul").is(":visible")) { // 되긴 하는데 여러 창고 구역 위치가 같이 됨..
+		if($("#" + wh_area_cd + " ul").is(":visible")) { // 열리기만 함..
 			$("#" + wh_area_cd + " ul").slideUp(); 
 //			submenu2.empty();
 			// 열렸을 때만 + 버튼 보이게 하기
 			$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "none");
 		} else {
-			$("#" + wh_area_cd + " ul").slideDown();
-			$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "block");
+// 			$("#" + wh_area_cd + " ul").slideDown();
+// 			$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "block");
 		}
+		
 	}
-	
-// 	$(document).on("click", ".hide > a", function() {
-		
-// 		// 창고구역명 > 창고 구역 내 위치명 - 얘가 실행이 안되고 에이젝스만 실행됨ㅠ     
-// 		console.log("카운트");
-// 		alert("w1(창고 구역) 클릭");
-// 		var submenu2 = $(this).next("ul");
-		
-// 		if (submenu2.is(":visible")) {
-// 			submenu2.slideUp();
-// 			submenu2.empty();
-// 		} else {
-// 			submenu2.slideDown();
-// 		}
-// 	});	
 	
 	// 창고 구역 추가
 	function addWhAreaDiv(wh_cd) {
@@ -473,8 +384,8 @@
 			})
 			.done(function() {
 				alert("해당 창고 구역이 삭제되었습니다.");
-// 				whArea(wh_cd);
-				window.location.reload();
+				javascript:whArea(wh_cd);
+// 				window.location.reload();
 			})
 			.fail(function() {
 				alert("창고 구역 삭제 실패");
@@ -485,11 +396,13 @@
 	
 	// 창고 구역 내 위치 삭제
 	$(document).on("click", ".remove_wh_loc_area", function(){
-// 		let li = $(this).closest("li"); // 창고 구역 코드
-// 		let wh_area_cd = li.closet("li").prop("id"); // 창고 구역 코드
+		let li = $(this).closest("li"); // 창고 구역 코드
+		let wh_cd = li.parent("ul").prop("id"); // 창고 구역 코드
+		let wh_area_cd = li.closest("li").prop("id"); // 창고 구역 코드
 		let wh_loc_in_area_cd = $(this).closest("li").prop("id"); // 창고 구역 내 위치 코드
 		let wh_loc_in_area = $(this).prev().prev().text(); // 창고 구역 내 위치 이름
 		let confirmDelete = confirm("해당 창고 구역 내 위치(위치명 : " + wh_loc_in_area + ") 를 삭제하시겠습니까?");
+		console.log("창고 : " + wh_cd + "창고 구역 : " + wh_area_cd);
 		
 		if(confirmDelete) {
 			$.ajax({
@@ -498,7 +411,7 @@
 			})
 			.done(function() {
 				alert("해당 창고 구역의 위치가 삭제되었습니다.");
-// 				whArea(wh_area_cd);
+// 				javascript:whLocArea(wh_area_cd);
 				window.location.reload();
 			})
 			.fail(function() {
