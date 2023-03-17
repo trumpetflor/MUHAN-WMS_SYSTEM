@@ -309,7 +309,7 @@
 			.done(function(result) { // 요청 성공 시
 				
 				$("#right").append(result);
-	 			
+				$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "block");
 			})
 			.fail(function(result) {
 				$("#right").append(result);
@@ -327,7 +327,7 @@
 			$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "none");
 		} else {
 // 			$("#" + wh_area_cd + " ul").slideDown();
-// 			$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "block");
+			$("#" + wh_area_cd + " .add_wh_loc_area").css("display", "block");
 		}
 		
 	}
