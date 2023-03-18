@@ -215,9 +215,66 @@
 
 // 		});
 		
+		//---------------------------------------토글 처리 부분 		
+
+		// 이미지 롤오버 처리
+		// 	        $("a.imgRollover").on("click", function(){
+		// 	            // a 태그 하위에 있는 img 태그 찾기
+		// 	            var img = $(this).find("img");
+		// 	            var src = img.attr("src");
+
+		// 	            // 현재 이미지가 on 인지 off 인지 판단
+		// 	            var isOn = src.indexOf("_on.") > 0;
+
+		// 	            // on 상태면 이미지 파일이름을 *_off 로 바꾸고 아니면 *_on 로 바꾸기
+		// 	            if( isOn ){
+		// 	                img.attr("src", src.replace("_on.", "_off."));
+		// 	            }else{
+		// 	                img.attr("src", src.replace("_off.", "_on."));
+		// 	            }
+		// 	        });
+
+		// 메뉴 클릭 처리
+		// 	        $(".menu>a").on("click", function(){
+		// 	            // 전에 펼쳐져 있던 메뉴
+		// 	            var oldMenu = $(".menu>ul").filter(":visible");
+		// 	            var oldMenuImg = oldMenu.prev("a").find("img");
+
+		// 	            // 전에 펼쳐져 있던 메뉴가 있으면
+		// 	            if( oldMenu.length>0 ){
+		// 	                // 메뉴버튼 이미지를 off 로 바꾸고 하위 메뉴를 안보이게 한다.
+		// 	                oldMenuImg.attr("src", oldMenuImg.attr("src").replace("_on.", "_off."));
+		// 	                oldMenu.hide();
+		// 	            }
+
+		// 	            // 지금 클릭한 메뉴
+		// 	            var menu = $(this).next("ul");
+		// 	            var menuImg = $(this).find("img");
+
+		// 	            // 지금 클릭한 메뉴버튼 이미지는 on 으로 바꾸고 하위메뉴를 보이게 한다.
+		// 	            menuImg.attr("src", menuImg.attr("src").replace("_off.", "_on."));
+		// 	            menu.show();
+		// 	        });
+		// 	   	 });
+		// --------------------------이미지 롤오버 처리
+
+		//-------------------항목 + / - 처리
+
+		// 항목 + 처리하기 
+		// 		 $("#addColumn").on("click", (function(){
+
+		// 			 $(".w1").after("<li class="w1"><a><img src="./resources/images/right-arrow.png" width="10px" />&nbsp;&nbsp;창고 구역명 1-3");
+
+		//             });
 
 	}); // document
 	
+	// 창고 입력창 삭제
+	$(document).on("click", "input[name=remove]", function(){
+// 		alert("입력창 삭제");
+		$(this).closest("li").remove();
+	});
+
 	function whArea(wh_cd) { // 한 번만 되게 만들기... 어떻게..? => 성공! - by. 에이젝스 광공 하원
 		
 		$("#" + wh_cd).empty();
@@ -352,7 +409,7 @@
 		}
 	}
 	
-	// 창고 구역 추가 입력창
+	// 창고 구역 추가
 	function addWhAreaDiv(wh_cd) {
 		
 // 		let whCd = wh_cd;
@@ -360,7 +417,7 @@
 // 		alert("창고 코드 : " + wh_cd);
 		
 		let html = '<li><div id="wh_area_div">'
-					+ '<form action="#" method="get" class="registWhAreaForm">'
+					+ '<form action="RegistWhArea" method="post">'
 					+ '<input type="hidden" value=' + wh_cd + ' name="wh_cd">'
 					+ '&nbsp;&nbsp;&nbsp;<input type="text" name="wh_area" placeholder="등록할 창고 구역명" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
 					+ '<input type="submit" value="등록" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" name="remove" class=" mx-1 btn btn-sm btn-dark rounded-1">'
@@ -370,36 +427,8 @@
 		$("#" + wh_cd).append(html);
 		
 	} 
-	
-	// 창고 구역 추가
-	$(document).on("submit", ".registWhAreaForm", function(){
-		let wh_cd = $("input[name=wh_cd]").val(); // 창고 코드
-		let wh_area = $("input[name=wh_area]").val(); // 추가할 창고 구역명
-		
-// 		alert("창고 코드 : " + wh_cd + ", 입력한 창고 구역 명 : " + wh_area);
-		
-		$.ajax({
-			type: "GET",
-			url: "RegistWhArea",
-			data: {
-				"wh_cd" : $("input[name=wh_cd]").val(),
-				"wh_area" : $("input[name=wh_area]").val()
-			}
-		})
-		.done(function() {
-			alert("해당 창고 구역이 등록되었습니다.");
-			javascript:whArea(wh_cd);
-//			window.location.reload();
-		})
-		.fail(function() {
-			alert("창고 구역 등록 실패");
-		});
-		
-		event.preventDefault(); // 이벤트 차단
-		
-	});
 
-	// 창고 구역 내 위치 추가 입력창
+	// 창고 구역 내 위치 추가
 	function addWhLocAreaDiv(wh_area_cd) {
 		
 // 		let whCd = wh_cd;
@@ -407,8 +436,8 @@
 // 		alert("창고 구역 코드 : " + wh_area_cd);
 		
 		let html = '<li><div id="wh_loc_area_div">'
-					+ '<form action="RegistWhLocArea" method="get" class="registWhLocAreaForm">'
-					+ '<input type="hidden" value="' + wh_area_cd + '" name="wh_area_cd">'
+					+ '<form action="RegistWhLocArea" method="post">'
+					+ '<input type="hidden" value=' + wh_area_cd + ' name="wh_area_cd">'
 					+ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_loc_in_area" placeholder="창고 구역 내 위치명" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
 					+ '<input type="submit" value="등록" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" name="remove" class=" mx-1 btn btn-sm btn-dark rounded-1">'
 					+ '</form>'
@@ -417,47 +446,6 @@
 		$("#" + wh_area_cd).append(html);
 		
 	} 
-	
-	// 창고 구역 내 위치 추가
-	$(document).on("submit", ".registWhLocAreaForm", function(){
-// 		let whla = $(this).closest("li"); // 창고 구역 내 위치 등록창 li
-// 		let wha = whla.closest("li"); // 창고 구역 li
-		let wh_area_cd = $("input[name=wh_area_cd]").val(); // 창고 구역 코드
-		let wh_loc_in_area = $("input[name=wh_loc_in_area]").val(); // 창고 구역 내 위치명
-		let wh_cd = $("#" + wh_area_cd).parent("ul").prop("id"); // 창고 코드
-		let whCd = "'" + wh_cd + "'" // 창고 코드 문자열
-		let formDivLi = $(this).closest("li"); // 입력창 li
-		
-// 		alert("창고 코드 : " + wh_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 입력한 창고 구역 위치 명 : " + wh_loc_in_area);
-		
-		$.ajax({
-			type: "GET",
-			url: "RegistWhLocArea",
-			data: {
-				"wh_area_cd" : $("input[name=wh_area_cd]").val(),
-				"wh_loc_in_area" : $("input[name=wh_loc_in_area]").val()
-			}
-		})
-		.done(function() {
-			alert("해당 창고 구역 내 위치가 등록되었습니다.");
-			javascript:whLocArea(wh_area_cd, wh_cd);
-//			window.location.reload();
-
-			formDivLi.remove(); // 입력창 지우기
-		})
-		.fail(function() {
-			alert("창고 구역 내 위치 등록 실패");
-		});
-		
-		event.preventDefault(); // 이벤트 차단
-		
-	});
-	
-	// 창고 입력창 삭제
-	$(document).on("click", "input[name=remove]", function(){
-// 		alert("입력창 삭제");
-		$(this).closest("li").remove();
-	});
 	
 	// 창고 구역 삭제
 	$(document).on("click", ".remove_wh_area", function(){
@@ -502,7 +490,7 @@
 			})
 			.done(function() {
 				alert("해당 창고 구역의 위치가 삭제되었습니다.");
-				javascript:whLocArea(wh_area_cd, wh_cd);
+				javascript:whLocArea(wh_area_cd, whCd);
 // 				window.location.reload();
 			})
 			.fail(function() {
@@ -538,7 +526,7 @@
 		let wh_area_cd = $("input[name=wh_area_cd]").val();
 		let wh_area = $("input[name=wh_area]").val();
 		
-// 		alert("창고 코드 : " + wh_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 입력한 창고 구역 명 : " + wh_area);
+		alert("창고 코드 : " + wh_cd + ", 창고 구역 코드 : " + wh_area_cd + ", 입력한 창고 구역 명 : " + wh_area);
 		
 		$.ajax({
 			type: "GET",
@@ -605,11 +593,11 @@
 		})
 		.done(function() {
 			alert("해당 창고 구역 내 위치명이 수정되었습니다.");
-			javascript:whLocArea(wh_area_cd, wh_cd);
+			javascript:whLocArea(wh_area_cd, whCd);
 //			window.location.reload();
 		})
 		.fail(function() {
-			alert("창고 구역 내 위치명 수정 실패");
+			alert("창고 구역내 위치명 수정 실패");
 		});
 		
 		event.preventDefault(); // 이벤트 차단
