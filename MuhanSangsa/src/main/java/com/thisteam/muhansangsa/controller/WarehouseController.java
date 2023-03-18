@@ -226,6 +226,7 @@ public class WarehouseController {
 			@RequestParam(defaultValue = "1") int pageNum, // 현재 페이지 번호
 			@RequestParam(defaultValue = "") String searchType, // 검색 타입
 			@RequestParam(defaultValue = "") String keyword, // 검색어
+			@RequestParam(defaultValue = "-1") int status,
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
@@ -234,15 +235,15 @@ public class WarehouseController {
 		// ------------------------- 쌤이랑 한 부분 --------------------------------------------
 
 		// 페이징 처리를 위한 변수 선언
-		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록을 7개로 제한
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록 제한
 		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
 
 		// 거래처 목록 가져오기
-		List<WarehouseVO> whList = service.getWarehouseList(searchType, keyword, startRow, listLimit);
+		List<WarehouseVO> whList = service.getWarehouseList(searchType, keyword, startRow, listLimit, status);
 
 		// 페이징 처리 
-		//1. 검색어에 해당하는 거래처 정보(ClientVO)의 갯수 계산
-		int listCount = service.getWhListCount(searchType, keyword);
+		//1. 검색어에 해당하는 정보의 갯수 계산
+		int listCount = service.getWhListCount(searchType, keyword, status);
 
 		// 2. 한 페이지에서 표시할 페이지 숫자의 갯수 설정
 		int pageListLimit = 10; // 한 페이지에서 표시할 페이지 수를 10개로 제한

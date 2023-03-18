@@ -134,8 +134,10 @@
 		$('input:checkbox[name=AllChecked]').on("click",function(){
 			if($(this).is(":checked") == true){
 				$("input[name=inChecked]").prop("checked",true);
+				$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
 			}else{
 				$("input[name=inChecked]").prop("checked",false);
+				$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
 			}
 		});	//전체선택버튼
 		

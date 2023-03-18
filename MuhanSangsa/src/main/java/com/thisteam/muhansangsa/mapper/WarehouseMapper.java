@@ -16,10 +16,14 @@ public interface WarehouseMapper {
 			@Param("searchType") String searchType, 
 			@Param("keyword") String keyword, 
 			@Param("startRow") int startRow, 
-			@Param("listLimit") int listLimit);
+			@Param("listLimit") int listLimit,
+			@Param("status") int status);
 	
 	// 목록 갯수 계산 (페이징 처리)
-	int selectWhListCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
+	int selectWhListCount(
+				@Param("searchType") String searchType,
+				@Param("keyword") String keyword,
+				@Param("status") int status);
 	
 	// 창고 권한
 	String selectWhPrivilege(String sId);

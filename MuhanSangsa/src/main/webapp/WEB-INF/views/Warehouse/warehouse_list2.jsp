@@ -27,8 +27,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+	<!-- CSS only -->
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> -->
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <!-- pageNum 이 없을 경우 기본값 1, 있을 경우 pageNum 값 저장 -->
 <c:choose>
@@ -47,21 +48,26 @@ function modifyOpen(code){
 
 //페이지번호 저장
 let pageNum = ${pageNum};
+// tab 이동 변수
+var realstatus = -1;
 
 $(function() {
 	
 	let searchType = $("#searchType").val(); // 검색 타입
 	let keyword = $("#keyword").val(); // 검색어
-	
-	load_list(pageNum, searchType, keyword); // 게시물 목록 조회 함수 호출 (pageNum 까지 파라미터로)
-	
+	load_list(pageNum, searchType, keyword, realstatus); // 게시물 목록 조회 함수 호출 (pageNum 까지 파라미터로)
 });
 
+function load_tab(status){
+	let searchType = $("#searchType").val(); // 검색 타입
+	let keyword = $("#keyword").val(); // 검색어
+	load_list(pageNum, searchType, keyword, status);
+}
 // 게시물 목록 조회 함수 (ajax)
-function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페이지, 검색 타입, 검색어
+function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현재 페이지, 검색 타입, 검색어
 	$.ajax({
 		type: "GET",
-		url: "WarehouseListJson?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword,
+		url: "WarehouseListJson?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword + "&status=" + status,
 		dataType: "json"
 	})
 	.done(function(jsonArray) { // 요청 성공 시
@@ -78,8 +84,8 @@ function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페�
 			let code = '"' + jsonArray[index].wh_cd + '"';
 			// 뿌릴 내용
 			let result = "<tr>"
-						+ "<td><a href='javascript:void(0);' onclick='modifyOpen(" + code + ")'>" + jsonArray[index].wh_cd + "</td>"
-						+ "<td><a href='javascript:void(0);' onclick='modifyOpen(" + code + ")'>" + jsonArray[index].wh_name + "</td>"
+						+ "<td class='click' onclick='modifyOpen(" + code + ")'>" + jsonArray[index].wh_cd + "</td>"
+						+ "<td class='click' onclick='modifyOpen(" + code + ")'>" + jsonArray[index].wh_name + "</td>"
 						+ "<td>" + jsonArray[index].wh_gubun + "</td>"
 						+ "<td>" + jsonArray[index].wh_addr + "</td>"
 						+ "<td>" + jsonArray[index].wh_tel + "</td>"
@@ -95,7 +101,7 @@ function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페�
 		
 		// PageInfo 객체 접근 (jsonArray 의 맨 마지막 인덱스) 해서 startPage 와 endPage 얻어오기 -> 차례대로 숫자 목록 저장
 		if(pageNum > 1) {
-			pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valSt + ', ' + valKey + ')">이전</a>';
+			pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valSt + ', ' + valKey + ', ' + status + ')">이전</a>';
 		} else {
 			pageList += '&nbsp;&nbsp;<a href="javascript:(0)">이전</a>';
 		}
@@ -104,12 +110,12 @@ function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페�
 			if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
 				pageList += '&nbsp;&nbsp;<a href="javascript:(0)" style="color: #212529; font-weight: bold;">' + i +'</a>'; 
 			} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
-				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ')">' + i + '</a>';
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ', ' + status + ')">' + i + '</a>';
 			}
 		}
 		
 		if(pageNum < jsonArray[jsonArray.length - 1].endPage) {
-			pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valSt + ', ' + valKey + ')">다음</a>';
+			pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valSt + ', ' + valKey + ', ' + status + ')">다음</a>';
 		} else {
 			pageList += '&nbsp;&nbsp;<a href="javascript:(0)">다음</a>';
 		}
@@ -128,49 +134,53 @@ function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페�
 </head>
 <style type="text/css">
 
-	@font-face {
-	    font-family: 'Pretendard-Regular';
-	    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-	    font-weight: 400;
-	    font-style: normal;
-	}
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
 
-	
-	@font-face {
-	    font-family: 'NEXON Lv1 Gothic OTF';
-	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-	    font-weight: normal;
-	    font-style: normal;
-	}
-	
-	body {
-	 font-family: 'NEXON Lv1 Gothic OTF';
+
+@font-face {
+    font-family: 'NEXON Lv1 Gothic OTF';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+ font-family: 'NEXON Lv1 Gothic OTF';
 /* 	 width: 100%; */
 /* 	 height: 100%; */
-	}
+}
 	
-	#warehouse_table{
-		 vertical-align: middle;
-	}
-	table{
-	 text-align: center;
-	}
-	
-	td {
+#warehouse_table{
+	 vertical-align: middle;
+}
+table{
+	text-align: center;
+}
+
+td {
 	height: 40px;
-	}
+}
+
+.click:not(:disabled):not(.disabled) {
+   cursor: pointer;
+}
 </style>
 <body>
 
 <jsp:include page="../inc/left.jsp"></jsp:include>
  <div class=" pr-4 mr-4 mb-1 mt-4 float-right"><small> *접속 IP: ${ip}</small></div> 
-        <div class="breadcrumbs">
-            <div class="breadcrumbs-inner">
+        <div class="breadcrumbs m-0">
+            <div class="breadcrumbs-inner rounded-start p-2">
                 <div class="row m-0">
                     <div class="col-sm-4">
-                        <div class="page-header float-left">
+                        <div class="page-header float-left rounded-start">
                             <div class="page-title">
-                                <h1>창고 목록</h1>
+                                <h1 class="m-1 click" onclick="location.href='WarehouseList'"><b>창고 목록</b></h1>
                             </div>
                         </div>
                     </div>
@@ -180,7 +190,7 @@ function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페�
                                 <ol class="breadcrumb text-right">
                                     <li>재고 관리</li>
                                     <li>창고 관리</li>
-                                    <li class="active">창고 조회</li>
+                                    <li>창고 조회</li>
                                 </ol>
                             </div>
                         </div>
@@ -205,6 +215,30 @@ function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페�
 						<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
 					</form>
 				</section>
+				
+			<!-- nav바 (tab)  -->
+			<!-- onclick="load_list(숫자값)" 사용으로 상태(status) 구분 
+			   (-1:전체, 0:창고내부, 1:창고외부, 2:공장) -->
+
+			<div class="default-tab" style="margin-bottom: 35px">
+				<nav>
+					<div class="nav nav-tabs" id="nav-tab" role="tablist">
+						<a class="nav-item nav-link active" id="nav-home-tab"
+							data-toggle="tab" href="#" onclick="load_tab(-1)" role="tab"
+							aria-controls="nav-home" aria-selected="true">전체</a> 
+						<a	class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
+							href="#" onclick="load_tab(0)" role="tab"
+							aria-controls="nav-profile" aria-selected="false">창고 내부</a>
+						<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"
+							href="#" onclick="load_tab(1)" role="tab"
+							aria-controls="nav-contact" aria-selected="false">창고 외부</a>
+						<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"
+							href="#" onclick="load_tab(2)" role="tab"
+							aria-controls="nav-contact" aria-selected="false">공장</a>
+					</div>
+				</nav>
+			</div>
+				
                 <table id="warehouse_table" class="table">
                     <thead>
                         <tr>
@@ -229,7 +263,7 @@ function load_list(pageNum, searchType, keyword) { // 파라미터 : 현재 페�
 					</div>
 				</div>
             	<c:if test="${priv eq '1' }">
-					<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1 float-right" onclick="location.href='WarehouseInsertForm'">신규 등록</button>
+					<button type="button" class="btn btn-sm btn-success m-2" onclick="location.href='WarehouseInsertForm'">신규 등록</button>
             	</c:if>
             </div><!-- .animated -->
         </div><!-- .content -->

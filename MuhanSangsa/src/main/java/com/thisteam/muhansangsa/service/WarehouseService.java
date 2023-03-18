@@ -20,13 +20,13 @@ public class WarehouseService {
 	}
 	
 	// 창고 조회
-	public List<WarehouseVO> getWarehouseList(String searchType, String keyword, int startRow, int listLimit) {
-		return mapper.selectWarehouseList(searchType, keyword, startRow, listLimit);
+	public List<WarehouseVO> getWarehouseList(String searchType, String keyword, int startRow, int listLimit, int status) {
+		return mapper.selectWarehouseList(searchType, keyword, startRow, listLimit, status);
 	}
 	
 	// 목록 갯수 계산 (페이징 처리)
-	public int getWhListCount(String searchType, String keyword) {
-		return mapper.selectWhListCount(searchType, keyword);
+	public int getWhListCount(String searchType, String keyword, int status) {
+		return mapper.selectWhListCount(searchType, keyword, status);
 	}
 	
 	// 창고 권한
