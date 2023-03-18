@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,10 +35,12 @@ import com.thisteam.muhansangsa.vo.InRegisterTotalVO;
 import com.thisteam.muhansangsa.vo.InVO;
 import com.thisteam.muhansangsa.vo.InWatingRegisterVO;
 import com.thisteam.muhansangsa.vo.InWatingRegister_nomalVO;
+import com.thisteam.muhansangsa.vo.PageInfo;
 import com.thisteam.muhansangsa.vo.Privilege;
 import com.thisteam.muhansangsa.vo.ProductVO;
 import com.thisteam.muhansangsa.vo.StockHistoryVO;
 import com.thisteam.muhansangsa.vo.StockWhVO;
+import com.thisteam.muhansangsa.vo.WarehouseVO;
 import com.thisteam.muhansangsa.vo.inProcessingArrVO;
 import com.thisteam.muhansangsa.vo.inProcessingVO;
 import com.thisteam.muhansangsa.vo.inRegisterArrVO;
@@ -55,9 +58,9 @@ public class InController {
 	private EmployeesService empService; // 사원 서비스
 	
 	// ======================== yeram ==============================
-	// 입고예정목록
+	// 입고예정목록 조회
 	@GetMapping(value = "/InProcessing")
-	public String processing(Model model, HttpSession session) {
+	public String inProcessingList(Model model, HttpSession session) {
 		
 		// 세션 아이디
         String sId;
@@ -66,7 +69,7 @@ public class InController {
         } else {
            model.addAttribute("msg", "로그인이 필요합니다");
            model.addAttribute("url", "/Login");
-           return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+           return "redirect"; 
         }
 
         // 아이피 주소
@@ -94,10 +97,10 @@ public class InController {
 
 		if(isRightUser) { // 권한 존재할 경우
 			model.addAttribute("priv", "1"); 
-			
-			List<inProcessingVO> inProList = service.getInProList();
-			
-			model.addAttribute("inProList", inProList);
+			// 조회
+//			List<inProcessingVO> inProList = service.getInProList();
+//			
+//			model.addAttribute("inProList", inProList);
 			
 			return "in/in_processing";
 		} else {
@@ -108,8 +111,82 @@ public class InController {
         
 	}
 	
+	// 입고예정목록 조회2
+	@ResponseBody
+	@GetMapping(value = "/InProcessingListJson")
+	public void inProcessingListJson(
+			@RequestParam(defaultValue = "1") int pageNum, // 현재 페이지 번호
+			@RequestParam(defaultValue = "") String searchType, // 검색 타입
+			@RequestParam(defaultValue = "") String keyword, // 검색어
+			@RequestParam(defaultValue = "-1") int status, // 탭
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+
+
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록 제한
+		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
+
+		// 입고 목록 가져오기
+		List<inProcessingVO> inProList = service.getInProList(searchType, keyword, startRow, listLimit, status);
+
+		// 페이징 처리 
+		//1. 검색어에 해당하는 정보의 갯수 계산
+		int listCount = service.getInProListCount(searchType, keyword, status);
+
+		// 2. 한 페이지에서 표시할 페이지 숫자의 갯수 설정
+		int pageListLimit = 10; // 한 페이지에서 표시할 페이지 수를 10개로 제한
+		// 3. 전체 페이지 목록 수 계산
+		int maxPage = listCount / listLimit 
+				+ (listCount % listLimit == 0 ? 0 : 1); 
+
+		// 4. 시작 페이지 번호 계산
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+
+		// 5. 끝 페이지 번호 계산
+		int endPage = startPage + pageListLimit - 1;
+
+		// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+		//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+
+		// PageInfo 객체 생성 후 페이징 처리 정보 저장
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);		
+
+		System.out.println(pageInfo);
+
+		// JSON 형식 변환
+		JSONArray jsonArray = new JSONArray();
+
+		for(inProcessingVO inList : inProList) {
+			System.out.println(inList);
+			JSONObject jsonObject = new JSONObject(inList);
+			System.out.println("입고 코드 : " + jsonObject.get("in_schedule_cd"));
+			
+			jsonArray.put(jsonObject);
+		}
+
+		JSONObject jsonObjectPage = new JSONObject(pageInfo);
+		System.out.println("시작 페이지 : " + jsonObjectPage.get("startPage"));
+		jsonArray.put(jsonObjectPage);
+
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(jsonArray);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	// 입고처리 폼(입고버튼)
-	@GetMapping(value = "/InRegister")
+	@ResponseBody
+	@PostMapping(value = "/InRegister")
 	public String register(String[] inRegisterList,
 							Model model,
 							HttpServletResponse response,
@@ -123,7 +200,7 @@ public class InController {
         } else {
            model.addAttribute("msg", "로그인이 필요합니다");
            model.addAttribute("url", "/Login");
-           return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+           return "redirect"; 
         }
 
         // 아이피 주소
@@ -137,30 +214,30 @@ public class InController {
         }
 		
 		
-		ArrayList<String> in_schedule_cd = new ArrayList<String>();
-		ArrayList<String> product_name = new ArrayList<String>();
-		ArrayList<String> in_date = new ArrayList<String>();
-		
-		for(int i = 0; i<inRegisterList.length; i++) {
-			String a = inRegisterList[i];
-			String b = a.split("/")[0];
-			String c = a.split("/")[1];
-			String d = a.split("/")[2];
-			
-			in_schedule_cd.add(b);
-			product_name.add(c);
-			in_date.add(d);
-		}
+//		ArrayList<String> in_schedule_cd = new ArrayList<String>();
+//		ArrayList<String> product_name = new ArrayList<String>();
+//		ArrayList<String> in_date = new ArrayList<String>();
+//		
+//		for(int i = 0; i<inRegisterList.length; i++) {
+//			String a = inRegisterList[i];
+//			String b = a.split("/")[0];
+//			String c = a.split("/")[1];
+//			String d = a.split("/")[2];
+//			
+//			in_schedule_cd.add(b);
+//			product_name.add(c);
+//			in_date.add(d);
+//		}
 //		System.out.println("in_schedule_cd :" + in_schedule_cd);
 //		System.out.println("product_name :" + product_name);
 //		System.out.println("in_date :" + in_date);
 		
-		List<InRegisterTotalVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
+//		List<InRegisterTotalVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
 		
 //		System.out.println("add 전 : " + resultList);
-		model.addAttribute("resultList", resultList);
-		
-		return "in/in_register_form";
+//		model.addAttribute("resultList", resultList);
+
+        return "in/in_register_form";
 		
 	}
 	

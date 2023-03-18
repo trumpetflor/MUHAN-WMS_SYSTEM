@@ -118,69 +118,180 @@
 /*   --bs-modal-width: 1000px!important;  */
 }
 
+.click:not(:disabled):not(.disabled) {
+   cursor: pointer;
+}
 </style>
-<!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
+<script src="resources/js/jquery-3.6.3.js"></script>
+<!-- pageNum 이 없을 경우 기본값 1, 있을 경우 pageNum 값 저장 -->
+<c:choose>
+	<c:when test="${param.pageNum eq null}">
+		<c:set var="pageNum" value="1"></c:set>
+	</c:when>
+	<c:otherwise>
+		<c:set var="pageNum" value="${param.pageNum }"></c:set>
+	</c:otherwise>
+</c:choose>
 <script type="text/javascript">
-	// 입고예정코드 클릭 시 수정 페이지 이동
-	function modify(item){
-		var code=$(item).text();
-		window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=760, height=900, top= 40,left=540,location=no,status=no,scrollbars=yes');
+// 입고예정코드 클릭 시 수정 페이지 이동
+function modifyOpen(code){
+	window.open('InProcessingModifyForm?in_schedule_cd='+code,'InProcessingModifyForm','width=760, height=900, top= 40,left=540,location=no,status=no,scrollbars=yes');
+} // 수정페이지
 
-	} // 수정페이지
+//페이지번호 저장
+let pageNum = ${pageNum};
+// tab 이동 변수
+var realstatus = -1;
+var w = window.open("about:blank","_blank");
+$(function(){
 	
+	let searchType = $("#searchType").val(); // 검색 타입
+	let keyword = $("#keyword").val(); // 검색어
+	load_list(pageNum, searchType, keyword, realstatus); // 게시물 목록 조회 함수 호출 (pageNum 까지 파라미터로)
 	
-	$(function(){
-		//전체선택 버튼 클릭
-		$('input:checkbox[name=AllChecked]').on("click",function(){
-			if($(this).is(":checked") == true){
-				$("input[name=inChecked]").prop("checked",true);
-				$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
-			}else{
-				$("input[name=inChecked]").prop("checked",false);
-				$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
-			}
-		});	//전체선택버튼
-		
-		// 체크박스 클릭
-		$(document).on("change","input[name=inChecked]",function(){
+	//전체선택 버튼 클릭
+	$('input:checkbox[name=AllChecked]').on("click",function(){
+		if($(this).is(":checked") == true){
+			$("input[name=inChecked]").prop("checked",true);
 			$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
-			let in_schedule_cd = $(this).val();
-		});//체크박스
-		
-		// 입고 버튼 클릭 시
-		$("#inScheduleBtn").on("click", function(){
-			let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
-			$('input:checkbox[name=inChecked]').each(function(index){
-				if($(this).is(":checked")==true){
-					console.log("id값=in_schedule_cd : "+$(this).val());
-					inRegisterList.push($(this).val()); // 배열에 추가
-					
-					console.log("inRegisterList[] : "+ inRegisterList);
-						window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
-						console.log(inRegisterList);
+		}else{
+			$("input[name=inChecked]").prop("checked",false);
+			$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
+		}
+	});	//전체선택버튼
+	
+	// 체크박스 클릭
+	$(document).on("change","input[name=inChecked]",function(){
+		$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
+		let in_schedule_cd = $(this).val();
+		console.log($(this).val());
+	});//체크박스
+	
+	// 입고 버튼 클릭 시
+	$("#inScheduleBtn").click(function(){
+		let inRegisterArr = new Array();
+		$('input:checkbox[name=inChecked]').each(function(index){
+			if($(this).is(":checked")==true){
+				let index = $(this).val();
+				let inList = new Object();
+				inList.in_schedule_cd = $("#in_schedule_cd" + index).val();
+				inList.product_name = $("#product_name" + index).val();
+				inList.in_date = $("#in_date" + index).val();
+				inRegisterArr.push(inList);
+				
+				console.log($(this).val());
+				console.log(inList.in_schedule_cd);
+				console.log(inList.product_name);
+			}
+		});
+			
+// 			window.open('InRegister','InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
+			
+			$.ajax({
+				type: "POST",
+				url: "InRegister",
+				contentType: "application/json",
+				data: JSON.stringify(inRegisterArr),
+				success: function(result) {
+					inRegisterOpen();
+				},
+				fail: function() {
+					alert("요청 실패!");
 				}
-							
 			});
-					
-					
-		}); //입고버튼
-			
-			
-		
-		
-		
-		
-		
-	
-	
-	
-	
-	
-	
-	
-	});//제이쿼리
+						
+				
+				
+	}); //입고버튼
 	
 
+});//제이쿼리
+
+function inRegisterOpen(){
+// 	w.location.href = "InRegister";
+}
+
+	
+//탭
+function load_tab(status){
+	let searchType = $("#searchType").val(); // 검색 타입
+	let keyword = $("#keyword").val(); // 검색어
+	load_list(pageNum, searchType, keyword, status);
+}
+
+// 게시물 목록 조회
+function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현재 페이지, 검색 타입, 검색어
+	$.ajax({
+		type: "GET",
+		url: "InProcessingListJson?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword + "&status=" + status,
+		dataType: "json"
+	})
+	.done(function(jsonArray) { // 요청 성공 시
+		
+		$("#inprocessing_table > tbody").empty(); // 리스트 출력 테이블 구역 비우기
+		$("#pageArea").empty(); // 페이지 번호 구역 비우기
+		$('html'). scrollTop(0); // 스크롤 맨 위로 보내기
+		let pageList = ''; // 페이지 번호 출력 코드 변수 선언 (블록 외부에서 사용하기 위해서!)
+		let number = $(this).closest("tr").index();
+			
+		// ================================= for문 사용 ====================================================
+		for(let index = 0; index < jsonArray.length - 1; index++) { 
+			// 자바 스크립트 함수 파라미터 용 변수 선언 (숫자를 문자열로 보내기 위함)
+			let code = '"' + jsonArray[index].in_schedule_cd + '"';
+			
+			// 뿌릴 내용
+			let result = "<tr>"
+						+ "<td align='center'><input type='checkbox' name='inChecked' id='inChecked' value='" + index + "'>"
+						+ "<input type='hidden' value='" + jsonArray[index].in_schedule_cd + "' id='in_schedule_cd" + index + "'>"
+						+ "<input type='hidden' value='" + jsonArray[index].product_name + "' id='product_name" + index + "'>"
+						+ "<input type='hidden' value='" + jsonArray[index].in_date + "' id='in_date" + index + "'>"
+						+ "</td>"
+						+ "<td class='click' onclick='modifyOpen(" + code + ")'>" + jsonArray[index].in_schedule_cd + "</td>"
+						+ "<td>" + jsonArray[index].cust_name + "</td>"
+						+ "<td>" + jsonArray[index].product_name + "</td>"
+						+ "<td>" + jsonArray[index].in_date + "</td>"
+						+ "<td>" + jsonArray[index].in_schedule_qty + "</td>"
+						+ "<td>" + jsonArray[index].in_qty + "</td>"
+						+ "<td>" + jsonArray[index].no_in_qty + "</td>"
+						+ "<td>" + jsonArray[index].remarks + "</td>"
+						+ "</tr>";
+			$("#inprocessing_table").append(result);
+		}
+		
+		// 자바 스크립트 함수 파라미터 용 변수 선언(문자열)
+		let valSt = "'" + searchType + "'";
+		let valKey = "'" + keyword + "'";
+		
+		// PageInfo 객체 접근 (jsonArray 의 맨 마지막 인덱스) 해서 startPage 와 endPage 얻어오기 -> 차례대로 숫자 목록 저장
+		if(pageNum > 1) {
+			pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valSt + ', ' + valKey + ', ' + status + ')">이전</a>';
+		} else {
+			pageList += '&nbsp;&nbsp;<a href="javascript:(0)">이전</a>';
+		}
+		
+		for(let i = jsonArray[jsonArray.length - 1].startPage; i <= jsonArray[jsonArray.length - 1].endPage; i++) {
+			if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
+				pageList += '&nbsp;&nbsp;<a href="javascript:(0)" style="color: #212529; font-weight: bold;">' + i +'</a>'; 
+			} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ', ' + status + ')">' + i + '</a>';
+			}
+		}
+		
+		if(pageNum < jsonArray[jsonArray.length - 1].endPage) {
+			pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valSt + ', ' + valKey + ', ' + status + ')">다음</a>';
+		} else {
+			pageList += '&nbsp;&nbsp;<a href="javascript:(0)">다음</a>';
+		}
+
+//			alert(pageList);
+		
+		$("#pageArea").append(pageList); // 페이지 번호 표출 div(id="pageArea") 에 페이지 숫자 목록(pageList) 넣기
+		
+	})
+	.fail(function() {
+		$("#inprocessing_table").append("요청 실패..ㅠㅠ");
+	}); // ajax 끝
+} // load_list 함수 끝
 	
 	
 	
@@ -198,7 +309,7 @@
                     <div class="col-sm-4 ">
                         <div class="page-header float-left rounded-start ">
                             <div class="page-title ">
-                               <h1 class="m-1"><b>입고 처리</b></h1>   
+                               <h1 class="m-1 click" onclick="location.href='InProcessing'"><b>입고 처리</b></h1>   
                             </div>
                         </div>
                     </div>
@@ -220,24 +331,42 @@
 <div class="content">
    <div class="animated fadeIn">
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
-  		<form action="employees_search ">
+  		<form action="InProcessing">
 				<!-- 검색 타입 추가 -->
 				<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
-					<option value="emp_name" <c:if test="${param.searchType eq 'emp_name'}">selected</c:if>>보낸곳명</option>
-					<option value="emp_num" <c:if test="${param.searchType eq 'emp_num'}">selected</c:if>>품목명</option>
+					<option value="in_schedule_code" <c:if test="${param.searchType eq 'in_schedule_code'}">selected</c:if>>입고예정번호</option>
+					<option value="cust_name" <c:if test="${param.searchType eq 'cust_name'}">selected</c:if>>보낸곳명</option>
+					<option value="product_name" <c:if test="${param.searchType eq 'product_name'}">selected</c:if>>품목명</option>
 				</select>			
 				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
 				<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
 		</form>
-		
-		
 	 </section>
+	 
+	<!-- nav바 (tab)  -->
+	<!-- onclick="load_list(숫자값)" 사용으로 상태(status) 구분 
+	   (-1:전체, 0:입고중, 1:입고완료) -->
+
+	<div class="default-tab" style="margin-bottom: 35px">
+		<nav>
+			<div class="nav nav-tabs" id="nav-tab" role="tablist">
+				<a class="nav-item nav-link active" id="nav-home-tab"
+					data-toggle="tab" href="#" onclick="load_tab(-1)" role="tab"
+					aria-controls="nav-home" aria-selected="true">전체</a> 
+				<a	class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
+					href="#" onclick="load_tab(0)" role="tab"
+					aria-controls="nav-profile" aria-selected="false">입고 중</a>
+				<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"
+					href="#" onclick="load_tab(1)" role="tab"
+					aria-controls="nav-contact" aria-selected="false">입고 완료</a>
+			</div>
+		</nav>
+	</div>
 	<c:if test="${priv eq 1 }">
  	 	<div id = "selectCount"><small class="text-secondary"> 0 개 선택됨</small></div>
-
   	</c:if>
 <!-- 	<form action="InRegister" method="post" name="form" enctype="multipart/form-data" class="form-horizontal"> -->
-	<table class="table  vertical-align"  id="empList-table">
+	<table class="table  vertical-align"  id="inprocessing_table">
 		<thead>
 			<tr>
 				<th><input type="checkbox" name="AllChecked"></th>
@@ -252,27 +381,23 @@
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${inProList }" var="inlist" varStatus="status" >
-			<tr>
-				<td align="center"><input type="checkbox" name="inChecked" id="inChecked" value="${inlist.in_schedule_cd }/${inlist.product_name }/${inlist.in_date }"></td>
-				<td><a id="in_schedule_cd" href='javascript:void(0);' onclick="modify(this)">${inlist.in_schedule_cd }</a></td>
-				<td>${inlist.cust_name }</td>
-				<td>${inlist.product_name }</td>
-				<td>${inlist.in_date }</td>
-				<td>${inlist.in_schedule_qty }</td>
-				<td>${inlist.in_qty }</td>
-				<td>${inlist.no_in_qty }</td>
-				<td>${inlist.remarks }</td>
-			</tr>
-		</c:forEach>
+			<!-- ajax -->
 		</tbody>
-	
 	</table>
-	<div class="float-left">
-	<div id="modal-btn-div" class="float-right mt-4">
-		<input type="button" value="입고" class = "btn btn-sm btn-success m-2" id="inScheduleBtn">
+    <!-- 페이징처리 -->
+	<div class="row" id="pageList" style="text-align: center;">
+		<div class="col-lg-12">
+			<div class="product_pagenation" id="pageArea">
+			</div>
+		</div>
 	</div>
-	</div>
+	<c:if test="${priv eq '1' }"> <!-- 권한 -->
+		<div class="float-left">
+		<div id="modal-btn-div" class="float-right mt-4">
+			<input type="button" value="입고" class = "btn btn-sm btn-success m-2" id="inScheduleBtn">
+		</div>
+		</div>
+	</c:if>
 <!-- 	</form> -->
 <!-- onclick="javascript:register();"  -->
 
@@ -284,36 +409,16 @@
 
 
 
-</div>
-</div>
-<!-- </div> -->
+            </div><!-- .animated -->
+        </div><!-- .content -->
 
-
-<!-- content -->
-<!-- <div id="content_tab"> -->
-<%-- <jsp:include page="in_schedule_form.jsp"></jsp:include> --%>
-<!-- </div>content -->
-
-<!-- <div id="container"> -->
-<!-- 	<ul class="tab"> -->
-<!-- 		<li data-tab="in_schedule_form" class='tabmenu'><a href="#">TabExample1</a></li> -->
-<!-- 		<li data-tab="in_waiting_form" class='tabmenu'><a href="#">TabExample2</a></li> -->
-<!-- 		<li data-tab="in_completed_form" class='tabmenu'><a href="#">TabExample3</a></li> -->
-<!-- 	</ul> -->
-<!-- 	<div id="tabcontent"></div> -->
-<!-- </div> -->
+        <div class="clearfix"></div>
 
 
 <!-- footer -->
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <jsp:include page="../inc/footer.jsp"></jsp:include>
     
-<!-- Scripts -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
-<!-- <script src="resources/assets/js/main.js"></script> -->
 
 </body>
 </html>

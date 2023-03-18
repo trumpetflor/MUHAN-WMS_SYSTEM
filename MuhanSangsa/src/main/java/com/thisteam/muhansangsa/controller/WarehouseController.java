@@ -173,7 +173,7 @@ public class WarehouseController {
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다");
 			model.addAttribute("url", "/Login");
-			return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+			return "redirect"; 
 		}
 
 		// 아이피 주소
@@ -226,13 +226,12 @@ public class WarehouseController {
 			@RequestParam(defaultValue = "1") int pageNum, // 현재 페이지 번호
 			@RequestParam(defaultValue = "") String searchType, // 검색 타입
 			@RequestParam(defaultValue = "") String keyword, // 검색어
-			@RequestParam(defaultValue = "-1") int status,
+			@RequestParam(defaultValue = "-1") int status, // 탭
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
 			) {
 
-		// ------------------------- 쌤이랑 한 부분 --------------------------------------------
 
 		// 페이징 처리를 위한 변수 선언
 		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록 제한

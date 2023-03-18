@@ -7,9 +7,50 @@
 	<select id="selectInProList" resultType="inProcessingVO">
 		SELECT *
 			FROM in_processing_view
-			WHERE in_complete = '0'
-			AND NO_IN_QTY > 0
+			WHERE in_schedule_cd LIKE '%-%'
+				<if test="status gte 0">
+					AND in_complete = #{status}
+				</if>
+				<if test="!keyword.equals('')">
+				<choose>
+					<when test="searchType.equals('in_schedule_cd')">
+						AND in_schedule_cd LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('cust_name')">
+						AND cust_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('product_name')">
+						AND product_name LIKE '%${keyword}%' 
+					</when>
+				</choose>		
+				</if>
 			ORDER BY IN_SCHEDULE_CD ASC
+			LIMIT 
+			#{startRow}
+			, #{listLimit}
+	</select>
+	
+	<!-- 목록 갯수 계산 (페이징 처리) -->
+	<select id="selectInProListCount" resultType="int">
+		SELECT COUNT(*)
+			FROM in_processing_view
+			WHERE in_schedule_cd LIKE '%-%'
+				<if test="status gte 0">
+					AND in_complete = #{status}
+				</if>
+				<if test="!keyword.equals('')">
+				<choose>
+					<when test="searchType.equals('in_schedule_cd')">
+						AND in_schedule_cd LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('cust_name')">
+						AND cust_name LIKE '%${keyword}%'
+					</when>
+					<when test="searchType.equals('product_name')">
+						AND product_name LIKE '%${keyword}%' 
+					</when>
+				</choose>		
+				</if>
 	</select>
 	
 	<!-- 입고처리 폼 -->

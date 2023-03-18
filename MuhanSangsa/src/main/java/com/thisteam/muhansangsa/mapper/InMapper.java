@@ -20,7 +20,18 @@ public interface InMapper {
 	
 	// ======================== yeram ==============================
 	// 입고예정 목록
-	public List<inProcessingVO> selectInProList();
+	public List<inProcessingVO> selectInProList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit,
+			@Param("status") int status);
+	
+	// 목록 갯수 계산 (페이징 처리)
+	int selectInProListCount(
+				@Param("searchType") String searchType,
+				@Param("keyword") String keyword,
+				@Param("status") int status);
 	
 	// 입고처리 폼(입고버튼)
 	public List<InRegisterTotalVO> selectInRegisterList(@Param("in_schedule_cd")ArrayList<String> in_schedule_cd,
