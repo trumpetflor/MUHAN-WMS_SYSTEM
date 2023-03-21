@@ -142,7 +142,6 @@ function modifyOpen(code){
 let pageNum = ${pageNum};
 // tab 이동 변수
 var realstatus = -1;
-// var w = window.open("about:blank","_blank");
 $(function(){
 	
 	let searchType = $("#searchType").val(); // 검색 타입
@@ -169,36 +168,38 @@ $(function(){
 	
 	// 입고 버튼 클릭 시
 	$("#inScheduleBtn").click(function(){
-		let inRegisterArr = new Array();
+// 		let inRegisterArr = new Array();
+		let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
 		$('input:checkbox[name=inChecked]').each(function(index){
 			if($(this).is(":checked")==true){
-				let index = $(this).val();
-				let inList = new Object();
-				inList.in_schedule_cd = $("#in_schedule_cd" + index).val();
-				inList.product_name = $("#product_name" + index).val();
-				inList.in_date = $("#in_date" + index).val();
-				inRegisterArr.push(inList);
-				
-				console.log($(this).val());
-				console.log(inList.in_schedule_cd);
-				console.log(inList.product_name);
+// 				let index = $(this).val();
+// 				let inList = new Object();
+// 				inList.in_schedule_cd = $("#in_schedule_cd" + index).val();
+// 				inList.product_name = $("#product_name" + index).val();
+// 				inList.in_date = $("#in_date" + index).val();
+// 				inRegisterArr.push(inList);
+				inRegisterList.push($(this).val()); // 배열에 추가
+// 				console.log($(this).val());
+// 				console.log(inList.in_schedule_cd);
+// 				console.log(inList.product_name);
+				console.log("inRegisterList[] : "+ inRegisterList);
+				window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
 			}
 		});
 			
-// 			window.open('InRegister','InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
 			
-			$.ajax({
-				type: "POST",
-				url: "InRegister",
-				contentType: "application/json",
-				data: JSON.stringify(inRegisterArr),
-				success: function(result) {
-					inRegisterOpen();
-				},
-				fail: function() {
-					alert("요청 실패!");
-				}
-			});
+// 			$.ajax({
+// 				type: "POST",
+// 				url: "InRegister",
+// 				contentType: "application/json",
+// 				data: JSON.stringify(inRegisterArr),
+// 				success: function(result) {
+// 					inRegisterOpen();
+// 				},
+// 				fail: function() {
+// 					alert("요청 실패!");
+// 				}
+// 			});
 						
 				
 				
@@ -232,7 +233,6 @@ function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현
 		$("#pageArea").empty(); // 페이지 번호 구역 비우기
 		$('html'). scrollTop(0); // 스크롤 맨 위로 보내기
 		let pageList = ''; // 페이지 번호 출력 코드 변수 선언 (블록 외부에서 사용하기 위해서!)
-		let number = $(this).closest("tr").index();
 			
 		// ================================= for문 사용 ====================================================
 		for(let index = 0; index < jsonArray.length - 1; index++) { 
@@ -241,7 +241,7 @@ function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현
 			
 			// 뿌릴 내용
 			let result = "<tr>"
-						+ "<td align='center'><input type='checkbox' name='inChecked' id='inChecked' value='" + index + "'>"
+						+ "<td align='center'><input type='checkbox' name='inChecked' id='inChecked' value='" + jsonArray[index].in_schedule_cd + "/" + jsonArray[index].product_name + "/" + jsonArray[index].in_date + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].in_schedule_cd + "' id='in_schedule_cd" + index + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].product_name + "' id='product_name" + index + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].in_date + "' id='in_date" + index + "'>"

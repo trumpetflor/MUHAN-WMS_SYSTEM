@@ -44,7 +44,7 @@ public class InService {
 	public List<InRegisterTotalVO> getInRegisterList(ArrayList<String> in_schedule_cd,
 			ArrayList<String> product_name,
 			ArrayList<String> in_date) {
-		return mapper.selectInRegisterList(in_schedule_cd, product_name,in_date);
+		return mapper.selectInRegisterList(in_schedule_cd, product_name, in_date);
 	}
 	
 	// 입고예정코드 품목 목록

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -185,12 +186,13 @@ public class InController {
 	}
 	
 	// 입고처리 폼(입고버튼)
-	@ResponseBody
-	@PostMapping(value = "/InRegister")
-	public String register(String[] inRegisterList,
-							Model model,
-							HttpServletResponse response,
-							HttpSession session) {
+	@GetMapping(value = "/InRegister")
+	public String register(
+//			List<inRegisterVO> inRegisterList,
+			String[] inRegisterList,
+			Model model,
+			HttpServletResponse response,
+			HttpSession session) {
 		System.out.println("inRegisterList : " + Arrays.toString(inRegisterList));
 		
 		// 세션 아이디
@@ -214,28 +216,38 @@ public class InController {
         }
 		
 		
-//		ArrayList<String> in_schedule_cd = new ArrayList<String>();
-//		ArrayList<String> product_name = new ArrayList<String>();
-//		ArrayList<String> in_date = new ArrayList<String>();
+		ArrayList<String> in_schedule_cd = new ArrayList<String>();
+		ArrayList<String> product_name = new ArrayList<String>();
+		ArrayList<String> in_date = new ArrayList<String>();
+//		ArrayList<Date> in_date = new ArrayList<Date>();
+		
+		for(int i = 0; i<inRegisterList.length; i++) {
+			String a = inRegisterList[i];
+			String b = a.split("/")[0];
+			String c = a.split("/")[1];
+			String d = a.split("/")[2];
+			
+			in_schedule_cd.add(b);
+			product_name.add(c);
+			in_date.add(d);
+		}
+			
+		// ================================보완
+//		for(inRegisterVO inList : inRegisterList) {
 //		
-//		for(int i = 0; i<inRegisterList.length; i++) {
-//			String a = inRegisterList[i];
-//			String b = a.split("/")[0];
-//			String c = a.split("/")[1];
-//			String d = a.split("/")[2];
-//			
-//			in_schedule_cd.add(b);
-//			product_name.add(c);
-//			in_date.add(d);
+//			in_schedule_cd.add(inList.getIn_schedule_cd());
+//			product_name.add(inList.getProduct_name());
+//			in_date.add(inList.getIn_date());
 //		}
-//		System.out.println("in_schedule_cd :" + in_schedule_cd);
-//		System.out.println("product_name :" + product_name);
-//		System.out.println("in_date :" + in_date);
+			
+		System.out.println("in_schedule_cd :" + in_schedule_cd);
+		System.out.println("product_name :" + product_name);
+		System.out.println("in_date :" + in_date);
 		
-//		List<InRegisterTotalVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
+		List<InRegisterTotalVO> resultList = service.getInRegisterList(in_schedule_cd, product_name, in_date);
 		
-//		System.out.println("add 전 : " + resultList);
-//		model.addAttribute("resultList", resultList);
+		System.out.println("add 전 : " + resultList);
+		model.addAttribute("resultList", resultList);
 
         return "in/in_register_form";
 		

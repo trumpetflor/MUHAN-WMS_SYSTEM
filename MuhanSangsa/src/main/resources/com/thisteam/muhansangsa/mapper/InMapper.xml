@@ -123,7 +123,7 @@
 	<!-- 창고선반 목록 -->
 	<select id="selectWhLocList" resultType="StockWhVO">
 		SELECT wh_area, wh_loc_in_area
-			FROM stock_wh_view
+			FROM wms_wh_view
 			<if test="!keyword.equals('')">
 			WHERE
 			<choose>
