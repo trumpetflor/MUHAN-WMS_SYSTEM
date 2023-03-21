@@ -223,6 +223,8 @@
 			IN_DATE = #{inProcessing.in_date},
 			REMARKS = #{inProcessing.remarks}
 		WHERE IN_SCHEDULE_CD = #{inProcessing.in_schedule_cd}
+			AND PRODUCT_CD = #{inProcessing.original_cd}
+			AND IN_DATE = #{inProcessing.original_date}
 	</update>
 	
 	<!-- 작업자코드 =>InVO -->

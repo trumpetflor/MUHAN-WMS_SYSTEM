@@ -58,12 +58,13 @@ $(function() {
 	load_list(pageNum, searchType, keyword, realstatus); // 게시물 목록 조회 함수 호출 (pageNum 까지 파라미터로)
 });
 
+// 탭
 function load_tab(status){
 	let searchType = $("#searchType").val(); // 검색 타입
 	let keyword = $("#keyword").val(); // 검색어
 	load_list(pageNum, searchType, keyword, status);
 }
-// 게시물 목록 조회 함수 (ajax)
+// 게시물 목록 조회
 function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현재 페이지, 검색 타입, 검색어
 	$.ajax({
 		type: "GET",
@@ -262,7 +263,7 @@ td {
 						</div>
 					</div>
 				</div>
-            	<c:if test="${priv eq '1' }">
+            	<c:if test="${priv eq '1' }"> <!-- 권한 -->
 					<button type="button" class="btn btn-sm btn-success m-2" onclick="location.href='WarehouseInsertForm'">신규 등록</button>
             	</c:if>
             </div><!-- .animated -->
@@ -274,31 +275,12 @@ td {
 <jsp:include page="../inc/footer.jsp"></jsp:include>
 
 
-<!-- Scripts -->
-<!--     <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script> -->
-<!--     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
-<!--     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script> -->
-<!--     <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script> -->
-<!--     <script src="assets/js/main.js"></script> -->
 
-
-<!--     <script src="assets/js/lib/data-table/datatables.min.js"></script> -->
-<!--     <script src="assets/js/lib/data-table/dataTables.bootstrap.min.js"></script> -->
-<!--     <script src="assets/js/lib/data-table/dataTables.buttons.min.js"></script> -->
-<!--     <script src="assets/js/lib/data-table/buttons.bootstrap.min.js"></script> -->
-<!--     <script src="assets/js/lib/data-table/jszip.min.js"></script> -->
-<!--     <script src="assets/js/lib/data-table/vfs_fonts.js"></script> -->
-<!--     <script src="assets/js/lib/data-table/buttons.html5.min.js"></script> -->
-<!--     <script src="assets/js/lib/data-table/buttons.print.min.js"></script> -->
-<!--     <script src="assets/js/lib/data-table/buttons.colVis.min.js"></script> -->
-<!--     <script src="assets/js/init/datatables-init.js"></script> -->
-
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-          $('#bootstrap-data-table-export').DataTable();
-      } );
-  </script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#bootstrap-data-table-export').DataTable();
+} );
+</script>
 
 
 </body>

@@ -142,7 +142,7 @@ function modifyOpen(code){
 let pageNum = ${pageNum};
 // tab 이동 변수
 var realstatus = -1;
-var w = window.open("about:blank","_blank");
+// var w = window.open("about:blank","_blank");
 $(function(){
 	
 	let searchType = $("#searchType").val(); // 검색 타입

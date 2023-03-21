@@ -396,15 +396,19 @@ public class InController {
 		inList.setRemarks(remarks2);
 		int modifyInCount = service.modifyInSchedule(inList);
 		System.out.println(modifyInCount);
+		System.out.println("proArr.getIn_schedule_cd().length = " +proArr.getIn_schedule_cd().length);
 		
-		for(int i = 0; i < proArr.getIn_schedule_cd().length; i ++) {
+		for(int i = 0; i <= proArr.getIn_schedule_cd().length; i ++) {
+			System.out.println(i+"번째 수정~");
 			inProcessingVO inProcessing = new inProcessingVO();
-			inProcessing.setIn_schedule_cd(proArr.getIn_schedule_cd()[i]);
+			inProcessing.setIn_schedule_cd(proArr.getIn_schedule_cd()[0]);
 			inProcessing.setProduct_cd(proArr.getProduct_cd()[i]);
 			// 품목명 자동 변경
 			inProcessing.setIn_schedule_qty(proArr.getIn_schedule_qty()[i]);
 			inProcessing.setIn_date(proArr.getIn_date()[i]);
 			inProcessing.setRemarks(proArr.getRemarks()[i]);
+			inProcessing.setOriginal_cd(proArr.getOriginal_cd()[i]);
+			inProcessing.setOriginal_date(proArr.getOriginal_date()[i]);
 			// 입고품목 테이블 수정
 			service.modifyInProcessing(inProcessing);
 		}

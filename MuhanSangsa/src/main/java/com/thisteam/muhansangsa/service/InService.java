@@ -30,9 +30,14 @@ public class InService {
 	private InMapper mapper;
 	
 	// ======================== yeram ==============================
-	// 입고예정목록
-	public List<inProcessingVO> getInProList() {
-		return mapper.selectInProList();
+	// 입고예정목록 조회
+	public List<inProcessingVO> getInProList(String searchType, String keyword, int startRow, int listLimit, int status) {
+		return mapper.selectInProList(searchType, keyword, startRow, listLimit, status);
+	}
+	
+	// 목록 갯수 계산 (페이징 처리)
+	public int getInProListCount(String searchType, String keyword, int status) {
+		return mapper.selectInProListCount(searchType, keyword, status);
 	}
 	
 	// 입고처리 폼(입고버튼)
