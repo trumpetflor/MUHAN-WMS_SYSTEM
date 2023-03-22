@@ -123,23 +123,36 @@
 
 
 </style>
+<script src="resources/js/jquery-3.6.3.js"></script>
+<!-- pageNum 이 없을 경우 기본값 1, 있을 경우 pageNum 값 저장 -->
+<c:choose>
+	<c:when test="${param.pageNum eq null}">
+		<c:set var="pageNum" value="1"></c:set>
+	</c:when>
+	<c:otherwise>
+		<c:set var="pageNum" value="${param.pageNum }"></c:set>
+	</c:otherwise>
+</c:choose>
 <script type="text/javascript">
-
+//페이지번호 저장
+let pageNum = ${pageNum};
 	$(function() {
-		
-		load_list(); // 게시물 목록 조회 함수 호출
+		let searchType = $("#searchType").val(); // 검색 타입
+		let keyword = $("#keyword").val(); // 검색어	
+		load_list(pageNum, searchType, keyword); // 게시물 목록 조회 함수 호출
 		
 	});
 
 	// 재고 목록 조회 함수
-	function load_list() {
+	function load_list(pageNum, searchType, keyword) {
 		$.ajax({
 			type: "GET",
-			url:"WhLocListJsonIn?keyword=" + $("#keyword").val() + "&searchType=" + $("#searchType").val() , 
+			url:"WhLocListJsonIn?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword , 
 			dataType: "json"
 		})
 		.done(function(whLocList) { // 요청 성공 시
 			let result ="";
+			let pageList = ''; // 페이지 번호 출력 코드 변수 선언 (블록 외부에서 사용하기 위해서!)
 			for(let whLoc of whLocList) {
 				result += "<tr>"
 							+ "<td id="+whLoc.wh_area+">" + whLoc.wh_area + "</td>"
@@ -148,6 +161,35 @@
 				
 			}
 			$("#whLoc_table > tbody").html(result);
+			
+			// 자바 스크립트 함수 파라미터 용 변수 선언(문자열)
+			let valSt = "'" + searchType + "'";
+			let valKey = "'" + keyword + "'";
+			
+			// PageInfo 객체 접근 (jsonArray 의 맨 마지막 인덱스) 해서 startPage 와 endPage 얻어오기 -> 차례대로 숫자 목록 저장
+			if(pageNum > 1) {
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valSt + ', ' + valKey + ', ' + status + ')">이전</a>';
+			} else {
+				pageList += '&nbsp;&nbsp;<a href="javascript:(0)">이전</a>';
+			}
+			
+			for(let i = jsonArray[jsonArray.length - 1].startPage; i <= jsonArray[jsonArray.length - 1].endPage; i++) {
+				if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
+					pageList += '&nbsp;&nbsp;<a href="javascript:(0)" style="color: #212529; font-weight: bold;">' + i +'</a>'; 
+				} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
+					pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ', ' + status + ')">' + i + '</a>';
+				}
+			}
+			
+			if(pageNum < jsonArray[jsonArray.length - 1].endPage) {
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valSt + ', ' + valKey + ', ' + status + ')">다음</a>';
+			} else {
+				pageList += '&nbsp;&nbsp;<a href="javascript:(0)">다음</a>';
+			}
+
+//				alert(pageList);
+			
+			$("#pageArea").append(pageList); // 페이지 번호 표출 div(id="pageArea") 에 페이지 숫자 목록(pageList) 넣기
 		})
 		.fail(function() {
 			$("#whLoc_table").append("요청 실패!!");
@@ -183,7 +225,13 @@
             <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
         </tbody>
 	</table>
-
+    <!-- 페이징처리 -->
+	<div class="row" id="pageList" style="text-align: center;">
+		<div class="col-lg-12">
+			<div class="product_pagenation" id="pageArea">
+			</div>
+		</div>
+	</div>
 
 </div>
 </div>

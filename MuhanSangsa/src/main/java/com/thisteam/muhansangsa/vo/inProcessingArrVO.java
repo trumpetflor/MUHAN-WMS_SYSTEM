@@ -14,6 +14,9 @@ public class inProcessingArrVO {
 	private int[] in_qty; // 입고수량 = 입고대기수량
 	private int[] no_in_qtyArr; // 미입고수량 = 입고예정수량 - 입고수량
 	private String[] remarks; // 적요
+	private int[] original_cd; // 원래코드(수정시사용)
+	private Date[] original_date; // 원래납기일자(수정시사용)
+	
 	public String[] getIn_schedule_cd() {
 		return in_schedule_cd;
 	}
@@ -74,6 +77,18 @@ public class inProcessingArrVO {
 	public void setRemarks(String[] remarks) {
 		this.remarks = remarks;
 	}
+	public int[] getOriginal_cd() {
+		return original_cd;
+	}
+	public void setOriginal_cd(int[] original_cd) {
+		this.original_cd = original_cd;
+	}
+	public Date[] getOriginal_date() {
+		return original_date;
+	}
+	public void setOriginal_date(Date[] original_date) {
+		this.original_date = original_date;
+	}
 	@Override
 	public String toString() {
 		return "inProcessingArrVO [in_schedule_cd=" + Arrays.toString(in_schedule_cd) + ", business_no="
@@ -81,7 +96,8 @@ public class inProcessingArrVO {
 				+ Arrays.toString(product_cd) + ", product_name=" + Arrays.toString(product_name) + ", in_date="
 				+ Arrays.toString(in_date) + ", in_schedule_qty=" + Arrays.toString(in_schedule_qty) + ", in_qty="
 				+ Arrays.toString(in_qty) + ", no_in_qtyArr=" + Arrays.toString(no_in_qtyArr) + ", remarks="
-				+ Arrays.toString(remarks) + "]";
+				+ Arrays.toString(remarks) + ", original_cd=" + Arrays.toString(original_cd) + ", original_date="
+				+ Arrays.toString(original_date) + "]";
 	}
 	
 	

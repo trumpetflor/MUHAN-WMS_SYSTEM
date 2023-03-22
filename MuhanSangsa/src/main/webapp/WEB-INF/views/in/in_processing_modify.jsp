@@ -78,6 +78,10 @@
 	.modal{
 	max-width: 1000px;
 	}
+	.modal a.close-modal{
+	 display: none;
+	
+	}
 	#modal_container_stock{
 	  width:800PX;
  	 height: 500px;
@@ -143,8 +147,43 @@
 		cursor: pointer;  
 	}
 	
-	#stock-table  input:disabled {
-    background-color: rgba(169, 168, 167, 0.2) !important;
+/* 	#stock-table  input:disabled { */
+/*     background-color: rgba(169, 168, 167, 0.2) !important; */
+/* 	} */
+	
+	#client_search_modalDiv{
+	width: 500px;
+	height: 600px;
+	position: fixed;
+	top: 20%;
+	left: 40%;
+	overflow-y: scroll;
+	}
+	
+	#emp_search_modalDiv{
+	width: 500px;
+	height: 600px;
+	position: fixed;
+	top: 20%;
+	left: 40%;
+	overflow-y: scroll;
+	}
+	
+	#product_search_modalDiv{
+	width: 500px;
+	height: 600px;
+	position: fixed;
+	top: 20%;
+	left: 40%;
+	overflow-y: scroll;
+	}
+	
+	/*emp_search_modalDiv 켰을때 검색버튼보여서 수정함*/
+	.input-group .btn{
+		z-index: 0 !important;
+	}
+	.input-group .btn:focus {
+		z-index: 0 !important;
 	}
 </style>
 <!-- <script src="resources/js/jquery-3.6.3.js"></script> -->
@@ -437,6 +476,9 @@ function openSearchArea() {
 						 <input type="text" class="form-control" id="product_cd${i.index }" name="product_cd" readonly="readonly"
 						  	value="${proList.product_cd }" placeholder="" aria-label="" aria-describedby="button-addon" width="100px" id="search_client" required="required">
 						 <input type="button" value="검색" class="btn btn-sm btn-dark p-2 productBtn" onclick="productBtn(${i.index})" id="product_searchBtn">
+						 <!-- 수정 시 필요한 파라미터들 -->
+						 <input type="hidden" name="original_cd" value="${proList.product_cd}">
+						 <input type="hidden" name="original_date" value="${proList.in_date}">
 						</div>
 					</td>
 					<!-- 품목명 -->
@@ -458,17 +500,6 @@ function openSearchArea() {
 	</form>
 </div>
 </div>
-<!-- 재고번호 클릭시 보이는 모달 영역 DIV  -->
-
-	<div id="modal_container_stock" class="modal">
-	<div id="modal_container_content">
-	</div>
-	 <div class="float-right">
-<!-- 		<a href="#" rel="modal:close"> -->
-		<input type="button" value="새 위치에 품목 추가" class="btn btn-primary" id="addProductTONewLoc">
-<!-- 		</a> -->
-	</div>
-	</div><!-- end of DIV #modal_container -->
 	
 	
 <!-- 유형 모달 DIV -->

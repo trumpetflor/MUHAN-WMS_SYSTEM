@@ -1,6 +1,7 @@
 package com.thisteam.muhansangsa.vo;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 /*
 CREATE VIEW in_processing_view
@@ -23,6 +24,8 @@ public class inProcessingVO {
 	private int no_in_qty; // 미입고수량 = 입고예정수량 - 입고수량
 	private int[] no_in_qtyArr; // 미입고수량 = 입고예정수량 - 입고수량
 	private String remarks; // 적요
+	private int original_cd; // 원래코드(수정시사용)
+	private Date original_date; // 원래납기일자(수정시사용)
 	
 	public String getIn_schedule_cd() {
 		return in_schedule_cd;
@@ -90,12 +93,28 @@ public class inProcessingVO {
 	public void setNo_in_qtyArr(int[] no_in_qty, int[] no_in_qtyArr) {
 		this.no_in_qtyArr = no_in_qtyArr;
 	}
+	public int getOriginal_cd() {
+		return original_cd;
+	}
+	public void setOriginal_cd(int original_cd) {
+		this.original_cd = original_cd;
+	}
+	public void setNo_in_qtyArr(int[] no_in_qtyArr) {
+		this.no_in_qtyArr = no_in_qtyArr;
+	}
+	public Date getOriginal_date() {
+		return original_date;
+	}
+	public void setOriginal_date(Date original_date) {
+		this.original_date = original_date;
+	}
 	@Override
 	public String toString() {
 		return "inProcessingVO [in_schedule_cd=" + in_schedule_cd + ", business_no=" + business_no + ", cust_name="
 				+ cust_name + ", product_cd=" + product_cd + ", product_name=" + product_name + ", in_date=" + in_date
 				+ ", in_schedule_qty=" + in_schedule_qty + ", in_qty=" + in_qty + ", no_in_qty=" + no_in_qty
-				+ ", remarks=" + remarks + "]";
+				+ ", no_in_qtyArr=" + Arrays.toString(no_in_qtyArr) + ", remarks=" + remarks + ", original_cd="
+				+ original_cd + ", original_date=" + original_date + "]";
 	}
 	
 	

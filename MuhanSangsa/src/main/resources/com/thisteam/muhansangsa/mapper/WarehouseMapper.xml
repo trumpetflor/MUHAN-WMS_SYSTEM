@@ -31,26 +31,39 @@
 	<select id="selectWarehouseList" resultType="WarehouseVO">
 		SELECT *
 			FROM warehouse
-			<if test="!keyword.equals('')">
-			WHERE
+				<choose>
+				<when test="status eq -1">
+					WHERE wh_cd LIKE '%_%'
+				</when>
+				<when test="status eq 0">
+					WHERE wh_cd LIKE '%IN%'
+				</when>
+				<when test="status eq 1">
+					WHERE wh_cd LIKE '%OUT%'
+				</when>
+				<when test="status eq 2">
+					WHERE wh_cd LIKE 'PL%'
+				</when>
+				</choose>
+				<if test="!keyword.equals('')">
 				<choose>
 					<when test="searchType.equals('wh_cd')">
-						wh_cd LIKE '%${keyword}%'
+						AND wh_cd LIKE '%${keyword}%'
 					</when>
 					<when test="searchType.equals('wh_name')">
-						wh_name LIKE '%${keyword}%'
+						AND wh_name LIKE '%${keyword}%'
 					</when>
 					<when test="searchType.equals('wh_addr')">
-						wh_addr LIKE '%${keyword}%' 
+						AND wh_addr LIKE '%${keyword}%' 
 					</when>
 					<when test="searchType.equals('wh_tel')">
-						wh_tel LIKE '%${keyword}%'
+						AND wh_tel LIKE '%${keyword}%'
 					</when>
 					<when test="searchType.equals('wh_man_name')">
-						wh_man_name LIKE '%${keyword}%'
+						AND wh_man_name LIKE '%${keyword}%'
 					</when>
 				</choose>		
-			</if>
+				</if>
 <!-- 		ORDER BY -->
 		LIMIT 
 			#{startRow}
@@ -61,27 +74,40 @@
 	<select id="selectWhListCount" resultType="int">
 		SELECT COUNT(*)
 			FROM warehouse
-			<!-- 키워드 검색 있을 경우 -->
-			<if test="!keyword.equals('')">
-			WHERE
+				<choose>
+				<when test="status eq -1">
+					WHERE wh_cd LIKE '%_%'
+				</when>
+				<when test="status eq 0">
+					WHERE wh_cd LIKE '%IN%'
+				</when>
+				<when test="status eq 1">
+					WHERE wh_cd LIKE '%OUT%'
+				</when>
+				<when test="status eq 2">
+					WHERE wh_cd LIKE 'PL%'
+				</when>
+				</choose>
+				<!-- 키워드 검색 있을 경우 -->
+				<if test="!keyword.equals('')">
 				<choose>
 					<when test="searchType.equals('wh_cd')">
-						wh_cd LIKE '%${keyword}%'
+						AND wh_cd LIKE '%${keyword}%'
 					</when>
 					<when test="searchType.equals('wh_name')">
-						wh_name LIKE '%${keyword}%'
+						AND wh_name LIKE '%${keyword}%'
 					</when>
 					<when test="searchType.equals('wh_addr')">
-						wh_addr LIKE '%${keyword}%' 
+						AND wh_addr LIKE '%${keyword}%' 
 					</when>
 					<when test="searchType.equals('wh_tel')">
-						wh_tel LIKE '%${keyword}%'
+						AND wh_tel LIKE '%${keyword}%'
 					</when>
 					<when test="searchType.equals('wh_man_name')">
-						wh_man_name LIKE '%${keyword}%'
+						AND wh_man_name LIKE '%${keyword}%'
 					</when>
 				</choose>		
-			</if>
+				</if>
 	</select>
 	
 	

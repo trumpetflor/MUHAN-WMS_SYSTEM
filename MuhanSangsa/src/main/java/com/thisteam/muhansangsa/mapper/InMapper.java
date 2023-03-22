@@ -1,5 +1,6 @@
 package com.thisteam.muhansangsa.mapper;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,18 @@ public interface InMapper {
 	
 	// ======================== yeram ==============================
 	// 입고예정 목록
-	public List<inProcessingVO> selectInProList();
+	public List<inProcessingVO> selectInProList(
+			@Param("searchType") String searchType, 
+			@Param("keyword") String keyword, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit,
+			@Param("status") int status);
+	
+	// 목록 갯수 계산 (페이징 처리)
+	int selectInProListCount(
+				@Param("searchType") String searchType,
+				@Param("keyword") String keyword,
+				@Param("status") int status);
 	
 	// 입고처리 폼(입고버튼)
 	public List<InRegisterTotalVO> selectInRegisterList(@Param("in_schedule_cd")ArrayList<String> in_schedule_cd,
@@ -48,10 +60,15 @@ public interface InMapper {
 	// 창고선반 목록
 	public List<StockWhVO> selectWhLocList(
 			@Param("searchType") String searchType, 
-			@Param("keyword") String keyword
-//			@Param("startRow") int startRow
-//			@Param("listLimit") int listLimit
+			@Param("keyword") String keyword,
+			@Param("startRow") int startRow,
+			@Param("listLimit") int listLimit
 			);
+	
+	// 창고선반 목록 갯수 계산 (페이징 처리)
+	int selectWhLocListCount(
+				@Param("searchType") String searchType,
+				@Param("keyword") String keyword);
 	
 	// 입고 등록 - 수량, 재고코드
 	public void updateinRegister(@Param("inRegister") inRegisterVO inRegister);
