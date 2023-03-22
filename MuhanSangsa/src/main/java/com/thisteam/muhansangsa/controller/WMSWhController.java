@@ -87,7 +87,7 @@ public class WMSWhController {
 //				Map<String, List<WhLocAreaVO>> whWhlaList = null; // 특정 창고 구역에 해당하는 창고 구역 내 위치 목록
 				
 				// 창고 가져오기
-				whList = whService.getWarehouseList();
+				whList = whService.getWarehouseList("", "", 0, 100);
 				
 //				whWhaList = new HashMap<String, List<WhAreaVO>>(); // <창고 코드, 창고 코드에 해당하는 창고 구역 목록>
 //				whWhlaList = new HashMap<String, List<WhLocAreaVO>>(); // <창고 구역, 창고 구역에 해당하는 위치 목록>
@@ -214,7 +214,7 @@ public class WMSWhController {
 	}
 
 	// 창고 구역 등록
-	@PostMapping(value = "RegistWhArea")
+	@GetMapping(value = "RegistWhArea")
 	public String registWhArea (
 			@ModelAttribute WhAreaVO whArea,
 			Model model,
@@ -289,7 +289,7 @@ public class WMSWhController {
 	}
 	
 	// 창고 구역 내 위치 등록
-	@PostMapping(value = "RegistWhLocArea")
+	@GetMapping(value = "RegistWhLocArea")
 	public String registWhArea (
 			@ModelAttribute WhLocAreaVO whLocArea,
 			Model model,
@@ -363,10 +363,11 @@ public class WMSWhController {
 	}
 	
 	// 창고 구역 수정
-	@PostMapping(value = "ModifyWhArea")
+	@GetMapping(value = "ModifyWhArea")
 	public String modifyWhArea (
 			@ModelAttribute WhAreaVO whArea,
-//			@RequestParam String newWhArea,
+//			@RequestParam int wh_area_cd,
+//			@RequestParam String wh_area,
 			Model model,
 			HttpSession session,
 			HttpServletResponse response
@@ -436,7 +437,7 @@ public class WMSWhController {
 	}
 	
 	// 창고 구역 내 위치 수정
-	@PostMapping(value = "ModifyWhLocArea")
+	@GetMapping(value = "ModifyWhLocArea")
 	public String modifyWhLocArea (
 			@ModelAttribute WhLocAreaVO whLocArea,
 //			@RequestParam String newWhLocArea,

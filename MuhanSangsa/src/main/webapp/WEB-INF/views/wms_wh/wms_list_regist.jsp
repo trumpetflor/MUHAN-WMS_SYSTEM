@@ -362,8 +362,8 @@
 		let html = '<li><div id="wh_area_div">'
 					+ '<form action="#" method="get" class="registWhAreaForm">'
 					+ '<input type="hidden" value=' + wh_cd + ' name="wh_cd">'
-					+ '&nbsp;&nbsp;<input type="text" name="wh_area" placeholder="등록할 창고 구역명" class=" bg-light border border-secondary rounded-1 px-1" required="required">'
-					+ '<input type="submit" value="등록" class="mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" name="remove" class=" mx-1 btn btn-sm btn-dark rounded-1">'
+					+ '&nbsp;&nbsp;&nbsp;<input type="text" name="wh_area" placeholder="등록할 창고 구역명" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
+					+ '<input type="submit" value="등록" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" name="remove" class=" mx-1 btn btn-sm btn-dark rounded-1">'
 					+ '</form>'
 					+ '</div></li>';
 		
@@ -409,7 +409,7 @@
 		let html = '<li><div id="wh_loc_area_div">'
 					+ '<form action="RegistWhLocArea" method="get" class="registWhLocAreaForm">'
 					+ '<input type="hidden" value="' + wh_area_cd + '" name="wh_area_cd">'
-					+ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_loc_in_area" placeholder="창고 구역 내 위치명" class=" bg-light border border-secondary rounded-1 px-1" required="required">'
+					+ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="wh_loc_in_area" placeholder="창고 구역 내 위치명" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
 					+ '<input type="submit" value="등록" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" name="remove" class=" mx-1 btn btn-sm btn-dark rounded-1">'
 					+ '</form>'
 					+ '</div></li>';
@@ -523,7 +523,7 @@
 		let html = '<li class="w1" id="' + wh_area_cd + '">'
 					+ '<form action="#" method="get" class="modifyWhAreaForm">'
 					+ '<input type="hidden" value="' + wh_area_cd + '" name="wh_area_cd">'
-					+ '&nbsp;&nbsp;<input type="text" name="wh_area" value="'+ wh_area + '" class=" bg-light border border-secondary rounded-1 px-1" required="required">'
+					+ '&nbsp;&nbsp;<input type="text" name="wh_area" value="'+ wh_area + '" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
 					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whArea(' + whCd + ')">'
 					+ '</form>'
 					+ '</li>';
@@ -576,7 +576,7 @@
 					+ '<input type="hidden" value=' + wh_cd + ' name="wh_cd">' // 창고 코드
 					+ '<input type="hidden" value=' + wh_area_cd + ' name="wh_area_cd">' // 창고 구역 코드
 					+ '<input type="hidden" value=' + wh_loc_in_area_cd + ' name="wh_loc_in_area_cd">'
-					+ '<input type="text" name="wh_loc_in_area" value="'+ wh_loc_in_area + '" class="bg-light border border-secondary rounded-1 px-1" required="required">'
+					+ '<input type="text" name="wh_loc_in_area" value="'+ wh_loc_in_area + '" class="col-sm-6 bg-light border border-secondary rounded-1 px-1" required="required">'
 					+ '<input type="submit" value="수정" class=" mx-1 btn btn-sm btn-dark rounded-1"><input type="button" value="취소" class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="whLocArea(' + wh_area_cd + ', ' + whCd + ')">'
 					+ '</form>'
 					+ '</li>';
@@ -641,6 +641,11 @@
 		});
 		
 	}	
+	
+	
+	
+	
+	
 	
 </script>
 
