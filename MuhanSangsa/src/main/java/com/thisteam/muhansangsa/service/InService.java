@@ -68,8 +68,13 @@ public class InService {
 	}
 	
 	// 창고선반 목록
-	public List<StockWhVO> getWhLocList(String searchType, String keyword) {
-		return mapper.selectWhLocList(searchType, keyword);
+	public List<StockWhVO> getWhLocList(String searchType, String keyword, int startRow, int listLimit) {
+		return mapper.selectWhLocList(searchType, keyword, startRow, listLimit);
+	}
+	
+	// 목록 갯수 계산 (페이징 처리)
+	public int getWhLocListCount(String searchType, String keyword) {
+		return mapper.selectWhLocListCount(searchType, keyword);
 	}
 
 	// 입고 등록

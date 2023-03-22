@@ -60,10 +60,15 @@ public interface InMapper {
 	// 창고선반 목록
 	public List<StockWhVO> selectWhLocList(
 			@Param("searchType") String searchType, 
-			@Param("keyword") String keyword
-//			@Param("startRow") int startRow
-//			@Param("listLimit") int listLimit
+			@Param("keyword") String keyword,
+			@Param("startRow") int startRow,
+			@Param("listLimit") int listLimit
 			);
+	
+	// 창고선반 목록 갯수 계산 (페이징 처리)
+	int selectWhLocListCount(
+				@Param("searchType") String searchType,
+				@Param("keyword") String keyword);
 	
 	// 입고 등록 - 수량, 재고코드
 	public void updateinRegister(@Param("inRegister") inRegisterVO inRegister);
