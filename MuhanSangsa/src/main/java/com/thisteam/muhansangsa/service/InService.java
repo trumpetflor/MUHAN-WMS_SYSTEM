@@ -67,12 +67,17 @@ public class InService {
 		return mapper.selectStockList(searchType, keyword, startRow, listLimit);
 	}
 	
+	// 재고 목록 갯수 계산 (페이징 처리)
+	public int getStockListCount(String searchType, String keyword) {
+		return mapper.selectStockListCount(searchType, keyword);
+	}
+	
 	// 창고선반 목록
 	public List<StockWhVO> getWhLocList(String searchType, String keyword, int startRow, int listLimit) {
 		return mapper.selectWhLocList(searchType, keyword, startRow, listLimit);
 	}
 	
-	// 목록 갯수 계산 (페이징 처리)
+	// 창고선반 목록 갯수 계산 (페이징 처리)
 	public int getWhLocListCount(String searchType, String keyword) {
 		return mapper.selectWhLocListCount(searchType, keyword);
 	}

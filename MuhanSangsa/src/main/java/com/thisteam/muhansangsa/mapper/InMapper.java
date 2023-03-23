@@ -57,6 +57,11 @@ public interface InMapper {
 			@Param("listLimit") int listLimit
 			);
 	
+	// 재고 목록 갯수 계산 (페이징 처리)
+	int selectStockListCount(
+				@Param("searchType") String searchType,
+				@Param("keyword") String keyword);
+	
 	// 창고선반 목록
 	public List<StockWhVO> selectWhLocList(
 			@Param("searchType") String searchType, 

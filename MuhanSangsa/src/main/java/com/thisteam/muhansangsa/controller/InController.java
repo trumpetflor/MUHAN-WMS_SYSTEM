@@ -370,7 +370,7 @@ public class InController {
         } else {
            model.addAttribute("msg", "로그인이 필요합니다");
            model.addAttribute("url", "/Login");
-           return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+           return "redirect"; 
         }
 
         // 아이피 주소
@@ -489,6 +489,32 @@ public class InController {
 		// 거래처 목록 가져오기
 		List<StockWhVO> stockList = service.getStockList(searchType, keyword, startRow, listLimit);
 		
+		// 페이징 처리 
+		//1. 검색어에 해당하는 정보의 갯수 계산
+		int listCount = service.getStockListCount(searchType, keyword);
+
+		// 2. 한 페이지에서 표시할 페이지 숫자의 갯수 설정
+		int pageListLimit = 10; // 한 페이지에서 표시할 페이지 수를 10개로 제한
+		// 3. 전체 페이지 목록 수 계산
+		int maxPage = listCount / listLimit 
+				+ (listCount % listLimit == 0 ? 0 : 1); 
+
+		// 4. 시작 페이지 번호 계산
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+
+		// 5. 끝 페이지 번호 계산
+		int endPage = startPage + pageListLimit - 1;
+
+		// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+		//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+
+		// PageInfo 객체 생성 후 페이징 처리 정보 저장
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);		
+		System.out.println(pageInfo);
+
 		// JSON 형식 변환
 		JSONArray jsonArray = new JSONArray();
 		
@@ -499,6 +525,10 @@ public class InController {
 			
 			jsonArray.put(jsonObject);
 		}
+		
+		JSONObject jsonObjectPage = new JSONObject(pageInfo);
+		System.out.println("시작 페이지 : " + jsonObjectPage.get("startPage"));
+		jsonArray.put(jsonObjectPage);
 		
 		try {
 			response.setCharacterEncoding("UTF-8");

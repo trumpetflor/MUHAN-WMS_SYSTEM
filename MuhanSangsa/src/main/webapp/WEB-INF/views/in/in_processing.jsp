@@ -172,6 +172,13 @@ $(function(){
 		let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
 		$('input:checkbox[name=inChecked]').each(function(index){
 			if($(this).is(":checked")==true){
+				let number = $(this).closest("tr").index();
+				console.log(number);
+				let no_in_qty = $("#no_in_qty"+number).text();
+				console.log(no_in_qty);
+				if(no_in_qty == 0){
+					alert("입고처리 안됩니다용~");
+				}else {
 // 				let index = $(this).val();
 // 				let inList = new Object();
 // 				inList.in_schedule_cd = $("#in_schedule_cd" + index).val();
@@ -184,6 +191,7 @@ $(function(){
 // 				console.log(inList.product_name);
 				console.log("inRegisterList[] : "+ inRegisterList);
 				window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
+				}
 			}
 		});
 			
@@ -242,6 +250,7 @@ function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현
 			// 뿌릴 내용
 			let result = "<tr>"
 						+ "<td align='center'><input type='checkbox' name='inChecked' id='inChecked' value='" + jsonArray[index].in_schedule_cd + "/" + jsonArray[index].product_name + "/" + jsonArray[index].in_date + "'>"
+						+ "<input type='hidden' value='" + index + "' id='number" + index + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].in_schedule_cd + "' id='in_schedule_cd" + index + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].product_name + "' id='product_name" + index + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].in_date + "' id='in_date" + index + "'>"
@@ -252,7 +261,7 @@ function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현
 						+ "<td>" + jsonArray[index].in_date + "</td>"
 						+ "<td>" + jsonArray[index].in_schedule_qty + "</td>"
 						+ "<td>" + jsonArray[index].in_qty + "</td>"
-						+ "<td>" + jsonArray[index].no_in_qty + "</td>"
+						+ "<td id='no_in_qty"+index+"'>" + jsonArray[index].no_in_qty + "</td>"
 						+ "<td>" + jsonArray[index].remarks + "</td>"
 						+ "</tr>";
 			$("#inprocessing_table").append(result);

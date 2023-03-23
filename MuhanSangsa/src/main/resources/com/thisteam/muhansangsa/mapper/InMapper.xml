@@ -115,18 +115,24 @@
 			</choose>		
 		</if>
 <!-- 		ORDER BY -->
-<!-- 		LIMIT  -->
-<!-- 			#{startRow} -->
-<!-- 			, #{listLimit} -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
 	</select>
 	
-	<!-- 창고선반 목록 -->
-	<select id="selectWhLocList" resultType="StockWhVO">
-		SELECT wh_area, wh_loc_in_area
-			FROM wms_wh_view
+	<!-- 재고 목록 갯수 계산 (페이징 처리) -->
+	<select id="selectStockListCount" resultType="int">
+		SELECT COUNT(*)
+			FROM stock_wh_view
 			<if test="!keyword.equals('')">
 			WHERE
 			<choose>
+				<when test="searchType.equals('stock_cd')">
+					stock_cd LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('product_name')">
+					product_name LIKE '%${keyword}%'
+				</when>
 				<when test="searchType.equals('wh_area')">
 					wh_area LIKE '%${keyword}%' 
 				</when>
@@ -135,6 +141,23 @@
 				</when>
 			</choose>		
 		</if>
+	</select>
+	
+	<!-- 창고선반 목록 -->
+	<select id="selectWhLocList" resultType="StockWhVO">
+		SELECT wh_area, wh_loc_in_area
+			FROM wms_wh_view
+			WHERE wh_loc_in_area IS NOT NULL
+			<if test="!keyword.equals('')">
+			<choose>
+				<when test="searchType.equals('wh_area')">
+					AND wh_area LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('wh_loc_in_area')">
+					AND wh_loc_in_area LIKE '%${keyword}%'
+				</when>
+			</choose>		
+			</if>
 <!-- 		ORDER BY -->
 		LIMIT 
 			#{startRow}
@@ -142,10 +165,11 @@
 	</select>
 	
 	<!-- 창고선반 목록 갯수 계산 (페이징 처리) -->
-	<select id="selectWhLocListCount">
+	<select id="selectWhLocListCount" resultType="int">
 		SELECT COUNT(*)
 			FROM wms_wh_view
 			WHERE wh_cd LIKE '%_%'
+			AND wh_loc_in_area IS NOT NULL
 				<if test="!keyword.equals('')">
 				<choose>
 					<when test="searchType.equals('wh_area')">

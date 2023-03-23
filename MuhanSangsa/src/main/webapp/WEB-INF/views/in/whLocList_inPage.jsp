@@ -138,37 +138,48 @@
 let pageNum = ${pageNum};
 	$(function() {
 		let searchType = $("#searchType").val(); // 검색 타입
-		let keyword = $("#keyword").val(); // 검색어	
+		let keyword = $("#keyword2").val(); // 검색어	
 		load_list(pageNum, searchType, keyword); // 게시물 목록 조회 함수 호출
 		
+		$("#searchBtn").on("click", function() {
+// 			alert("keyword:"+ $("#keyword2").val());
+			console.log("눌러짐");
+			load_list(pageNum, searchType, $("#keyword2").val());
+		});
+		
 	});
-
-	// 재고 목록 조회 함수
+	
+	
+	
+	// 창고선반 목록 조회 함수
 	function load_list(pageNum, searchType, keyword) {
+		console.log(searchType);
+		console.log(keyword);
 		$.ajax({
 			type: "GET",
 			url:"WhLocListJsonIn?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword , 
 			dataType: "json"
 		})
-		.done(function(whLocList) { // 요청 성공 시
-			let result ="";
+		.done(function(jsonArray) { // 요청 성공 시
+			$("#whLoc_table > tbody").empty(); // 리스트 출력 테이블 구역 비우기
+			$("#pageArea").empty(); // 페이지 번호 구역 비우기
 			let pageList = ''; // 페이지 번호 출력 코드 변수 선언 (블록 외부에서 사용하기 위해서!)
-			for(let whLoc of whLocList) {
-				result += "<tr>"
-							+ "<td id="+whLoc.wh_area+">" + whLoc.wh_area + "</td>"
-							+ "<td id="+whLoc.wh_loc_in_area+">" + whLoc.wh_loc_in_area + "</td>"
+			for(let index = 0; index < jsonArray.length - 1; index++) { 
+				let result = "<tr>"
+							+ "<td id="+jsonArray[index].wh_area+">" + jsonArray[index].wh_area + "</td>"
+							+ "<td id="+jsonArray[index].wh_loc_in_area+">" + jsonArray[index].wh_loc_in_area + "</td>"
 							+ "</tr>";
 				
+			$("#whLoc_table > tbody").append(result);
 			}
-			$("#whLoc_table > tbody").html(result);
 			
 			// 자바 스크립트 함수 파라미터 용 변수 선언(문자열)
-			let valSt = "'" + searchType + "'";
-			let valKey = "'" + keyword + "'";
+			let valSt = "'" + $("#searchType").val() + "'";
+			let valKey = "'" + $("#keyword2").val() + "'";
 			
 			// PageInfo 객체 접근 (jsonArray 의 맨 마지막 인덱스) 해서 startPage 와 endPage 얻어오기 -> 차례대로 숫자 목록 저장
 			if(pageNum > 1) {
-				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valSt + ', ' + valKey + ', ' + status + ')">이전</a>';
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valSt + ', ' + valKey + ')">이전</a>';
 			} else {
 				pageList += '&nbsp;&nbsp;<a href="javascript:(0)">이전</a>';
 			}
@@ -177,12 +188,12 @@ let pageNum = ${pageNum};
 				if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
 					pageList += '&nbsp;&nbsp;<a href="javascript:(0)" style="color: #212529; font-weight: bold;">' + i +'</a>'; 
 				} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
-					pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ', ' + status + ')">' + i + '</a>';
+					pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ')">' + i + '</a>';
 				}
 			}
 			
 			if(pageNum < jsonArray[jsonArray.length - 1].endPage) {
-				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valSt + ', ' + valKey + ', ' + status + ')">다음</a>';
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valSt + ', ' + valKey + ')">다음</a>';
 			} else {
 				pageList += '&nbsp;&nbsp;<a href="javascript:(0)">다음</a>';
 			}
@@ -203,15 +214,13 @@ let pageNum = ${pageNum};
 <div class="content">
    <div class="animated fadeIn">
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
-
- 					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
-						<option value="wh_area">구역명</option>
-						<option value="wh_loc_in_area">위치명</option>
-					</select>
-			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" > 
-			<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" onclick="javascirpt:load_list();">
-
-	   </section>
+		<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
+			<option value="wh_area">구역명</option>
+			<option value="wh_loc_in_area">위치명</option>
+		</select>
+		<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword2" id="keyword2" onkeyup="if(window.event.keyCode==13){load_list()}"> 
+		<input type="button" id="searchBtn" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1">
+	</section>
 
 	<table class="table table-hover"  id="whLoc_table">
 		<thead>
