@@ -123,7 +123,6 @@
 
 
 </style>
-<script src="resources/js/jquery-3.6.3.js"></script>
 <!-- pageNum 이 없을 경우 기본값 1, 있을 경우 pageNum 값 저장 -->
 <c:choose>
 	<c:when test="${param.pageNum eq null}">
@@ -133,18 +132,19 @@
 		<c:set var="pageNum" value="${param.pageNum }"></c:set>
 	</c:otherwise>
 </c:choose>
+<script src="resources/js/jquery-3.6.3.js"></script>
 <script type="text/javascript">
 //페이지번호 저장
-let pageNum = ${pageNum};
+let pageNum2 = ${pageNum};
 	$(function() {
 		let searchType = $("#searchType").val(); // 검색 타입
 		let keyword = $("#keyword2").val(); // 검색어	
-		load_list(pageNum, searchType, keyword); // 게시물 목록 조회 함수 호출
+		load_list(pageNum2, searchType, keyword); // 게시물 목록 조회 함수 호출
 		
-		$("#searchBtn").on("click", function() {
+		$("#searchBtn2").on("click", function() {
 // 			alert("keyword:"+ $("#keyword2").val());
 			console.log("눌러짐");
-			load_list(pageNum, $("#searchType").val(), $("#keyword2").val());
+			load_list(pageNum2, $("#searchType").val(), $("#keyword2").val());
 		});
 		
 	});
@@ -152,12 +152,12 @@ let pageNum = ${pageNum};
 	
 	
 	// 창고선반 목록 조회 함수
-	function load_list(pageNum, searchType, keyword) {
+	function load_list(pageNum2, searchType, keyword) {
 		console.log(searchType);
 		console.log(keyword);
 		$.ajax({
 			type: "GET",
-			url:"WhLocListJsonIn?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword , 
+			url:"WhLocListJsonIn?pageNum=" + pageNum2 + "&searchType=" + searchType + "&keyword=" + keyword , 
 			dataType: "json"
 		})
 		.done(function(jsonArray) { // 요청 성공 시
@@ -178,22 +178,22 @@ let pageNum = ${pageNum};
 			let valKey = "'" + $("#keyword2").val() + "'";
 			
 			// PageInfo 객체 접근 (jsonArray 의 맨 마지막 인덱스) 해서 startPage 와 endPage 얻어오기 -> 차례대로 숫자 목록 저장
-			if(pageNum > 1) {
-				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valSt + ', ' + valKey + ')">이전</a>';
+			if(pageNum2 > 1) {
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum2 - 1) + ', ' + valSt + ', ' + valKey + ')">이전</a>';
 			} else {
 				pageList += '&nbsp;&nbsp;<a href="javascript:(0)">이전</a>';
 			}
 			
 			for(let i = jsonArray[jsonArray.length - 1].startPage; i <= jsonArray[jsonArray.length - 1].endPage; i++) {
-				if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
+				if(i == pageNum2) { // 현재 페이지와 같을 경우 작동 X
 					pageList += '&nbsp;&nbsp;<a href="javascript:(0)" style="color: #212529; font-weight: bold;">' + i +'</a>'; 
 				} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
 					pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valSt + ', ' + valKey + ')">' + i + '</a>';
 				}
 			}
 			
-			if(pageNum < jsonArray[jsonArray.length - 1].endPage) {
-				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valSt + ', ' + valKey + ')">다음</a>';
+			if(pageNum2 < jsonArray[jsonArray.length - 1].endPage) {
+				pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum2 + 1) + ', ' + valSt + ', ' + valKey + ')">다음</a>';
 			} else {
 				pageList += '&nbsp;&nbsp;<a href="javascript:(0)">다음</a>';
 			}
@@ -219,7 +219,7 @@ let pageNum = ${pageNum};
 			<option value="wh_loc_in_area">위치명</option>
 		</select>
 		<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword2" id="keyword2" onkeyup="if(window.event.keyCode==13){load_list()}"> 
-		<input type="button" id="searchBtn" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1">
+		<input type="button" id="searchBtn2" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1">
 	</section>
 
 	<table class="table table-hover"  id="whLoc_table">

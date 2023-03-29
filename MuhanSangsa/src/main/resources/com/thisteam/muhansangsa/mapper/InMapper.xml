@@ -194,9 +194,15 @@
 	
 	<!-- 입고 등록 - 수량, 재고코드 -->
 	<update id="updateinRegister">
+		<selectKey keyProperty="original_qty" resultType="integer" order="BEFORE">
+			SELECT IN_QTY FROM IN_SCHEDULE_PER_PRODUCT
+			WHERE IN_SCHEDULE_CD = #{inRegister.in_schedule_cd}
+				AND PRODUCT_CD = #{inRegister.product_cd}
+				AND IN_DATE = #{inRegister.in_date}
+		</selectKey>
 		UPDATE IN_SCHEDULE_PER_PRODUCT
 			SET
-				IN_QTY = #{inRegister.in_qty},
+				IN_QTY = ${original_qty} + #{inRegister.in_qty},
 				STOCK_CD = #{inRegister.stock_cd}
 <!-- 				WH_LOC_IN_AREA = #{inRegister.wh_loc_in_area} -->
 			WHERE IN_SCHEDULE_CD = #{inRegister.in_schedule_cd}

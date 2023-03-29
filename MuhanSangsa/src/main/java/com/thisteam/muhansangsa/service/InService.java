@@ -84,7 +84,9 @@ public class InService {
 
 	// 입고 등록
 	public void inRegister(inRegisterVO inRegister) {
+		// 입고 등록 - 수량, 재고코드
 		mapper.updateinRegister(inRegister);
+		// 입고 등록 - 창고선반
 		mapper.updateWhLoc(inRegister);
 	}
 

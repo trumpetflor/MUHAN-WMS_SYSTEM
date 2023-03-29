@@ -276,17 +276,21 @@ public class InController {
 				String wh_loc_in_area = whLoc.split("_")[1];
 				System.out.println("선반명 : " + wh_loc_in_area);
 				inRegister.setWh_loc_in_area(wh_loc_in_area);
-				// 재고테이블에 신규 재고번호생성
-				if(stock_cd == 0) {
+				
+				if(stock_cd == 0) { // 재고테이블에 신규 재고번호생성
+					// 제품 코드
 					int product_cd = inRegister.getProduct_cd();
-					String wh_loc = inRegister.getWh_loc_in_area();
-					int wh_loc_in_area_cd = service.getWhLocCd(wh_loc);
+					// 선반명으로 선반코드 가져오기
+//					String wh_loc = inRegister.getWh_loc_in_area();
+					int wh_loc_in_area_cd = service.getWhLocCd(wh_loc_in_area);
+					// 수량
 					int stock_qty = inRegister.getIn_qty();
 					
 					int insertStockCount = service.insertStockCd(product_cd, wh_loc_in_area_cd, stock_qty);
+					// 새로운 재고코드 저장
 					int newStockCd = service.getMaxStockCd();
 					inRegister.setStock_cd(newStockCd);
-				} else {
+				} else { // 기존 재고번호 사용
 					inRegister.setStock_cd(voArr.getStock_cd()[i]);
 				}
 
@@ -303,14 +307,9 @@ public class InController {
 				stock.setSource_stock_cd(0);
 				stock.setTarget_stock_cd(0);
 				stock.setQty(inRegister.getIn_qty());
-				// 작업자코드 =>InVO
+				// 작업자코드 => InVO
 				String emp_num = service.getInEmpNum(inRegister.getIn_schedule_cd());
 				stock.setEmp_num(emp_num);
-				// 오늘 날짜
-//				LocalDate now = LocalDate.now();
-//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-//				int formatedNow = Integer.parseInt(now.format(formatter));
-//				stock.setStock_date(formatedNow);
 				// 비고 => inVO
 				String remarks = service.getInRemarks(inRegister.getIn_schedule_cd());
 				stock.setRemarks(remarks);
@@ -321,16 +320,16 @@ public class InController {
 			System.out.println("재고수정..됐니? : " + insertStockHistory);
 			
 			// 미입고수량 = 0 되면 진행 상태 1로 바꾸기
-			int[] checkArr = service.getNoInQty();
-			System.out.println(checkArr);
-			if(checkArr != null) {
-				for(int i = 0; i < checkArr.length; i++) {
-					if(checkArr[i] == 0) {
+//			int[] checkArr = service.getNoInQty();
+//			System.out.println(checkArr);
+//			if(checkArr != null) {
+//				for(int i = 0; i < checkArr.length; i++) {
+//					if(checkArr[i] == 0) {
 						// 진행상태 바꾸기
 						service.updateInComplete();
-					}
-				}
-			}
+//					}
+//				}
+//			}
 			
 			
 //			if(insertStockHistory > 0) {

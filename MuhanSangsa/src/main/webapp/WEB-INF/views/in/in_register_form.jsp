@@ -185,6 +185,7 @@ table {
 }
 </style>
 <script type="text/javascript">
+
 	// 재고 모달에서 값 가져오기
 // 	$(document).on("click", "#stock_search_modalDiv #stock_table > tbody tr", function(index, item){
 // 		var index = 
@@ -322,9 +323,10 @@ $(function(){
 				
 		});
 		
-		var in_schedule_qty = $("#in_schedule_qty"+index).val();
-		var in_qty = $("#in_qty"+index).val();
-		
+		let in_schedule_qty = $("#in_schedule_qty"+index).val();
+		let in_qty = $("#in_qty"+index).val();
+		console.log(in_schedule_qty);
+		console.log(in_qty);
 		if(in_qty > in_schedule_qty){
 			alert('입고예정수량을 초과할 수 없습니다!');
 			$("#in_qty"+index).val(in_schedule_qty);
@@ -355,6 +357,7 @@ $(function(){
                                 <strong class="card-title">
                                 일자 : <input type="date" class="form-control" id="todayDate" name="out_date">
                                 </strong>
+                                <small style="float: right;">재고번호를 선택하지 않으면 자동으로 부여됩니다.</small>
                             </div>
                             <div class="card-body">
                                 <form action="InRegisterPro" method="post" enctype="multipart/form-data">

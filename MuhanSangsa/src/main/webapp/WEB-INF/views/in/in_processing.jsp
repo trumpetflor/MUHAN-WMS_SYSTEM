@@ -71,6 +71,10 @@
 	 transition: 0.5s;
 	}
 	
+	#keyword {
+		width: 200px;	
+	}
+	
 /* 스크롤바 크기 설정*/
   #modal_container::-webkit-scrollbar {
      width: 3px; 
