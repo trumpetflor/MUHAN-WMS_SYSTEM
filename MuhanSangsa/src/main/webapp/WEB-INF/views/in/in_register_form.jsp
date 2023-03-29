@@ -312,7 +312,9 @@ function newStockCd(index){
 $(function(){
 	// 입고지시수량 계산
 	$("input[type=number]").on("change", function(){
-	var index = $("#index").val();
+		var index = $(this).closest("tr").index();
+		let original_sum = $("#original_qty").val();
+		console.log(index);
 		let sum = 0;
 		$("input[type=number]").each(function(){
 			sum += Number($(this).val()); 
@@ -326,6 +328,7 @@ $(function(){
 		if(in_qty > in_schedule_qty){
 			alert('입고예정수량을 초과할 수 없습니다!');
 			$("#in_qty"+index).val(in_schedule_qty);
+			$("#in_qty_result").text(original_sum);
 		}
 	    
 		
@@ -418,7 +421,8 @@ $(function(){
 												<tr>
 													<td colspan="2">합계</td>
 													<td><c:out value="${in_schedule_qty_total }" /></td>
-													<td id="in_qty_result"><c:out value="${in_qty_total }" /></td>
+													<td id="in_qty_result"><c:out value="${in_qty_total }" />
+													<input type="hidden" id="original_qty" value="${in_qty_total }"></td>
 													<td></td>
 													<td></td>
 												</tr>
