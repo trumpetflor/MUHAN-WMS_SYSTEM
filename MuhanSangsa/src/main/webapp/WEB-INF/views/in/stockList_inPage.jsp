@@ -144,7 +144,7 @@ let pageNum = ${pageNum};
 		$("#searchBtn").on("click", function() {
 // 			alert("keyword:"+ $("#keyword").val());
 			console.log("눌러짐");
-			load_list(pageNum, searchType, $("#keyword").val());
+			load_list(pageNum, $("#searchType").val(), $("#keyword").val());
 		});
 	});
 
@@ -213,7 +213,6 @@ let pageNum = ${pageNum};
 <div class="content">
    <div class="animated fadeIn">
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
-
  					<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1 mx-4">
 						<option value="stock_cd">재고 번호</option>
 						<option value="product_name">품목명</option>
@@ -222,7 +221,6 @@ let pageNum = ${pageNum};
 					</select>
 			<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword"  onkeyup="if(window.event.keyCode==13){load_list()}" > 
 			<input type="button" id="searchBtn" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1">
-
 	   </section>
 
 	<table class="table table-hover"  id="stock_table">

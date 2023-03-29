@@ -125,7 +125,6 @@ public class InController {
 			HttpServletResponse response
 			) {
 
-
 		// 페이징 처리를 위한 변수 선언
 		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록 제한
 		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산

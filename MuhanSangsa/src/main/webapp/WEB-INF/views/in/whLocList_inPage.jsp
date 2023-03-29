@@ -144,7 +144,7 @@ let pageNum = ${pageNum};
 		$("#searchBtn").on("click", function() {
 // 			alert("keyword:"+ $("#keyword2").val());
 			console.log("눌러짐");
-			load_list(pageNum, searchType, $("#keyword2").val());
+			load_list(pageNum, $("#searchType").val(), $("#keyword2").val());
 		});
 		
 	});

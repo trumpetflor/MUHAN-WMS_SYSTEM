@@ -7,10 +7,15 @@
 	<select id="selectInProList" resultType="inProcessingVO">
 		SELECT *
 			FROM in_processing_view
-			WHERE in_schedule_cd LIKE '%-%'
-				<if test="status gte 0">
-					AND in_complete = #{status}
-				</if>
+<!-- 			WHERE in_schedule_cd LIKE '%-%' -->
+				<choose>
+				<when test="status gte 0">
+					WHERE in_complete = #{status}
+				</when>
+				<otherwise>
+					WHERE in_complete IN (0, 1)
+				</otherwise>
+				</choose>
 				<if test="!keyword.equals('')">
 				<choose>
 					<when test="searchType.equals('in_schedule_cd')">
@@ -34,10 +39,15 @@
 	<select id="selectInProListCount" resultType="int">
 		SELECT COUNT(*)
 			FROM in_processing_view
-			WHERE in_schedule_cd LIKE '%-%'
-				<if test="status gte 0">
-					AND in_complete = #{status}
-				</if>
+<!-- 			WHERE in_schedule_cd LIKE '%-%' -->
+				<choose>
+				<when test="status gte 0">
+					WHERE in_complete = #{status}
+				</when>
+				<otherwise>
+					WHERE in_complete IN (0, 1)
+				</otherwise>
+				</choose>
 				<if test="!keyword.equals('')">
 				<choose>
 					<when test="searchType.equals('in_schedule_cd')">
