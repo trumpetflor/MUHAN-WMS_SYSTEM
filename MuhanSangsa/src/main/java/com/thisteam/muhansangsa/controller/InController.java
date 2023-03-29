@@ -125,7 +125,6 @@ public class InController {
 			HttpServletResponse response
 			) {
 
-
 		// 페이징 처리를 위한 변수 선언
 		int listLimit = 10; // 한 페이지에서 표시할 게시물 목록 제한
 		int startRow = (pageNum - 1) * listLimit; // 조회 시작 행번호 계산
@@ -277,17 +276,21 @@ public class InController {
 				String wh_loc_in_area = whLoc.split("_")[1];
 				System.out.println("선반명 : " + wh_loc_in_area);
 				inRegister.setWh_loc_in_area(wh_loc_in_area);
-				// 재고테이블에 신규 재고번호생성
-				if(stock_cd == 0) {
+				
+				if(stock_cd == 0) { // 재고테이블에 신규 재고번호생성
+					// 제품 코드
 					int product_cd = inRegister.getProduct_cd();
-					String wh_loc = inRegister.getWh_loc_in_area();
-					int wh_loc_in_area_cd = service.getWhLocCd(wh_loc);
+					// 선반명으로 선반코드 가져오기
+//					String wh_loc = inRegister.getWh_loc_in_area();
+					int wh_loc_in_area_cd = service.getWhLocCd(wh_loc_in_area);
+					// 수량
 					int stock_qty = inRegister.getIn_qty();
 					
 					int insertStockCount = service.insertStockCd(product_cd, wh_loc_in_area_cd, stock_qty);
+					// 새로운 재고코드 저장
 					int newStockCd = service.getMaxStockCd();
 					inRegister.setStock_cd(newStockCd);
-				} else {
+				} else { // 기존 재고번호 사용
 					inRegister.setStock_cd(voArr.getStock_cd()[i]);
 				}
 
@@ -304,14 +307,9 @@ public class InController {
 				stock.setSource_stock_cd(0);
 				stock.setTarget_stock_cd(0);
 				stock.setQty(inRegister.getIn_qty());
-				// 작업자코드 =>InVO
+				// 작업자코드 => InVO
 				String emp_num = service.getInEmpNum(inRegister.getIn_schedule_cd());
 				stock.setEmp_num(emp_num);
-				// 오늘 날짜
-//				LocalDate now = LocalDate.now();
-//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-//				int formatedNow = Integer.parseInt(now.format(formatter));
-//				stock.setStock_date(formatedNow);
 				// 비고 => inVO
 				String remarks = service.getInRemarks(inRegister.getIn_schedule_cd());
 				stock.setRemarks(remarks);
@@ -322,16 +320,16 @@ public class InController {
 			System.out.println("재고수정..됐니? : " + insertStockHistory);
 			
 			// 미입고수량 = 0 되면 진행 상태 1로 바꾸기
-			int[] checkArr = service.getNoInQty();
-			System.out.println(checkArr);
-			if(checkArr != null) {
-				for(int i = 0; i < checkArr.length; i++) {
-					if(checkArr[i] == 0) {
+//			int[] checkArr = service.getNoInQty();
+//			System.out.println(checkArr);
+//			if(checkArr != null) {
+//				for(int i = 0; i < checkArr.length; i++) {
+//					if(checkArr[i] == 0) {
 						// 진행상태 바꾸기
 						service.updateInComplete();
-					}
-				}
-			}
+//					}
+//				}
+//			}
 			
 			
 //			if(insertStockHistory > 0) {
@@ -370,7 +368,7 @@ public class InController {
         } else {
            model.addAttribute("msg", "로그인이 필요합니다");
            model.addAttribute("url", "/Login");
-           return "redirect"; // 어떻게 alert 후에 보내지? => 해결 by. 하원
+           return "redirect"; 
         }
 
         // 아이피 주소
@@ -489,6 +487,32 @@ public class InController {
 		// 거래처 목록 가져오기
 		List<StockWhVO> stockList = service.getStockList(searchType, keyword, startRow, listLimit);
 		
+		// 페이징 처리 
+		//1. 검색어에 해당하는 정보의 갯수 계산
+		int listCount = service.getStockListCount(searchType, keyword);
+
+		// 2. 한 페이지에서 표시할 페이지 숫자의 갯수 설정
+		int pageListLimit = 10; // 한 페이지에서 표시할 페이지 수를 10개로 제한
+		// 3. 전체 페이지 목록 수 계산
+		int maxPage = listCount / listLimit 
+				+ (listCount % listLimit == 0 ? 0 : 1); 
+
+		// 4. 시작 페이지 번호 계산
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+
+		// 5. 끝 페이지 번호 계산
+		int endPage = startPage + pageListLimit - 1;
+
+		// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+		//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+
+		// PageInfo 객체 생성 후 페이징 처리 정보 저장
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);		
+		System.out.println(pageInfo);
+
 		// JSON 형식 변환
 		JSONArray jsonArray = new JSONArray();
 		
@@ -499,6 +523,10 @@ public class InController {
 			
 			jsonArray.put(jsonObject);
 		}
+		
+		JSONObject jsonObjectPage = new JSONObject(pageInfo);
+		System.out.println("시작 페이지 : " + jsonObjectPage.get("startPage"));
+		jsonArray.put(jsonObjectPage);
 		
 		try {
 			response.setCharacterEncoding("UTF-8");

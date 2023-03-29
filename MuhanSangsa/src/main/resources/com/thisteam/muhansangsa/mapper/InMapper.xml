@@ -7,10 +7,15 @@
 	<select id="selectInProList" resultType="inProcessingVO">
 		SELECT *
 			FROM in_processing_view
-			WHERE in_schedule_cd LIKE '%-%'
-				<if test="status gte 0">
-					AND in_complete = #{status}
-				</if>
+<!-- 			WHERE in_schedule_cd LIKE '%-%' -->
+				<choose>
+				<when test="status gte 0">
+					WHERE in_complete = #{status}
+				</when>
+				<otherwise>
+					WHERE in_complete IN (0, 1)
+				</otherwise>
+				</choose>
 				<if test="!keyword.equals('')">
 				<choose>
 					<when test="searchType.equals('in_schedule_cd')">
@@ -34,10 +39,15 @@
 	<select id="selectInProListCount" resultType="int">
 		SELECT COUNT(*)
 			FROM in_processing_view
-			WHERE in_schedule_cd LIKE '%-%'
-				<if test="status gte 0">
-					AND in_complete = #{status}
-				</if>
+<!-- 			WHERE in_schedule_cd LIKE '%-%' -->
+				<choose>
+				<when test="status gte 0">
+					WHERE in_complete = #{status}
+				</when>
+				<otherwise>
+					WHERE in_complete IN (0, 1)
+				</otherwise>
+				</choose>
 				<if test="!keyword.equals('')">
 				<choose>
 					<when test="searchType.equals('in_schedule_cd')">
@@ -115,18 +125,24 @@
 			</choose>		
 		</if>
 <!-- 		ORDER BY -->
-<!-- 		LIMIT  -->
-<!-- 			#{startRow} -->
-<!-- 			, #{listLimit} -->
+		LIMIT 
+			#{startRow}
+			, #{listLimit}
 	</select>
 	
-	<!-- 창고선반 목록 -->
-	<select id="selectWhLocList" resultType="StockWhVO">
-		SELECT wh_area, wh_loc_in_area
-			FROM wms_wh_view
+	<!-- 재고 목록 갯수 계산 (페이징 처리) -->
+	<select id="selectStockListCount" resultType="int">
+		SELECT COUNT(*)
+			FROM stock_wh_view
 			<if test="!keyword.equals('')">
 			WHERE
 			<choose>
+				<when test="searchType.equals('stock_cd')">
+					stock_cd LIKE '%${keyword}%'
+				</when>
+				<when test="searchType.equals('product_name')">
+					product_name LIKE '%${keyword}%'
+				</when>
 				<when test="searchType.equals('wh_area')">
 					wh_area LIKE '%${keyword}%' 
 				</when>
@@ -135,6 +151,23 @@
 				</when>
 			</choose>		
 		</if>
+	</select>
+	
+	<!-- 창고선반 목록 -->
+	<select id="selectWhLocList" resultType="StockWhVO">
+		SELECT wh_area, wh_loc_in_area
+			FROM wms_wh_view
+			WHERE wh_loc_in_area IS NOT NULL
+			<if test="!keyword.equals('')">
+			<choose>
+				<when test="searchType.equals('wh_area')">
+					AND wh_area LIKE '%${keyword}%' 
+				</when>
+				<when test="searchType.equals('wh_loc_in_area')">
+					AND wh_loc_in_area LIKE '%${keyword}%'
+				</when>
+			</choose>		
+			</if>
 <!-- 		ORDER BY -->
 		LIMIT 
 			#{startRow}
@@ -142,10 +175,11 @@
 	</select>
 	
 	<!-- 창고선반 목록 갯수 계산 (페이징 처리) -->
-	<select id="selectWhLocListCount">
+	<select id="selectWhLocListCount" resultType="int">
 		SELECT COUNT(*)
 			FROM wms_wh_view
 			WHERE wh_cd LIKE '%_%'
+			AND wh_loc_in_area IS NOT NULL
 				<if test="!keyword.equals('')">
 				<choose>
 					<when test="searchType.equals('wh_area')">
@@ -160,9 +194,15 @@
 	
 	<!-- 입고 등록 - 수량, 재고코드 -->
 	<update id="updateinRegister">
+		<selectKey keyProperty="original_qty" resultType="integer" order="BEFORE">
+			SELECT IN_QTY FROM IN_SCHEDULE_PER_PRODUCT
+			WHERE IN_SCHEDULE_CD = #{inRegister.in_schedule_cd}
+				AND PRODUCT_CD = #{inRegister.product_cd}
+				AND IN_DATE = #{inRegister.in_date}
+		</selectKey>
 		UPDATE IN_SCHEDULE_PER_PRODUCT
 			SET
-				IN_QTY = #{inRegister.in_qty},
+				IN_QTY = ${original_qty} + #{inRegister.in_qty},
 				STOCK_CD = #{inRegister.stock_cd}
 <!-- 				WH_LOC_IN_AREA = #{inRegister.wh_loc_in_area} -->
 			WHERE IN_SCHEDULE_CD = #{inRegister.in_schedule_cd}

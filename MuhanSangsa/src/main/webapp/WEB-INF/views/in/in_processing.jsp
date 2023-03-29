@@ -71,6 +71,10 @@
 	 transition: 0.5s;
 	}
 	
+	#keyword {
+		width: 200px;	
+	}
+	
 /* 스크롤바 크기 설정*/
   #modal_container::-webkit-scrollbar {
      width: 3px; 
@@ -148,6 +152,12 @@ $(function(){
 	let keyword = $("#keyword").val(); // 검색어
 	load_list(pageNum, searchType, keyword, realstatus); // 게시물 목록 조회 함수 호출 (pageNum 까지 파라미터로)
 	
+	$("#searchBtn").on("click", function() {
+//		alert("keyword:"+ $("#keyword2").val());
+	console.log("눌러짐");
+	load_list(pageNum, $("#searchType").val(), $("#keyword").val(), realstatus);
+});
+	
 	//전체선택 버튼 클릭
 	$('input:checkbox[name=AllChecked]').on("click",function(){
 		if($(this).is(":checked") == true){
@@ -170,8 +180,16 @@ $(function(){
 	$("#inScheduleBtn").click(function(){
 // 		let inRegisterArr = new Array();
 		let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
+		let checkCount = 0;
 		$('input:checkbox[name=inChecked]').each(function(index){
 			if($(this).is(":checked")==true){
+				let number = $(this).closest("tr").index();
+				console.log(number);
+				let no_in_qty = $("#no_in_qty"+number).text();
+				console.log(no_in_qty);
+				if(no_in_qty == 0){
+					checkCount++;
+				} else {
 // 				let index = $(this).val();
 // 				let inList = new Object();
 // 				inList.in_schedule_cd = $("#in_schedule_cd" + index).val();
@@ -183,9 +201,15 @@ $(function(){
 // 				console.log(inList.in_schedule_cd);
 // 				console.log(inList.product_name);
 				console.log("inRegisterList[] : "+ inRegisterList);
-				window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
+				}
+				
 			}
 		});
+				if(checkCount > 0){
+					alert("입고완료된 항목이 있습니다.");
+				} else {
+					window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
+				}
 			
 			
 // 			$.ajax({
@@ -218,10 +242,12 @@ function load_tab(status){
 	let searchType = $("#searchType").val(); // 검색 타입
 	let keyword = $("#keyword").val(); // 검색어
 	load_list(pageNum, searchType, keyword, status);
+	
 }
 
 // 게시물 목록 조회
 function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현재 페이지, 검색 타입, 검색어
+	
 	$.ajax({
 		type: "GET",
 		url: "InProcessingListJson?pageNum=" + pageNum + "&searchType=" + searchType + "&keyword=" + keyword + "&status=" + status,
@@ -242,6 +268,7 @@ function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현
 			// 뿌릴 내용
 			let result = "<tr>"
 						+ "<td align='center'><input type='checkbox' name='inChecked' id='inChecked' value='" + jsonArray[index].in_schedule_cd + "/" + jsonArray[index].product_name + "/" + jsonArray[index].in_date + "'>"
+						+ "<input type='hidden' value='" + index + "' id='number" + index + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].in_schedule_cd + "' id='in_schedule_cd" + index + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].product_name + "' id='product_name" + index + "'>"
 						+ "<input type='hidden' value='" + jsonArray[index].in_date + "' id='in_date" + index + "'>"
@@ -252,7 +279,7 @@ function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현
 						+ "<td>" + jsonArray[index].in_date + "</td>"
 						+ "<td>" + jsonArray[index].in_schedule_qty + "</td>"
 						+ "<td>" + jsonArray[index].in_qty + "</td>"
-						+ "<td>" + jsonArray[index].no_in_qty + "</td>"
+						+ "<td id='no_in_qty"+index+"'>" + jsonArray[index].no_in_qty + "</td>"
 						+ "<td>" + jsonArray[index].remarks + "</td>"
 						+ "</tr>";
 			$("#inprocessing_table").append(result);
@@ -331,16 +358,16 @@ function load_list(pageNum, searchType, keyword, status) { // 파라미터 : 현
 <div class="content">
    <div class="animated fadeIn">
 	<section id="searchSection" class="m-0 d-flex justify-content-end">
-  		<form action="InProcessing">
+<!--   		<form action="InProcessing"> -->
 				<!-- 검색 타입 추가 -->
 				<select name="searchType" id="searchType" class="rounded-1 btn-sm p-1">
-					<option value="in_schedule_code" <c:if test="${param.searchType eq 'in_schedule_code'}">selected</c:if>>입고예정번호</option>
+					<option value="in_schedule_cd" <c:if test="${param.searchType eq 'in_schedule_code'}">selected</c:if>>입고예정번호</option>
 					<option value="cust_name" <c:if test="${param.searchType eq 'cust_name'}">selected</c:if>>보낸곳명</option>
 					<option value="product_name" <c:if test="${param.searchType eq 'product_name'}">selected</c:if>>품목명</option>
 				</select>			
 				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
-				<input type="submit" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
-		</form>
+				<input type="button" id="searchBtn" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
+<!-- 		</form> -->
 	 </section>
 	 
 	<!-- nav바 (tab)  -->
