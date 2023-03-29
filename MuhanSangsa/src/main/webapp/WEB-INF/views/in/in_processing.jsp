@@ -170,6 +170,7 @@ $(function(){
 	$("#inScheduleBtn").click(function(){
 // 		let inRegisterArr = new Array();
 		let inRegisterList = []; // 배열 선언, 변수명 컨트롤러 파라미터명과 동일
+		let checkCount = 0;
 		$('input:checkbox[name=inChecked]').each(function(index){
 			if($(this).is(":checked")==true){
 				let number = $(this).closest("tr").index();
@@ -177,8 +178,8 @@ $(function(){
 				let no_in_qty = $("#no_in_qty"+number).text();
 				console.log(no_in_qty);
 				if(no_in_qty == 0){
-					alert("입고처리 안됩니다용~");
-				}else {
+					checkCount++;
+				} else {
 // 				let index = $(this).val();
 // 				let inList = new Object();
 // 				inList.in_schedule_cd = $("#in_schedule_cd" + index).val();
@@ -190,10 +191,15 @@ $(function(){
 // 				console.log(inList.in_schedule_cd);
 // 				console.log(inList.product_name);
 				console.log("inRegisterList[] : "+ inRegisterList);
-				window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
 				}
+				
 			}
 		});
+				if(checkCount > 0){
+					alert("입고완료된 항목이 있습니다.");
+				} else {
+					window.open('InRegister?inRegisterList='+inRegisterList,'InRegister','width=1500, height=800,location=no,status=no,scrollbars=yes');
+				}
 			
 			
 // 			$.ajax({
