@@ -2,7 +2,7 @@
 ## 🏭MuhanSangsa 🏭
 팀프로젝트로 진행한  WMS(창고 관리 시스템) 및 사원관리 시스템입니다.
 ## DEMO : 👉<a href="http://itwillbs4.cafe24.com/MuhanSangsa">MUHAN WMS System</a>👈 
-<i>(**아이디 및 비밀번호 : 포트폴리오에 첨부)</i>
+<i>(**아이디 및 비밀번호 : 포트폴리오 19p 에 첨부)</i>
 
 ![Muhan_logo](https://user-images.githubusercontent.com/112055211/230053316-9197b2f3-0b15-47ee-ac2c-6e24039c774c.png)
 <br>
