@@ -50,7 +50,7 @@ public class StockService {
 		return mapper.insertStockHistory(stockHistory);
 	}
 	
-	//��ǰ �˻�
+	////상품번호(product_cd) 받아와서 재고 검색
 	public List<Stock_viewVO> getProductAtSameLoc(int product_cd) {
 		
 		return mapper.selectProductInLoc(product_cd);
